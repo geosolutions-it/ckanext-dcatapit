@@ -1,0 +1,13 @@
+{% ckan_extends %}
+
+{% block metadata_fields %}
+	{{ super() }}
+
+	{{ form.input('last_modified', id='field-last-modified', label=_('Last Modified'), placeholder=_('eg. 2012-06-05'), value=data.last_modified, error=errors.last_modified, classes=[]) }}
+
+	{{ form.input('size', id='field-size', label=_('File Size'), placeholder=_('eg. 1024'), value=data.size, error=errors.size, classes=[]) }}
+
+	{{ form.input('mimetype', id='field-mimetype', label=_('MIME Type'), placeholder=_('eg. application/json'), value=data.mimetype, error=errors.mimetype, classes=[]) }}
+	{#% set mime_attrs = {'data-module': 'autocomplete', 'data-module-types': '', 'data-module-source': '/api/2/util/tag/autocomplete?incomplete=?'} %}
+  	{{ form.input('mimetype', id='field-mimetype', label=_('MIME Type'), placeholder=_('eg. application/json'), value=data.mimetype, error=errors.mimetype, classes=['control-full'], attrs=mime_attrs, is_required=True) }#}
+{% endblock %}

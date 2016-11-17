@@ -1,0 +1,15 @@
+{% ckan_extends %}
+
+{% block package_additional_info %}
+  {{ super() }}
+
+  {#{ pkg_dict }#}
+
+  {% if pkg_dict.theme %}
+    <tr>
+      <th scope="row" class="dataset-label">{{ _('EU Themes') }}</th>
+      <td class="dataset-details" property="foaf:homepage">{{ pkg_dict.theme }}</td>
+    </tr>
+  {% endif %}
+
+{% endblock %}
