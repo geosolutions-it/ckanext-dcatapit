@@ -24,6 +24,24 @@
 
                   {{ form.input(field.name, id='field-' + field.name, label=_(field.label), placeholder=_(field.placeholder), value=data[field.name], error=errors[field.name], classes=['control-full'], attrs=tag_attrs, is_required=field.is_required) }}
 
+            {% elif field.element == 'theme' %}
+            
+                  {% set options = h.getVocabularyItems(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
+                  
+                  {{ 
+                        dcatapit_form_macros.theme(
+                              field.name,
+                              id='field-' + field.name,
+                              label=_(field.label),
+                              value=data[field.name],
+                              placeholder=_(field.placeholder),
+                              error=errors[field.name],
+                              options=options,
+                              type=field.type,
+                              classes=['control-full'],
+                              is_required=field.is_required)
+                  }}
+
             {% elif field.element == 'couple' %}
 
                   {% set couple_values = data[field.name].split(',') if data[field.name] else ['', ''] %}

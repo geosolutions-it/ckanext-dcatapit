@@ -4,8 +4,9 @@ def get_custom_config_schema():
 	    {
 		    'name': 'ckanext.dcatapit_config.catalog_theme',
 		    'validator': ['ignore_missing'],
-		    'element': 'multiselect',
+		    'element': 'theme',
 		    'type': 'vocabulary',
+		    'vocabulary_name': 'eu_themes',
 		    'label': 'Catalog Themes',
 		    'placeholder': 'eg. economy, mental health, government',
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eu_themes&incomplete=?',
@@ -99,8 +100,9 @@ def get_custom_package_schema():
 	    {
 		    'name': 'theme',
 		    'validator': ['not_empty'],
-		    'element': 'multiselect',
+		    'element': 'theme',
 		    'type': 'vocabulary',
+		    'vocabulary_name': 'eu_themes',
 		    'label': 'Dataset Themes',
 		    'placeholder': 'eg. economy, mental health, government',
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eu_themes&incomplete=?',
@@ -110,11 +112,12 @@ def get_custom_package_schema():
 		    'name': 'sub_theme',
 		    'ignore': True,
 		    'validator': ['ignore_missing'],
-		    'element': 'multiselect',
+		    'element': 'theme',
 		    'type': 'vocabulary',
+		    'vocabulary_name': 'eurovoc',
 		    'label': 'Sub Theme',
 		    'placeholder': 'sub theme of the dataset',
-		    'data_module_source': '/api/2/util/tag/autocomplete?incomplete=?',
+			'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eurovoc&incomplete=?',
 		    'is_required': False
 	    },
 	    {
@@ -157,8 +160,9 @@ def get_custom_package_schema():
 	    {
 		    'name': 'geographical_coverage',
 		    'validator': ['ignore_missing'],
-		    'element': 'multiselect',
+		    'element': 'theme',
 		    'type': 'vocabulary',
+		    'vocabulary_name': 'places',
 		    'label': 'Geographical Coverage',
 		    'placeholder': 'geographical coverage',
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=places&incomplete=?',
@@ -167,8 +171,9 @@ def get_custom_package_schema():
 	    {
 		    'name': 'language',
 		    'validator': ['ignore_missing'],
-		    'element': 'multiselect',
+		    'element': 'theme',
 		    'type': 'vocabulary',
+		    'vocabulary_name': 'languages',
 		    'label': 'Dataset Languages',
 		    'placeholder': 'eg. italian, german, english',
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=languages&incomplete=?',
