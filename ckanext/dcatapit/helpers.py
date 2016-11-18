@@ -28,11 +28,10 @@ def getVocabularyItems(vocabulary_name, keys=None):
 		tag_list = []
 		for item in items:
 			if keys:
-				log.info(":::::::::::::::::::::::::::: %r", keys)
 				for key in keys:
 					if key == item:
 						localized_tag_name = interfaces.getLocalizedTagName(item)
-						tag_list.append(str(localized_tag_name))
+						tag_list.append(localized_tag_name.encode('utf-8'))
 			else:
 				localized_tag_name = interfaces.getLocalizedTagName(item)
 				tag_list.append({'text': localized_tag_name, 'value': item})
