@@ -99,11 +99,11 @@ def get_custom_package_schema():
 	    {
 		    'name': 'theme',
 		    'validator': ['not_empty'],
-		    'element': 'multiselect',
+		    'element': 'theme',
 		    'type': 'vocabulary',
+		    'vocabulary_name': 'eu_themes',
 		    'label': 'Dataset Themes',
 		    'placeholder': 'eg. economy, mental health, government',
-		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eu_themes&incomplete=?',
 		    'is_required': True
 	    },
 	    {
@@ -157,21 +157,21 @@ def get_custom_package_schema():
 	    {
 		    'name': 'geographical_coverage',
 		    'validator': ['ignore_missing'],
-		    'element': 'multiselect',
+		    'element': 'theme',
 		    'type': 'vocabulary',
+		    'vocabulary_name': 'places',
 		    'label': 'Geographical Coverage',
 		    'placeholder': 'geographical coverage',
-		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=places&incomplete=?',
 		    'is_required': False
 	    },
 	    {
 		    'name': 'language',
 		    'validator': ['ignore_missing'],
-		    'element': 'multiselect',
+		    'element': 'theme',
 		    'type': 'vocabulary',
+		    'vocabulary_name': 'languages',
 		    'label': 'Dataset Languages',
 		    'placeholder': 'eg. italian, german, english',
-		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=languages&incomplete=?',
 		    'is_required': False
 	    },
 	    {

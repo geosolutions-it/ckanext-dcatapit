@@ -1,6 +1,7 @@
 
 import logging
 import urllib2
+import re
 
 import xml.etree.ElementTree as etree
 import ckan.plugins.toolkit as toolkit
@@ -34,6 +35,8 @@ class DCATAPITCommands(CkanCommand):
 
     summary = __doc__.split('\n')[0]
     usage = __doc__
+
+    places_theme_regex = '^ITA_.+'
 
     _locales_ckan_mapping = {
         'it': 'it',
@@ -145,6 +148,12 @@ class DCATAPITCommands(CkanCommand):
             # Skipping the ckan locales not mapped in this plugin (subject: language theme)
             #
             if vocab_name == 'languages' and identifier not in self._ckan_language_theme_mapping.values():
+                continue
+
+            #
+            # Skipping the ckan places not in italy according to the regex (subject: places theme)
+            #
+            if vocab_name == 'places' and not re.match(self.places_theme_regex, identifier, flags=0):
                 continue
 
             print 'Concept {} ({})'.format(about, identifier)

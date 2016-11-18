@@ -3,6 +3,8 @@ import logging
 import ckan.plugins.toolkit as toolkit
 import ckanext.dcatapit.schema as dcatapit_schema
 
+import ckanext.dcatapit.interfaces as interfaces
+
 log = logging.getLogger(__file__)
 
 
@@ -25,7 +27,8 @@ def getVocabularyItems(vocabulary_name):
 
 		tag_list = []
 		for item in items:
-			tag_list.append({'name': item, 'value': item})
+			localized_tag_name = interfaces.getLocalizedTagName(item)
+			tag_list.append({'text': localized_tag_name, 'value': item})
 
 		return tag_list
 	except toolkit.ObjectNotFound:

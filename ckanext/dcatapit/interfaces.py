@@ -3,6 +3,15 @@ import logging
 from ckan.lib.base import model
 from ckan.model import Session
 from ckanext.multilang.model import TagMultilang
+from pylons.i18n.translation import get_lang
+
+def getLanguage():
+    lang = get_lang()
+    
+    if lang is not None:
+        lang = unicode(lang[0])        
+    
+    return lang
 
 def persist_tag_multilang(name, lang, localized_text, vocab_name):
     logging.info('DCAT-AP_IT: persisting tag multilang for tag %r ...', name)
@@ -33,3 +42,14 @@ def persist_tag_multilang(name, lang, localized_text, vocab_name):
         if existing_tag:
             TagMultilang.persist({'id': existing_tag.id, 'name': name, 'text': localized_text}, lang)
             logging.info('::::::::: OBJECT TAG PERSISTED SUCCESSFULLY :::::::::')
+
+def getLocalizedTagName(tag_name=None):
+    if tag_name:
+        lang = getLanguage()
+        localized_tag_name = TagMultilang.by_name(tag_name, lang)
+        if localized_tag_name:
+            return localized_tag_name.text
+        else:
+            return None
+    else:
+        return None
