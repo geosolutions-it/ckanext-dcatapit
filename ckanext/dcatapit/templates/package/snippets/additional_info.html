@@ -1,15 +1,23 @@
 {% ckan_extends %}
 
+{% set schema_fields = h.get_dcatapit_package_schema() %}
+
 {% block package_additional_info %}
   {{ super() }}
 
   {#{ pkg_dict }#}
 
-  {% if pkg_dict.theme %}
-    <tr>
-      <th scope="row" class="dataset-label">{{ _('EU Themes') }}</th>
-      <td class="dataset-details" property="foaf:homepage">{{ pkg_dict.theme }}</td>
-    </tr>
-  {% endif %}
+  {% for field in schema_fields %}
+
+	  {% if pkg_dict[field.name] %}
+	  	{% set field_localized = h.getVocabularyItems(field.vocabulary_name, pkg_dict[field.name][1:-1].split(",") if ',' in pkg_dict[field.name] else [pkg_dict[field.name]] ) if field.type == 'vocabulary' else pkg_dict[field.name] %}
+
+	    <tr>
+	      <th scope="row" class="dataset-label">{{ _(field.label) }}</th>
+	      <td class="dataset-details">{{ field_localized or pkg_dict[field.name] }}</td>
+	    </tr>
+	  {% endif %}
+
+  {% endfor %}
 
 {% endblock %}

@@ -20,15 +20,22 @@ def get_dcatapit_configuration_schema():
     log.debug('Retrieving DCAT-AP_IT configuration schema fields...')
     return dcatapit_schema.get_custom_config_schema()
 
-def getVocabularyItems(vocabulary_name):
+def getVocabularyItems(vocabulary_name, keys=None):
 	try:
 		tag_list = toolkit.get_action('tag_list')
 		items = tag_list(data_dict={'vocabulary_id': vocabulary_name})
 
 		tag_list = []
 		for item in items:
-			localized_tag_name = interfaces.getLocalizedTagName(item)
-			tag_list.append({'text': localized_tag_name, 'value': item})
+			if keys:
+				log.info(":::::::::::::::::::::::::::: %r", keys)
+				for key in keys:
+					if key == item:
+						localized_tag_name = interfaces.getLocalizedTagName(item)
+						tag_list.append(str(localized_tag_name))
+			else:
+				localized_tag_name = interfaces.getLocalizedTagName(item)
+				tag_list.append({'text': localized_tag_name, 'value': item})
 
 		return tag_list
 	except toolkit.ObjectNotFound:
