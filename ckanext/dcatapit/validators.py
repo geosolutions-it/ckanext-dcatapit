@@ -6,11 +6,11 @@ from datetime import datetime
 log = logging.getLogger(__file__)
 
 
-def isBlank (string):
+def is_blank (string):
     return not (string and string.strip())
 
 def couple_validator(value, context):
-	if not isBlank(value):
+	if not is_blank(value):
 		couples = value.split(',')
 
 		for c in couples:

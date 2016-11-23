@@ -135,7 +135,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm)
     def get_helpers(self):
         return {
             'get_dcatapit_package_schema': helpers.get_dcatapit_package_schema,
-            'getVocabularyItems': helpers.getVocabularyItems
+            'get_vocabulary_items': helpers.get_vocabulary_items
         }
 
 

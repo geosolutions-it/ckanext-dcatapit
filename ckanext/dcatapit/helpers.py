@@ -20,7 +20,7 @@ def get_dcatapit_configuration_schema():
     log.debug('Retrieving DCAT-AP_IT configuration schema fields...')
     return dcatapit_schema.get_custom_config_schema()
 
-def getVocabularyItems(vocabulary_name, keys=None):
+def get_vocabulary_items(vocabulary_name, keys=None):
 	try:
 		tag_list = toolkit.get_action('tag_list')
 		items = tag_list(data_dict={'vocabulary_id': vocabulary_name})
@@ -30,10 +30,10 @@ def getVocabularyItems(vocabulary_name, keys=None):
 			if keys:
 				for key in keys:
 					if key == item:
-						localized_tag_name = interfaces.getLocalizedTagName(item)
+						localized_tag_name = interfaces.get_localized_tag_name(item)
 						tag_list.append(localized_tag_name.encode('utf-8'))
 			else:
-				localized_tag_name = interfaces.getLocalizedTagName(item)
+				localized_tag_name = interfaces.get_localized_tag_name(item)
 				tag_list.append({'text': localized_tag_name, 'value': item})
 
 		return tag_list
