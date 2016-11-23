@@ -31,7 +31,7 @@ def get_vocabulary_items(vocabulary_name, keys=None):
 				for key in keys:
 					if key == item:
 						localized_tag_name = interfaces.get_localized_tag_name(item)
-						tag_list.append(localized_tag_name.encode('utf-8'))
+						tag_list.append(localized_tag_name)
 			else:
 				localized_tag_name = interfaces.get_localized_tag_name(item)
 				tag_list.append({'text': localized_tag_name, 'value': item})
@@ -39,3 +39,41 @@ def get_vocabulary_items(vocabulary_name, keys=None):
 		return tag_list
 	except toolkit.ObjectNotFound:
 		return None
+
+def list_to_string(_list, _format=None):
+	if _list:
+		_string = ''
+
+		first_item = True
+		for item in _list:
+			if first_item:
+				first_item = False
+				element = item
+
+				if _format:
+					element = format(element, _format)
+
+				_string = _string + element
+			else:
+				element = item
+
+				if _format:
+					element = format(element, _format)
+
+				_string = _string + ', ' + item
+
+		return _string
+
+def couple_to_string(field_couples, couple_value, format=None):
+	if couple_value and ',' in couple_value:
+		items = couple_value.split(',')
+
+		_string = field_couples[0]['label'] + ': ' + items[0]
+		_string = _string + ' ' + field_couples[1]['label'] + ': ' + items[1]
+
+		return _string
+
+def format(_string, format=None):
+	if _string:
+		return _string
+
