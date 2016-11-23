@@ -20,7 +20,7 @@ def get_dcatapit_configuration_schema():
     log.debug('Retrieving DCAT-AP_IT configuration schema fields...')
     return dcatapit_schema.get_custom_config_schema()
 
-def getVocabularyItems(vocabulary_name, keys=None):
+def get_vocabulary_items(vocabulary_name, keys=None):
 	try:
 		tag_list = toolkit.get_action('tag_list')
 		items = tag_list(data_dict={'vocabulary_id': vocabulary_name})
@@ -30,12 +30,50 @@ def getVocabularyItems(vocabulary_name, keys=None):
 			if keys:
 				for key in keys:
 					if key == item:
-						localized_tag_name = interfaces.getLocalizedTagName(item)
-						tag_list.append(localized_tag_name.encode('utf-8'))
+						localized_tag_name = interfaces.get_localized_tag_name(item)
+						tag_list.append(localized_tag_name)
 			else:
-				localized_tag_name = interfaces.getLocalizedTagName(item)
+				localized_tag_name = interfaces.get_localized_tag_name(item)
 				tag_list.append({'text': localized_tag_name, 'value': item})
 
 		return tag_list
 	except toolkit.ObjectNotFound:
 		return None
+
+def list_to_string(_list, _format=None):
+	if _list:
+		_string = ''
+
+		first_item = True
+		for item in _list:
+			if first_item:
+				first_item = False
+				element = item
+
+				if _format:
+					element = format(element, _format)
+
+				_string = _string + element
+			else:
+				element = item
+
+				if _format:
+					element = format(element, _format)
+
+				_string = _string + ', ' + item
+
+		return _string
+
+def couple_to_string(field_couples, couple_value, format=None):
+	if couple_value and ',' in couple_value:
+		items = couple_value.split(',')
+
+		_string = field_couples[0]['label'] + ': ' + items[0]
+		_string = _string + ' ' + field_couples[1]['label'] + ': ' + items[1]
+
+		return _string
+
+def format(_string, format=None):
+	if _string:
+		return _string
+

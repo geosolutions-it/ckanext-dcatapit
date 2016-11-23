@@ -14,7 +14,7 @@
 
             {% elif field.element == 'select' %}
             
-                  {% set options = h.getVocabularyItems(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
+                  {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
 
                   {{ form.select(field.name, label=_(field.label), options=options, selected=data[field.name], error=errors[field.name]) }}
 
@@ -26,7 +26,7 @@
 
             {% elif field.element == 'theme' %}
             
-                  {% set options = h.getVocabularyItems(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
+                  {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
                   
                   {{ 
                         dcatapit_form_macros.theme(
