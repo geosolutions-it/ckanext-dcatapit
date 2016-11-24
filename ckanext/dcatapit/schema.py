@@ -1,50 +1,70 @@
+from ckan.common import _, ungettext
 
-def get_custom_config_schema():
-	return [
-	    {
-		    'name': 'ckanext.dcatapit_config.catalog_theme',
-		    'validator': ['ignore_missing'],
-		    'element': 'theme',
-		    'type': 'vocabulary',
-		    'vocabulary_name': 'eu_themes',
-		    'label': 'Catalog Themes',
-		    'placeholder': 'eg. economy, mental health, government',
-		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eu_themes&incomplete=?',
-		    'description': 'Themes of the catalog',
-		    'is_required': False
-	    },
-	    {
-		    'name': 'ckanext.dcatapit_configpublisher_name',
-		    'validator': ['not_empty'],
-		    'element': 'input',
-		    'type': 'text',
-		    'label': 'Dataset Editor',
-		    'placeholder': 'dataset editor',
-		    'description': 'The responsible organization of the catalog',
-		    'is_required': True
-	    },
-	    {
-		    'name': 'ckanext.dcatapit_configpublisher_code_identifier',
-		    'validator': ['not_empty'],
-		    'element': 'input',
-		    'type': 'number',
-		    'label': 'Catalog Organization Code',
-		    'placeholder': 'IPA/IVA',
-		    'description': 'The IVA/IPA code of the catalog organization',
-		    'is_required': True
-	    },
-	    {
-		    'name': 'ckanext.dcatapit_config.catalog_issued',
-		    'validator': ['ignore_missing'],
-		    'element': 'input',
-		    'type': 'date',
-		    'label': 'Catalog Release Date',
-		    'placeholder': 'catalog release date',
-		    'description': 'The creation date of the catalog',
-		    'is_required': False
-	    }
-	]
-
+def get_custom_config_schema(show=True):
+	if show:
+		return [
+		    {
+			    'name': 'ckanext.dcatapit_config.catalog_theme',
+			    'validator': ['ignore_missing'],
+			    'element': 'theme',
+			    'type': 'vocabulary',
+			    'vocabulary_name': 'eu_themes',
+			    'label': _('Catalog Themes'),
+			    'placeholder': _('eg. economy, mental health, government'),
+				'description': _('Themes of the catalog'),
+			    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eu_themes&incomplete=?',
+			    'is_required': False
+		    },
+		    {
+			    'name': 'ckanext.dcatapit_configpublisher_name',
+			    'validator': ['not_empty'],
+			    'element': 'input',
+			    'type': 'text',
+			    'label': _('Dataset Editor'),
+			    'placeholder': _('dataset editor'),
+			    'description': _('The responsible organization of the catalog'),
+			    'is_required': True
+		    },
+		    {
+			    'name': 'ckanext.dcatapit_configpublisher_code_identifier',
+			    'validator': ['not_empty'],
+			    'element': 'input',
+			    'type': 'number',
+			    'label': _('Catalog Organization Code'),
+			    'placeholder': _('IPA/IVA'),
+			    'description': _('The IVA/IPA code of the catalog organization'),
+			    'is_required': True
+		    },
+		    {
+			    'name': 'ckanext.dcatapit_config.catalog_issued',
+			    'validator': ['ignore_missing'],
+			    'element': 'input',
+			    'type': 'date',
+			    'label': _('Catalog Release Date'),
+			    'placeholder': _('catalog release date'),
+			    'description': _('The creation date of the catalog'),
+			    'is_required': False
+		    }
+		]
+	else:
+		return [
+		    {
+			    'name': 'ckanext.dcatapit_config.catalog_theme',
+			    'validator': ['ignore_missing']
+		    },
+		    {
+			    'name': 'ckanext.dcatapit_configpublisher_name',
+			    'validator': ['not_empty']
+		    },
+		    {
+			    'name': 'ckanext.dcatapit_configpublisher_code_identifier',
+			    'validator': ['not_empty']
+		    },
+		    {
+			    'name': 'ckanext.dcatapit_config.catalog_issued',
+			    'validator': ['ignore_missing']
+		    }
+		]
 
 def get_custom_organization_schema():
 	return [
@@ -53,8 +73,8 @@ def get_custom_organization_schema():
 		    'validator': ['not_empty'],
 		    'element': 'input',
 		    'type': 'email',
-		    'label': 'EMail',
-		    'placeholder': 'organization email',
+		    'label': _('EMail'),
+		    'placeholder': _('organization email'),
 		    'is_required': True
 	    },
 	    {
@@ -62,8 +82,8 @@ def get_custom_organization_schema():
 		    'validator': ['ignore_missing'],
 		    'element': 'input',
 		    'type': 'text',
-		    'label': 'Telephone',
-		    'placeholder': 'organization telephone',
+		    'label': _('Telephone'),
+		    'placeholder': _('organization telephone'),
 		    'is_required': False
 	    },
 	    {
@@ -71,8 +91,8 @@ def get_custom_organization_schema():
 		    'validator': ['ignore_missing'],
 		    'element': 'input',
 		    'type': 'url',
-		    'label': 'Site URL',
-		    'placeholder': 'organization site url',
+		    'label': _('Site URL'),
+		    'placeholder': _('organization site url'),
 		    'is_required': False
 	    }
 	]
@@ -84,8 +104,8 @@ def get_custom_package_schema():
 		    'validator': ['not_empty'],
 		    'element': 'input',
 		    'type': 'text',
-		    'label': 'Dataset Identifier',
-		    'placeholder': 'dataset identifier',
+		    'label': _('Dataset Identifier'),
+		    'placeholder': _('dataset identifier'),
 		    'is_required': True
 	    },
 	    {
@@ -93,8 +113,8 @@ def get_custom_package_schema():
 		    'validator': ['ignore_missing'],
 		    'element': 'input',
 		    'type': 'text',
-		    'label': 'Other Identifier',
-		    'placeholder': 'other identifier',
+		    'label': _('Other Identifier'),
+		    'placeholder': _('other identifier'),
 		    'is_required': False
 	    },
 	    {
@@ -103,8 +123,8 @@ def get_custom_package_schema():
 		    'element': 'theme',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'eu_themes',
-		    'label': 'Dataset Themes',
-		    'placeholder': 'eg. economy, mental health, government',
+		    'label': _('Dataset Themes'),
+		    'placeholder': _('eg. economy, mental health, government'),
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eu_themes&incomplete=?',
 		    'is_required': True
 	    },
@@ -115,8 +135,8 @@ def get_custom_package_schema():
 		    'element': 'theme',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'eurovoc',
-		    'label': 'Sub Theme',
-		    'placeholder': 'sub theme of the dataset',
+		    'label': _('Sub Theme'),
+		    'placeholder': _('sub theme of the dataset'),
 			'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eurovoc&incomplete=?',
 		    'is_required': False
 	    },
@@ -125,17 +145,17 @@ def get_custom_package_schema():
 		    'validator': ['ignore_missing', 'couple_validator'],
 		    'element': 'couple',
 		    'type': 'text',
-		    'label': 'Dataset Editor',
-		    'placeholder': 'dataset editor',
+		    'label': _('Dataset Editor'),
+		    'placeholder': _('dataset editor'),
 		    'is_required': False,
 		    'couples': [
 		    	{
 		    		'name': 'publisher_name',
-		    		'label': 'Name'
+		    		'label': _('Name')
 		    	},
 			    {
 		    		'name': 'publisher_code_identified',
-		    		'label': 'IPA/IVA'
+		    		'label': _('IPA/IVA')
 		    	}
 		    ]
 	    },
@@ -145,7 +165,7 @@ def get_custom_package_schema():
 		    'element': 'input',
 		    'type': 'date',
 		    'label': 'Release Date',
-		    'placeholder': 'release date',
+		    'placeholder': _('release date'),
 		    'is_required': False
 	    },
 	    {
@@ -153,8 +173,8 @@ def get_custom_package_schema():
 		    'validator': ['not_empty'],
 		    'element': 'input',
 		    'type': 'date',
-		    'label': 'Modification Date',
-		    'placeholder': 'modification date',
+		    'label': _('Modification Date'),
+		    'placeholder': _('modification date'),
 		    'is_required': True
 	    },
 	    {
@@ -163,8 +183,8 @@ def get_custom_package_schema():
 		    'element': 'theme',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'places',
-		    'label': 'Geographical Coverage',
-		    'placeholder': 'geographical coverage',
+		    'label': _('Geographical Coverage'),
+		    'placeholder': _('geographical coverage'),
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=places&incomplete=?',
 		    'is_required': False
 	    },
@@ -174,8 +194,8 @@ def get_custom_package_schema():
 		    'element': 'theme',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'languages',
-		    'label': 'Dataset Languages',
-		    'placeholder': 'eg. italian, german, english',
+		    'label': _('Dataset Languages'),
+		    'placeholder': _('eg. italian, german, english'),
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=languages&incomplete=?',
 		    'is_required': False
 	    },
@@ -184,17 +204,17 @@ def get_custom_package_schema():
 		    'validator': ['ignore_missing', 'couple_validator'],
 		    'element': 'couple',
 		    'type': 'date',
-		    'label': 'Temporal Coverage',
-		    'placeholder': 'temporal coverage',
+		    'label': _('Temporal Coverage'),
+		    'placeholder': _('temporal coverage'),
 		    'is_required': False,
 		    'couples': [
 		    	{
 		    		'name': 'start_date',
-		    		'label': 'Start Date'
+		    		'label': _('Start Date')
 		    	},
 			    {
 		    		'name': 'end_date',
-		    		'label': 'End Date'
+		    		'label': _('End Date')
 		    	}
 		    ]
 	    },
@@ -204,8 +224,8 @@ def get_custom_package_schema():
 		    'element': 'select',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'frequencies',
-		    'label': 'Frequency',
-		    'placeholder': 'accrual periodicity',
+		    'label': _('Frequency'),
+		    'placeholder': _('accrual periodicity'),
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=frequencies&incomplete=?',
 		    'is_required': True
 	    },
@@ -214,8 +234,8 @@ def get_custom_package_schema():
 		    'validator': ['ignore_missing'],
 		    'element': 'input',
 		    'type': 'url',
-		    'label': 'Version Of',
-		    'placeholder': 'is version of a related dataset URI',
+		    'label': _('Version Of'),
+		    'placeholder': _('is version of a related dataset URI'),
 		    'is_required': False
 	    },
 	    {
@@ -223,8 +243,8 @@ def get_custom_package_schema():
 		    'validator': ['ignore_missing'],
 		    'element': 'input',
 		    'type': 'text',
-		    'label': 'Conforms To',
-		    'placeholder': 'conforms to',
+		    'label': _('Conforms To'),
+		    'placeholder': _('conforms to'),
 		    'is_required': False
 	    },
 	    {
@@ -232,17 +252,17 @@ def get_custom_package_schema():
 		    'validator': ['not_empty', 'couple_validator'],
 		    'element': 'couple',
 		    'type': 'text',
-		    'label': 'Rights Holder',
-		    'placeholder': 'rights holder of the dataset',
+		    'label': _('Rights Holder'),
+		    'placeholder': _('rights holder of the dataset'),
 		    'is_required': True,
 		    'couples': [
 		    	{
 		    		'name': 'holder_name',
-		    		'label': 'Name'
+		    		'label': _('Name')
 		    	},
 			    {
 		    		'name': 'holder_code_identified',
-		    		'label': 'IPA/IVA'
+		    		'label': _('IPA/IVA')
 		    	}
 		    ]
 	    },
@@ -251,22 +271,21 @@ def get_custom_package_schema():
 		    'validator': ['ignore_missing', 'couple_validator'],
 		    'element': 'couple',
 		    'type': 'text',
-		    'label': 'Creator',
-		    'placeholder': 'creator of the dataset',
+		    'label': _('Creator'),
+		    'placeholder': _('creator of the dataset'),
 		    'is_required': False,
 		    'couples': [
 		    	{
 		    		'name': 'creator_name',
-		    		'label': 'Name'
+		    		'label': _('Name')
 		    	},
 			    {
 		    		'name': 'creator_code_identified',
-		    		'label': 'IPA/IVA'
+		    		'label': _('IPA/IVA')
 		    	}
 		    ]
 	    }
 	]
-
 
 def get_custom_resource_schema():
 	return [
@@ -276,8 +295,8 @@ def get_custom_resource_schema():
 		    'element': 'select',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'filetype',
-		    'label': 'Distribution Format',
-		    'placeholder': 'distribution format',
+		    'label': _('Distribution Format'),
+		    'placeholder': _('distribution format'),
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=filetype&incomplete=?',
 		    'is_required': False
 	    }

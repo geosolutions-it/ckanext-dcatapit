@@ -10,19 +10,19 @@
 
             {% if field.element == 'input' %}
 
-                  {{ form.input(field.name, label=_(field.label), id='field-' + field.name, placeholder=_(field.placeholder), type=field.type, value=data[field.name], error=errors[field.name], classes=['control-medium'], is_required=field.is_required) }}
+                  {{ form.input(field.name, label=field.label, id='field-' + field.name, placeholder=field.placeholder, type=field.type, value=data[field.name], error=errors[field.name], classes=['control-medium'], is_required=field.is_required) }}
 
             {% elif field.element == 'select' %}
             
                   {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
 
-                  {{ form.select(field.name, label=_(field.label), options=options, selected=data[field.name], error=errors[field.name]) }}
+                  {{ form.select(field.name, label=field.label, options=options, selected=data[field.name], error=errors[field.name]) }}
 
             {% elif field.element == 'multiselect' %}
 
                   {% set tag_attrs = {'data-module': 'autocomplete', 'data-module-tags': '', 'data-module-source': field.data_module_source} %}
 
-                  {{ form.input(field.name, id='field-' + field.name, label=_(field.label), placeholder=_(field.placeholder), value=data[field.name], error=errors[field.name], classes=['control-full'], attrs=tag_attrs, is_required=field.is_required) }}
+                  {{ form.input(field.name, id='field-' + field.name, label=field.label, placeholder=field.placeholder, value=data[field.name], error=errors[field.name], classes=['control-full'], attrs=tag_attrs, is_required=field.is_required) }}
 
             {% elif field.element == 'theme' %}
             
@@ -32,9 +32,9 @@
                         dcatapit_form_macros.theme(
                               field.name,
                               id='field-' + field.name,
-                              label=_(field.label),
+                              label=field.label,
                               value=data[field.name],
-                              placeholder=_(field.placeholder),
+                              placeholder=field.placeholder,
                               error=errors[field.name],
                               options=options,
                               type=field.type,
@@ -49,10 +49,10 @@
                   {{ 
                         dcatapit_form_macros.couple(
                               field.name,
-                              labels=(field.couples[0].label,
-                              field.couples[1].label),
+                              labels=(field.couples[0].label, field.couples[1].label),
                               names=(field.couples[0].name, field.couples[1].name),
-                              id='field-range-' + field.name, label=_(field.label),
+                              id='field-range-' + field.name, 
+                              label=field.label,
                               values=(couple_values[0], couple_values[1], False),
                               error=errors[field.couples[0].name] or errors[field.couples[1].name],
                               type=field.type,

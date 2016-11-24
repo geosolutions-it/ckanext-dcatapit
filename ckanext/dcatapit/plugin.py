@@ -12,12 +12,13 @@ import ckanext.dcatapit.validators as validators
 import ckanext.dcatapit.schema as dcatapit_schema
 import ckanext.dcatapit.helpers as helpers
 
+from routes.mapper import SubMapper, Mapper as _Mapper
+from ckan.lib.plugins import DefaultTranslation
+
 log = logging.getLogger(__file__)
 
-from routes.mapper import SubMapper, Mapper as _Mapper
 
-
-class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
+class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm, DefaultTranslation):
 
 	# IDatasetForm
     plugins.implements(plugins.IDatasetForm)
@@ -29,6 +30,8 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm)
     plugins.implements(plugins.ITemplateHelpers)
     # IRoutes
     plugins.implements(plugins.IRoutes, inherit=True)
+    # ITranslation
+    plugins.implements(plugins.ITranslation)
     
     # ------------- IRoutes ---------------#
     
@@ -137,7 +140,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm)
         ##
         # Getting custom resource schema
         ##
-        
+
         for field in dcatapit_schema.get_custom_resource_schema():
             if 'ignore' in field and field['ignore'] == True:
                 continue
@@ -184,7 +187,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm)
         }
 
 
-class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupForm):
+class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupForm, DefaultTranslation):
 
     # IConfigurer
     plugins.implements(plugins.IConfigurer)
@@ -192,6 +195,8 @@ class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupFo
     plugins.implements(plugins.ITemplateHelpers)
     # IGroupForm
     plugins.implements(plugins.IGroupForm, inherit=True)
+    # ITranslation
+    plugins.implements(plugins.ITranslation)
     
     # ------------- IConfigurer ---------------#
 
@@ -336,12 +341,14 @@ class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupFo
 
         return schema
 
-class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
+class DCATAPITConfigurerPlugin(plugins.SingletonPlugin, DefaultTranslation):
 
     # IConfigurer
     plugins.implements(plugins.IConfigurer)
     # ITemplateHelpers
     plugins.implements(plugins.ITemplateHelpers)
+    # ITranslation
+    plugins.implements(plugins.ITranslation)
     
     # ------------- IConfigurer ---------------#
 
@@ -350,7 +357,7 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
         toolkit.add_template_directory(config, 'templates')
 
     def update_config_schema(self, schema):        
-        for field in dcatapit_schema.get_custom_config_schema():
+        for field in dcatapit_schema.get_custom_config_schema(False):
 
             validators = []
             for validator in field['validator']:

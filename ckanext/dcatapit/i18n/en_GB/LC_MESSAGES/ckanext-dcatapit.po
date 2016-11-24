@@ -1,0 +1,210 @@
+# English (United Kingdom) translations for ckanext-dcatapit.
+# Copyright (C) 2016 ORGANIZATION
+# This file is distributed under the same license as the ckanext-dcatapit
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ckanext-dcatapit 0.0.1\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2016-11-24 15:25+0100\n"
+"PO-Revision-Date: 2016-11-24 15:25+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: en_GB <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: ckanext/dcatapit/schema.py:56
+msgid "EMail"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:57
+msgid "organization email"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:65
+msgid "Telephone"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:66
+msgid "organization telephone"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:74
+msgid "Site URL"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:75
+msgid "organization site url"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:87
+msgid "Dataset Identifier"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:88
+msgid "dataset identifier"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:96
+msgid "Other Identifier"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:97
+msgid "other identifier"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:106
+msgid "Dataset Themes"
+msgstr "Dataset Themes"
+
+#: ckanext/dcatapit/schema.py:107
+msgid "eg. economy, mental health, government"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:118
+msgid "Sub Theme"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:119
+msgid "sub theme of the dataset"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:128
+msgid "Dataset Editor"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:129
+msgid "dataset editor"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:134 ckanext/dcatapit/schema.py:241
+#: ckanext/dcatapit/schema.py:260
+msgid "Name"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:138 ckanext/dcatapit/schema.py:245
+#: ckanext/dcatapit/schema.py:264
+msgid "IPA/IVA"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:148
+msgid "release date"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:156
+msgid "Modification Date"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:157
+msgid "modification date"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:166
+msgid "Geographical Coverage"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:167
+msgid "geographical coverage"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:177
+msgid "Dataset Languages"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:178
+msgid "eg. italian, german, english"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:187
+msgid "Temporal Coverage"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:188
+msgid "temporal coverage"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:193
+msgid "Start Date"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:197
+msgid "End Date"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:207
+msgid "Frequency"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:208
+msgid "accrual periodicity"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:217
+msgid "Version Of"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:218
+msgid "is version of a related dataset URI"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:226
+msgid "Conforms To"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:227
+msgid "conforms to"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:235
+msgid "Rights Holder"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:236
+msgid "rights holder of the dataset"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:254
+msgid "Creator"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:255
+msgid "creator of the dataset"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:278
+msgid "Distribution Format"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:279
+msgid "distribution format"
+msgstr ""
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:5
+msgid "This field is required"
+msgstr ""
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:5
+msgid "Custom"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/resource_form.html:13
+msgid "Last Modified"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/resource_form.html:13
+msgid "eg. 2012-06-05"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/resource_form.html:15
+msgid "File Size"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/resource_form.html:15
+msgid "eg. 1024"
+msgstr ""
+
