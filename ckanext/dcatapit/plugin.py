@@ -52,6 +52,11 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm)
     # ------------- IDatasetForm ---------------#
 
     def _modify_package_schema(self, schema):
+
+        ##
+        # Getting custom package schema
+        ##
+
         for field in dcatapit_schema.get_custom_package_schema():
             if 'ignore' in field and field['ignore'] == True:
                 continue
@@ -72,6 +77,22 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm)
             ]
         })
 
+        ##
+        # Getting custom resource schema
+        ##
+
+        for field in dcatapit_schema.get_custom_resource_schema():
+            if 'ignore' in field and field['ignore'] == True:
+                continue
+
+            validators = []
+            for validator in field['validator']:
+                validators.append(toolkit.get_validator(validator))
+
+            schema['resources'].update({
+                field['name']: validators
+            })
+
         log.debug("Schema updated for DCAT_AP-TI:  %r", schema)
 
         return schema
@@ -89,6 +110,10 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm)
     def show_package_schema(self):
         schema = super(DCATAPITPackagePlugin, self).show_package_schema()
         
+        ##
+        # Getting custom package schema
+        ##
+
         for field in dcatapit_schema.get_custom_package_schema():
             if 'ignore' in field and field['ignore'] == True:
                 continue
@@ -108,6 +133,22 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm)
                 toolkit.get_validator('not_empty')
             ]
         })
+
+        ##
+        # Getting custom resource schema
+        ##
+        
+        for field in dcatapit_schema.get_custom_resource_schema():
+            if 'ignore' in field and field['ignore'] == True:
+                continue
+
+            validators = []
+            for validator in field['validator']:
+                validators.append(toolkit.get_validator(validator))
+
+            schema['resources'].update({
+                field['name']: validators
+            })
 
         log.debug("Schema updated for DCAT_AP-TI:  %r", schema)
 
@@ -136,6 +177,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm)
         return {
             'get_dcatapit_package_schema': helpers.get_dcatapit_package_schema,
             'get_vocabulary_items': helpers.get_vocabulary_items,
+            'get_dcatapit_resource_schema': helpers.get_dcatapit_resource_schema,
             'list_to_string': helpers.list_to_string,
             'couple_to_string': helpers.couple_to_string,
             'format': helpers.format
