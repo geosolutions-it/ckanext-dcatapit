@@ -213,9 +213,9 @@ def get_custom_package_schema():
 		    'name': 'is_version_of',
 		    'validator': ['ignore_missing'],
 		    'element': 'input',
-		    'type': 'text',
+		    'type': 'url',
 		    'label': 'Version Of',
-		    'placeholder': 'is version of',
+		    'placeholder': 'is version of a related dataset URI',
 		    'is_required': False
 	    },
 	    {
@@ -264,5 +264,21 @@ def get_custom_package_schema():
 		    		'label': 'IPA/IVA'
 		    	}
 		    ]
+	    }
+	]
+
+
+def get_custom_resource_schema():
+	return [
+ 		{
+		    'name': 'dcatapit_format',
+		    'validator': ['ignore_missing'],
+		    'element': 'select',
+		    'type': 'vocabulary',
+		    'vocabulary_name': 'filetype',
+		    'label': 'DCAT_AP-IT Format',
+		    'placeholder': 'accrual periodicity',
+		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=filetype&incomplete=?',
+		    'is_required': False
 	    }
 	]

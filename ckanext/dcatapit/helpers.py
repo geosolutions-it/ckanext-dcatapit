@@ -20,6 +20,10 @@ def get_dcatapit_configuration_schema():
     log.debug('Retrieving DCAT-AP_IT configuration schema fields...')
     return dcatapit_schema.get_custom_config_schema()
 
+def get_dcatapit_resource_schema():
+    log.debug('Retrieving DCAT-AP_IT resource schema fields...')
+    return dcatapit_schema.get_custom_resource_schema()
+
 def get_vocabulary_items(vocabulary_name, keys=None):
 	try:
 		tag_list = toolkit.get_action('tag_list')

@@ -50,6 +50,6 @@ def get_localized_tag_name(tag_name=None):
         if localized_tag_name:
             return localized_tag_name.text
         else:
-            return None
+            return tag_name
     else:
         return None

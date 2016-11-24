@@ -21,7 +21,11 @@
 	  	{% else %}
 		    <tr>
 		      <th scope="row" class="dataset-label">{{ _(field.label) }}</th>
-		      <td class="dataset-details">{{ h.format(value_field, field.format) if field.element != 'couple' else h.couple_to_string(field.couples, value_field, field.format) }}</td>
+			  {% if h.is_url(value_field) %}
+	          	<td class="dataset-details">{{ h.link_to(value_field, value_field, rel='', target='_blank') }}</td>
+	          {% else %}
+	         	<td class="dataset-details">{{ h.format(value_field, field.format) if field.element != 'couple' else h.couple_to_string(field.couples, value_field, field.format) }}</td>
+	          {% endif %}
 		    </tr>
 	  	{% endif %}
 

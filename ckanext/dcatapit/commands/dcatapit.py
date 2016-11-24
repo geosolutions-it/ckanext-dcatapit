@@ -14,6 +14,7 @@ LANGUAGE_THEME_NAME = 'languages'
 EUROPEAN_THEME_NAME = 'eu_themes'
 LOCATIONS_THEME_NAME = 'places'
 FREQUENCIES_THEME_NAME = 'frequencies'
+FILETYPE_THEME_NAME = 'filetype'
 
 class DCATAPITCommands(CkanCommand):
     '''  A command for working with vocabularies
@@ -29,7 +30,8 @@ class DCATAPITCommands(CkanCommand):
           languages   -> http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf
           eu_themes   -> http://publications.europa.eu/mdr/resource/authority/data-theme/skos/data-theme-skos.rdf
           places      -> http://publications.europa.eu/mdr/resource/authority/place/skos/places-skos.rdf
-          frequencies -> http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf      
+          frequencies -> http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf
+          filetype -> http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf    
        PATH_TO_INI_FILE is the path to the Ckan configuration file
     '''
 
@@ -50,7 +52,7 @@ class DCATAPITCommands(CkanCommand):
         'en_GB': 'ENG'
     }
 
-    _controlled_vocabularies_allowed = [EUROPEAN_THEME_NAME, LOCATIONS_THEME_NAME, LANGUAGE_THEME_NAME, FREQUENCIES_THEME_NAME]
+    _controlled_vocabularies_allowed = [EUROPEAN_THEME_NAME, LOCATIONS_THEME_NAME, LANGUAGE_THEME_NAME, FREQUENCIES_THEME_NAME, FILETYPE_THEME_NAME]
 
     def __init__(self, name):
         self.parser.add_option('--filename', dest='filename', default=None,
