@@ -271,13 +271,13 @@ def get_custom_package_schema():
 def get_custom_resource_schema():
 	return [
  		{
-		    'name': 'dcatapit_format',
+		    'name': 'distribution_format',
 		    'validator': ['ignore_missing'],
 		    'element': 'select',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'filetype',
-		    'label': 'DCAT_AP-IT Format',
-		    'placeholder': 'accrual periodicity',
+		    'label': 'Distribution Format',
+		    'placeholder': 'distribution format',
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=filetype&incomplete=?',
 		    'is_required': False
 	    }
