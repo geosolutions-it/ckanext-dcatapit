@@ -3,16 +3,12 @@ CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
 
 ##UNDER DEVELOPMENT
 
-------------
-Requirements
-------------
+#Requirements
 
 The ckanext-dcatapit extension has been developed for CKAN 2.4 or later.
 The ckanext-dcatapit extension requires the [ckanext-multilang plugin](https://github.com/geosolutions-it/ckanext-multilang/tree/ckan-2.5.2) installed on CKAN (see the [WIKI](https://github.com/geosolutions-it/ckanext-multilang/wiki) for more details about that).
 
-------------
-Installation
-------------
+#Installation
 
 1. Install the ckanext-multilang extension as described [here](https://github.com/geosolutions-it/ckanext-multilang/blob/ckan-2.5.2/README.rst)
 
