@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-24 16:42+0100\n"
-"PO-Revision-Date: 2016-11-24 16:42+0100\n"
+"POT-Creation-Date: 2016-11-24 18:52+0100\n"
+"PO-Revision-Date: 2016-11-24 18:52+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: it <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: ckanext/dcatapit/schema.py:12
 msgid "Catalog Themes"
-msgstr "Temi del Catalogo"
+msgstr ""
 
 #: ckanext/dcatapit/schema.py:13 ckanext/dcatapit/schema.py:127
 msgid "eg. economy, mental health, government"
@@ -109,7 +109,7 @@ msgstr ""
 
 #: ckanext/dcatapit/schema.py:126
 msgid "Dataset Themes"
-msgstr ""
+msgstr "Temi del Dataset"
 
 #: ckanext/dcatapit/schema.py:138
 msgid "Sub Theme"

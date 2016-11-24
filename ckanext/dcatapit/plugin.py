@@ -32,7 +32,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     plugins.implements(plugins.IRoutes, inherit=True)
     # ITranslation
     plugins.implements(plugins.ITranslation)
-    
+
     # ------------- IRoutes ---------------#
     
     def before_map(self, map):
