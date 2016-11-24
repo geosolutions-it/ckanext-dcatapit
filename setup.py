@@ -46,7 +46,6 @@ setup(
         'Programming Language :: Python :: 2.7',
     ],
 
-
     # What does your project relate to?
     keywords='''CKAN DCAT DCAT_AP-IT RDF''',
 
@@ -89,5 +88,18 @@ setup(
 
         [paste.paster_command]
         vocabulary=ckanext.dcatapit.commands.dcatapit:DCATAPITCommands
+
+        [babel.extractors]
+        ckan = ckan.lib.extract:extract_ckan
     ''',
+
+    # DCAT-AP_IT Translations
+    message_extractors={
+        'ckanext': [
+            ('**.py', 'python', None),
+            ('**.js', 'javascript', None),
+            ('**/templates/**.html', 'ckan', None),
+        ],
+    }
+
 )
