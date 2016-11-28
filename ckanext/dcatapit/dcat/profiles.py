@@ -69,28 +69,12 @@ class ItalianDCATAPProfile(RDFProfile):
 
         ### replace periodicity
         self._remove_node(dataset_dict, dataset_ref,  ('frequency', DCT.accrualPeriodicity, None, Literal))
-        self._add_uri_node(dataset_dict, dataset_ref, ('accrual_periodicity', DCT.accrualPeriodicity, None, URIRef), FREQ_BASE_URI)
+        self._add_uri_node(dataset_dict, dataset_ref, ('frequency', DCT.accrualPeriodicity, None, URIRef), FREQ_BASE_URI)
 
         ### replace landing page
         self._remove_node(dataset_dict, dataset_ref,  ('url', DCAT.landingPage, None, URIRef))
         landing_page = dataset_uri(dataset_dict)
         self.g.add((dataset_ref, DCAT.landingPage, URIRef(landing_page)))
-
-        ### temporal extension
-        value = self._get_dict_value(dataset_dict, 'temporal_coverage')  # "temporal_coverage" : "2016-11-01,2016-11-06",
-        if value:
-            start, end = value.split(',')
-
-            if start or end:
-                temporal_extent = BNode()
-
-                g.add((temporal_extent, RDF.type, DCT.PeriodOfTime))
-                if start:
-                    self._add_date_triple(temporal_extent, SCHEMA.startDate, start)
-                if end:
-                    self._add_date_triple(temporal_extent, SCHEMA.endDate, end)
-                g.add((dataset_ref, DCT.temporal, temporal_extent))
-
 
         ### publisher
 
@@ -111,7 +95,7 @@ class ItalianDCATAPProfile(RDFProfile):
         self._add_agent(dataset_dict, dataset_ref, 'publisher', DCT.publisher)
 
         ### Rights holder : Agent
-        self._add_agent(dataset_dict, dataset_ref, 'rights_holder', DCT.rightsHolder)
+        self._add_agent(dataset_dict, dataset_ref, 'holder', DCT.rightsHolder)
 
         ### Autore : Agent
         self._add_agent(dataset_dict, dataset_ref, 'creator', DCT.creator)
@@ -180,7 +164,7 @@ class ItalianDCATAPProfile(RDFProfile):
                     log.warn('License not found for dataset: %s', title)
 
 
-    def _add_agent(self, _dict, ref, key, _type):
+    def _add_agent(self, _dict, ref, basekey, _type):
         ''' Stores the Agent in this format:
                 <dct:publisher rdf:resource="http://dati.gov.it/resource/Amministrazione/r_liguri"/>
                     <dcatapit:Agent rdf:about="http://dati.gov.it/resource/Amministrazione/r_liguri">
@@ -190,18 +174,17 @@ class ItalianDCATAPProfile(RDFProfile):
                     </dcatapit:Agent>
         '''
 
-        value = self._get_dict_value(_dict, key)
-        if value:
-            agent_name, agent_id = value.split(',')
+        agent_name = self._get_dict_value(_dict, basekey + '_name', 'N/A')
+        agent_id = self._get_dict_value(_dict, basekey + '_identifier','N/A')
 
-            agent = BNode()
+        agent = BNode()
 
-            self.g.add((agent, RDF['type'], DCATAPIT.Agent))
-            self.g.add((ref, _type, agent))
+        self.g.add((agent, RDF['type'], DCATAPIT.Agent))
+        self.g.add((ref, _type, agent))
 
-            # g.add((agent, RDF['type'], URIRef('&foaf;Agent')))
-            self.g.add((agent, FOAF.name, Literal(agent_name)))
-            self.g.add((agent, DCT.identifier, Literal(agent_id)))
+        # g.add((agent, RDF['type'], URIRef('&foaf;Agent')))
+        self.g.add((agent, FOAF.name, Literal(agent_name)))
+        self.g.add((agent, DCT.identifier, Literal(agent_id)))
 
 
     def _add_uri_node(self, _dict, ref, item, base_uri=''):
