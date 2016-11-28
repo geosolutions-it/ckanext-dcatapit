@@ -78,6 +78,8 @@ def couple_to_string(field_couples, couple_value, format=None):
 		return _string
 
 def format(_string, format=None):
-	if _string:
-		return _string
+	##
+	# TODO: manage the string format if needed
+	##
+	return _string
 
