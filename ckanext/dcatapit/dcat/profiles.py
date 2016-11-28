@@ -59,13 +59,21 @@ class ItalianDCATAPProfile(RDFProfile):
         g.add((dataset_ref, RDF.type, DCATAPIT.Dataset))
         g.remove((dataset_ref, RDF.type, DCAT.Dataset))
 
-        ### replace theme
-        self._remove_node(dataset_dict, dataset_ref, ('theme', DCAT.theme, None, URIRef))
-        self._add_uri_node(dataset_dict, dataset_ref, ('theme', DCAT.theme, None, URIRef), THEME_BASE_URI)
+        ### replace themes
+        value = self._get_dict_value(dataset_dict, 'theme')
+        if value:
+            for theme in value.split(','):
+                self.g.remove((dataset_ref, DCAT.theme, URIRef(theme)))
+                theme = theme.replace('{','').replace('}','')
+                self.g.add((dataset_ref, DCAT.theme, URIRef(THEME_BASE_URI + theme)))
 
-        ### replace language
-        self._remove_node(dataset_dict, dataset_ref,  ('language', DCT.language, None, Literal))
-        self._add_uri_node(dataset_dict, dataset_ref, ('language', DCT.language, None, URIRef), LANG_BASE_URI)
+        ### replace languages
+        value = self._get_dict_value(dataset_dict, 'language')
+        if value:
+            for lang in value.split(','):
+                self.g.remove((dataset_ref, DCT.language, Literal(lang)))
+                lang = lang.replace('{','').replace('}','')
+                self.g.add((dataset_ref, DCT.language, URIRef(LANG_BASE_URI + lang)))
 
         ### replace periodicity
         self._remove_node(dataset_dict, dataset_ref,  ('frequency', DCT.accrualPeriodicity, None, Literal))
