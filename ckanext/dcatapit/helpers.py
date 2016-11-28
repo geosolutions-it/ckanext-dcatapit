@@ -68,14 +68,16 @@ def list_to_string(_list, _format=None):
 
 		return _string
 
-def couple_to_string(field_couples, couple_value, format=None):
-	if couple_value and ',' in couple_value:
-		items = couple_value.split(',')
-
-		_string = field_couples[0]['label'] + ': ' + items[0]
-		_string = _string + ' ' + field_couples[1]['label'] + ': ' + items[1]
+def couple_to_string(field_couples, pkg_dict, format=None):
+	if field_couples and pkg_dict:
+		_string = ''
+		for couple in field_couples:
+			field_value = pkg_dict[couple['name']]
+			if field_value:
+				_string = _string + ' ' + couple['label'] + ': ' + field_value
 
 		return _string
+	return None
 
 def format(_string, format=None):
 	##

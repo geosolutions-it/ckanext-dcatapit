@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-28 12:06+0100\n"
+"POT-Creation-Date: 2016-11-28 17:43+0100\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -30,11 +30,11 @@ msgstr "g. Bildung, Landwirtschaft, Energie"
 msgid "Themes of the catalog"
 msgstr "Themen des Katalogs"
 
-#: ckanext/dcatapit/schema.py:23 ckanext/dcatapit/schema.py:148
+#: ckanext/dcatapit/schema.py:23 ckanext/dcatapit/schema.py:146
 msgid "Dataset Editor"
 msgstr "Dataset-Editor"
 
-#: ckanext/dcatapit/schema.py:24 ckanext/dcatapit/schema.py:149
+#: ckanext/dcatapit/schema.py:24
 msgid "dataset editor"
 msgstr "Herausgeber des Datensatzes"
 
@@ -46,8 +46,8 @@ msgstr "Die verantwortliche Organisation des Katalogs"
 msgid "Catalog Organization Code"
 msgstr "Katalog Organisationscode"
 
-#: ckanext/dcatapit/schema.py:34 ckanext/dcatapit/schema.py:158
-#: ckanext/dcatapit/schema.py:265 ckanext/dcatapit/schema.py:284
+#: ckanext/dcatapit/schema.py:34 ckanext/dcatapit/schema.py:159
+#: ckanext/dcatapit/schema.py:272 ckanext/dcatapit/schema.py:294
 msgid "IPA/IVA"
 msgstr "IPA/IVA"
 
@@ -119,100 +119,112 @@ msgstr "Unter Thema"
 msgid "sub theme of the dataset"
 msgstr "Unterthema des Datensatzes"
 
-#: ckanext/dcatapit/schema.py:154 ckanext/dcatapit/schema.py:261
-#: ckanext/dcatapit/schema.py:280
+#: ckanext/dcatapit/schema.py:152 ckanext/dcatapit/schema.py:264
+#: ckanext/dcatapit/schema.py:287
 msgid "Name"
 msgstr "Name"
 
-#: ckanext/dcatapit/schema.py:168
+#: ckanext/dcatapit/schema.py:154
+msgid "publisher name"
+msgstr "Name des Herausgebers"
+
+#: ckanext/dcatapit/schema.py:161
+msgid "publisher identifier"
+msgstr "anderen Bezeichner"
+
+#: ckanext/dcatapit/schema.py:170
+msgid "Release Date"
+msgstr "Veröffentlichungsdatum"
+
+#: ckanext/dcatapit/schema.py:171
 msgid "release date"
 msgstr "Veröffentlichungsdatum"
 
-#: ckanext/dcatapit/schema.py:176
+#: ckanext/dcatapit/schema.py:179
 msgid "Modification Date"
 msgstr "Änderungsdatum"
 
-#: ckanext/dcatapit/schema.py:177
+#: ckanext/dcatapit/schema.py:180
 msgid "modification date"
 msgstr "Änderungsdatum"
 
-#: ckanext/dcatapit/schema.py:186
-msgid "Geographical Coverage"
-msgstr "Geografische Abdeckung"
-
-#: ckanext/dcatapit/schema.py:187
-msgid "geographical coverage"
+#: ckanext/dcatapit/schema.py:189
+msgid "Geographical Name"
 msgstr "geografischen Abdeckung"
 
-#: ckanext/dcatapit/schema.py:197
+#: ckanext/dcatapit/schema.py:190
+msgid "geographical name"
+msgstr "geografischen Abdeckung"
+
+#: ckanext/dcatapit/schema.py:200
 msgid "Dataset Languages"
 msgstr "Dataset Sprachen"
 
-#: ckanext/dcatapit/schema.py:198
+#: ckanext/dcatapit/schema.py:201
 msgid "eg. italian, german, english"
 msgstr "z.B. Italienisch, deutsch, englisch"
 
-#: ckanext/dcatapit/schema.py:207
+#: ckanext/dcatapit/schema.py:208
 msgid "Temporal Coverage"
 msgstr "Zeitliche Deckung"
-
-#: ckanext/dcatapit/schema.py:208
-msgid "temporal coverage"
-msgstr "zeitliche Abdeckung"
 
 #: ckanext/dcatapit/schema.py:213
 msgid "Start Date"
 msgstr "Anfangsdatum"
 
-#: ckanext/dcatapit/schema.py:217
+#: ckanext/dcatapit/schema.py:216 ckanext/dcatapit/schema.py:223
+msgid "temporal coverage"
+msgstr "zeitliche Abdeckung"
+
+#: ckanext/dcatapit/schema.py:220
 msgid "End Date"
 msgstr "Enddatum"
 
-#: ckanext/dcatapit/schema.py:227
+#: ckanext/dcatapit/schema.py:233
 msgid "Frequency"
 msgstr "Frequenz"
 
-#: ckanext/dcatapit/schema.py:228
+#: ckanext/dcatapit/schema.py:234
 msgid "accrual periodicity"
 msgstr "Periodendauer"
 
-#: ckanext/dcatapit/schema.py:237
+#: ckanext/dcatapit/schema.py:243
 msgid "Version Of"
 msgstr "Version von"
 
-#: ckanext/dcatapit/schema.py:238
+#: ckanext/dcatapit/schema.py:244
 msgid "is version of a related dataset URI"
 msgstr "Ist die Version eines verknüpften Dataset-URI"
 
-#: ckanext/dcatapit/schema.py:246
+#: ckanext/dcatapit/schema.py:252
 msgid "Conforms To"
 msgstr "Entspricht"
 
-#: ckanext/dcatapit/schema.py:247
+#: ckanext/dcatapit/schema.py:253
 msgid "conforms to"
 msgstr "entspricht"
 
-#: ckanext/dcatapit/schema.py:255
+#: ckanext/dcatapit/schema.py:259
 msgid "Rights Holder"
 msgstr "Rechteinhaber"
 
-#: ckanext/dcatapit/schema.py:256
+#: ckanext/dcatapit/schema.py:267 ckanext/dcatapit/schema.py:275
 msgid "rights holder of the dataset"
 msgstr "Rechteinhaber des Datenbestandes"
 
-#: ckanext/dcatapit/schema.py:274
+#: ckanext/dcatapit/schema.py:282
 msgid "Creator"
 msgstr "Schöpfer"
 
-#: ckanext/dcatapit/schema.py:275
+#: ckanext/dcatapit/schema.py:290 ckanext/dcatapit/schema.py:297
 msgid "creator of the dataset"
 msgstr "Ersteller des Datensatzes"
 
-#: ckanext/dcatapit/schema.py:298
+#: ckanext/dcatapit/schema.py:311
 msgid "Distribution Format"
 msgstr "Verteilungsformat"
 
-#: ckanext/dcatapit/schema.py:299
+#: ckanext/dcatapit/schema.py:312
 msgid "distribution format"
 msgstr "Verteilungsformat"
 

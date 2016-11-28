@@ -44,6 +44,7 @@
 
             {% elif field.element == 'couple' %}
 
+                  {# -------------------------------------------------------------------------------
                   {% set couple_values = data[field.name].split(',') if data[field.name] else ['', ''] %}
 
                   {{ 
@@ -56,6 +57,20 @@
                               values=(couple_values[0], couple_values[1], False),
                               error=errors[field.couples[0].name] or errors[field.couples[1].name],
                               type=field.type,
+                              is_required=field.is_required)
+                  }}
+                  ------------------------------------------------------------------------------- #}
+
+                  {{ 
+                        dcatapit_form_macros.couple(
+                              field.name,
+                              labels=(field.couples[0].label, field.couples[1].label),
+                              names=(field.couples[0].name, field.couples[1].name),
+                              id='field-range-' + field.name, 
+                              label=field.label,
+                              values=(data[field.couples[0].name], data[field.couples[1].name], False),
+                              error=errors[field.couples[0].name] or errors[field.couples[1].name],
+                              types=(field.couples[0].type, field.couples[1].type),
                               is_required=field.is_required)
                   }}
 
