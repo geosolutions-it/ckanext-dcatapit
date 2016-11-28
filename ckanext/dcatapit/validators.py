@@ -1,5 +1,7 @@
 import logging
 
+from ckan.common import _, ungettext
+
 from ckan.plugins.toolkit import Invalid
 from datetime import datetime
 
@@ -15,6 +17,6 @@ def couple_validator(value, context):
 
 		for c in couples:
 			if not c:
-				raise Invalid('Invalid couple, one value is missing')
+				raise Invalid(_('Invalid couple, one value is missing'))
 
 	return value

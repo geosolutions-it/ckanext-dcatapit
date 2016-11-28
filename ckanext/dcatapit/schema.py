@@ -10,7 +10,7 @@ def get_custom_config_schema(show=True):
 			    'type': 'vocabulary',
 			    'vocabulary_name': 'eu_themes',
 			    'label': _('Catalog Themes'),
-			    'placeholder': _('eg. economy, mental health, government'),
+			    'placeholder': _('eg. education, agriculture, energy'),
 				'description': _('Themes of the catalog'),
 			    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eu_themes&incomplete=?',
 			    'is_required': False
@@ -124,7 +124,7 @@ def get_custom_package_schema():
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'eu_themes',
 		    'label': _('Dataset Themes'),
-		    'placeholder': _('eg. economy, mental health, government'),
+		    'placeholder': _('eg. education, agriculture, energy'),
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eu_themes&incomplete=?',
 		    'is_required': True
 	    },

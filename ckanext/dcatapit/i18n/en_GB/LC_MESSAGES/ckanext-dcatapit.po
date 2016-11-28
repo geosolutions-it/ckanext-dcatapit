@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-24 18:52+0100\n"
-"PO-Revision-Date: 2016-11-24 18:52+0100\n"
+"POT-Creation-Date: 2016-11-28 12:06+0100\n"
+"PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en_GB <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -23,7 +23,7 @@ msgid "Catalog Themes"
 msgstr ""
 
 #: ckanext/dcatapit/schema.py:13 ckanext/dcatapit/schema.py:127
-msgid "eg. economy, mental health, government"
+msgid "eg. education, agriculture, energy"
 msgstr ""
 
 #: ckanext/dcatapit/schema.py:14
@@ -214,6 +214,10 @@ msgstr ""
 
 #: ckanext/dcatapit/schema.py:299
 msgid "distribution format"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:20
+msgid "Invalid couple, one value is missing"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:5
