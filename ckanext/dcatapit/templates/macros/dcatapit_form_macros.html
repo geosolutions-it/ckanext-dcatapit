@@ -11,6 +11,10 @@
   </div>
 {% endmacro %}
 
+
+{# -------------------------------------------------------------------------------
+Old implementation of the couple element (one element with comma separated values)
+
 {% macro couple(name, labels=(), names=(), id="", label="", values=(), placeholders=(), error="", type="", classes=[], attrs={}, is_required=false, key_values=()) %}
   {%- set classes = (classes|list) -%}
   {%- set label_id = (id) ~ "-key" -%}
@@ -29,10 +33,10 @@
              value="{{ values[0] | empty_and_escape }}" 
              placeholder="{{ placeholders[0] }}" 
              onchange="if($('#{{ names[0] }}-value').val() || $('#{{ names[1] }}-value').val()){
-             		$('#{{name}}-hidden').val($('#{{ names[0] }}-value').val() + ',' + $('#{{ names[1] }}-value').val())
-             	} else {
-             		$('#{{name}}-hidden').val('')
-             	} " />
+                $('#{{name}}-hidden').val($('#{{ names[0] }}-value').val() + ',' + $('#{{ names[1] }}-value').val())
+              } else {
+                $('#{{name}}-hidden').val('')
+              } " />
 
       <label for="{{ names[1] }}-label" class="add-on">{{ _(labels[1]) }}</label>
       <input id="{{ names[1] }}-value" 
@@ -41,10 +45,37 @@
              value="{{ values[1] | empty_and_escape }}" 
              placeholder="{{ placeholders[1] }}" 
              onchange="if($('#{{ names[0] }}-value').val() || $('#{{ names[1] }}-value').val()){
-             		$('#{{name}}-hidden').val($('#{{ names[0] }}-value').val() + ',' + $('#{{ names[1] }}-value').val())
-             	} else {
-             		$('#{{name}}-hidden').val('')
-             	} " />
+                $('#{{name}}-hidden').val($('#{{ names[0] }}-value').val() + ',' + $('#{{ names[1] }}-value').val())
+              } else {
+                $('#{{name}}-hidden').val('')
+              } " />
+    </div>
+  {% endcall %}
+{% endmacro %}
+------------------------------------------------------------------------------- #}
+
+
+{% macro couple(name, labels=(), names=(), id="", label="", values=(), placeholders=(), error="", types="", classes=[], attrs={}, is_required=false, key_values=()) %}
+  {%- set classes = (classes|list) -%}
+  {%- set label_id = (id) ~ "-key" -%}
+  {%- set extra_html = caller() if caller -%}
+  {%- do classes.append('control-custom') -%}
+
+  {% call input_block(label_id, label or name, error, classes, control_classes=["editor"], extra_html=extra_html, is_required=is_required) %}
+    <div class="input-prepend" {{ form.attributes(attrs) }}>
+      <label for="{{ names[0] }}-label" class="add-on">{{ _(labels[0]) }}</label>
+      <input id="{{ names[0] }}-value" 
+             type="{{ types[0] }}" 
+             name="{{ names[0] }}" 
+             value="{{ values[0] | empty_and_escape }}" 
+             placeholder="{{ placeholders[0] }}" />
+
+      <label for="{{ names[1] }}-label" class="add-on">{{ _(labels[1]) }}</label>
+      <input id="{{ names[1] }}-value" 
+             type="{{ types[1] }}" 
+             name="{{ names[1] }}" 
+             value="{{ values[1] | empty_and_escape }}" 
+             placeholder="{{ placeholders[1] }}" />
     </div>
   {% endcall %}
 {% endmacro %}

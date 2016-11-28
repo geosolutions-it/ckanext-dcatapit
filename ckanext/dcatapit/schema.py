@@ -29,7 +29,7 @@ def get_custom_config_schema(show=True):
 			    'name': 'ckanext.dcatapit_configpublisher_code_identifier',
 			    'validator': ['not_empty'],
 			    'element': 'input',
-			    'type': 'number',
+			    'type': 'text',
 			    'label': _('Catalog Organization Code'),
 			    'placeholder': _('IPA/IVA'),
 			    'description': _('The IVA/IPA code of the catalog organization'),
@@ -100,7 +100,7 @@ def get_custom_organization_schema():
 def get_custom_package_schema():
 	return [
 	    {
-		    'name': 'dataset_identifier',
+		    'name': 'identifier',
 		    'validator': ['not_empty'],
 		    'element': 'input',
 		    'type': 'text',
@@ -109,7 +109,7 @@ def get_custom_package_schema():
 		    'is_required': True
 	    },
 	    {
-		    'name': 'other_identifier',
+		    'name': 'alternate_identifier',
 		    'validator': ['ignore_missing'],
 		    'element': 'input',
 		    'type': 'text',
@@ -142,20 +142,23 @@ def get_custom_package_schema():
 	    },
 	    {
 		    'name': 'publisher',
-		    'validator': ['ignore_missing', 'couple_validator'],
 		    'element': 'couple',
-		    'type': 'text',
 		    'label': _('Dataset Editor'),
-		    'placeholder': _('dataset editor'),
 		    'is_required': False,
 		    'couples': [
 		    	{
 		    		'name': 'publisher_name',
-		    		'label': _('Name')
+		    		'validator': ['not_empty'],
+		    		'label': _('Name'),
+		    		'type': 'text',
+		    		'placeholder': _('publisher name')
 		    	},
 			    {
-		    		'name': 'publisher_code_identified',
-		    		'label': _('IPA/IVA')
+		    		'name': 'publisher_identifier',
+		    		'validator': ['not_empty'],
+		    		'label': _('IPA/IVA'),
+		    		'type': 'text',
+		    		'placeholder': _('publisher identifier')
 		    	}
 		    ]
 	    },
@@ -164,7 +167,7 @@ def get_custom_package_schema():
 		    'validator': ['ignore_missing'],
 		    'element': 'input',
 		    'type': 'date',
-		    'label': 'Release Date',
+		    'label': _('Release Date'),
 		    'placeholder': _('release date'),
 		    'is_required': False
 	    },
@@ -178,13 +181,13 @@ def get_custom_package_schema():
 		    'is_required': True
 	    },
 	    {
-		    'name': 'geographical_coverage',
+		    'name': 'geographical_name',
 		    'validator': ['ignore_missing'],
 		    'element': 'theme',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'places',
-		    'label': _('Geographical Coverage'),
-		    'placeholder': _('geographical coverage'),
+		    'label': _('Geographical Name'),
+		    'placeholder': _('geographical name'),
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=places&incomplete=?',
 		    'is_required': False
 	    },
@@ -200,26 +203,29 @@ def get_custom_package_schema():
 		    'is_required': False
 	    },
 	    {
-		    'name': 'temporal_coverage',
-		    'validator': ['ignore_missing'],
-		    'element': 'couple',
-		    'type': 'date',
-		    'label': _('Temporal Coverage'),
-		    'placeholder': _('temporal coverage'),
+		    'name': 'temporal_coverage',		    
+		    'element': 'couple',		    
+		    'label': _('Temporal Coverage'),		    
 		    'is_required': False,
 		    'couples': [
 		    	{
-		    		'name': 'start_date',
-		    		'label': _('Start Date')
+		    		'name': 'temporal_start',
+		    		'label': _('Start Date'),
+		    		'validator': ['not_empty'],
+		    		'type': 'date',
+		    		'placeholder': _('temporal coverage')
 		    	},
 			    {
-		    		'name': 'end_date',
-		    		'label': _('End Date')
+		    		'name': 'temporal_end',
+		    		'label': _('End Date'),
+		    		'validator': ['ignore_missing'],
+		    		'type': 'date',
+		    		'placeholder': _('temporal coverage')
 		    	}
 		    ]
 	    },
 	    {
-		    'name': 'accrual_periodicity',
+		    'name': 'frequency',
 		    'validator': ['not_empty'],
 		    'element': 'select',
 		    'type': 'vocabulary',
@@ -248,40 +254,47 @@ def get_custom_package_schema():
 		    'is_required': False
 	    },
 	    {
-		    'name': 'rights_holder',
-		    'validator': ['not_empty', 'couple_validator'],
-		    'element': 'couple',
-		    'type': 'text',
-		    'label': _('Rights Holder'),
-		    'placeholder': _('rights holder of the dataset'),
+		    'name': 'rights_holder',		    
+		    'element': 'couple',		    
+		    'label': _('Rights Holder'),		    
 		    'is_required': True,
 		    'couples': [
 		    	{
 		    		'name': 'holder_name',
-		    		'label': _('Name')
+		    		'label': _('Name'),
+		    		'validator': ['not_empty'],
+		    		'type': 'text',
+		    		'placeholder': _('rights holder of the dataset')
+
 		    	},
 			    {
-		    		'name': 'holder_code_identified',
-		    		'label': _('IPA/IVA')
+		    		'name': 'holder_identifier',
+		    		'label': _('IPA/IVA'),
+		    		'validator': ['not_empty'],
+		    		'type': 'text',
+		    		'placeholder': _('rights holder of the dataset')
 		    	}
 		    ]
 	    },
 	    {
-		    'name': 'creator',
-		    'validator': ['ignore_missing', 'couple_validator'],
-		    'element': 'couple',
-		    'type': 'text',
-		    'label': _('Creator'),
-		    'placeholder': _('creator of the dataset'),
+		    'name': 'creator',		    
+		    'element': 'couple',		    
+		    'label': _('Creator'),		    
 		    'is_required': False,
 		    'couples': [
 		    	{
 		    		'name': 'creator_name',
-		    		'label': _('Name')
+		    		'label': _('Name'),
+		    		'validator': ['ignore_missing'],
+		    		'type': 'text',
+		    		'placeholder': _('creator of the dataset')
 		    	},
 			    {
-		    		'name': 'creator_code_identified',
-		    		'label': _('IPA/IVA')
+		    		'name': 'creator_identifier',
+		    		'label': _('IPA/IVA'),
+		    		'validator': ['ignore_missing'],
+		    		'type': 'text',
+		    		'placeholder': _('creator of the dataset')
 		    	}
 		    ]
 	    }

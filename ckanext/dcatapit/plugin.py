@@ -69,6 +69,17 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
     # ------------- IDatasetForm ---------------#
 
+    def update_schema_field(self, schema, field):
+        validators = []
+        for validator in field['validator']:
+            validators.append(toolkit.get_validator(validator))
+
+        converters = [toolkit.get_converter('convert_to_extras')]
+
+        schema.update({
+            field['name']: validators + converters
+        })
+
     def _modify_package_schema(self, schema):
 
         ##
@@ -79,15 +90,11 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             if 'ignore' in field and field['ignore'] == True:
                 continue
 
-            validators = []
-            for validator in field['validator']:
-                validators.append(toolkit.get_validator(validator))
-
-            converters = [toolkit.get_converter('convert_to_extras')]
-
-            schema.update({
-                field['name']: validators + converters
-            })
+            if 'couples' in field:
+                for couple in field['couples']:
+                    self.update_schema_field(schema, couple)
+            else:
+                self.update_schema_field(schema, field)
 
     	schema.update({
             'notes': [
@@ -125,6 +132,17 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         schema = self._modify_package_schema(schema)
         return schema
 
+    def update_show_schema_field(self, schema, field):
+        validators = []
+        for validator in field['validator']:
+            validators.append(toolkit.get_validator(validator))
+
+        converters = [toolkit.get_converter('convert_from_extras')]
+
+        schema.update({
+            field['name']: converters + validators
+        })
+
     def show_package_schema(self):
         schema = super(DCATAPITPackagePlugin, self).show_package_schema()
         
@@ -136,15 +154,11 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             if 'ignore' in field and field['ignore'] == True:
                 continue
 
-            validators = []
-            for validator in field['validator']:
-                validators.append(toolkit.get_validator(validator))
-
-            converters = [toolkit.get_converter('convert_from_extras')]
-
-            schema.update({
-                field['name']: converters + validators
-            })
+            if 'couples' in field:
+                for couple in field['couples']:
+                    self.update_show_schema_field(schema, couple)
+            else:
+                self.update_show_schema_field(schema, field)
 
         schema.update({
             'notes': [
