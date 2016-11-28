@@ -6,14 +6,18 @@ from pylons import config
 from rdflib.namespace import Namespace, RDF
 from rdflib import URIRef, BNode, Literal
 
+import ckan.logic as logic
+
 from ckanext.dcat.profiles import RDFProfile, DCAT
-from ckanext.dcat.utils import dataset_uri, resource_uri
+from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
 
 
 DCT = Namespace("http://purl.org/dc/terms/")
 DCATAPIT = Namespace('http://dati.gov.it/onto/dcatapit#')
-SCHEMA = Namespace('http://schema.org/')
 FOAF = Namespace("http://xmlns.com/foaf/0.1/")
+SCHEMA = Namespace('http://schema.org/')
+VCARD = Namespace("http://www.w3.org/2006/vcard/ns#")
+
 
 THEME_BASE_URI = 'http://publications.europa.eu/resource/authority/data-theme/'
 LANG_BASE_URI = 'http://publications.europa.eu/resource/authority/language/'
@@ -89,19 +93,17 @@ class ItalianDCATAPProfile(RDFProfile):
 
 
         ### publisher
-        
+
         # DCAT by default creates this node
         # <dct:publisher>
         #   <foaf:Organization rdf:about="http://10.10.100.75/organization/55535226-f82a-4cf7-903a-3e10afeaa79a">
         #     <foaf:name>orga2_test</foaf:name>
         #   </foaf:Organization>
         # </dct:publisher>
-        
+
         for s,p,o in g.triples( (dataset_ref, DCT.publisher, None) ):
             log.info("Removing publisher %r", o)
             g.remove((s, p, o))
-        
-        # TODO: the linked organizations seems not to be removed
 
         # This is what we have in the dataset info
         #"publisher" : "dataset_editor_test,dataset_editor_ipa_test"
@@ -113,6 +115,26 @@ class ItalianDCATAPProfile(RDFProfile):
 
         ### Autore : Agent
         self._add_agent(dataset_dict, dataset_ref, 'creator', DCT.creator)
+
+        ### Point of Contact
+
+        org_id = dataset_dict.get('organization',{}).get('id')
+
+        # get orga info
+        org_show = logic.get_action('organization_show')
+        org_dict = org_show({}, {'id': org_id})
+        org_uri = organization_uri(org_dict)
+
+        poc = URIRef(org_uri)
+        g.add((poc, RDF.type, DCATAPIT.Organization))
+        g.add((dataset_ref, DCAT.contactPoint, poc))
+
+        g.add((poc, VCARD.fn, Literal(org_dict.get('name'))))
+        g.add((poc, VCARD.hasEmail, Literal(org_dict.get('email'))))
+        if 'telephone' in org_dict.keys():
+            g.add((poc, VCARD.hasTelephone, Literal(org_dict.get('telephone'))))
+        if 'site' in org_dict.keys():
+            g.add((poc, VCARD.hasURL, Literal(org_dict.get('site'))))
 
         ### Resources
         for resource_dict in dataset_dict.get('resources', []):
@@ -234,3 +256,24 @@ class ItalianDCATAPProfile(RDFProfile):
         lang3 = languages_mapping.get(lang2) or 'ITA'
         self.g.add((catalog_ref, DCT.language, URIRef(LANG_BASE_URI + lang3)))
         self.g.remove((catalog_ref, DCT.language, Literal(config.get('ckan.locale_default', 'en'))))
+
+
+def organization_uri(orga_dict):
+    '''
+    Returns an URI for the organization
+
+    This will be used to uniquely reference the organization on the RDF serializations.
+
+    The value will be
+
+        `catalog_uri()` + '/organization/' + `orga_id`
+
+    Check the documentation for `catalog_uri()` for the recommended ways of
+    setting it.
+
+    Returns a string with the resource URI.
+    '''
+
+    uri = '{0}/organization/{1}'.format(catalog_uri().rstrip('/'), orga_dict['id'])
+
+    return uri
