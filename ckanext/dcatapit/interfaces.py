@@ -4,7 +4,18 @@ from ckan.lib.base import model
 from ckan.model import Session
 from pylons.i18n.translation import get_lang
 
+from ckan.plugins.interfaces import Interface
+
 log = logging.getLogger(__name__)
+
+
+class ICustomSchema(Interface):
+    '''
+    Allows extensions to provide their own schema fields.
+    '''
+    def get_custom_schema(self):
+        '''gets the array containing the custom schema fields'''
+        return []
 
 
 def get_language():
