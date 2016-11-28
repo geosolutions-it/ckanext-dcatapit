@@ -201,7 +201,7 @@ def get_custom_package_schema():
 	    },
 	    {
 		    'name': 'temporal_coverage',
-		    'validator': ['ignore_missing', 'couple_validator'],
+		    'validator': ['ignore_missing'],
 		    'element': 'couple',
 		    'type': 'date',
 		    'label': _('Temporal Coverage'),
