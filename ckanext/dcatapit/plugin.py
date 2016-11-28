@@ -13,7 +13,12 @@ import ckanext.dcatapit.schema as dcatapit_schema
 import ckanext.dcatapit.helpers as helpers
 
 from routes.mapper import SubMapper, Mapper as _Mapper
-from ckan.lib.plugins import DefaultTranslation
+
+try:
+    from ckan.lib.plugins import DefaultTranslation
+except ImportError:
+    class DefaultTranslation():
+        pass
 
 log = logging.getLogger(__file__)
 
@@ -31,7 +36,17 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     # IRoutes
     plugins.implements(plugins.IRoutes, inherit=True)
     # ITranslation
-    plugins.implements(plugins.ITranslation)
+    if toolkit.check_ckan_version(min_version='2.5.0'):
+        plugins.implements(plugins.ITranslation, inherit=True)
+
+    # ------------- ITranslation ---------------#
+
+    def i18n_domain(self):
+        '''Change the gettext domain handled by this plugin
+        This implementation assumes the gettext domain is
+        ckanext-{extension name}, hence your pot, po and mo files should be
+        named ckanext-{extension name}.mo'''
+        return 'ckanext-{name}'.format(name='dcatapit')
 
     # ------------- IRoutes ---------------#
     
@@ -187,7 +202,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         }
 
 
-class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupForm, DefaultTranslation):
+class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupForm):
 
     # IConfigurer
     plugins.implements(plugins.IConfigurer)
@@ -195,8 +210,6 @@ class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupFo
     plugins.implements(plugins.ITemplateHelpers)
     # IGroupForm
     plugins.implements(plugins.IGroupForm, inherit=True)
-    # ITranslation
-    plugins.implements(plugins.ITranslation)
     
     # ------------- IConfigurer ---------------#
 
@@ -341,14 +354,12 @@ class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupFo
 
         return schema
 
-class DCATAPITConfigurerPlugin(plugins.SingletonPlugin, DefaultTranslation):
+class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
 
     # IConfigurer
     plugins.implements(plugins.IConfigurer)
     # ITemplateHelpers
     plugins.implements(plugins.ITemplateHelpers)
-    # ITranslation
-    plugins.implements(plugins.ITranslation)
     
     # ------------- IConfigurer ---------------#
 
