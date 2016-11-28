@@ -42,7 +42,7 @@ def get_vocabulary_items(vocabulary_name, keys=None):
 
 		return tag_list
 	except toolkit.ObjectNotFound:
-		return None
+		return []
 
 def list_to_string(_list, _format=None):
 	if _list:

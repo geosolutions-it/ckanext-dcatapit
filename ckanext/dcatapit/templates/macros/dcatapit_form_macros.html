@@ -87,7 +87,7 @@ Old implementation of the couple element (one element with comma separated value
 
       <select id="{{name}}-hidden" placeholder="{{ placeholder }}" multiple name="{{ name }}" {{ attributes(attrs) }} data-module="autocomplete">
         {% for option in options %}
-          <option value="{{ option.value }}"{% if option.value in value %} selected{% endif %}>{{ option.text or option.value }}</option>
+          <option value="{{ option.value }}"{% if value and option.value in value %} selected {% endif %}>{{ option.text or option.value }}</option>
         {% endfor %}
       </select>
 
