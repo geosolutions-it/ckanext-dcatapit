@@ -72,8 +72,8 @@ def couple_to_string(field_couples, pkg_dict, format=None):
 	if field_couples and pkg_dict:
 		_string = ''
 		for couple in field_couples:
-			field_value = pkg_dict[couple['name']]
-			if field_value:
+			if couple['name'] in pkg_dict:
+				field_value = pkg_dict[couple['name']]
 				_string = _string + ' ' + couple['label'] + ': ' + field_value
 
 		return _string
