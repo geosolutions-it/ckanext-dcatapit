@@ -1,4 +1,5 @@
 
+import ast
 import logging
 
 from pylons import config
@@ -46,8 +47,6 @@ class ItalianDCATAPProfile(RDFProfile):
 
     def graph_from_dataset(self, dataset_dict, dataset_ref):
 
-        logging.info(":::::: graph_from_dataset")
-
         title = dataset_dict.get('title')
 
         g = self.g
@@ -94,7 +93,7 @@ class ItalianDCATAPProfile(RDFProfile):
         # </dct:publisher>
 
         for s,p,o in g.triples( (dataset_ref, DCT.publisher, None) ):
-            log.info("Removing publisher %r", o)
+            #log.info("Removing publisher %r", o)
             g.remove((s, p, o))
 
         # This is what we have in the dataset info
@@ -122,7 +121,7 @@ class ItalianDCATAPProfile(RDFProfile):
         g.add((dataset_ref, DCAT.contactPoint, poc))
 
         g.add((poc, VCARD.fn, Literal(org_dict.get('name'))))
-        g.add((poc, VCARD.hasEmail, Literal(org_dict.get('email'))))
+        g.add((poc, VCARD.hasEmail, Literal(org_dict.get('email', "N/A"))))
         if 'telephone' in org_dict.keys():
             g.add((poc, VCARD.hasTelephone, Literal(org_dict.get('telephone'))))
         if 'site' in org_dict.keys():
@@ -240,7 +239,18 @@ class ItalianDCATAPProfile(RDFProfile):
 
         ### theme
         theme = config.get('ckanext.dcatapit_config.catalog_theme')
-        self.g.add((catalog_ref, DCAT.theme, URIRef(THEME_BASE_URI + theme)))
+        try:
+            themes = ast.literal_eval(theme)
+        except ValueError:
+            if ',' in theme:
+                # Comma-separated list
+                themes = theme.replace('{','').replace('}','').split(',')
+            else:
+                # Normal text value
+                themes = [theme]
+
+        for t in themes:
+            self.g.add((catalog_ref, DCAT.theme, URIRef(THEME_BASE_URI + t)))
 
         ### language
         lang2 = config.get('ckanext.dcatapit_config.catalog_theme', 'it')
