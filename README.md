@@ -74,4 +74,12 @@ In order to update the existing translations proceed as follow:
      for a specific language, or for all languages:
 
      `python setup.py update_catalog`
+
+3. Once the translation files (po) have been updated adding the new translations needed, compile them by running:
+
+     `python setup.py compile_catalog --locale YOUR_LANGUAGE`
+
+     for a specific language, or for all languages:
+
+     `python setup.py compile_catalog`
      

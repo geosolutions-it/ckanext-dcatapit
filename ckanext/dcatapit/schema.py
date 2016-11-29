@@ -114,7 +114,7 @@ def get_custom_package_schema():
 	    },
 	    {
 		    'name': 'alternate_identifier',
-		    'validator': ['ignore_missing'],
+		    'validator': ['ignore_missing', 'no_number'],
 		    'element': 'input',
 		    'type': 'text',
 		    'label': _('Other Identifier'),
@@ -250,7 +250,7 @@ def get_custom_package_schema():
 	    },
 	    {
 		    'name': 'conforms_to',
-		    'validator': ['ignore_missing'],
+		    'validator': ['ignore_missing', 'no_number'],
 		    'element': 'input',
 		    'type': 'text',
 		    'label': _('Conforms To'),
