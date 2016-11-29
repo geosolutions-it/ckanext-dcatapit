@@ -20,3 +20,9 @@ def couple_validator(value, context):
 				raise Invalid(_('Invalid couple, one value is missing'))
 
 	return value
+
+def no_number(value, context):
+	if value and value.isdigit():
+		raise Invalid(_('This field cannot be a number'))
+
+	return value
