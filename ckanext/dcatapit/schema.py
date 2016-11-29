@@ -1,4 +1,8 @@
+import ckanext.dcatapit.interfaces as interfaces
+
 from ckan.common import _, ungettext
+from ckan.plugins import PluginImplementations
+
 
 def get_custom_config_schema(show=True):
 	if show:
@@ -70,7 +74,7 @@ def get_custom_organization_schema():
 	return [
 	    {
 		    'name': 'email',
-		    'validator': ['not_empty'],
+		    'validator': ['ignore_missing'],
 		    'element': 'input',
 		    'type': 'email',
 		    'label': _('EMail'),
@@ -98,7 +102,7 @@ def get_custom_organization_schema():
 	]
 
 def get_custom_package_schema():
-	return [
+	package_schema = [
 	    {
 		    'name': 'identifier',
 		    'validator': ['not_empty'],
@@ -299,6 +303,11 @@ def get_custom_package_schema():
 		    ]
 	    }
 	]
+
+	for plugin in PluginImplementations(interfaces.ICustomSchema):
+		package_schema = package_schema + plugin.get_custom_schema()
+
+	return package_schema
 
 def get_custom_resource_schema():
 	return [
