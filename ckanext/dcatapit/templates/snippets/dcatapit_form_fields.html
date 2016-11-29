@@ -74,6 +74,10 @@
                               is_required=field.is_required)
                   }}
 
+            {% elif field.element == 'textarea' %}
+
+                  {{ form.textarea(field.name, label=field.label, id='field-' + field.name, placeholder=field.placeholder, value=data[field.name], error=errors[field.name], classes=['control-full']) }}
+
             {% endif %}
 
       {% endif %}
