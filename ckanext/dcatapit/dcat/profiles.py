@@ -54,9 +54,8 @@ class ItalianDCATAPProfile(RDFProfile):
         for prefix, namespace in it_namespaces.iteritems():
             g.bind(prefix, namespace)
 
-        ### replace Dataset node
+        ### add a further type for the Dataset node
         g.add((dataset_ref, RDF.type, DCATAPIT.Dataset))
-        g.remove((dataset_ref, RDF.type, DCAT.Dataset))
 
         ### replace themes
         value = self._get_dict_value(dataset_dict, 'theme')
@@ -80,7 +79,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
         ### replace landing page
         self._remove_node(dataset_dict, dataset_ref,  ('url', DCAT.landingPage, None, URIRef))
-        landing_page = dataset_uri(dataset_dict)
+        landing_page = dataset_uri(dataset_dict)  # TODO: preserve original URI if harvested
         self.g.add((dataset_ref, DCAT.landingPage, URIRef(landing_page)))
 
         ### publisher
@@ -109,6 +108,18 @@ class ItalianDCATAPProfile(RDFProfile):
 
         ### Point of Contact
 
+        # <dcat:contactPoint rdf:resource="http://dati.gov.it/resource/PuntoContatto/contactPointRegione_r_liguri"/>
+
+        # <!-- http://dati.gov.it/resource/PuntoContatto/contactPointRegione_r_liguri -->
+        # <dcatapit:Organization rdf:about="http://dati.gov.it/resource/PuntoContatto/contactPointRegione_r_liguri">
+        #    <rdf:type rdf:resource="&vcard;Kind"/>
+        #    <rdf:type rdf:resource="&vcard;Organization"/>
+        #    <vcard:hasEmail rdf:resource="mailto:infoter@regione.liguria.it"/>
+        #    <vcard:fn>Regione Liguria - Sportello Cartografico</vcard:fn>
+        # </dcatapit:Organization>
+
+
+        # TODO: preserve original info if harvested
         org_id = dataset_dict.get('organization',{}).get('id')
 
         # get orga info
@@ -117,11 +128,15 @@ class ItalianDCATAPProfile(RDFProfile):
         org_uri = organization_uri(org_dict)
 
         poc = URIRef(org_uri)
-        g.add((poc, RDF.type, DCATAPIT.Organization))
         g.add((dataset_ref, DCAT.contactPoint, poc))
+        g.add((poc, RDF.type, DCATAPIT.Organization))
+        g.add((poc, RDF.type, VCARD.Kind))
+        g.add((poc, RDF.type, VCARD.Organization))
 
         g.add((poc, VCARD.fn, Literal(org_dict.get('name'))))
-        g.add((poc, VCARD.hasEmail, Literal(org_dict.get('email', "N/A"))))
+
+        if 'email' in org_dict.keys():  # this element is mandatory for dcatapit, but it may not have been filled for imported datasets
+            g.add((poc, VCARD.hasEmail, URIRef(org_dict.get('email'))))
         if 'telephone' in org_dict.keys():
             g.add((poc, VCARD.hasTelephone, Literal(org_dict.get('telephone'))))
         if 'site' in org_dict.keys():
@@ -130,7 +145,10 @@ class ItalianDCATAPProfile(RDFProfile):
         ### Resources
         for resource_dict in dataset_dict.get('resources', []):
 
-            distribution = URIRef(resource_uri(resource_dict))
+            distribution = URIRef(resource_uri(resource_dict))  # TODO: preserve original info if harvested
+
+            # Add the DCATAPIT type
+            g.add((distribution, RDF.type, DCATAPIT.Distribution))
 
             ### format
             self._remove_node(resource_dict, distribution,  ('format', DCT['format'], None, Literal))
@@ -158,6 +176,7 @@ class ItalianDCATAPProfile(RDFProfile):
             if license_url:
                 license = URIRef(license_url)
                 g.add((license, RDF['type'], DCATAPIT.LicenseDocument))
+                g.add((license, RDF['type'], DCT.LicenseDocument))
                 g.add((distribution, DCT.license, license))
 
                 if license_id:
@@ -187,9 +206,9 @@ class ItalianDCATAPProfile(RDFProfile):
         agent = BNode()
 
         self.g.add((agent, RDF['type'], DCATAPIT.Agent))
+        self.g.add((agent, RDF['type'], FOAF.Agent))
         self.g.add((ref, _type, agent))
 
-        # g.add((agent, RDF['type'], URIRef('&foaf;Agent')))
         self.g.add((agent, FOAF.name, Literal(agent_name)))
         self.g.add((agent, DCT.identifier, Literal(agent_id)))
 
@@ -217,10 +236,8 @@ class ItalianDCATAPProfile(RDFProfile):
         for prefix, namespace in it_namespaces.iteritems():
             g.bind(prefix, namespace)
 
-        ### replace Catalog node
+        ### Add a further type for the  Catalog node
         g.add((catalog_ref, RDF.type, DCATAPIT.Catalog))
-        g.remove((catalog_ref, RDF.type, DCAT.Catalog))
-
 
         ### publisher
         pub_agent_name = config.get('ckanext.dcatapit_configpublisher_name', 'unknown')
