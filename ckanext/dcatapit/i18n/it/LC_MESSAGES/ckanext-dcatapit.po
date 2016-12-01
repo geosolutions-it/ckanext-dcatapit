@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-29 15:32+0100\n"
+"POT-Creation-Date: 2016-12-01 14:34+0100\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -220,11 +220,11 @@ msgstr "Creatore"
 msgid "creator of the dataset"
 msgstr "creatore del dataset"
 
-#: ckanext/dcatapit/schema.py:320
+#: ckanext/dcatapit/schema.py:325
 msgid "Distribution Format"
 msgstr "Formato di distribuzione"
 
-#: ckanext/dcatapit/schema.py:321
+#: ckanext/dcatapit/schema.py:326
 msgid "distribution format"
 msgstr "formato di distribuzione"
 
@@ -243,6 +243,15 @@ msgstr "Il campo è richiesto"
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:5
 msgid "Custom"
 msgstr "Campo personalizzato"
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:3
+#, fuzzy
+msgid "Dataset Metadata"
+msgstr "Editor del Dataset"
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:54
+msgid "N/D"
+msgstr "N/A"
 
 #: ckanext/dcatapit/templates/package/snippets/resource_form.html:13
 msgid "Last Modified"
