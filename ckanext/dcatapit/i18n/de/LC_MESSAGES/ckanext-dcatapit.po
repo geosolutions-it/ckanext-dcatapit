@@ -249,9 +249,8 @@ msgid "Custom"
 msgstr "Brauch"
 
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:3
-#, fuzzy
 msgid "Dataset Metadata"
-msgstr "Herausgeber des Datensatzes"
+msgstr "Standard-Metadaten"
 
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:54
 msgid "N/D"

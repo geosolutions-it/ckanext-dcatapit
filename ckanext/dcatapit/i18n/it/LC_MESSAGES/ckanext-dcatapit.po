@@ -249,9 +249,8 @@ msgid "Custom"
 msgstr "Campo personalizzato"
 
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:3
-#, fuzzy
 msgid "Dataset Metadata"
-msgstr "Editor del Dataset"
+msgstr "Metadati del Dataset"
 
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:54
 msgid "N/D"
