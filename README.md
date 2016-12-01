@@ -48,15 +48,15 @@ The dcatapit extension implements the ITranslation CKAN's interface so the trans
 ## Creating a new translation
 To create a new translation proceed as follow:
 
-1.  Create a translation file for your language (a po file) using the existing pot file in this plugin
+1. Extract new messages from your extension updating the pot file
+
+     `python setup.py extract_messages`
+     
+2.  Create a translation file for your language (a po file) using the existing pot file in this plugin
 
      `python setup.py init_catalog --locale YOUR_LANGUAGE`
 
      Replace YOUR_LANGUAGE with the two-letter ISO language code (e.g. es, de).
-
-2. Extract new messages from your extension updating the pot file
-
-     `python setup.py extract_messages`
      
 3. Do the translation into the po file
 
@@ -75,15 +75,7 @@ In order to update the existing translations proceed as follow:
 
      `python setup.py update_catalog --locale YOUR-LANGUAGE`
 
-     for a specific language, or for all languages:
-
-     `python setup.py update_catalog`
-
 3. Once the translation files (po) have been updated adding the new translations needed, compile them by running:
 
      `python setup.py compile_catalog --locale YOUR_LANGUAGE`
-
-     for a specific language, or for all languages:
-
-     `python setup.py compile_catalog`
      
