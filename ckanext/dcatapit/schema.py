@@ -8,18 +8,6 @@ def get_custom_config_schema(show=True):
 	if show:
 		return [
 		    {
-			    'name': 'ckanext.dcatapit_config.catalog_theme',
-			    'validator': ['ignore_missing'],
-			    'element': 'theme',
-			    'type': 'vocabulary',
-			    'vocabulary_name': 'eu_themes',
-			    'label': _('Catalog Themes'),
-			    'placeholder': _('eg. education, agriculture, energy'),
-				'description': _('Themes of the catalog'),
-			    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eu_themes&incomplete=?',
-			    'is_required': False
-		    },
-		    {
 			    'name': 'ckanext.dcatapit_configpublisher_name',
 			    'validator': ['not_empty'],
 			    'element': 'input',
@@ -52,10 +40,6 @@ def get_custom_config_schema(show=True):
 		]
 	else:
 		return [
-		    {
-			    'name': 'ckanext.dcatapit_config.catalog_theme',
-			    'validator': ['ignore_missing']
-		    },
 		    {
 			    'name': 'ckanext.dcatapit_configpublisher_name',
 			    'validator': ['not_empty']
@@ -193,7 +177,8 @@ def get_custom_package_schema():
 		    'label': _('Geographical Name'),
 		    'placeholder': _('geographical name'),
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=places&incomplete=?',
-		    'is_required': False
+		    'is_required': False,
+		    'default': _('Organizational Unit Responsible Competence Area')
 	    },
 	    {
 		    'name': 'language',
@@ -305,7 +290,12 @@ def get_custom_package_schema():
 	]
 
 	for plugin in PluginImplementations(interfaces.ICustomSchema):
-		package_schema = package_schema + plugin.get_custom_schema()
+		extra_schema = plugin.get_custom_schema()
+
+		for extra in extra_schema:
+			extra['external'] = True
+
+		package_schema = package_schema + extra_schema
 
 	return package_schema
 
