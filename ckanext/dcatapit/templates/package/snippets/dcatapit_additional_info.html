@@ -51,7 +51,7 @@
 
 					    	<tr>
 							    <th scope="row" class="dataset-label">{{ field.label }}</th>
-								<td class="dataset-details">{{ _('N/D') }}</td>
+								<td class="dataset-details">{{ field.default or _('N/D') }}</td>
 							</tr>		
 									    	
 					    {% endif %}

@@ -193,7 +193,8 @@ def get_custom_package_schema():
 		    'label': _('Geographical Name'),
 		    'placeholder': _('geographical name'),
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=places&incomplete=?',
-		    'is_required': False
+		    'is_required': False,
+		    'default': _('Organizational Unit Responsible Competence Area')
 	    },
 	    {
 		    'name': 'language',
