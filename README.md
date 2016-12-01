@@ -54,9 +54,13 @@ To create a new translation proceed as follow:
 
      Replace YOUR_LANGUAGE with the two-letter ISO language code (e.g. es, de).
 
-2. Do the translation into the po file
+2. Extract new messages from your extension updating the pot file
 
-3. Once the translation files (po) have been updated, either manually or via Transifex, compile them by running:
+     `python setup.py extract_messages`
+     
+3. Do the translation into the po file
+
+4. Once the translation files (po) have been updated, either manually or via Transifex, compile them by running:
 
      `python setup.py compile_catalog --locale YOUR_LANGUAGE`
      
