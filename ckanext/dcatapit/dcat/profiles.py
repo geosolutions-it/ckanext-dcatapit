@@ -4,7 +4,7 @@ import logging
 
 from pylons import config
 
-from rdflib.namespace import Namespace, RDF
+from rdflib.namespace import Namespace, RDF, SKOS
 from rdflib import URIRef, BNode, Literal
 
 import ckan.logic as logic
@@ -254,20 +254,18 @@ class ItalianDCATAPProfile(RDFProfile):
         if issued:
             self._add_date_triple(catalog_ref, DCT.issued, issued)
 
-        ### theme
-        theme = config.get('ckanext.dcatapit_config.catalog_theme')
-        try:
-            themes = ast.literal_eval(theme)
-        except ValueError:
-            if ',' in theme:
-                # Comma-separated list
-                themes = theme.replace('{','').replace('}','').split(',')
-            else:
-                # Normal text value
-                themes = [theme]
+        ### theme taxonomy
 
-        for t in themes:
-            self.g.add((catalog_ref, DCAT.theme, URIRef(THEME_BASE_URI + t)))
+        # <dcat:themeTaxonomy rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+        
+        # <skos:ConceptScheme rdf:about="http://publications.europa.eu/resource/authority/data-theme">
+        #    <dct:title xml:lang="it">Il Vocabolario Data Theme</dct:title>
+        # </skos:ConceptScheme>
+
+        taxonomy = URIRef(THEME_BASE_URI.rstrip('/'))
+        self.g.add((catalog_ref, DCAT.themeTaxonomy, taxonomy))
+        self.g.add((taxonomy, RDF.type, SKOS.ConceptScheme))
+        self.g.add((taxonomy, DCT.title, Literal('Il Vocabolario Data Theme', lang='it')))
 
         ### language
         lang2 = config.get('ckanext.dcatapit_config.catalog_theme', 'it')
