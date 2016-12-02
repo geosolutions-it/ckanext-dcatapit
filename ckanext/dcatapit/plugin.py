@@ -11,6 +11,7 @@ import ckan.plugins as plugins
 import ckanext.dcatapit.validators as validators
 import ckanext.dcatapit.schema as dcatapit_schema
 import ckanext.dcatapit.helpers as helpers
+import ckanext.dcatapit.interfaces as interfaces
 
 from routes.mapper import SubMapper, Mapper as _Mapper
 
@@ -25,16 +26,24 @@ log = logging.getLogger(__file__)
 
 class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm, DefaultTranslation):
 
-	# IDatasetForm
+    # IDatasetForm
     plugins.implements(plugins.IDatasetForm)
-	# IConfigurer
+    
+    # IConfigurer
     plugins.implements(plugins.IConfigurer)
+    
     # IValidators
     plugins.implements(plugins.IValidators)
+    
     # ITemplateHelpers
     plugins.implements(plugins.ITemplateHelpers)
+    
     # IRoutes
     plugins.implements(plugins.IRoutes, inherit=True)
+    
+    # IPackageController
+    plugins.implements(plugins.IPackageController, inherit=True)
+    
     # ITranslation
     if toolkit.check_ckan_version(min_version='2.5.0'):
         plugins.implements(plugins.ITranslation, inherit=True)
@@ -96,9 +105,9 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             else:
                 self.update_schema_field(schema, field)
 
-    	schema.update({
+        schema.update({
             'notes': [
-            	toolkit.get_validator('not_empty')
+                toolkit.get_validator('not_empty')
             ]
         })
 
@@ -190,7 +199,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         # Return True to register this plugin as the default handler for
         # package types not handled by any other IDatasetForm plugin.
         return True
-		
+        
     def package_types(self):
         # This plugin doesn't handle any special package types, it just
         # registers itself as the default (above).
@@ -199,7 +208,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     # ------------- IValidators ---------------#
 
     def get_validators(self):
-		return {
+        return {
             'couple_validator': validators.couple_validator,
             'no_number': validators.no_number
         }
@@ -213,16 +222,64 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'get_dcatapit_resource_schema': helpers.get_dcatapit_resource_schema,
             'list_to_string': helpers.list_to_string,
             'couple_to_string': helpers.couple_to_string,
-            'format': helpers.format
+            'format': helpers.format,
+            'get_localized_field_value': helpers.get_localized_field_value
         }
+
+    # ------------- IPackageController ---------------#
+
+    def after_create(self, context, pkg_dict):
+        # During the harvest the get_lang() is not defined
+        lang = interfaces.get_language()
+        otype = pkg_dict.get('type')
+
+        if lang and otype == 'dataset':    
+            for extra in pkg_dict.get('extras'):
+                for field in dcatapit_schema.get_custom_package_schema():
+
+                    couples = field.get('couples', [])
+                    if couples and len(couples) > 0:
+                        for couple in couples:
+                            if extra.get('key') == couple.get('name', None) and couple.get('localized', False) == True:
+                                log.debug(':::::::::::::::Localizing custom schema field: %r', couple['name'])
+                                # Create the localized field record
+                                self.create_loc_field(extra, lang, pkg_dict.get('id'))
+                    else:
+                        if extra.get('key') == field.get('name', None) and field.get('localized', False) == True:
+                            log.debug(':::::::::::::::Localizing custom schema field: %r', field['name'])
+                            # Create the localized field record
+                            self.create_loc_field(extra, lang, pkg_dict.get('id'))
+
+    def after_update(self, context, pkg_dict):
+        # During the harvest the get_lang() is not defined
+        lang = interfaces.get_language()
+        otype = pkg_dict.get('type')
+
+        if lang and otype == 'dataset':             
+            for extra in pkg_dict.get('extras'):
+                for field in dcatapit_schema.get_custom_package_schema():
+                    couples = field.get('couples', [])
+                    if couples and len(couples) > 0:
+                        for couple in couples:
+                            self.update_loc_field(extra, pkg_dict.get('id'), couple, lang)
+                    else:
+                        self.update_loc_field(extra, pkg_dict.get('id'), field, lang)
+
+    def update_loc_field(self, extra, pkg_id, field, lang):
+        interfaces.update_extra_package_multilang(extra, pkg_id, field, lang)
+
+    def create_loc_field(self, extra, lang, pkg_id): 
+        interfaces.save_extra_package_multilang({'id': pkg_id, 'text': extra.get('value'), 'field': extra.get('key')}, lang, 'extra')
 
 
 class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupForm):
 
     # IConfigurer
     plugins.implements(plugins.IConfigurer)
+
     # ITemplateHelpers
     plugins.implements(plugins.ITemplateHelpers)
+
     # IGroupForm
     plugins.implements(plugins.IGroupForm, inherit=True)
     
@@ -373,6 +430,7 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
 
     # IConfigurer
     plugins.implements(plugins.IConfigurer)
+
     # ITemplateHelpers
     plugins.implements(plugins.ITemplateHelpers)
     

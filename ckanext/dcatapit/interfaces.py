@@ -26,6 +26,62 @@ def get_language():
 
     return lang
 
+def save_extra_package_multilang(pkg, lang, field_type):
+    try:
+        from ckanext.multilang.model import PackageMultilang
+    except ImportError:
+        log.warn('DCAT-AP_IT: multilang extension not available.')
+        return
+
+    log.debug('Creating create_loc_field for package ID: %r', str(pkg.get('id')))
+    PackageMultilang.persist(pkg, lang, field_type)
+    log.info('Localized field created successfully')
+
+def update_extra_package_multilang(extra, pkg_id, field, lang, field_type='extra'):
+    try:
+        from ckanext.multilang.model import PackageMultilang
+    except ImportError:
+        log.warn('DCAT-AP_IT: multilang extension not available.')
+        return
+
+    if extra.get('key') == field.get('name', None) and field.get('localized', False) == True:        
+        log.debug(':::::::::::::::Localizing schema field: %r', field['name'])
+        
+        f = PackageMultilang.get(pkg_id, field['name'], lang, field_type)
+        if f:
+            if extra.get('value') == '':
+                f.purge()
+            elif f.text != extra.get('value'):
+                # Update the localized field value for the current language
+                f.text = extra.get('value')
+                f.save()
+
+                log.info('Localized field updated successfully')
+
+        elif extra.get('value') != '':
+            # Create the localized field record
+            save_extra_package_multilang({'id': pkg_id, 'text': extra.get('value'), 'field': extra.get('key')}, lang, 'extra')
+
+def get_localized_field_value(field=None, pkg_id=None, field_type='extra'):
+    try:
+        from ckanext.multilang.model import PackageMultilang
+    except ImportError:
+        log.warn('DCAT-AP_IT: multilang extension not available.')
+        return
+
+    if field and pkg_id:
+        lang = get_language()
+        if lang: 
+            localized_value = PackageMultilang.get(pkg_id, field, lang, field_type)
+            if localized_value:
+                return localized_value.text
+            else:
+                return None
+        else: 
+            return None
+    else:
+        return None
+
 def persist_tag_multilang(name, lang, localized_text, vocab_name):
     try:
         from ckanext.multilang.model import TagMultilang
