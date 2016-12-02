@@ -25,6 +25,8 @@ LANG_BASE_URI = 'http://publications.europa.eu/resource/authority/language/'
 FREQ_BASE_URI = 'http://publications.europa.eu/resource/authority/frequency/'
 FORMAT_BASE_URI = 'http://publications.europa.eu/resource/authority/file-type/'
 
+DEFAULT_THEME_KEY = 'OP_DATPRO'
+
 it_namespaces = {
     'dcatapit': DCATAPIT,
 }
@@ -32,7 +34,20 @@ it_namespaces = {
 languages_mapping = {
     'it': 'ITA',
     'en': 'ENG',
+    'en_GB': 'ENG',
 }
+
+format_mapping = {
+    'WMS': 'MAP_SRVC',
+    'HTML': 'HTML_SIMPL',
+    'CSV': 'CSV',
+    'XLS': 'XLS',
+    'ODS': 'ODS',
+    'ZIP': 'OP_DATPRO', # requires to be more specific, can't infer
+
+}
+
+DEFAULT_FORMAT_CODE = 'OP_DATPRO'
 
 log = logging.getLogger(__name__)
 
@@ -64,6 +79,8 @@ class ItalianDCATAPProfile(RDFProfile):
                 self.g.remove((dataset_ref, DCAT.theme, URIRef(theme)))
                 theme = theme.replace('{','').replace('}','')
                 self.g.add((dataset_ref, DCAT.theme, URIRef(THEME_BASE_URI + theme)))
+        else:
+                self.g.add((dataset_ref, DCAT.theme, URIRef(THEME_BASE_URI + DEFAULT_THEME_KEY)))
 
         ### replace languages
         value = self._get_dict_value(dataset_dict, 'language')
@@ -120,6 +137,21 @@ class ItalianDCATAPProfile(RDFProfile):
 
 
         # TODO: preserve original info if harvested
+
+        # retrieve the contactPoint added by the euro serializer
+        euro_poc = g.value(subject=dataset_ref, predicate=DCAT.contactPoint, object=None, any=False)
+
+        # euro poc has this format:
+        # <dcat:contactPoint>
+        #    <vcard:Organization rdf:nodeID="Nfcd06f452bcd41f48f33c45b0c95979e">
+        #       <vcard:fn>THE ORGANIZATION NAME</vcard:fn>
+        #       <vcard:hasEmail>THE ORGANIZATION EMAIL</vcard:hasEmail>
+        #    </vcard:Organization>
+        # </dcat:contactPoint>
+
+        if euro_poc:
+            g.remove((dataset_ref, DCAT.contactPoint, euro_poc))
+
         org_id = dataset_dict.get('organization',{}).get('id')
 
         # get orga info
@@ -152,7 +184,14 @@ class ItalianDCATAPProfile(RDFProfile):
 
             ### format
             self._remove_node(resource_dict, distribution,  ('format', DCT['format'], None, Literal))
-            self._add_uri_node(resource_dict, distribution, ('distribution_format', DCT['format'], None, URIRef), FORMAT_BASE_URI)
+            if not self._add_uri_node(resource_dict, distribution, ('distribution_format', DCT['format'], None, URIRef), FORMAT_BASE_URI):
+                guessed_format = guess_format(resource_dict)
+                if guessed_format:
+                    self.g.add((distribution, DCT['format'], URIRef(FORMAT_BASE_URI + guessed_format)))
+                else:
+                    log.warn('No format for resource: %s / %s', dataset_dict.get('title', 'N/A'), resource_dict.get('description', 'N/A') )
+                    self.g.add((distribution, DCT['format'], URIRef(FORMAT_BASE_URI + DEFAULT_FORMAT_CODE)))
+
 
             ### license
 #            <dct:license rdf:resource="http://creativecommons.org/licenses/by/3.0/it/"/>
@@ -177,6 +216,8 @@ class ItalianDCATAPProfile(RDFProfile):
                 license = URIRef(license_url)
                 g.add((license, RDF['type'], DCATAPIT.LicenseDocument))
                 g.add((license, RDF['type'], DCT.LicenseDocument))
+                g.add((license, DCT['type'], URIRef('http://purl.org/adms/licencetype/Attribution'))) # TODO: infer from CKAN license
+                
                 g.add((distribution, DCT.license, license))
 
                 if license_id:
@@ -220,6 +261,9 @@ class ItalianDCATAPProfile(RDFProfile):
         value = self._get_dict_value(_dict, key)
         if value:
             self.g.add((ref, pred, _type(base_uri + value)))
+            return True
+        else:
+            return False
 
     def _remove_node(self, _dict, ref, item):
 
@@ -245,6 +289,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
         agent = BNode()
         self.g.add((agent, RDF['type'], DCATAPIT.Agent))
+        self.g.add((agent, RDF['type'], FOAF.Agent))
         self.g.add((catalog_ref, DCT.publisher, agent))
         self.g.add((agent, FOAF.name, Literal(pub_agent_name)))
         self.g.add((agent, DCT.identifier, Literal(pub_agent_id)))
@@ -293,3 +338,22 @@ def organization_uri(orga_dict):
     uri = '{0}/organization/{1}'.format(catalog_uri().rstrip('/'), orga_dict['id'])
 
     return uri
+
+
+def guess_format(resource_dict):
+    f = resource_dict.get('format')
+
+    if not f:
+        log.info('No format found')
+        return None
+
+    ret = format_mapping.get(f, None)
+
+    if not ret:
+       log.info('Mapping not found for format %s', f)
+
+    return ret
+
+
+
+
