@@ -253,7 +253,8 @@ def get_custom_package_schema():
 		    		'label': _('Name'),
 		    		'validator': ['not_empty'],
 		    		'type': 'text',
-		    		'placeholder': _('rights holder of the dataset')
+		    		'placeholder': _('rights holder of the dataset'),
+                	'localized': True
 
 		    	},
 			    {

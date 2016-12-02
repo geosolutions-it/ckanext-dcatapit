@@ -44,6 +44,10 @@ def get_vocabulary_items(vocabulary_name, keys=None):
 	except toolkit.ObjectNotFound:
 		return []
 
+def get_localized_field_value(field=None, pkg_id=None, field_type='extra'):
+	log.debug('Retrieving localized package field...')
+	return interfaces.get_localized_field_value(field, pkg_id, field_type)
+
 def list_to_string(_list, _format=None):
 	if _list:
 		_string = ''
