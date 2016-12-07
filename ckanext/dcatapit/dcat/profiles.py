@@ -24,6 +24,8 @@ THEME_BASE_URI = 'http://publications.europa.eu/resource/authority/data-theme/'
 LANG_BASE_URI = 'http://publications.europa.eu/resource/authority/language/'
 FREQ_BASE_URI = 'http://publications.europa.eu/resource/authority/frequency/'
 FORMAT_BASE_URI = 'http://publications.europa.eu/resource/authority/file-type/'
+GEO_BASE_URI = 'http://publications.europa.eu/mdr/authority/place/'
+
 
 DEFAULT_THEME_KEY = 'OP_DATPRO'
 
@@ -33,6 +35,7 @@ it_namespaces = {
 
 languages_mapping = {
     'it': 'ITA',
+    'de': 'GER',
     'en': 'ENG',
     'en_GB': 'ENG',
 }
@@ -90,6 +93,24 @@ class ItalianDCATAPProfile(RDFProfile):
                 lang = lang.replace('{','').replace('}','')
                 self.g.add((dataset_ref, DCT.language, URIRef(LANG_BASE_URI + lang)))
 
+        ### add spatial (EU URI)
+
+        value = self._get_dict_value(dataset_dict, 'geographical_name')
+        if value:
+            for gname in value.split(','):
+                gname = gname.replace('{','').replace('}','')
+                spatialNode = URIRef(GEO_BASE_URI + gname)
+                self.g.add((dataset_ref, DCT.spatial, spatialNode))
+                self.g.add((spatialNode, RDF['type'], DCATAPIT.geographicalIdentifier))
+
+        ### add spatial (GeoNames)
+
+        value = self._get_dict_value(dataset_dict, 'geographical_geonames_url')
+        if value:
+            spatialNode = URIRef(value)
+            self.g.add((dataset_ref, DCT.spatial, spatialNode))
+            self.g.add((spatialNode, RDF['type'], DCATAPIT.geographicalIdentifier))
+
         ### replace periodicity
         self._remove_node(dataset_dict, dataset_ref,  ('frequency', DCT.accrualPeriodicity, None, Literal))
         self._add_uri_node(dataset_dict, dataset_ref, ('frequency', DCT.accrualPeriodicity, None, URIRef), FREQ_BASE_URI)
@@ -111,9 +132,6 @@ class ItalianDCATAPProfile(RDFProfile):
         for s,p,o in g.triples( (dataset_ref, DCT.publisher, None) ):
             #log.info("Removing publisher %r", o)
             g.remove((s, p, o))
-
-        # This is what we have in the dataset info
-        #"publisher" : "dataset_editor_test,dataset_editor_ipa_test"
 
         self._add_agent(dataset_dict, dataset_ref, 'publisher', DCT.publisher)
 
@@ -217,7 +235,7 @@ class ItalianDCATAPProfile(RDFProfile):
                 g.add((license, RDF['type'], DCATAPIT.LicenseDocument))
                 g.add((license, RDF['type'], DCT.LicenseDocument))
                 g.add((license, DCT['type'], URIRef('http://purl.org/adms/licencetype/Attribution'))) # TODO: infer from CKAN license
-                
+
                 g.add((distribution, DCT.license, license))
 
                 if license_id:

@@ -181,6 +181,15 @@ def get_custom_package_schema():
 		    'default': _('Organizational Unit Responsible Competence Area')
 	    },
 	    {
+		    'name': 'geographical_geonames_url',
+		    'validator': ['ignore_missing'],
+		    'element': 'input',
+		    'type': 'url',
+		    'label': _('GeoNames URL'),
+		    'placeholder': _('http://www.geonames.org/3175395'),
+		    'is_required': False,
+	    },
+	    {
 		    'name': 'language',
 		    'validator': ['ignore_missing'],
 		    'element': 'theme',
@@ -192,9 +201,9 @@ def get_custom_package_schema():
 		    'is_required': False
 	    },
 	    {
-		    'name': 'temporal_coverage',		    
-		    'element': 'couple',		    
-		    'label': _('Temporal Coverage'),		    
+		    'name': 'temporal_coverage',
+		    'element': 'couple',
+		    'label': _('Temporal Coverage'),
 		    'is_required': False,
 		    'couples': [
 		    	{
@@ -243,9 +252,9 @@ def get_custom_package_schema():
 		    'is_required': False
 	    },
 	    {
-		    'name': 'rights_holder',		    
-		    'element': 'couple',		    
-		    'label': _('Rights Holder'),		    
+		    'name': 'rights_holder',
+		    'element': 'couple',
+		    'label': _('Rights Holder'),
 		    'is_required': True,
 		    'couples': [
 		    	{
@@ -267,9 +276,9 @@ def get_custom_package_schema():
 		    ]
 	    },
 	    {
-		    'name': 'creator',		    
-		    'element': 'couple',		    
-		    'label': _('Creator'),		    
+		    'name': 'creator',
+		    'element': 'couple',
+		    'label': _('Creator'),
 		    'is_required': False,
 		    'couples': [
 		    	{
