@@ -82,6 +82,81 @@ def get_localized_field_value(field=None, pkg_id=None, field_type='extra'):
     else:
         return None
 
+def get_for_package(pkg_id):
+    '''
+    Returns all the localized fields of a dataset, in a dict of dicts, i.e.:
+        {FIELDNAME:{LANG:label,...},...}
+
+    Returns None if multilang extension not loaded.
+    '''
+
+    try:
+        from ckanext.multilang.model import PackageMultilang
+    except ImportError:
+        log.warn('DCAT-AP_IT: multilang extension not available.')
+
+        # TODO: if no multilang, return the dataset in a single language in the same format of the multilang data
+        return None
+
+    records = PackageMultilang.get_for_package(pkg_id)
+    return _multilang_to_dict(records)
+
+
+def get_for_resource(res_id):
+    '''
+    Returns all the localized fields of a dataset's resources, in a dict of dicts, i.e.:
+         {FIELDNAME:{LANG:label, ...}, ...}
+
+    Returns None if multilang extension not loaded.
+    '''
+
+    try:
+        from ckanext.multilang.model import ResourceMultilang
+    except ImportError:
+        log.warn('DCAT-AP_IT: multilang extension not available.')
+
+        return None
+
+    records = ResourceMultilang.get_for_resource_id(res_id)
+    return _multilang_to_dict(records)
+
+
+def _multilang_to_dict(records):
+    
+    fields_dict = {}
+
+    for r in records:
+        fieldname = r.field
+        lang  = r.lang
+        value = r.text
+
+        lang_dict = fields_dict.get(fieldname, {})
+        if len(lang_dict) == 0:
+            fields_dict[fieldname] = lang_dict
+
+        lang_dict[lang] = value
+
+    return fields_dict
+
+
+#def get_for_resources(pkg_id):
+#    '''
+#    Returns all the localized fields of a dataset's resources, in a dict of dicts, i.e.:
+#         {RES_ID: {FIELDNAME:{LANG:label, ...}, ...}, ...}
+#
+#    Returns None if multilang extension not loaded.
+#    '''
+#
+#    try:
+#        from ckanext.multilang.model import PackageMultilang
+#    except ImportError:
+#        log.warn('DCAT-AP_IT: multilang extension not available.')
+#
+#        return None
+#
+#    pass
+
+
 def persist_tag_multilang(name, lang, localized_text, vocab_name):
     try:
         from ckanext.multilang.model import TagMultilang
@@ -135,3 +210,12 @@ def get_localized_tag_name(tag_name=None):
             return tag_name
     else:
         return None
+
+def get_all_localized_tag_labels(tag_name):
+    try:
+        from ckanext.multilang.model import TagMultilang
+    except ImportError:
+        log.warn('DCAT-AP_IT: multilang extension not available. Tag %s will not be localized', tag_name)
+        return tag_name
+
+    return TagMultilang.all_by_name(tag_name)
