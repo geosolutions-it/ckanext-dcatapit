@@ -305,6 +305,7 @@ class ItalianDCATAPProfile(RDFProfile):
                     continue
 
                 for lang, value in lang_dict.iteritems():
+                   lang = lang.split('_')[0]  # rdflib is quite picky in lang names
                    self.g.add((ref, pred, Literal(value, lang=lang)))
 
 
