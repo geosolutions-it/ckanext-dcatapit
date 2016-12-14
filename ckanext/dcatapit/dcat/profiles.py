@@ -244,11 +244,19 @@ class ItalianDCATAPProfile(RDFProfile):
                 self.g.add((dataset_ref, DCT.spatial, dct_location))
 
                 self.g.add((dct_location, RDF['type'], DCT.Location))
-                self.g.add((dct_location, DCATAPIT.geographicalIdentifier, Literal(GEO_BASE_URI + gname)))
+                
+                # Try and add a Concept from the spatial vocabulary
+                if self._add_concept(GEO_CONCEPTS, gname):
+                    self.g.add((dct_location, DCATAPIT.geographicalIdentifier, Literal(GEO_BASE_URI + gname)))
 
-                # geo concept is not really required, but may be a useful adding
-                self.g.add((dct_location, LOCN.geographicalName, URIRef(GEO_BASE_URI + gname)))
-                self._add_concept(GEO_CONCEPTS, gname)
+                    # geo concept is not really required, but may be a useful adding
+                    self.g.add((dct_location, LOCN.geographicalName, URIRef(GEO_BASE_URI + gname)))
+                else:
+                    # The dataset field is not a controlled tag, let's create a Concept out of the label we have
+                    concept = BNode()
+                    self.g.add((concept, RDF['type'], SKOS.Concept))
+                    self.g.add((concept, SKOS.prefLabel, Literal(gname)))
+                    self.g.add((dct_location, LOCN.geographicalName, concept))
 
         ### add spatial (GeoNames)
         value = self._get_dict_value(dataset_dict, 'geographical_geonames_url')
@@ -489,6 +497,8 @@ class ItalianDCATAPProfile(RDFProfile):
         # <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/ENVI">
         #     <skos:prefLabel xml:lang="it">Ambiente</skos:prefLabel>
         # </skos:Concept>
+        #
+        # Return true if Concept has been added
 
         voc, base_uri = concepts
 
@@ -503,6 +513,9 @@ class ItalianDCATAPProfile(RDFProfile):
                 lang = lang.split('_')[0]  # rdflib is quite picky in lang names
                 self.g.add((concept, SKOS.prefLabel, Literal(label, lang=lang)))
 
+            return True
+
+        return False
 
     def graph_from_catalog(self, catalog_dict, catalog_ref):
 
