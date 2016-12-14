@@ -532,6 +532,11 @@ class ItalianDCATAPProfile(RDFProfile):
         ### Add a further type for the Catalog node
         g.add((catalog_ref, RDF.type, DCATAPIT.Catalog))
 
+        ### Replace homepage
+        # Try to avoid to have the Catalog URIRef identical to the homepage URI
+        g.remove((catalog_ref, FOAF.homepage, URIRef(config.get('ckan.site_url'))))
+        g.add((catalog_ref, FOAF.homepage, URIRef(catalog_uri() + '/#')))
+
         ### publisher
         pub_agent_name = config.get('ckanext.dcatapit_configpublisher_name', 'unknown')
         pub_agent_id = config.get('ckanext.dcatapit_configpublisher_code_identifier', 'unknown')
