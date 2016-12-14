@@ -9,24 +9,23 @@ from rdflib import URIRef, BNode, Literal
 
 import ckan.logic as logic
 
-from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN
+from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF
 from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
 
 import ckanext.dcatapit.interfaces as interfaces
 
 
-DCT = Namespace("http://purl.org/dc/terms/")
 DCATAPIT = Namespace('http://dati.gov.it/onto/dcatapit#')
-FOAF = Namespace("http://xmlns.com/foaf/0.1/")
-VCARD = Namespace("http://www.w3.org/2006/vcard/ns#")
 
+it_namespaces = {
+    'dcatapit': DCATAPIT,
+}
 
 THEME_BASE_URI = 'http://publications.europa.eu/resource/authority/data-theme/'
 LANG_BASE_URI = 'http://publications.europa.eu/resource/authority/language/'
 FREQ_BASE_URI = 'http://publications.europa.eu/resource/authority/frequency/'
 FORMAT_BASE_URI = 'http://publications.europa.eu/resource/authority/file-type/'
 GEO_BASE_URI = 'http://publications.europa.eu/resource/authority/place/'
-
 
 # vocabulary name, base URI
 THEME_CONCEPTS = ('eu_themes', THEME_BASE_URI)
@@ -35,21 +34,23 @@ GEO_CONCEPTS = ('places', GEO_BASE_URI)
 FREQ_CONCEPTS = ('frequencies', FREQ_BASE_URI)
 FORMAT_CONCEPTS = ('filetype', FORMAT_BASE_URI)
 
-
 DEFAULT_VOCABULARY_KEY = 'OP_DATPRO'
 DEFAULT_THEME_KEY = DEFAULT_VOCABULARY_KEY
 DEFAULT_FORMAT_CODE = DEFAULT_VOCABULARY_KEY
 
-it_namespaces = {
-    'dcatapit': DCATAPIT,
-}
-
-languages_mapping = {
+lang_mapping_ckan_to_voc = {
     'it': 'ITA',
-    'de': 'GER',
+    'de': 'DEU',
     'en': 'ENG',
     'en_GB': 'ENG',
 }
+
+lang_mapping_xmllang_to_ckan = {
+    'it' : 'it',
+    'de' : 'de',
+    'en' : 'en_GB' ,
+}
+
 
 format_mapping = {
     'WMS': 'MAP_SRVC',
@@ -71,7 +72,134 @@ class ItalianDCATAPProfile(RDFProfile):
     '''
 
     def parse_dataset(self, dataset_dict, dataset_ref):
+
+        # check the dataset type
+        if (dataset_ref, RDF.type, DCATAPIT.Dataset) not in self.g:
+            # not a DCATAPIT dataset
+            return dataset_dict
+
+        # frequency
+        valueRef = self._object_value(dataset_ref, DCT.accrualPeriodicity)
+        if valueRef:
+            value = self._strip_uri(valueRef, FREQ_BASE_URI)
+            self._add_or_replace_extra(dataset_dict, 'frequency', value)
+        else:
+            log.debug('No DCT.accrualPeriodicity found for dataset "%s"', dataset_dict.get('title', '---'))
+
+        # language
+        valueRefList = self._object_value_list(dataset_ref, DCT.language)
+        valueList = [self._strip_uri(valueRef, LANG_BASE_URI) for valueRef in valueRefList]
+        value = ','.join(valueList)
+        if len(valueList) > 1:
+            value = '{'+value+'}'
+        self._add_or_replace_extra(dataset_dict, 'language', value)
+
+        # theme
+        valueRefList = self._object_value_list(dataset_ref, DCAT.theme)
+        valueList = [self._strip_uri(valueRef, THEME_BASE_URI) for valueRef in valueRefList]
+        value = ','.join(valueList)
+        if len(valueList) > 1:
+            value = '{'+value+'}'
+        self._add_or_replace_extra(dataset_dict, 'theme', value)
+
+        # Publisher
+        for k,v in self._parse_agent(dataset_ref, DCT.publisher, 'publisher').iteritems():
+            self._add_or_replace_extra(dataset_dict, k, v)
+
+        # Rights holder
+        for k,v in self._parse_agent(dataset_ref, DCT.rightsHolder, 'holder').iteritems():
+            self._add_or_replace_extra(dataset_dict, k, v)
+
+        # Creator (autore)
+        for k,v in self._parse_agent(dataset_ref, DCT.creator, 'creator').iteritems():
+            self._add_or_replace_extra(dataset_dict, k, v)
+
+        # Spatial
+        spatial_tags = []
+        geonames_url = None
+        for _s, spatial_literal in self.g.subject_objects(predicate=DCATAPIT.geographicalIdentifier):
+            spatial_value = spatial_literal.value
+            if GEO_BASE_URI in spatial_value:
+                spatial_tags.append(self._strip_uri(spatial_value, GEO_BASE_URI))
+            else:
+                if geonames_url:
+                    log.warn("GeoName URL is already set to %s, value %s will not be imported", geonames_url, spatial_value)
+                else:
+                    geonames_url = spatial_value
+
+        if len(spatial_tags) > 0:
+            value = ','.join(spatial_tags)
+            if len(spatial_tags) > 1:
+                value = '{'+value+'}'
+            dataset_dict['geographical_name'] = value
+
+        if geonames_url:
+            dataset_dict['geographical_geonames_url'] = geonames_url
+
+        ### Collect strings from multilang fields
+
+        for key, predicate, target_dict_name in (
+                ('title', DCT.title, 'localised_titles'),
+                ('notes', DCT.description, 'localised_abstracts'),
+                ):
+            self._collect_multilang_strings(dataset_dict, key, dataset_ref, predicate, target_dict_name)
+
+        ### TODO: multilang resources
+
         return dataset_dict
+
+    def _collect_multilang_strings(self, dataset_dict, key, subj, pred, target_dict_name):
+        '''
+        Search for multilang Literals matching (subj, pred).
+        - Literals not localized will be stored as dataset_dict[key] -- possibly replacing the value set by the EURO parser
+        - Localized literals will be stored into multilang_dict[key][lang]
+        '''
+
+        localized_values = []
+        for obj in self.g.objects(subj, pred):
+            value = obj.value
+            lang = obj.language
+            if not lang:
+                # force default value in dataset
+                dataset_dict[key] = value
+            else:
+                # add localized string
+                localized_values.append({
+                    'text': value,
+                    'locale': lang_mapping_xmllang_to_ckan.get(lang)
+                })
+
+        if len(localized_values) > 0:
+            log.debug('SKIPPING MULTILANG INFO')
+        # TODO: find out how to pass multilang info
+        #    dataset_dict[target_dict_name] = localized_values
+
+
+    def _add_or_replace_extra(self, dataset_dict, key, value):
+
+        #  search and replace
+        for extra in dataset_dict['extras']:
+            if extra['key'] == key:
+                extra['value'] = value
+                return
+
+        # add if not found
+        dataset_dict['extras'].append({'key': key, 'value': value})
+
+    def _parse_agent(self, subject, predicate, base_name):
+
+        agent_dict = {}
+
+        for agent in self.g.objects(subject, predicate):
+
+            agent_dict[base_name + '_name'] = self._object_value(agent, FOAF.name)
+            agent_dict[base_name + '_identifier'] = self._object_value(agent, DCT.identifier)
+
+        return agent_dict
+
+    def _strip_uri(self, value, base_uri):
+        return value.replace(base_uri, '')
+
 
     def graph_from_dataset(self, dataset_dict, dataset_ref):
 
@@ -104,7 +232,7 @@ class ItalianDCATAPProfile(RDFProfile):
                 self.g.remove((dataset_ref, DCT.language, Literal(lang)))
                 lang = lang.replace('{','').replace('}','')
                 self.g.add((dataset_ref, DCT.language, URIRef(LANG_BASE_URI + lang)))
-                self._add_concept(LANG_CONCEPTS, lang)
+                # self._add_concept(LANG_CONCEPTS, lang)
 
         ### add spatial (EU URI)
         value = self._get_dict_value(dataset_dict, 'geographical_name')
@@ -134,7 +262,7 @@ class ItalianDCATAPProfile(RDFProfile):
         ### replace periodicity
         self._remove_node(dataset_dict, dataset_ref,  ('frequency', DCT.accrualPeriodicity, None, Literal))
         self._add_uri_node(dataset_dict, dataset_ref, ('frequency', DCT.accrualPeriodicity, None, URIRef), FREQ_BASE_URI)
-        self._add_concept(FREQ_CONCEPTS, dataset_dict.get('frequency', DEFAULT_VOCABULARY_KEY))
+        # self._add_concept(FREQ_CONCEPTS, dataset_dict.get('frequency', DEFAULT_VOCABULARY_KEY))
 
         ### replace landing page
         self._remove_node(dataset_dict, dataset_ref,  ('url', DCAT.landingPage, None, URIRef))
@@ -245,17 +373,15 @@ class ItalianDCATAPProfile(RDFProfile):
                     log.warn('No format for resource: %s / %s', dataset_dict.get('title', 'N/A'), resource_dict.get('description', 'N/A') )
                     self.g.add((distribution, DCT['format'], URIRef(FORMAT_BASE_URI + DEFAULT_FORMAT_CODE)))
 
-
             ### license
-#            <dct:license rdf:resource="http://creativecommons.org/licenses/by/3.0/it/"/>
-#
-#            <!-- http://creativecommons.org/licenses/by/3.0/it/ -->
-#            <dcatapit:LicenseDocument rdf:about="http://creativecommons.org/licenses/by/3.0/it/">
-#                <rdf:type rdf:resource="&dct;LicenseDocument"/>
-#                <owl:versionInfo>3.0 ITA</owl:versionInfo>
-#                <foaf:name>CC BY</foaf:name>
-#                <dct:type rdf:resource="http://purl.org/adms/licencetype/Attribution"/>
-#            </dcatapit:LicenseDocument>
+            # <dct:license rdf:resource="http://creativecommons.org/licenses/by/3.0/it/"/>
+            #
+            # <dcatapit:LicenseDocument rdf:about="http://creativecommons.org/licenses/by/3.0/it/">
+            #    <rdf:type rdf:resource="&dct;LicenseDocument"/>
+            #    <owl:versionInfo>3.0 ITA</owl:versionInfo>
+            #    <foaf:name>CC BY</foaf:name>
+            #    <dct:type rdf:resource="http://purl.org/adms/licencetype/Attribution"/>
+            # </dcatapit:LicenseDocument>
 
             # "license_id" : "cc-zero"
             # "license_title" : "Creative Commons CCZero",
@@ -360,7 +486,6 @@ class ItalianDCATAPProfile(RDFProfile):
         #
         # <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/ENVI"/>
         #
-        # <!-- http://publications.europa.eu/resource/authority/data-theme/ENVI -->
         # <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/ENVI">
         #     <skos:prefLabel xml:lang="it">Ambiente</skos:prefLabel>
         # </skos:Concept>
@@ -386,7 +511,7 @@ class ItalianDCATAPProfile(RDFProfile):
         for prefix, namespace in it_namespaces.iteritems():
             g.bind(prefix, namespace)
 
-        ### Add a further type for the  Catalog node
+        ### Add a further type for the Catalog node
         g.add((catalog_ref, RDF.type, DCATAPIT.Catalog))
 
         ### publisher
@@ -419,9 +544,12 @@ class ItalianDCATAPProfile(RDFProfile):
         self.g.add((taxonomy, DCT.title, Literal('Il Vocabolario Data Theme', lang='it')))
 
         ### language
-        lang2 = config.get('ckanext.dcatapit_config.catalog_theme', 'it')
-        lang3 = languages_mapping.get(lang2) or 'ITA'
-        self.g.add((catalog_ref, DCT.language, URIRef(LANG_BASE_URI + lang3)))
+        langs = config.get('ckan.locales_offered', 'it')
+
+        for lang_offered in langs.split():
+            lang_code = lang_mapping_ckan_to_voc.get(lang_offered)
+            self.g.add((catalog_ref, DCT.language, URIRef(LANG_BASE_URI + lang_code)))
+
         self.g.remove((catalog_ref, DCT.language, Literal(config.get('ckan.locale_default', 'en'))))
 
 
