@@ -244,7 +244,7 @@ class ItalianDCATAPProfile(RDFProfile):
                 self.g.add((dataset_ref, DCT.spatial, dct_location))
 
                 self.g.add((dct_location, RDF['type'], DCT.Location))
-                
+
                 # Try and add a Concept from the spatial vocabulary
                 if self._add_concept(GEO_CONCEPTS, gname):
                     self.g.add((dct_location, DCATAPIT.geographicalIdentifier, Literal(GEO_BASE_URI + gname)))
@@ -274,8 +274,13 @@ class ItalianDCATAPProfile(RDFProfile):
 
         ### replace landing page
         self._remove_node(dataset_dict, dataset_ref,  ('url', DCAT.landingPage, None, URIRef))
-        landing_page = dataset_uri(dataset_dict)  # TODO: preserve original URI if harvested
-        self.g.add((dataset_ref, DCAT.landingPage, URIRef(landing_page)))
+        landing_page_uri = None
+        if dataset_dict.get('name'):
+            landing_page_uri = '{0}/dataset/{1}'.format(catalog_uri().rstrip('/'), dataset_dict['name'])
+        else:
+            landing_page_uri = dataset_uri(dataset_dict)  # TODO: preserve original URI if harvested
+
+        self.g.add((dataset_ref, DCAT.landingPage, URIRef(landing_page_uri)))
 
         ### publisher
 
