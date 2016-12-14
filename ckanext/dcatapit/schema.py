@@ -132,7 +132,7 @@ def get_custom_package_schema():
 		    'name': 'publisher',
 		    'element': 'couple',
 		    'label': _('Dataset Editor'),
-		    'is_required': False,
+		    'is_required': True,
 		    'couples': [
 		    	{
 		    		'name': 'publisher_name',
@@ -204,7 +204,7 @@ def get_custom_package_schema():
 		    'name': 'temporal_coverage',
 		    'element': 'couple',
 		    'label': _('Temporal Coverage'),
-		    'is_required': False,
+		    'is_required': True,
 		    'couples': [
 		    	{
 		    		'name': 'temporal_start',

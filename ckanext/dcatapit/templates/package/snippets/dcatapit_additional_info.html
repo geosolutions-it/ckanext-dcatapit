@@ -9,7 +9,7 @@
 
 			{% for field in schema_fields %}	  
 
-				{% if not field.ignore %}
+				{% if not field.ignore and not field.ignore_from_info %}
 
 				  	{% if field.element == 'couple' %}
 

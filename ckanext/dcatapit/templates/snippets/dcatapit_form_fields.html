@@ -4,9 +4,7 @@
 {% import 'macros/dcatapit_form_macros.html' as dcatapit_form_macros %}
 
 {% for field in schema_fields %}
-      {% if 'ignore' in field and field.ignore == True %}
-            {# do nothing, skip the field #}
-      {% else %}
+      {% if not field.ignore and not field.ignore_from_edit %}
 
             {% if field.element == 'input' %}
 
