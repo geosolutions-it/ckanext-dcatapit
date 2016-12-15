@@ -5,12 +5,12 @@ CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
 
 #Requirements
 
-The ckanext-dcatapit extension has been developed for CKAN 2.4 or later.
-The ckanext-dcatapit extension requires the [ckanext-multilang plugin](https://github.com/geosolutions-it/ckanext-multilang/tree/ckan-2.5.2) installed on CKAN (see the [WIKI](https://github.com/geosolutions-it/ckanext-multilang/wiki) for more details about that).
+The ckanext-dcatapit extension has been developed for CKAN 2.4 or later and is based on [ckanext-dcat plugin](https://github.com/ckan/ckanext-dcat) 
+The ckanext-dcatapit extension requires also the [ckanext-multilang plugin](https://github.com/geosolutions-it/ckanext-multilang/tree/ckan-2.5.2) installed on CKAN (see the [WIKI](https://github.com/geosolutions-it/ckanext-multilang/wiki) for more details about that).
 
 #Installation
 
-1. Install the ckanext-multilang extension as described [here](https://github.com/geosolutions-it/ckanext-multilang/blob/ckan-2.5.2/README.rst)
+1. Install the ckanext-multilang extension as described [here](https://github.com/geosolutions-it/ckanext-multilang/blob/ckan-2.5.2/README.rst) and ckanext-dcat.
 
 2. Activate your CKAN virtual environment, for example:
 
@@ -26,6 +26,10 @@ The ckanext-dcatapit extension requires the [ckanext-multilang plugin](https://g
 
 4. Add ``dcatapit_pkg`` and ``dcatapit_org`` and ``dcatapit_config`` to the ``ckan.plugins`` setting in your CKAN
    config file (by default the config file is located at ``/etc/ckan/default/production.ini``).
+
+5. Enable the dcatapit profile adding the following configuration property in the ``production.ini`` file::
+
+    `ckanext.dcat.rdf.profiles = euro_dcat_ap it_dcat_ap`
    
 5. The EU controlled vocabularies must be populated before start using the dcatapit plugin. Execute in sequence these commands:
 
@@ -39,7 +43,26 @@ The ckanext-dcatapit extension requires the [ckanext-multilang plugin](https://g
     
     `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf  --name filetype --config=/etc/ckan/default/production.ini`
 
-6. Restart CKAN
+6. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu::
+
+     sudo service apache2 reload
+
+
+------------------------
+Development Installation
+------------------------
+
+To install `ckanext-datitrentinoit` for development, activate your CKAN virtualenv and
+do::
+
+    `git clone https://github.com/geosolutions-it/ckanext-datitrentinoit.git`
+    
+    `cd ckanext-datitrentinoit`
+    
+    `python setup.py develop`
+
+    `pip install -r dev-requirements.txt`
+
 
 # Managing translations
 
