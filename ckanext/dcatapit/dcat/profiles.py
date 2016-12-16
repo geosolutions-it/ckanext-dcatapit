@@ -38,6 +38,8 @@ DEFAULT_VOCABULARY_KEY = 'OP_DATPRO'
 DEFAULT_THEME_KEY = DEFAULT_VOCABULARY_KEY
 DEFAULT_FORMAT_CODE = DEFAULT_VOCABULARY_KEY
 
+LOCALISED_DICT_NAME = 'DCATAPIT_MULTILANG'
+
 lang_mapping_ckan_to_voc = {
     'it': 'ITA',
     'de': 'DEU',
@@ -138,24 +140,30 @@ class ItalianDCATAPProfile(RDFProfile):
 
         ### Collect strings from multilang fields
 
-        for key, predicate, target_dict_name in (
-                ('title', DCT.title, 'localised_titles'),
-                ('notes', DCT.description, 'localised_abstracts'),
+        # { 'field_name': {'it': 'italian loc', 'de': 'german loc', ...}, ...}
+        localized_dict = {}
+
+        for key, predicate in (
+                ('title', DCT.title),
+                ('notes', DCT.description),
                 ):
-            self._collect_multilang_strings(dataset_dict, key, dataset_ref, predicate, target_dict_name)
+            self._collect_multilang_strings(dataset_dict, key, dataset_ref, predicate, localized_dict)
+
+        if len(localized_dict) > 0:
+            log.debug('Found multilang metadata')
+            dataset_dict[LOCALISED_DICT_NAME] = localized_dict
 
         ### TODO: multilang resources
 
         return dataset_dict
 
-    def _collect_multilang_strings(self, dataset_dict, key, subj, pred, target_dict_name):
+    def _collect_multilang_strings(self, dataset_dict, key, subj, pred, target_dict):
         '''
         Search for multilang Literals matching (subj, pred).
         - Literals not localized will be stored as dataset_dict[key] -- possibly replacing the value set by the EURO parser
-        - Localized literals will be stored into multilang_dict[key][lang]
+        - Localized literals will be stored into target_dict[key][lang]
         '''
 
-        localized_values = []
         for obj in self.g.objects(subj, pred):
             value = obj.value
             lang = obj.language
@@ -164,16 +172,8 @@ class ItalianDCATAPProfile(RDFProfile):
                 dataset_dict[key] = value
             else:
                 # add localized string
-                localized_values.append({
-                    'text': value,
-                    'locale': lang_mapping_xmllang_to_ckan.get(lang)
-                })
-
-        if len(localized_values) > 0:
-            log.debug('SKIPPING MULTILANG INFO')
-        # TODO: find out how to pass multilang info
-        #    dataset_dict[target_dict_name] = localized_values
-
+                lang_dict = target_dict.setdefault(key, {})
+                lang_dict[lang_mapping_xmllang_to_ckan.get(lang)] = value
 
     def _add_or_replace_extra(self, dataset_dict, key, value):
 
