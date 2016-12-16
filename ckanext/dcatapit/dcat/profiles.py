@@ -37,6 +37,7 @@ FORMAT_CONCEPTS = ('filetype', FORMAT_BASE_URI)
 DEFAULT_VOCABULARY_KEY = 'OP_DATPRO'
 DEFAULT_THEME_KEY = DEFAULT_VOCABULARY_KEY
 DEFAULT_FORMAT_CODE = DEFAULT_VOCABULARY_KEY
+DEFAULT_FREQ_CODE = 'UNKNOWN'
 
 LOCALISED_DICT_NAME = 'DCATAPIT_MULTILANG'
 
@@ -269,7 +270,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
         ### replace periodicity
         self._remove_node(dataset_dict, dataset_ref,  ('frequency', DCT.accrualPeriodicity, None, Literal))
-        self._add_uri_node(dataset_dict, dataset_ref, ('frequency', DCT.accrualPeriodicity, None, URIRef), FREQ_BASE_URI)
+        self._add_uri_node(dataset_dict, dataset_ref, ('frequency', DCT.accrualPeriodicity, DEFAULT_FREQ_CODE, URIRef), FREQ_BASE_URI)
         # self._add_concept(FREQ_CONCEPTS, dataset_dict.get('frequency', DEFAULT_VOCABULARY_KEY))
 
         ### replace landing page
@@ -482,6 +483,9 @@ class ItalianDCATAPProfile(RDFProfile):
         if value:
             self.g.add((ref, pred, _type(base_uri + value)))
             return True
+        elif fallback:
+            self.g.add((ref, pred, _type(base_uri + fallback)))
+            return False
         else:
             return False
 
