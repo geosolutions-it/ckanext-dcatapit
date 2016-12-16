@@ -299,6 +299,9 @@ class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupFo
 
     # ------------- IGroupForm ---------------#
 
+    def group_controller(self):
+        return 'organization'
+        
     def group_form(self):
         return 'organization/new_organization_form.html'
 
