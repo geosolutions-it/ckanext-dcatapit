@@ -45,7 +45,7 @@ The ckanext-dcatapit extension requires also the [ckanext-multilang plugin](http
 
 6. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu::
 
-     sudo service apache2 reload
+     `sudo service apache2 reload`
 
 
 ------------------------
@@ -55,13 +55,13 @@ Development Installation
 To install `ckanext-dcatapit` for development, activate your CKAN virtualenv and
 do::
 
-    `git clone https://github.com/geosolutions-it/ckanext-dcatapit.git`
+    git clone https://github.com/geosolutions-it/ckanext-dcatapit.git
     
-    `cd ckanext-dcatapit `
+    cd ckanext-dcatapit
     
-    `python setup.py develop`
+    python setup.py develop
 
-    `pip install -r dev-requirements.txt`
+    pip install -r dev-requirements.txt
 
 
 # Managing translations
