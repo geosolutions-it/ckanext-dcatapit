@@ -52,10 +52,10 @@ The ckanext-dcatapit extension requires also the [ckanext-multilang plugin](http
 Development Installation
 ------------------------
 
-To install `ckanext-datitrentinoit` for development, activate your CKAN virtualenv and
+To install `ckanext-dcatapit` for development, activate your CKAN virtualenv and
 do::
 
-    `git clone https://github.com/geosolutions-it/ckanext-datitrentinoit.git`
+    `git clone https://github.com/geosolutions-it/ckanext-dcatapit.git`
     
     `cd ckanext-dcatapit `
     
