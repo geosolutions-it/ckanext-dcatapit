@@ -57,7 +57,7 @@ do::
 
     `git clone https://github.com/geosolutions-it/ckanext-datitrentinoit.git`
     
-    `cd ckanext-datitrentinoit`
+    `cd ckanext-dcatapit `
     
     `python setup.py develop`
 
