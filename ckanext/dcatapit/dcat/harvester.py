@@ -1,14 +1,11 @@
 import logging
 
-import ckan.model as model
 import ckan.plugins as p
 
 from ckanext.dcat.interfaces import IDCATRDFHarvester
 
 from ckanext.dcatapit.dcat.profiles import LOCALISED_DICT_NAME
 import ckanext.dcatapit.interfaces as interfaces
-
-from ckanext.multilang.model import PackageMultilang
 
 log = logging.getLogger(__name__)
 
@@ -55,12 +52,7 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
         try:
             for field, lang_dict in dcatapit_dict.iteritems():
                 for lang, text in lang_dict.iteritems():
-                    pml = PackageMultilang.get(pkg_id, field, lang, 'package')
-                    if not pml:
-                        interfaces.save_extra_package_multilang({'id':pkg_id, 'field':field, 'text':text}, lang, 'package')
-                    elif not pml.text == text:
-                        pml.text = text
-                        pml.add()
+                    interfaces.upsert_package_multilang(pkg_id, field, 'package', lang, text)
 
         except Exception, e:
             return str(e)

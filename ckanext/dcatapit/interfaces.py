@@ -37,6 +37,22 @@ def save_extra_package_multilang(pkg, lang, field_type):
     PackageMultilang.persist(pkg, lang, field_type)
     log.info('Localized field created successfully')
 
+def upsert_package_multilang(pkg_id, field_name, field_type, lang, text):
+    try:
+        from ckanext.multilang.model import PackageMultilang
+    except ImportError:
+        log.warn('DCAT-AP_IT: multilang extension not available.')
+        return
+
+    pml = PackageMultilang.get(pkg_id, field_name, lang, field_type)
+    if not pml:
+        PackageMultilang.persist({'id':pkg_id, 'field':field_name, 'text':text}, lang, field_type)
+    elif not text:
+        pml.purge()
+    elif not pml.text == text:
+        pml.text = text
+        pml.save()
+
 def update_extra_package_multilang(extra, pkg_id, field, lang, field_type='extra'):
     try:
         from ckanext.multilang.model import PackageMultilang
