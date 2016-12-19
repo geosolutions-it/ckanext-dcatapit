@@ -39,7 +39,8 @@ DEFAULT_THEME_KEY = DEFAULT_VOCABULARY_KEY
 DEFAULT_FORMAT_CODE = DEFAULT_VOCABULARY_KEY
 DEFAULT_FREQ_CODE = 'UNKNOWN'
 
-LOCALISED_DICT_NAME = 'DCATAPIT_MULTILANG'
+LOCALISED_DICT_NAME_BASE = 'DCATAPIT_MULTILANG_BASE'
+LOCALISED_DICT_NAME_RESOURCES = 'DCATAPIT_MULTILANG_RESOURCES'
 
 lang_mapping_ckan_to_voc = {
     'it': 'ITA',
@@ -152,16 +153,50 @@ class ItalianDCATAPProfile(RDFProfile):
 
         if len(localized_dict) > 0:
             log.debug('Found multilang metadata')
-            dataset_dict[LOCALISED_DICT_NAME] = localized_dict
+            dataset_dict[LOCALISED_DICT_NAME_BASE] = localized_dict
 
-        ### TODO: multilang resources
+        ### Resources
+
+        resources_loc_dict = {}
+
+        for resource_dict in dataset_dict['resources']:
+            resource_uri = resource_dict['uri']
+            if not resource_uri:
+                log.warn("URI not defined for resource %s", resource_dict['name'])
+                continue
+
+            distribution = URIRef(resource_uri)
+            if not (dataset_ref, DCAT.distribution, distribution) in self.g:
+                log.warn("Distribution not found in dataset %s", resource_uri)
+                continue
+
+            # Format
+
+            # License
+
+            # Multilang
+            loc_dict = {}
+
+            for key, predicate in (
+                    ('name', DCT.title),
+                    ('description', DCT.description),
+                    ):
+                self._collect_multilang_strings(resource_dict, key, distribution, predicate, loc_dict)
+
+            if len(loc_dict) > 0:
+                log.debug('Found multilang metadata in resource %s', resource_dict['name'])
+                resources_loc_dict[resource_uri] = loc_dict
+
+        if len(resources_loc_dict) > 0:
+            log.debug('Found multilang metadata in resources')
+            dataset_dict[LOCALISED_DICT_NAME_RESOURCES] = resources_loc_dict
 
         return dataset_dict
 
-    def _collect_multilang_strings(self, dataset_dict, key, subj, pred, target_dict):
+    def _collect_multilang_strings(self, source_dict, key, subj, pred, target_dict):
         '''
         Search for multilang Literals matching (subj, pred).
-        - Literals not localized will be stored as dataset_dict[key] -- possibly replacing the value set by the EURO parser
+        - Literals not localized will be stored as source_dict[key] -- possibly replacing the value set by the EURO parser
         - Localized literals will be stored into target_dict[key][lang]
         '''
 
@@ -170,7 +205,7 @@ class ItalianDCATAPProfile(RDFProfile):
             lang = obj.language
             if not lang:
                 # force default value in dataset
-                dataset_dict[key] = value
+                source_dict[key] = value
             else:
                 # add localized string
                 lang_dict = target_dict.setdefault(key, {})

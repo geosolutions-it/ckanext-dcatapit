@@ -45,13 +45,29 @@ def upsert_package_multilang(pkg_id, field_name, field_type, lang, text):
         return
 
     pml = PackageMultilang.get(pkg_id, field_name, lang, field_type)
-    if not pml:
+    if not pml and text:
         PackageMultilang.persist({'id':pkg_id, 'field':field_name, 'text':text}, lang, field_type)
-    elif not text:
+    elif pml and not text:
         pml.purge()
-    elif not pml.text == text:
+    elif pml and not pml.text == text:
         pml.text = text
         pml.save()
+
+def upsert_resource_multilang(res_id, field_name, lang, text):
+    try:
+        from ckanext.multilang.model import ResourceMultilang
+    except ImportError:
+        log.warn('DCAT-AP_IT: multilang extension not available.')
+        return
+
+    ml = ResourceMultilang.get_for_pk(res_id, field_name, lang)
+    if not ml and text:
+        ResourceMultilang.persist_resources([ResourceMultilang(res_id, field_name, lang, text)])
+    elif ml and not text:
+        ml.purge()
+    elif ml and not ml.text == text:
+        ml.text = text
+        ml.save()
 
 def update_extra_package_multilang(extra, pkg_id, field, lang, field_type='extra'):
     try:
@@ -153,24 +169,6 @@ def _multilang_to_dict(records):
         lang_dict[lang] = value
 
     return fields_dict
-
-
-#def get_for_resources(pkg_id):
-#    '''
-#    Returns all the localized fields of a dataset's resources, in a dict of dicts, i.e.:
-#         {RES_ID: {FIELDNAME:{LANG:label, ...}, ...}, ...}
-#
-#    Returns None if multilang extension not loaded.
-#    '''
-#
-#    try:
-#        from ckanext.multilang.model import PackageMultilang
-#    except ImportError:
-#        log.warn('DCAT-AP_IT: multilang extension not available.')
-#
-#        return None
-#
-#    pass
 
 
 def persist_tag_multilang(name, lang, localized_text, vocab_name):
