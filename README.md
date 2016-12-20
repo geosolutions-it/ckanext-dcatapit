@@ -27,7 +27,7 @@ If the ckanext-multilang extension is missing you can use the dcatapit extension
 
 ## Installation
 
-1. Install the ckanext-multilang extension as described [here](https://github.com/geosolutions-it/ckanext-multilang/blob/ckan-2.5.2/README.rst) and ckanext-dcat [here](https://github.com/ckan/ckanext-dcat/blob/master/README.md).
+1. Install the **ckanext-multilang** extension as described [here](https://github.com/geosolutions-it/ckanext-multilang/blob/ckan-2.5.2/README.rst) and **ckanext-dcat** [here](https://github.com/ckan/ckanext-dcat/blob/master/README.md).
 
 2. Activate your CKAN virtual environment, for example:
 
@@ -95,24 +95,24 @@ do::
 The dcatapit extension allows to define additional custom fields to the package schema by implementing the `ICustomSchema` interface 
 in you CKAN extension. Below a sample:
 
-class ExamplePlugin(plugins.SingletonPlugin):
+    class ExamplePlugin(plugins.SingletonPlugin):
 
-    # ICustomSchema
-    plugins.implements(interfaces.ICustomSchema)
+        # ICustomSchema
+        plugins.implements(interfaces.ICustomSchema)
 
-    def get_custom_schema(self):
-        return [
-            {
-                'name': 'custom_text',
-                'validator': ['ignore_missing'],
-                'element': 'input',
-                'type': 'text',
-                'label': _('Custom Text'),
-                'placeholder': _('custom texte here'),
-                'is_required': False,
-                'localized': False
-            }
-        ]
+        def get_custom_schema(self):
+            return [
+                {
+                    'name': 'custom_text',
+                    'validator': ['ignore_missing'],
+                    'element': 'input',
+                    'type': 'text',
+                    'label': _('Custom Text'),
+                    'placeholder': _('custom texte here'),
+                    'is_required': False,
+                    'localized': False
+                }
+            ]
 
 Through this an additional schema field named `custom_text` will be added to the package schema and automatically managed by the dcatapit extension. Below a brief description of the 
 fields properties that can be used:
