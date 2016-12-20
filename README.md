@@ -42,9 +42,9 @@ The ckanext-dcatapit extension requires also the [ckanext-multilang plugin](http
 4. Add ``dcatapit_pkg`` and ``dcatapit_org`` and ``dcatapit_config`` to the ``ckan.plugins`` setting in your CKAN
    config file (by default the config file is located at ``/etc/ckan/default/production.ini``).
 
-   **dcatapit_pkg**: extends the package schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
-   **dcatapit_org**: extends the organization schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
-   **dcatapit_config**: extends the admin configuration schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
+   * **dcatapit_pkg**: extends the package schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
+   * **dcatapit_org**: extends the organization schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
+   * **dcatapit_config**: extends the admin configuration schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
 
 The ckanext-dcatapit allows to localize the package fields (eg. title, description etc.) according to the schema definition, but to do that requires the ckanext-multilang installed.
 
@@ -115,14 +115,14 @@ class ExamplePlugin(plugins.SingletonPlugin):
 Through this an additional schema field named `custom_text` will be added to the package schema and automatically managed by the dcatapit extension. Below a brief description of the 
 fields properties that can be used:
 
-    `name`: the name of the field
-    `validator`: array of validators to use for the field
-    `element`: the element type to use into the package edit form (ie. see the available ckan macros or macros defined into the dcatapit extension [here](https://github.com/geosolutions-it/ckanext-dcatapit/blob/master/ckanext/dcatapit/templates/macros/dcatapit_form_macros.html)
-    `type`: the type of input eg. email, url, date (default: text)
-    `label`: the human readable label
-    `placeholder`: some placeholder text
-    `is_required`: boolean of whether this input is requred for the form to validate
-    `localized`: True to enable the field localization by the dcatapit extension (default False). This need the ckanext-multilang installed.
+* ``name``: the name of the field
+* ``validator``: array of validators to use for the field
+* ``element``: the element type to use into the package edit form (ie. see the available ckan macros or macros defined into the dcatapit extension [here](https://github.com/geosolutions-it/ckanext-dcatapit/blob/master/ckanext/dcatapit/templates/macros/dcatapit_form_macros.html)
+* ``type``: the type of input eg. email, url, date (default: text)
+* ``label``: the human readable label
+* ``placeholder``: some placeholder text
+* ``is_required``: boolean of whether this input is requred for the form to validate
+* ``localized``: True to enable the field localization by the dcatapit extension (default False). This need the ckanext-multilang installed.
 
 ## Managing translations
 
