@@ -19,16 +19,19 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
     def after_download(self, content, harvest_job):
         return content, []
 
-    def before_update(self, harvest_object, dataset_dict, temp_dict):
+    def before_update(self, harvest_object, dataset_dict, temp_dict, context=None):
         self._before(dataset_dict, temp_dict)
 
-    def after_update(self, harvest_object, dataset_dict, temp_dict):
+    def after_update(self, harvest_object, dataset_dict, temp_dict, context=None):
         return self._after(dataset_dict, temp_dict)
 
-    def before_create(self, harvest_object, dataset_dict, temp_dict):
+    def before_create(self, harvest_object, dataset_dict, temp_dict, context=None):
         self._before(dataset_dict, temp_dict)
+        
+        if context and 'schema' in context:
+            context.pop('schema', None)
 
-    def after_create(self, harvest_object, dataset_dict, temp_dict):
+    def after_create(self, harvest_object, dataset_dict, temp_dict, context=None):
         return self._after(dataset_dict, temp_dict)
 
     def _before(self, dataset_dict, temp_dict):

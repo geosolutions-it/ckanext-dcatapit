@@ -1,6 +1,7 @@
 
 import ast
 import logging
+import datetime
 
 from pylons import config
 
@@ -9,7 +10,7 @@ from rdflib import URIRef, BNode, Literal
 
 import ckan.logic as logic
 
-from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF
+from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF, ADMS
 from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
 
 import ckanext.dcatapit.interfaces as interfaces
@@ -82,13 +83,84 @@ class ItalianDCATAPProfile(RDFProfile):
             # not a DCATAPIT dataset
             return dataset_dict
 
+        # issued
+        valueRef = self._object_value(dataset_ref, DCT.issued)
+        if valueRef:
+            value = datetime.datetime.strptime(valueRef, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
+            self._remove_from_extra(dataset_dict, 'issued', value)
+            dataset_dict['issued'] = value
+        else:
+            log.debug('No DCT.issued found for dataset "%s"', dataset_dict.get('title', '---'))
+
+        # modified
+        valueRef = self._object_value(dataset_ref, DCT.modified)
+        if valueRef:
+            value = datetime.datetime.strptime(valueRef, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
+            self._remove_from_extra(dataset_dict, 'modified', value)
+            dataset_dict['modified'] = value
+        else:
+            log.warn('No DCT.modified found for dataset "%s"', dataset_dict.get('title', '---'))
+
+        # identifier
+        valueRef = self._object_value(dataset_ref, DCT.identifier)
+        if valueRef:
+            self._remove_from_extra(dataset_dict, 'identifier', valueRef)
+            dataset_dict['identifier'] = valueRef
+        else:
+            log.warn('No DCT.identifier found for dataset "%s"', dataset_dict.get('title', '---'))
+
+        # alternate_identifier
+        valueRefList = self._object_value_list(dataset_ref, ADMS.identifier)
+        if valueRefList:
+            value = ','.join(valueRefList)
+            self._remove_from_extra(dataset_dict, 'alternate_identifier', value)
+            dataset_dict['alternate_identifier'] = value
+        else:
+            log.debug('No ADMS.identifier found for dataset "%s"', dataset_dict.get('title', '---'))
+
+        # conforms_to
+        valueRefList = self._object_value_list(dataset_ref, DCT.conformsTo)
+        if valueRefList:
+            value = ','.join(valueRefList)
+            self._remove_from_extra(dataset_dict, 'conforms_to', value)
+            dataset_dict['conforms_to'] = value
+        else:
+            log.debug('No DCT.conformsTo found for dataset "%s"', dataset_dict.get('title', '---'))
+
+        # is_version_of
+        valueRefList = self._object_value_list(dataset_ref, DCT.isVersionOf)
+        if valueRefList:
+            value = ','.join(valueRefList)
+            self._remove_from_extra(dataset_dict, 'is_version_of', value)
+            dataset_dict['is_version_of'] = value
+        else:
+            log.debug('No DCT.isVersionOf found for dataset "%s"', dataset_dict.get('title', '---'))
+
+        # Temporal
+        start, end = self._time_interval(dataset_ref, DCT.temporal)
+        if start:
+            value = datetime.datetime.strptime(start, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
+            self._remove_from_extra(dataset_dict, 'temporal_start', value)
+            dataset_dict['temporal_start'] = value
+        else:
+            log.warn('No DCT.temporal Start Date found for dataset "%s"', dataset_dict.get('title', '---'))
+
+        if end:
+            value = datetime.datetime.strptime(end, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
+            self._remove_from_extra(dataset_dict, 'temporal_end', value)
+            dataset_dict['temporal_end'] = value
+        else:
+            log.debug('No DCT.temporal End Date found for dataset "%s"', dataset_dict.get('title', '---'))
+
         # frequency
         valueRef = self._object_value(dataset_ref, DCT.accrualPeriodicity)
         if valueRef:
             value = self._strip_uri(valueRef, FREQ_BASE_URI)
-            self._add_or_replace_extra(dataset_dict, 'frequency', value)
+            #self._add_or_replace_extra(dataset_dict, 'frequency', value)
+            self._remove_from_extra(dataset_dict, 'frequency', value)
+            dataset_dict['frequency'] = value
         else:
-            log.debug('No DCT.accrualPeriodicity found for dataset "%s"', dataset_dict.get('title', '---'))
+            log.warn('No DCT.accrualPeriodicity found for dataset "%s"', dataset_dict.get('title', '---'))
 
         # language
         valueRefList = self._object_value_list(dataset_ref, DCT.language)
@@ -96,7 +168,9 @@ class ItalianDCATAPProfile(RDFProfile):
         value = ','.join(valueList)
         if len(valueList) > 1:
             value = '{'+value+'}'
-        self._add_or_replace_extra(dataset_dict, 'language', value)
+        #self._add_or_replace_extra(dataset_dict, 'language', value)
+        self._remove_from_extra(dataset_dict, 'language', value)
+        dataset_dict['language'] = value
 
         # theme
         valueRefList = self._object_value_list(dataset_ref, DCAT.theme)
@@ -104,19 +178,27 @@ class ItalianDCATAPProfile(RDFProfile):
         value = ','.join(valueList)
         if len(valueList) > 1:
             value = '{'+value+'}'
-        self._add_or_replace_extra(dataset_dict, 'theme', value)
+        #self._add_or_replace_extra(dataset_dict, 'theme', value)
+        self._remove_from_extra(dataset_dict, 'theme', value)
+        dataset_dict['theme'] = value
 
         # Publisher
         for k,v in self._parse_agent(dataset_ref, DCT.publisher, 'publisher').iteritems():
-            self._add_or_replace_extra(dataset_dict, k, v)
+            #self._add_or_replace_extra(dataset_dict, k, v)
+            self._remove_from_extra(dataset_dict, k, v)
+            dataset_dict[k] = v
 
         # Rights holder
         for k,v in self._parse_agent(dataset_ref, DCT.rightsHolder, 'holder').iteritems():
-            self._add_or_replace_extra(dataset_dict, k, v)
+            #self._add_or_replace_extra(dataset_dict, k, v)
+            self._remove_from_extra(dataset_dict, k, v)
+            dataset_dict[k] = v
 
         # Creator (autore)
         for k,v in self._parse_agent(dataset_ref, DCT.creator, 'creator').iteritems():
-            self._add_or_replace_extra(dataset_dict, k, v)
+            #self._add_or_replace_extra(dataset_dict, k, v)
+            self._remove_from_extra(dataset_dict, k, v)
+            dataset_dict[k] = v
 
         # Spatial
         spatial_tags = []
@@ -210,6 +292,14 @@ class ItalianDCATAPProfile(RDFProfile):
                 # add localized string
                 lang_dict = target_dict.setdefault(key, {})
                 lang_dict[lang_mapping_xmllang_to_ckan.get(lang)] = value
+
+    def _remove_from_extra(self, dataset_dict, key, value):
+
+        #  search and replace
+        for extra in dataset_dict['extras']:
+            if extra['key'] == key:
+                dataset_dict['extras'].pop(dataset_dict['extras'].index(extra))
+                return
 
     def _add_or_replace_extra(self, dataset_dict, key, value):
 
