@@ -195,4 +195,4 @@ We welcome contributions in any form:
 ## Professional Support and Credits
 This work has been performed by GeoSolutions ith funding provided by Provincia di Trento and Provincia di Bolzano in a joint effort.
 
-The work is provided as is and no warranty whatsoever is provided. Professional Support is available through our [Enterprise Support Services](www.geo-solutions.it/enterprise-support-services) offer.
+The work is provided as is and no warranty whatsoever is provided. Professional Support is available through our [Enterprise Support Services](http://www.geo-solutions.it/enterprise-support-services) offer.
