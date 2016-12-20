@@ -99,7 +99,7 @@ class ItalianDCATAPProfile(RDFProfile):
             self._remove_from_extra(dataset_dict, 'modified', value)
             dataset_dict['modified'] = value
         else:
-            log.debug('No DCT.modified found for dataset "%s"', dataset_dict.get('title', '---'))
+            log.warn('No DCT.modified found for dataset "%s"', dataset_dict.get('title', '---'))
 
         # identifier
         valueRef = self._object_value(dataset_ref, DCT.identifier)
@@ -107,7 +107,7 @@ class ItalianDCATAPProfile(RDFProfile):
             self._remove_from_extra(dataset_dict, 'identifier', valueRef)
             dataset_dict['identifier'] = valueRef
         else:
-            log.debug('No DCT.identifier found for dataset "%s"', dataset_dict.get('title', '---'))
+            log.warn('No DCT.identifier found for dataset "%s"', dataset_dict.get('title', '---'))
 
         # alternate_identifier
         valueRefList = self._object_value_list(dataset_ref, ADMS.identifier)
@@ -143,7 +143,7 @@ class ItalianDCATAPProfile(RDFProfile):
             self._remove_from_extra(dataset_dict, 'temporal_start', value)
             dataset_dict['temporal_start'] = value
         else:
-            log.debug('No DCT.temporal Start Date found for dataset "%s"', dataset_dict.get('title', '---'))
+            log.warn('No DCT.temporal Start Date found for dataset "%s"', dataset_dict.get('title', '---'))
 
         if end:
             value = datetime.datetime.strptime(end, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
@@ -160,7 +160,7 @@ class ItalianDCATAPProfile(RDFProfile):
             self._remove_from_extra(dataset_dict, 'frequency', value)
             dataset_dict['frequency'] = value
         else:
-            log.debug('No DCT.accrualPeriodicity found for dataset "%s"', dataset_dict.get('title', '---'))
+            log.warn('No DCT.accrualPeriodicity found for dataset "%s"', dataset_dict.get('title', '---'))
 
         # language
         valueRefList = self._object_value_list(dataset_ref, DCT.language)
