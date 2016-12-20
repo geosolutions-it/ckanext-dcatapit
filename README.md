@@ -21,7 +21,9 @@ This extension provides plugins that allow CKAN to expose and consume metadata f
 ## Requirements
 
 The ckanext-dcatapit extension has been developed for CKAN 2.4 or later and is based on [ckanext-dcat plugin](https://github.com/ckan/ckanext-dcat) 
-The ckanext-dcatapit extension requires also the [ckanext-multilang plugin](https://github.com/geosolutions-it/ckanext-multilang/tree/ckan-2.5.2) installed on CKAN in order to manage localized fields (see the [WIKI](https://github.com/geosolutions-it/ckanext-multilang/wiki) for more details about that). If the ckanext-multilang extension is missing you can use the dcatapit extension without the multilingual management. This means that all the multilingual aspects will be ignored (ie. for vocabularies, the package editing and also during the RDF harvesting and the serialization procedures).
+The ckanext-dcatapit extension requires also the [ckanext-multilang plugin](https://github.com/geosolutions-it/ckanext-multilang/tree/ckan-2.5.2) installed on CKAN in order to manage localized fields (see the [WIKI](https://github.com/geosolutions-it/ckanext-multilang/wiki) for more details about that). 
+
+If the ckanext-multilang extension is missing you can use the dcatapit extension without the multilingual management. This means that all the multilingual aspects will be ignored (ie. for vocabularies, the package editing and also during the RDF harvesting and the serialization procedures).
 
 ## Installation
 
@@ -127,7 +129,10 @@ fields properties that can be used:
 ## Managing translations
 
 The dcatapit extension implements the ITranslation CKAN's interface so the translations procedure of the GUI elements is automatically covered using the translations files provided in the i18n directory.
-Pay attention that the usage of the ITranslation interface can work only in CKAN 2.5 or later, if you are using a minor version of CKAN the ITranslation's implementation will be ignored.
+
+    Pay attention that the usage of the ITranslation interface can work only in CKAN 2.5 
+    or later, if you are using a minor version of CKAN the ITranslation's implementation 
+    will be ignored.
 
 ### Creating a new translation
 
