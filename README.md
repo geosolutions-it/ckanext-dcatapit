@@ -6,6 +6,8 @@ CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
 ## Contents
 
 - [Overview](#overview)
+- [License](#license)
+- [Demo Instance](#demo-instance)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Development Installation](#development-installation)
@@ -13,6 +15,16 @@ CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
 - [Managing translations](#managing-translations)
     - [Creating a new translation](#creating-a-new-translation)
     - [Updating an existing translation](#updating-an-existing-translation)
+
+## License
+
+**ckanext-dcatapit** is Free and Open Source software and is licensed under the GNU Affero General Public License (AGPL) v3.0 whose full text may be found at:
+
+http://www.fsf.org/licensing/licenses/agpl-3.0.html
+
+## Demo Instance
+
+A demo instance can be found [here](http://dcatapit.geo-solutions.it/).
 
 ## Overview 
 
@@ -169,4 +181,12 @@ In order to update the existing translations proceed as follow:
 3. Once the translation files (po) have been updated adding the new translations needed, compile them by running:
 
      `python setup.py compile_catalog --locale YOUR_LANGUAGE`
-     
+
+## Contributing
+
+We welcome contributions in any form:
+
+* pull requests for new features
+* pull requests for bug fixes
+* pull requests for documentation
+* funding for any combination of the above
