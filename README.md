@@ -60,7 +60,8 @@ If the ckanext-multilang extension is missing you can use the dcatapit extension
    * **dcatapit_org**: extends the organization schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
    * **dcatapit_config**: extends the admin configuration schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
 
-The ckanext-dcatapit allows to localize the package fields (eg. title, description etc.) according to the schema definition, but to do that requires the ckanext-multilang installed.
+    The ckanext-dcatapit allows to localize the package fields (eg. title, description etc.) according to the schema definition, but to
+    do that requires the ckanext-multilang installed.
 
 5. In order to enable also the RDF harvester add ``dcatapit_harvester`` to the ``ckan.plugins`` setting in your CKAN. 
 The ckanext-dcatapit RDF harvester also harvests localized fields, but to do that requires the ckanext-multilang installed.
