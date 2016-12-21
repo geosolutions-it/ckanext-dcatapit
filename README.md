@@ -41,7 +41,7 @@ If the ckanext-multilang extension is missing you can use the dcatapit extension
 
 ## Installation
 
-1. Install the **ckanext-multilang** extension as described [here](https://github.com/geosolutions-it/ckanext-multilang/blob/master/README.rst#installation) and **ckanext-dcat** [here](https://github.com/ckan/ckanext-dcat/blob/master/README.md).
+1. Install the **ckanext-multilang** extension as described [here](https://github.com/geosolutions-it/ckanext-multilang/blob/master/README.rst#installation) and **ckanext-dcat** [here](https://github.com/ckan/ckanext-dcat/blob/master/README.md#installation).
 
 2. Activate your CKAN virtual environment, for example:
 
