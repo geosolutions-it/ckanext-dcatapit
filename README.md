@@ -74,8 +74,12 @@ The ckanext-dcatapit RDF harvester also harvests localized fields, but to do tha
 
 7. Configure the CKAN base URI as reported in the [dcat documentation](https://github.com/ckan/ckanext-dcat/blob/master/README.md#uris):
     `ckanext.dcat.base_uri = YOUR_BASE_URI`
-   
-8. The EU controlled vocabularies must be populated before start using the dcatapit plugin. Execute in sequence these commands:
+
+8. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu:
+
+     `sudo service apache2 reload`
+     
+9. The EU controlled vocabularies must be populated before start using the dcatapit plugin. Execute in sequence these commands:
 
     `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf --name languages --config=/etc/ckan/default/production.ini`
     
@@ -86,10 +90,6 @@ The ckanext-dcatapit RDF harvester also harvests localized fields, but to do tha
     `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf --name frequencies --config=/etc/ckan/default/production.ini`
     
     `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf  --name filetype --config=/etc/ckan/default/production.ini`
-
-9. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu:
-
-     `sudo service apache2 reload`
 
 
 ## Development Installation
