@@ -94,8 +94,7 @@ The ckanext-dcatapit RDF harvester also harvests localized fields, but to do tha
 
 ## Development Installation
 
-To install `ckanext-dcatapit` for development, activate your CKAN virtualenv and
-do::
+To install `ckanext-dcatapit` for development, activate your CKAN virtualenv and do:
 
     git clone https://github.com/geosolutions-it/ckanext-dcatapit.git
     
@@ -129,8 +128,7 @@ in you CKAN extension. Below a sample:
                 }
             ]
 
-Through this an additional schema field named `custom_text` will be added to the package schema and automatically managed by the dcatapit extension. Below a brief description of the 
-fields properties that can be used:
+Through this an additional schema field named `custom_text` will be added to the package schema and automatically managed by the dcatapit extension. Below a brief description of the fields properties that can be used:
 
 * ``name``: the name of the field
 * ``validator``: array of validators to use for the field
