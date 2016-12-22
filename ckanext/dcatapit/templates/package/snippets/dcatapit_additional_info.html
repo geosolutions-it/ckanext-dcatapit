@@ -15,14 +15,10 @@
 
 				  		{% set value_couple = h.couple_to_string(field.couples, pkg_dict)%}
 
-			  		  	{% if value_couple %}
-
-			  		        <tr>
-						      <th scope="row" class="dataset-label">{{ field.label }}</th>
-					          <td class="dataset-details">{{ value_couple }}</td>
-						    </tr>
-
-					    {% endif %}
+		  		        <tr>
+					      <th scope="row" class="dataset-label">{{ field.label }}</th>
+				          <td class="dataset-details">{{ value_couple or _('N/D')}}</td>
+					    </tr>
 
 					{% else %}
 
