@@ -32,8 +32,8 @@ def get_language():
 def update_solr_package_indexes(package_dict):
     # Updating Solr Index
     if package_dict:
-        log.info("::: UPDATING SOLR INDEX :::")
-        
+        log.debug("::: UPDATING SOLR INDEX :::")
+
         # solr update here
         psi = search.PackageSearchIndex()
 
