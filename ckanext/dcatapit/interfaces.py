@@ -1,5 +1,8 @@
+import json
 import logging
+import ckan.lib.search as search
 
+from pylons import config
 from ckan.lib.base import model
 from ckan.model import Session
 from pylons.i18n.translation import get_lang
@@ -25,6 +28,49 @@ def get_language():
         lang = unicode(lang[0])
 
     return lang
+
+def update_solr_package_indexes(package_dict):
+    # Updating Solr Index
+    if package_dict:
+        log.info("::: UPDATING SOLR INDEX :::")
+        
+        # solr update here
+        psi = search.PackageSearchIndex()
+
+        # update the solr index in batches
+        BATCH_SIZE = 50
+
+        def process_solr(q):
+            # update the solr index for the query
+            query = search.PackageSearchQuery()
+            q = {
+                'q': q,
+                'fl': 'data_dict',
+                'wt': 'json',
+                'fq': 'site_id:"%s"' % config.get('ckan.site_id'),
+                'rows': BATCH_SIZE
+            }
+
+            for result in query.run(q)['results']:
+                data_dict = json.loads(result['data_dict'])
+                if data_dict['owner_org'] == package_dict.get('owner_org'):
+                    psi.index_package(data_dict, defer_commit=True)
+
+        count = 0
+        q = []
+        
+        q.append('id:"%s"' % (package_dict.get('id')))
+        count += 1
+        if count % BATCH_SIZE == 0:
+            process_solr(' OR '.join(q))
+            q = []
+
+        if len(q):
+            process_solr(' OR '.join(q))
+        # finally commit the changes
+        psi.commit()
+    else:
+        log.warning("::: package_dict is None: SOLR INDEX CANNOT BE UPDATED! :::")
 
 def save_extra_package_multilang(pkg, lang, field_type):
     try:
