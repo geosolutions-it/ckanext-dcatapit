@@ -61,6 +61,11 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
             if err:
                 return err
 
+        ##
+        # Managing Solr indexes for harvested package dict
+        ## 
+        interfaces.update_solr_package_indexes(dataset_dict)
+
         return None
 
     def _save_package_multilang(self, pkg_id, base_dict):
