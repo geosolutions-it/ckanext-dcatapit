@@ -204,12 +204,12 @@ def get_custom_package_schema():
 		    'name': 'temporal_coverage',
 		    'element': 'couple',
 		    'label': _('Temporal Coverage'),
-		    'is_required': True,
+		    'is_required': False,
 		    'couples': [
 		    	{
 		    		'name': 'temporal_start',
 		    		'label': _('Start Date'),
-		    		'validator': ['not_empty'],
+		    		'validator': ['ignore_missing'],
 		    		'type': 'date',
 		    		'placeholder': _('temporal coverage')
 		    	},
