@@ -56,7 +56,6 @@ lang_mapping_xmllang_to_ckan = {
     'en' : 'en_GB' ,
 }
 
-
 format_mapping = {
     'WMS': 'MAP_SRVC',
     'HTML': 'HTML_SIMPL',
@@ -83,122 +82,81 @@ class ItalianDCATAPProfile(RDFProfile):
             # not a DCATAPIT dataset
             return dataset_dict
 
-        # issued
-        valueRef = self._object_value(dataset_ref, DCT.issued)
-        if valueRef:
-            value = datetime.datetime.strptime(valueRef, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
-            self._remove_from_extra(dataset_dict, 'issued', value)
-            dataset_dict['issued'] = value
-        else:
-            log.debug('No DCT.issued found for dataset "%s"', dataset_dict.get('title', '---'))
+        # date info
+        for predicate, key, logf in (
+                (DCT.issued, 'issued', log.debug),
+                (DCT.modified, 'modified', log.warn),
+                ):
+            value = self._object_value(dataset_ref, predicate)
+            if value:
+                self._remove_from_extra(dataset_dict, key)
+                value = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
+                dataset_dict[key] = value
+            else:
+                logf('No %s found for dataset "%s"', predicate, dataset_dict.get('title', '---'))
 
-        # modified
-        valueRef = self._object_value(dataset_ref, DCT.modified)
-        if valueRef:
-            value = datetime.datetime.strptime(valueRef, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
-            self._remove_from_extra(dataset_dict, 'modified', value)
-            dataset_dict['modified'] = value
-        else:
-            log.warn('No DCT.modified found for dataset "%s"', dataset_dict.get('title', '---'))
+        # 0..1 predicates
+        for predicate, key, logf in (
+                (DCT.identifier, 'identifier', log.warn),
+                ):
+            value = self._object_value(dataset_ref, predicate)
+            if value:
+                self._remove_from_extra(dataset_dict, key)
+                dataset_dict[key] = value
+            else:
+                logf('No %s found for dataset "%s"', predicate, dataset_dict.get('title', '---'))
 
-        # identifier
-        valueRef = self._object_value(dataset_ref, DCT.identifier)
-        if valueRef:
-            self._remove_from_extra(dataset_dict, 'identifier', valueRef)
-            dataset_dict['identifier'] = valueRef
-        else:
-            log.warn('No DCT.identifier found for dataset "%s"', dataset_dict.get('title', '---'))
-
-        # alternate_identifier
-        valueRefList = self._object_value_list(dataset_ref, ADMS.identifier)
-        if valueRefList:
-            value = ','.join(valueRefList)
-            self._remove_from_extra(dataset_dict, 'alternate_identifier', value)
-            dataset_dict['alternate_identifier'] = value
-        else:
-            log.debug('No ADMS.identifier found for dataset "%s"', dataset_dict.get('title', '---'))
-
-        # conforms_to
-        valueRefList = self._object_value_list(dataset_ref, DCT.conformsTo)
-        if valueRefList:
-            value = ','.join(valueRefList)
-            self._remove_from_extra(dataset_dict, 'conforms_to', value)
-            dataset_dict['conforms_to'] = value
-        else:
-            log.debug('No DCT.conformsTo found for dataset "%s"', dataset_dict.get('title', '---'))
-
-        # is_version_of
-        valueRefList = self._object_value_list(dataset_ref, DCT.isVersionOf)
-        if valueRefList:
-            value = ','.join(valueRefList)
-            self._remove_from_extra(dataset_dict, 'is_version_of', value)
-            dataset_dict['is_version_of'] = value
-        else:
-            log.debug('No DCT.isVersionOf found for dataset "%s"', dataset_dict.get('title', '---'))
+        # 0..n predicates list
+        for predicate, key, logf in (
+                (ADMS.identifier, 'alternate_identifier', log.debug),
+                (DCT.conformsTo, 'conforms_to', log.debug),
+                (DCT.isVersionOf, 'is_version_of', log.debug),
+                ):
+            valueList = self._object_value_list(dataset_ref, predicate)
+            if valueList:
+                self._remove_from_extra(dataset_dict, key)
+                value = ','.join(valueList)
+                dataset_dict[key] = value
+            else:
+                logf('No %s found for dataset "%s"', predicate, dataset_dict.get('title', '---'))
 
         # Temporal
         start, end = self._time_interval(dataset_ref, DCT.temporal)
-        if start:
-            value = datetime.datetime.strptime(start, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
-            self._remove_from_extra(dataset_dict, 'temporal_start', value)
-            dataset_dict['temporal_start'] = value
-        else:
-            log.warn('No DCT.temporal Start Date found for dataset "%s"', dataset_dict.get('title', '---'))
+        for v, key, logf in (
+                (start, 'temporal_start', log.debug),
+                (end, 'temporal_end', log.debug),
+                ):
+            if v:
+                self._remove_from_extra(dataset_dict, key)
+                value = datetime.datetime.strptime(v, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
+                dataset_dict[key] = value
+            else:
+                log.warn('No %s Date found for dataset "%s"', key, dataset_dict.get('title', '---'))
 
-        if end:
-            value = datetime.datetime.strptime(end, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
-            self._remove_from_extra(dataset_dict, 'temporal_end', value)
-            dataset_dict['temporal_end'] = value
-        else:
-            log.debug('No DCT.temporal End Date found for dataset "%s"', dataset_dict.get('title', '---'))
+        # URI 0..1
+        for predicate, key, base_uri in (
+                (DCT.accrualPeriodicity, 'frequency', FREQ_BASE_URI),
+                ):
+            valueRef = self._object_value(dataset_ref, predicate)
+            if valueRef:
+                self._remove_from_extra(dataset_dict, key)
+                value = self._strip_uri(valueRef, base_uri)
+                dataset_dict[key] = value
+            else:
+                log.warn('No %s found for dataset "%s"', predicate, dataset_dict.get('title', '---'))
 
-        # frequency
-        valueRef = self._object_value(dataset_ref, DCT.accrualPeriodicity)
-        if valueRef:
-            value = self._strip_uri(valueRef, FREQ_BASE_URI)
-            #self._add_or_replace_extra(dataset_dict, 'frequency', value)
-            self._remove_from_extra(dataset_dict, 'frequency', value)
-            dataset_dict['frequency'] = value
-        else:
-            log.warn('No DCT.accrualPeriodicity found for dataset "%s"', dataset_dict.get('title', '---'))
-
-        # language
-        valueRefList = self._object_value_list(dataset_ref, DCT.language)
-        valueList = [self._strip_uri(valueRef, LANG_BASE_URI) for valueRef in valueRefList]
-        value = ','.join(valueList)
-        if len(valueList) > 1:
-            value = '{'+value+'}'
-        #self._add_or_replace_extra(dataset_dict, 'language', value)
-        self._remove_from_extra(dataset_dict, 'language', value)
-        dataset_dict['language'] = value
-
-        # theme
-        valueRefList = self._object_value_list(dataset_ref, DCAT.theme)
-        valueList = [self._strip_uri(valueRef, THEME_BASE_URI) for valueRef in valueRefList]
-        value = ','.join(valueList)
-        if len(valueList) > 1:
-            value = '{'+value+'}'
-        #self._add_or_replace_extra(dataset_dict, 'theme', value)
-        self._remove_from_extra(dataset_dict, 'theme', value)
-        dataset_dict['theme'] = value
-
-        # Publisher
-        for k,v in self._parse_agent(dataset_ref, DCT.publisher, 'publisher').iteritems():
-            #self._add_or_replace_extra(dataset_dict, k, v)
-            self._remove_from_extra(dataset_dict, k, v)
-            dataset_dict[k] = v
-
-        # Rights holder
-        for k,v in self._parse_agent(dataset_ref, DCT.rightsHolder, 'holder').iteritems():
-            #self._add_or_replace_extra(dataset_dict, k, v)
-            self._remove_from_extra(dataset_dict, k, v)
-            dataset_dict[k] = v
-
-        # Creator (autore)
-        for k,v in self._parse_agent(dataset_ref, DCT.creator, 'creator').iteritems():
-            #self._add_or_replace_extra(dataset_dict, k, v)
-            self._remove_from_extra(dataset_dict, k, v)
-            dataset_dict[k] = v
+        # URI lists
+        for predicate, key, base_uri in (
+                (DCT.language, 'language', LANG_BASE_URI),
+                (DCAT.theme, 'theme', THEME_BASE_URI),
+                ):
+            self._remove_from_extra(dataset_dict, key)
+            valueRefList = self._object_value_list(dataset_ref, predicate)
+            valueList = [self._strip_uri(valueRef, base_uri) for valueRef in valueRefList]
+            value = ','.join(valueList)
+            if len(valueList) > 1:
+                value = '{'+value+'}'
+            dataset_dict[key] = value
 
         # Spatial
         spatial_tags = []
@@ -233,6 +191,20 @@ class ItalianDCATAPProfile(RDFProfile):
                 ):
             self._collect_multilang_strings(dataset_dict, key, dataset_ref, predicate, localized_dict)
 
+        # Agents
+        for predicate, basekey in (
+                (DCT.publisher, 'publisher'),
+                (DCT.rightsHolder, 'holder'),
+                (DCT.creator, 'creator'),
+                ):
+
+            agent_dict, agent_loc_dict = self._parse_agent(dataset_ref, predicate, basekey)
+            for key,v in agent_dict.iteritems():
+                self._remove_from_extra(dataset_dict, key)
+                dataset_dict[key] = v
+            localized_dict.update(agent_loc_dict)
+
+        # when all localized data have been parsed, check if there really any and add it to the dict
         if len(localized_dict) > 0:
             log.debug('Found multilang metadata')
             dataset_dict[LOCALISED_DICT_NAME_BASE] = localized_dict
@@ -275,7 +247,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
         return dataset_dict
 
-    def _collect_multilang_strings(self, source_dict, key, subj, pred, target_dict):
+    def _collect_multilang_strings(self, base_dict, key, subj, pred, loc_dict):
         '''
         Search for multilang Literals matching (subj, pred).
         - Literals not localized will be stored as source_dict[key] -- possibly replacing the value set by the EURO parser
@@ -287,13 +259,13 @@ class ItalianDCATAPProfile(RDFProfile):
             lang = obj.language
             if not lang:
                 # force default value in dataset
-                source_dict[key] = value
+                base_dict[key] = value
             else:
                 # add localized string
-                lang_dict = target_dict.setdefault(key, {})
+                lang_dict = loc_dict.setdefault(key, {})
                 lang_dict[lang_mapping_xmllang_to_ckan.get(lang)] = value
 
-    def _remove_from_extra(self, dataset_dict, key, value):
+    def _remove_from_extra(self, dataset_dict, key):
 
         #  search and replace
         for extra in dataset_dict['extras']:
@@ -315,13 +287,13 @@ class ItalianDCATAPProfile(RDFProfile):
     def _parse_agent(self, subject, predicate, base_name):
 
         agent_dict = {}
+        loc_dict= {}
 
         for agent in self.g.objects(subject, predicate):
-
-            agent_dict[base_name + '_name'] = self._object_value(agent, FOAF.name)
             agent_dict[base_name + '_identifier'] = self._object_value(agent, DCT.identifier)
+            self._collect_multilang_strings(agent_dict, base_name + '_name', agent, FOAF.name, loc_dict)
 
-        return agent_dict
+        return agent_dict, loc_dict
 
     def _strip_uri(self, value, base_uri):
         return value.replace(base_uri, '')
