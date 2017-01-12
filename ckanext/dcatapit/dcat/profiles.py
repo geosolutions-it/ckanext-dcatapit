@@ -109,7 +109,6 @@ class ItalianDCATAPProfile(RDFProfile):
         # 0..n predicates list
         for predicate, key, logf in (
                 (ADMS.identifier, 'alternate_identifier', log.debug),
-                (DCT.conformsTo, 'conforms_to', log.debug),
                 (DCT.isVersionOf, 'is_version_of', log.debug),
                 ):
             valueList = self._object_value_list(dataset_ref, predicate)
@@ -119,6 +118,17 @@ class ItalianDCATAPProfile(RDFProfile):
                 dataset_dict[key] = value
             else:
                 logf('No %s found for dataset "%s"', predicate, dataset_dict.get('title', '---'))
+
+        # conformsTo
+        self._remove_from_extra(dataset_dict, 'conforms_to')
+        conform_list = []
+        for conforms_to in self.g.objects(dataset_ref, DCT.conformsTo):
+            conform_list.append(self._object_value(conforms_to, DCT.identifier))
+        if conform_list:
+            value = ','.join(conform_list)
+            dataset_dict['conforms_to'] = value
+        else:
+            log.debug('No DCT.conformsTo found for dataset "%s"', dataset_dict.get('title', '---'))
 
         # Temporal
         start, end = self._time_interval(dataset_ref, DCT.temporal)
@@ -213,7 +223,7 @@ class ItalianDCATAPProfile(RDFProfile):
         resources_loc_dict = {}
 
         # In ckan, the license is a dataset property, not resource's
-        # we'll collect all of the resources' licenses, then we will postprocess them
+        # We'll collect all of the resources' licenses, then we will postprocess them
         licenses = [] #  contains tuples (url, name)
 
         for resource_dict in dataset_dict['resources']:
@@ -416,6 +426,19 @@ class ItalianDCATAPProfile(RDFProfile):
             landing_page_uri = dataset_uri(dataset_dict)  # TODO: preserve original URI if harvested
 
         self.g.add((dataset_ref, DCAT.landingPage, URIRef(landing_page_uri)))
+
+        ### conformsTo
+        self.g.remove((dataset_ref, DCT.conformsTo, None))
+        value = self._get_dict_value(dataset_dict, 'conforms_to')
+        if value:
+            for item in value.split(','):
+
+                standard = BNode()
+                self.g.add((dataset_ref, DCT.conformsTo, standard))
+                
+                self.g.add((standard, RDF['type'], DCT.Standard))
+                self.g.add((standard, RDF['type'], DCATAPIT.Standard))
+                self.g.add((standard, DCT.identifier, Literal(item)))
 
         ### publisher
 
