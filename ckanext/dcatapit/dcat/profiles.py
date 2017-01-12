@@ -197,7 +197,6 @@ class ItalianDCATAPProfile(RDFProfile):
                 (DCT.rightsHolder, 'holder'),
                 (DCT.creator, 'creator'),
                 ):
-
             agent_dict, agent_loc_dict = self._parse_agent(dataset_ref, predicate, basekey)
             for key,v in agent_dict.iteritems():
                 self._remove_from_extra(dataset_dict, key)
@@ -213,6 +212,10 @@ class ItalianDCATAPProfile(RDFProfile):
 
         resources_loc_dict = {}
 
+        # In ckan, the license is a dataset property, not resource's
+        # we'll collect all of the resources' licenses, then we will postprocess them
+        licenses = [] #  contains tuples (url, name)
+
         for resource_dict in dataset_dict['resources']:
             resource_uri = resource_dict['uri']
             if not resource_uri:
@@ -224,9 +227,36 @@ class ItalianDCATAPProfile(RDFProfile):
                 log.warn("Distribution not found in dataset %s", resource_uri)
                 continue
 
-            # Format
+            # URI 0..1
+            for predicate, key, base_uri in (
+                    (DCT['format'], 'format', FORMAT_BASE_URI), # Format
+                    ):
+                valueRef = self._object_value(distribution, predicate)
+                if valueRef:
+                    value = self._strip_uri(valueRef, base_uri)
+                    resource_dict[key] = value
+                else:
+                    log.warn('No %s found for resource "%s"::"%s"',
+                             predicate,
+                             dataset_dict.get('title', '---'),
+                             resource_dict.get('name', '---'))
 
             # License
+            license = self._object(distribution, DCT.license)
+            if license:
+                # just add this info in the resource extras
+                resource_dict['license_url'] = str(license)
+                license_name = self._object_value(license, FOAF.name) # may be either the title or the id
+                if(license_name):
+                    # just add this info in the resource extras
+                    resource_dict['license_name'] = license_name
+                else:
+                    license_name = "unknown"
+                licenses.append((str(license), license_name))
+            else:
+                log.warn('No license found for resource "%s"::"%s"',
+                         dataset_dict.get('title', '---'),
+                         resource_dict.get('name', '---'))
 
             # Multilang
             loc_dict = {}
@@ -244,6 +274,13 @@ class ItalianDCATAPProfile(RDFProfile):
         if len(resources_loc_dict) > 0:
             log.debug('Found multilang metadata in resources')
             dataset_dict[LOCALISED_DICT_NAME_RESOURCES] = resources_loc_dict
+
+        # postprocess licenses
+        license_ids = {id for url,id in licenses}
+        if license_ids:
+            if len(license_ids) > 1:
+                log.warn('More than one license found for dataset "%s"', dataset_dict.get('title', '---'))
+            dataset_dict['license_id'] = license_ids.pop() # take a random one
 
         return dataset_dict
 
