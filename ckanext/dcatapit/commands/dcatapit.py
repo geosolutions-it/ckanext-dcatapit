@@ -18,6 +18,9 @@ LOCATIONS_THEME_NAME = 'places'
 FREQUENCIES_THEME_NAME = 'frequencies'
 FILETYPE_THEME_NAME = 'filetype'
 
+log = logging.getLogger(__name__)
+
+
 class DCATAPITCommands(CkanCommand):
     '''  A command for working with vocabularies
     Usage::
@@ -77,7 +80,7 @@ class DCATAPITCommands(CkanCommand):
             self.load()
         else:
             print self.usage
-            logging.error('Command "%s" not recognized' % (cmd,))
+            log.error('Command "%s" not recognized' % (cmd,))
             return
 
     def load(self):
@@ -127,7 +130,7 @@ class DCATAPITCommands(CkanCommand):
             else:
                 g.parse(source=filename)
         except Exception,e:
-            logging.error("Error retrieving the document %r", e)
+            log.error("Error retrieving the document %r", e)
             print self.usage
             return
 
@@ -167,24 +170,26 @@ class DCATAPITCommands(CkanCommand):
         ##
         # Creating the Tag Vocabulary using the given name
         ##
-        logging.info('Creating tag vocabulary %r ...', vocab_name)
+        log.info('Creating tag vocabulary {0} ...'.format(vocab_name))
 
         user = toolkit.get_action('get_site_user')({'ignore_auth': True}, {})
         context = {'user': user['name']}
+        
+        print "Using site user '{0}'".format(user['name'])
 
         try:
         	data = {'id': vocab_name}
         	toolkit.get_action('vocabulary_show')(context, data)
 
-        	logging.info("Vocabulary %s already exists, skipping...", vocab_name)
+        	log.info("Vocabulary {0} already exists, skipping...".format(vocab_name))
         except toolkit.ObjectNotFound:
-	        logging.info("Creating vocabulary '%s'", vocab_name)
+	        log.info("Creating vocabulary '{0}'".format(vocab_name))
 
 	        data = {'name': vocab_name}
 	        vocab = toolkit.get_action('vocabulary_create')(context, data)
 
 	        for tag in concepts:
-	            logging.info("Adding tag {0} to vocabulary '{1}'".format(tag, vocab_name))
+	            log.info("Adding tag {0} to vocabulary '{1}'".format(tag, vocab_name))
 
 	            data = {'name': tag, 'vocabulary_id': vocab['id']}
 	            toolkit.get_action('tag_create')(context, data)
@@ -192,7 +197,7 @@ class DCATAPITCommands(CkanCommand):
         ##
         # Persisting Multilag Tags or updating existing
         ##
-        logging.info('Creating the corresponding multilang tags for vocab: %r ...', vocab_name)
+        log.info('Creating the corresponding multilang tags for vocab: {0} ...'.format(vocab_name))
 
         for pref_label in pref_labels:
         	if pref_label['lang'] in self._locales_ckan_mapping:
