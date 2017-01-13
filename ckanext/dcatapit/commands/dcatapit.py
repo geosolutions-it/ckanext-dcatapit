@@ -1,14 +1,16 @@
 
 import logging
-import urllib2
 import re
 
-import xml.etree.ElementTree as etree
 import ckan.plugins.toolkit as toolkit
 import ckanext.dcatapit.interfaces as interfaces
 
 from pylons import config
 from ckan.lib.cli import CkanCommand
+
+from rdflib import Graph
+from rdflib.namespace import SKOS, DC
+from ckanext.dcat.profiles import namespaces
 
 LANGUAGE_THEME_NAME = 'languages'
 EUROPEAN_THEME_NAME = 'eu_themes'
@@ -24,7 +26,7 @@ class DCATAPITCommands(CkanCommand):
      paster --plugin=ckanext-dcatapit vocabulary load --filename FILE --name NAME --config=PATH_TO_INI_FILE
      Where:
        URL  is the url to a SKOS document
-       FILE is the local path to a SKOS document (ie. "file:///etc/languages-skos.rdf")
+       FILE is the local path to a SKOS document
        NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies)
        Where the corresponding rdf are:
           languages   -> http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf
@@ -90,11 +92,6 @@ class DCATAPITCommands(CkanCommand):
             print self.usage
             return
 
-        if filename and 'file://' not in filename:
-        	print "No correct file path!"
-        	print self.usage
-        	return
-
         vocab_name = self.options.name
 
         if not vocab_name:
@@ -120,36 +117,26 @@ class DCATAPITCommands(CkanCommand):
         ##
         print "Loading graph ..."
 
-        RDF_URI = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        XML_URI = 'http://www.w3.org/XML/1998/namespace'
-
-        ABOUT_ATTRIB = '{' + RDF_URI + '}about'
-        LANG_ATTRIB = '{' + XML_URI + '}lang'
-
-        ns = {
-            'rdf': RDF_URI,
-            'foaf': 'http://xmlns.com/foaf/0.1/',
-            'dc': 'http://purl.org/dc/elements/1.1/',
-            'dcterms': 'http://purl.org/dc/terms/',
-            'skos': 'http://www.w3.org/2004/02/skos/core#'
-        }
+        g = Graph()
+        for prefix, namespace in namespaces.iteritems():
+            g.bind(prefix, namespace)
 
         try:
-        	graph = urllib2.urlopen(url or filename)
+            if url:
+                g.parse(location=url)
+            else:
+                g.parse(source=filename)
         except Exception,e:
             logging.error("Error retrieving the document %r", e)
             print self.usage
             return
 
-        document = etree.parse(graph)
-        root = document.getroot()
-
         concepts = []
         pref_labels = []
 
-        for concept in root.findall('skos:Concept', ns):
-            about = concept.attrib.get(ABOUT_ATTRIB)
-            identifier = concept.find('dc:identifier', ns).text
+        for concept,_pred,_conc in g.triples((None, None, SKOS.Concept)):
+            about = str(concept)
+            identifier = str(g.value(subject=concept, predicate=DC.identifier))
 
             #
             # Skipping the ckan locales not mapped in this plugin (subject: language theme)
@@ -166,9 +153,9 @@ class DCATAPITCommands(CkanCommand):
             print 'Concept {} ({})'.format(about, identifier)
             concepts.append(identifier)
 
-            for pref_label in concept.findall('skos:prefLabel', ns):
-                lang = pref_label.attrib.get(LANG_ATTRIB)
-                label = pref_label.text
+            for pref_label in g.objects(concept, SKOS.prefLabel):
+                lang = pref_label.language
+                label = pref_label.value
 
                 print u'    Label {}: {}'.format(lang, label)
                 pref_labels.append({
