@@ -24,7 +24,7 @@ class DCATAPITCommands(CkanCommand):
      paster --plugin=ckanext-dcatapit vocabulary load --filename FILE --name NAME --config=PATH_TO_INI_FILE
      Where:
        URL  is the url to a SKOS document
-       FILE is the local path to a SKOS document
+       FILE is the local path to a SKOS document (ie. "file:///etc/languages-skos.rdf")
        NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies)
        Where the corresponding rdf are:
           languages   -> http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf
@@ -90,6 +90,11 @@ class DCATAPITCommands(CkanCommand):
             print self.usage
             return
 
+        if filename and 'file://' not in filename:
+        	print "No correct file path!"
+        	print self.usage
+        	return
+
         vocab_name = self.options.name
 
         if not vocab_name:
@@ -130,7 +135,7 @@ class DCATAPITCommands(CkanCommand):
         }
 
         try:
-        	graph = urllib2.urlopen(url)
+        	graph = urllib2.urlopen(url or filename)
         except Exception,e:
             logging.error("Error retrieving the document %r", e)
             print self.usage
