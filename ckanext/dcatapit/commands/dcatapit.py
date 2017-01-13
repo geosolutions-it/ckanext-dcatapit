@@ -173,7 +173,7 @@ class DCATAPITCommands(CkanCommand):
         log.info('Creating tag vocabulary {0} ...'.format(vocab_name))
 
         user = toolkit.get_action('get_site_user')({'ignore_auth': True}, {})
-        context = {'user': user['name']}
+        context = {'user': user['name'], 'ignore_auth': True}
         
         print "Using site user '{0}'".format(user['name'])
 
