@@ -286,7 +286,11 @@ class ItalianDCATAPProfile(RDFProfile):
             dataset_dict[LOCALISED_DICT_NAME_RESOURCES] = resources_loc_dict
 
         # postprocess licenses
-        license_ids = {id for url,id in licenses}
+        # license_ids = {id for url,id in licenses}  # does not work in python 2.6
+        license_ids = set()
+        for url,id in licenses:
+           license_ids.add(id)
+
         if license_ids:
             if len(license_ids) > 1:
                 log.warn('More than one license found for dataset "%s"', dataset_dict.get('title', '---'))
