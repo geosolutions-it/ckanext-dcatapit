@@ -100,7 +100,7 @@ class DCATAPITCommands(CkanCommand):
             return
 
         if vocab_name not in self._controlled_vocabularies_allowed:
-            print "Incorrect vocabulary name, only one of these values are allowed: {}".format(self._controlled_vocabularies_allowed) 
+            print "Incorrect vocabulary name, only one of these values are allowed: {0}".format(self._controlled_vocabularies_allowed) 
             print self.usage
             return
 
@@ -150,14 +150,14 @@ class DCATAPITCommands(CkanCommand):
             if vocab_name == 'places' and not re.match(self.places_theme_regex, identifier, flags=0):
                 continue
 
-            print 'Concept {} ({})'.format(about, identifier)
+            print 'Concept {0} ({1})'.format(about, identifier)
             concepts.append(identifier)
 
             for pref_label in g.objects(concept, SKOS.prefLabel):
                 lang = pref_label.language
                 label = pref_label.value
 
-                print u'    Label {}: {}'.format(lang, label)
+                print u'    Label {0}: {1}'.format(lang, label)
                 pref_labels.append({
                 	'name': identifier,
                 	'lang': lang,
@@ -202,5 +202,5 @@ class DCATAPITCommands(CkanCommand):
 
 	        	interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
 
-    	print 'Vocabulary successfully loaded ({})'.format(vocab_name)
+        print 'Vocabulary successfully loaded ({0})'.format(vocab_name)
 
