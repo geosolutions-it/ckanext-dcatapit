@@ -33,15 +33,15 @@
 						  	{% if value_field is iterable and value_field is not string %}
 							  	<tr>
 							      <th scope="row" class="dataset-label">{{ field.label }}</th>
-							      <td class="dataset-details">{{ h.list_to_string(value_field, field.format) }}</td>
+							      <td class="dataset-details">{{ h.list_to_string(value_field, field.format) or field.default or _('N/D') }}</td>
 							    </tr>
 							{% else %}
 						        <tr>
 							      <th scope="row" class="dataset-label">{{ field.label }}</th>
 								  {% if h.is_url(value_field) %}
-						          	<td class="dataset-details">{{ h.link_to(value_field, value_field, rel='', target='_blank') }}</td>
+						          	<td class="dataset-details">{{ h.link_to(value_field, value_field, rel='', target='_blank') or field.default or _('N/D') }}</td>
 						          {% else %}
-						         	<td class="dataset-details">{{ h.format(value_field, field.format) }}</td>
+						         	<td class="dataset-details">{{ h.format(value_field, field.format) or field.default or _('N/D') }}</td>
 						          {% endif %}
 							    </tr>
 						    {% endif %}
