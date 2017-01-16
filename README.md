@@ -182,6 +182,9 @@ In order to update the existing translations proceed as follow:
 3. Once the translation files (po) have been updated adding the new translations needed, compile them by running:
 
      `python setup.py compile_catalog --locale YOUR_LANGUAGE`
+     
+## Pending issues
+Currently in catalogs with a large number of dataset, the ckanext-dcat official extension implements a paging of returned dataset, which does not works when Ckan resides behind a proxy. [Here the issue](https://github.com/ckan/ckanext-dcat/issues/68) on GitHub.
 
 ## Contributing
 
