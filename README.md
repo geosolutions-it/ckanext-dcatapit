@@ -15,6 +15,7 @@ CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
 - [Managing translations](#managing-translations)
     - [Creating a new translation](#creating-a-new-translation)
     - [Updating an existing translation](#updating-an-existing-translation)
+- [Pending issues](#pending-issues)
 - [Contributing](#contributing)
 - [Professional Support and Credits](#professional-support-and-credits)
 
