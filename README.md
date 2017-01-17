@@ -92,6 +92,12 @@ The ckanext-dcatapit RDF harvester also harvests localized fields, but to do tha
     
     `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf  --name filetype --config=/etc/ckan/default/production.ini`
 
+## Test Instance and Validation
+
+We have a test instance available at [this link](http://dcatapit.geo-solutions.it/) with a few sample datasets; a specific test dataset is available [here](http://dcatapit.geo-solutions.it/dataset/dcatapit-test-dataset).
+
+If you want to test validation please use the online validator available [here](http://52.50.205.146:3031/dcat-ap_validator.html). To get no errors you should validate the entire catalog (e.g. [this link](http://dcatapit.geo-solutions.it/catalog.rdf)) if you validate a single dataset (e.g. using [this link](http://dcatapit.geo-solutions.it/dataset/dcatapit-test-dataset.rdf)) you will always get an error for "...missing catalog...".
+
 
 ## Development Installation
 
