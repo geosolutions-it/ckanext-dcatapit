@@ -10,6 +10,7 @@ CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
 - [Demo Instance](#demo-instance)
 - [Requirements](#requirements)
 - [Installation](#installation)
+- [Test Instance and Validation](#test-instance-and-validation)
 - [Development Installation](#development-installation)
 - [Extending the package schema in your own extension](#extending-the-package-schema-in-your-own-extension)
 - [Managing translations](#managing-translations)
