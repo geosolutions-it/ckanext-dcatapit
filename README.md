@@ -203,7 +203,9 @@ We welcome contributions in any form:
 * pull requests for documentation
 * funding for any combination of the above
 
-## Professional Support and Credits
+## Support and Credits
 This work has been performed by GeoSolutions with funding provided by Provincia di Trento and Provincia di Bolzano in a joint effort.
 
-The work is provided as is and no warranty whatsoever is provided. Professional Support is available through our [Enterprise Support Services](http://www.geo-solutions.it/enterprise-support-services) offer. There is also a public Google Group for support questions available [here](https://groups.google.com/d/forum/ckanext-dcatapit) but beware that support through this channel will be given on a best effort basis.
+The work is provided as is and no warranty whatsoever is provided. There is a public Google Group for support questions available [here](https://groups.google.com/d/forum/ckanext-dcatapit) but beware that support through this channel will be given on a best effort basis.
+
+Professional Support is available through our [Enterprise Support Services](http://www.geo-solutions.it/enterprise-support-services) offer. 
