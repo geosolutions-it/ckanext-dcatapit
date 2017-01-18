@@ -203,8 +203,8 @@ We welcome contributions in any form:
 * pull requests for documentation
 * funding for any combination of the above
 
-## Support and Credits
-This work has been performed by GeoSolutions with funding provided by Provincia di Trento and Provincia di Bolzano in a joint effort.
+## Support, Communication and Credits
+This work has been performed by [GeoSolutions](http://www.geo-solutions.it) with funding provided by Provincia Autonoma di Trento and Provincia Autonoma di Bolzano in a joint effort.
 
 The work is provided as is and no warranty whatsoever is provided. There is a public Google Group for support questions available [here](https://groups.google.com/d/forum/ckanext-dcatapit) but beware that support through this channel will be given on a best effort basis.
 
