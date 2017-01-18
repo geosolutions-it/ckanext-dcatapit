@@ -48,13 +48,17 @@ class DCATAPITCommands(CkanCommand):
     _locales_ckan_mapping = {
         'it': 'it',
         'de': 'de',
-        'en': 'en_GB'
+        'en': 'en_GB',
+        'fr': 'fr',
+        'es': 'es'        
     }
 
     _ckan_language_theme_mapping = {
         'it': 'ITA',
         'de': 'DEU',
-        'en_GB': 'ENG'
+        'en_GB': 'ENG',
+        'fr': 'FRA',
+        'es': 'SPA'
     }
 
     _controlled_vocabularies_allowed = [EUROPEAN_THEME_NAME, LOCATIONS_THEME_NAME, LANGUAGE_THEME_NAME, FREQUENCIES_THEME_NAME, FILETYPE_THEME_NAME]
@@ -80,7 +84,7 @@ class DCATAPITCommands(CkanCommand):
             self.load()
         else:
             print self.usage
-            log.error('Command "%s" not recognized' % (cmd,))
+            log.error('ERROR: Command "%s" not recognized' % (cmd,))
             return
 
     def load(self):
@@ -91,19 +95,19 @@ class DCATAPITCommands(CkanCommand):
         filename = self.options.filename
 
         if not url and not filename:
-            print "No URL or FILENAME provided and one is required"
+            print "ERROR: No URL or FILENAME provided and one is required"
             print self.usage
             return
 
         vocab_name = self.options.name
 
         if not vocab_name:
-            print "No vocabulary name provided and is required"
+            print "ERROR: No vocabulary name provided and is required"
             print self.usage
             return
 
         if vocab_name not in self._controlled_vocabularies_allowed:
-            print "Incorrect vocabulary name, only one of these values are allowed: {0}".format(self._controlled_vocabularies_allowed) 
+            print "ERROR: Incorrect vocabulary name, only one of these values are allowed: {0}".format(self._controlled_vocabularies_allowed) 
             print self.usage
             return
 
@@ -111,9 +115,7 @@ class DCATAPITCommands(CkanCommand):
             ckan_offered_languages = config.get('ckan.locales_offered', []).split(' ')
             for offered_language in ckan_offered_languages:
                 if offered_language not in self._ckan_language_theme_mapping:
-                    print "ERROR: '{0}' CKAN locale is not mapped in this plugin. All the offered languages by CKAN must be mapped (vocabulary name '{1}')".format(offered_language, vocab_name)
-                    print self.usage
-                    return
+                    print "INFO: '{0}' CKAN locale is not mapped in this plugin and will be skipped during the import stage (vocabulary name '{1}')".format(offered_language, vocab_name)
 
         ##
         # Loading the RDF vocabulary
@@ -130,7 +132,7 @@ class DCATAPITCommands(CkanCommand):
             else:
                 g.parse(source=filename)
         except Exception,e:
-            log.error("Error retrieving the document %r", e)
+            log.error("ERROR: Problem occurred while retrieving the document %r", e)
             print self.usage
             return
 
