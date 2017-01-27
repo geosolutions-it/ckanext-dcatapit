@@ -5,8 +5,19 @@ import ckanext.dcatapit.schema as dcatapit_schema
 
 import ckanext.dcatapit.interfaces as interfaces
 
+import datetime
+from webhelpers.html import escape, HTML, literal, url_escape
+
 log = logging.getLogger(__file__)
 
+dateformats = [
+	"%d-%m-%Y",
+	"%Y-%m-%d",
+	"%d-%m-%y",
+	"%Y-%m-%d %H:%M:%S",
+	"%d-%m-%Y %H:%M:%S",
+	"%Y-%m-%dT%H:%M:%S"
+]
 
 def get_dcatapit_package_schema():
     log.debug('Retrieving DCAT-AP_IT package schema fields...')
@@ -72,7 +83,7 @@ def list_to_string(_list, _format=None):
 
 		return _string
 
-def couple_to_string(field_couples, pkg_dict, format=None):
+def couple_to_string(field_couples, pkg_dict):
 	if field_couples and pkg_dict:
 		_string = ''
 		for couple in field_couples:
@@ -84,9 +95,51 @@ def couple_to_string(field_couples, pkg_dict, format=None):
 		return _string
 	return None
 
-def format(_string, format=None):
-	##
-	# TODO: manage the string format if needed
-	##
-	return _string
+def couple_to_html(field_couples, pkg_dict):
+	if field_couples and pkg_dict:
+		html_elements = []
+		for couple in field_couples:
+			couple_name = couple.get('name', None)
+
+			if couple_name in pkg_dict:
+				field_value = pkg_dict[couple_name]
+
+				couple_format = couple.get('format', None)
+				if couple_format:
+					couple_type = couple.get('type', None)
+					field_value = format(field_value, couple_format, couple_type)
+
+				couple_label = couple.get('label', None)
+				if field_value and couple_label:
+					html_elements.append(literal(('<span style="font-weight:bold">%s: </span><span>%s</span>') % (couple_label, field_value)))
+
+		return html_elements if len(html_elements) > 0 else []
+	return []
+
+def format(value, _format='%d-%m-%Y', _type=None):
+	# #################################################
+	# TODO: manage here other formats if needed 
+	#      (ie. for type text, other date formats etc)
+	# #################################################
+	if _format and _type:
+		if _type == 'date':
+			date = None
+			for dateformat in dateformats:
+				date = validate_dateformat(value, dateformat)
+
+				if date and isinstance(date, datetime.date):
+					date = date.strftime(_format)
+					return date
+		if _type == 'text':
+			return value
+
+	return value
+
+def validate_dateformat(date_string, date_format):
+	try:
+		date = datetime.datetime.strptime(date_string, date_format)
+		return date
+	except ValueError:
+		log.debug('Incorrect date format {0} for date string {1}'.format(date_format, date_string))
+		return None
 

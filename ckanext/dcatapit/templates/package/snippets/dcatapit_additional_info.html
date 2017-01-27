@@ -13,11 +13,19 @@
 
 				  	{% if field.element == 'couple' %}
 
-				  		{% set value_couple = h.couple_to_string(field.couples, pkg_dict)%}
+				  		{% set couples = h.couple_to_html(field.couples, pkg_dict)%}
 
 		  		        <tr>
 					      <th scope="row" class="dataset-label">{{ field.label }}</th>
-				          <td class="dataset-details">{{ value_couple or _('N/D')}}</td>
+				          <td class="dataset-details">
+				          	{% if couples %}
+					          	{% for couple in couples %}
+					          		{{ couple or _('N/D') }} <br/>
+					          	{% endfor %}
+				          	{% else %}
+				          		{{ _('N/D') }}
+				          	{% endif %}
+				          </td>
 					    </tr>
 
 					{% else %}
@@ -41,7 +49,7 @@
 								  {% if h.is_url(value_field) %}
 						          	<td class="dataset-details">{{ h.link_to(value_field, value_field, rel='', target='_blank') or field.default or _('N/D') }}</td>
 						          {% else %}
-						         	<td class="dataset-details">{{ h.format(value_field, field.format) or field.default or _('N/D') }}</td>
+						         	<td class="dataset-details">{{ h.format(value_field, field.format, field.type) or field.default or _('N/D') }}</td>
 						          {% endif %}
 							    </tr>
 						    {% endif %}
