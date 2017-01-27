@@ -33,6 +33,7 @@ def get_custom_config_schema(show=True):
 			    'element': 'input',
 			    'type': 'date',
 			    'label': _('Catalog Release Date'),
+			    'format': '%d-%m-%Y',
 			    'placeholder': _('catalog release date'),
 			    'description': _('The creation date of the catalog'),
 			    'is_required': False
@@ -156,6 +157,7 @@ def get_custom_package_schema():
 		    'element': 'input',
 		    'type': 'date',
 		    'label': _('Release Date'),
+		    'format': '%d-%m-%Y',
 		    'placeholder': _('release date'),
 		    'is_required': False
 	    },
@@ -165,6 +167,7 @@ def get_custom_package_schema():
 		    'element': 'input',
 		    'type': 'date',
 		    'label': _('Modification Date'),
+		    'format': '%d-%m-%Y',
 		    'placeholder': _('modification date'),
 		    'is_required': True
 	    },
@@ -211,6 +214,7 @@ def get_custom_package_schema():
 		    		'label': _('Start Date'),
 		    		'validator': ['ignore_missing'],
 		    		'type': 'date',
+		    		'format': '%d-%m-%Y',
 		    		'placeholder': _('temporal coverage')
 		    	},
 			    {
@@ -218,6 +222,7 @@ def get_custom_package_schema():
 		    		'label': _('End Date'),
 		    		'validator': ['ignore_missing'],
 		    		'type': 'date',
+		    		'format': '%d-%m-%Y',
 		    		'placeholder': _('temporal coverage')
 		    	}
 		    ]

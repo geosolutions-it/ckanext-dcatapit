@@ -221,8 +221,10 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'get_vocabulary_items': helpers.get_vocabulary_items,
             'get_dcatapit_resource_schema': helpers.get_dcatapit_resource_schema,
             'list_to_string': helpers.list_to_string,
+            'couple_to_html': helpers.couple_to_html,
             'couple_to_string': helpers.couple_to_string,
             'format': helpers.format,
+            'validate_dateformat': helpers.validate_dateformat,
             'get_localized_field_value': helpers.get_localized_field_value
         }
 
