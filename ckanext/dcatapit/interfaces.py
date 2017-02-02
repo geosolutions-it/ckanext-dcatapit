@@ -8,6 +8,7 @@ from ckan.model import Session
 from pylons.i18n.translation import get_lang
 
 from ckan.plugins.interfaces import Interface
+from ckanext.dcatapit.model import DCATAPITTagVocabulary
 
 log = logging.getLogger(__name__)
 
@@ -218,15 +219,9 @@ def _multilang_to_dict(records):
 
 
 def persist_tag_multilang(name, lang, localized_text, vocab_name):
-    try:
-        from ckanext.multilang.model import TagMultilang
-    except ImportError:
-        log.warn('DCAT-AP_IT: multilang extension not available. Will not persist name:%r for lang:%s', name, lang)
-        return
-
     log.info('DCAT-AP_IT: persisting tag multilang for tag %r ...', name)
 
-    tag = TagMultilang.by_name(name, lang)
+    tag = DCATAPITTagVocabulary.by_name(name, lang)
 
     if tag:
         # Update the existing record
@@ -250,20 +245,14 @@ def persist_tag_multilang(name, lang, localized_text, vocab_name):
         existing_tag = model.Tag.by_name(name, vocab)
 
         if existing_tag:
-            TagMultilang.persist({'id': existing_tag.id, 'name': name, 'text': localized_text}, lang)
+            DCATAPITTagVocabulary.persist({'id': existing_tag.id, 'name': name, 'text': localized_text}, lang)
             logging.info('::::::::: OBJECT TAG PERSISTED SUCCESSFULLY :::::::::')
 
 
 def get_localized_tag_name(tag_name=None):
-    try:
-        from ckanext.multilang.model import TagMultilang
-    except ImportError:
-        log.warn('DCAT-AP_IT: multilang extension not available. Tag %s will not be localized', tag_name)
-        return tag_name
-
     if tag_name:
         lang = get_language()
-        localized_tag_name = TagMultilang.by_name(tag_name, lang)
+        localized_tag_name = DCATAPITTagVocabulary.by_name(tag_name, lang)
         if localized_tag_name:
             return localized_tag_name.text
         else:
@@ -272,10 +261,4 @@ def get_localized_tag_name(tag_name=None):
         return None
 
 def get_all_localized_tag_labels(tag_name):
-    try:
-        from ckanext.multilang.model import TagMultilang
-    except ImportError:
-        log.warn('DCAT-AP_IT: multilang extension not available. Tag %s will not be localized', tag_name)
-        return tag_name
-
-    return TagMultilang.all_by_name(tag_name)
+    return DCATAPITTagVocabulary.all_by_name(tag_name)
