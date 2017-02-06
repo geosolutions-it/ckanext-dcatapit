@@ -269,7 +269,7 @@ def get_custom_package_schema():
 		    		'validator': ['not_empty'],
 		    		'type': 'text',
 		    		'placeholder': _('rights holder of the dataset'),
-                	'localized': True
+		    		'localized': True
 
 		    	},
 			    {
@@ -293,7 +293,7 @@ def get_custom_package_schema():
 		    		'validator': ['ignore_missing'],
 		    		'type': 'text',
 		    		'placeholder': _('creator of the dataset'),
-                	'localized': True
+		    		'localized': True
 		    	},
 			    {
 		    		'name': 'creator_identifier',
