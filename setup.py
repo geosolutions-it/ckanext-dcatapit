@@ -83,6 +83,7 @@ setup(
         dcatapit_org=ckanext.dcatapit.plugin:DCATAPITOrganizationPlugin        
         dcatapit_config=ckanext.dcatapit.plugin:DCATAPITConfigurerPlugin
         dcatapit_harvester=ckanext.dcatapit.dcat.harvester:DCATAPITHarvesterPlugin
+        dcatapit_csw_harvester=ckanext.dcatapit.harvesters.csw_harvester:DCATAPITCSWHarvester
 		
         [ckan.rdf.profiles]
         it_dcat_ap=ckanext.dcatapit.dcat.profiles:ItalianDCATAPProfile

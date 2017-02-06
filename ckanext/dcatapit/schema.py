@@ -140,7 +140,8 @@ def get_custom_package_schema():
 		    		'validator': ['not_empty'],
 		    		'label': _('Name'),
 		    		'type': 'text',
-		    		'placeholder': _('publisher name')
+		    		'placeholder': _('publisher name'),
+                	'localized': True
 		    	},
 			    {
 		    		'name': 'publisher_identifier',
@@ -291,7 +292,8 @@ def get_custom_package_schema():
 		    		'label': _('Name'),
 		    		'validator': ['ignore_missing'],
 		    		'type': 'text',
-		    		'placeholder': _('creator of the dataset')
+		    		'placeholder': _('creator of the dataset'),
+                	'localized': True
 		    	},
 			    {
 		    		'name': 'creator_identifier',
