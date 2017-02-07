@@ -62,11 +62,11 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
                 'role': 'publisher',
                 'code_regex': {
                     'regex': '\(([^)]+)\:([^)]+)\)',
-                    'groups': [2] # optional, dependes by the regular expression
+                    'groups': [2]  # optional, dependes by the regular expression
                 },
                 'name_regex': {
                     'regex': '([^(]*)(\(IPa[^)]*\))(.+)',
-                    'groups': [1,3] # optional, dependes by the regular expression
+                    'groups': [1, 3]  # optional, dependes by the regular expression
                 }
             },
             'owner': {
@@ -74,11 +74,11 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
                 'role': 'owner',
                 'code_regex': {
                     'regex': '\(([^)]+)\:([^)]+)\)',
-                    'groups': [2] # optional, dependes by the regular expression
+                    'groups': [2]  # optional, dependes by the regular expression
                 },
                 'name_regex': {
                     'regex': '([^(]*)(\(IPa[^)]*\))(.+)',
-                    'groups': [1,3] # optional, dependes by the regular expression
+                    'groups': [1, 3]  # optional, dependes by the regular expression
                 }
             },
             'author': {
@@ -86,11 +86,11 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
                 'role': 'author',
                 'code_regex': {
                     'regex': '\(([^)]+)\:([^)]+)\)',
-                    'groups': [2] # optional, dependes by the regular expression
+                    'groups': [2]  # optional, dependes by the regular expression
                 },
                 'name_regex': {
                     'regex': '([^(]*)(\(IPa[^)]*\))(.+)',
-                    'groups': [1,3] # optional, dependes by the regular expression
+                    'groups': [1, 3]  # optional, dependes by the regular expression
                 }
             }
         },
@@ -108,12 +108,12 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
             'form_config_interface': 'Text'
         }
 
-    def get_package_dict(self, iso_values, harvest_object):        
+    def get_package_dict(self, iso_values, harvest_object):
         package_dict = super(DCATAPITCSWHarvester, self).get_package_dict(iso_values, harvest_object)
 
         mapping_frequencies_to_mdr_vocabulary = self.source_config.get('mapping_frequencies_to_mdr_vocabulary', utils._mapping_frequencies_to_mdr_vocabulary)
         mapping_languages_to_mdr_vocabulary = self.source_config.get('mapping_languages_to_mdr_vocabulary', utils._mapping_languages_to_mdr_vocabulary)
-        
+
         dcatapit_config = self.source_config.get('dcatapit_config', None)
         if dcatapit_config and not all(name in dcatapit_config for name in self._dcatapit_config):
             dcatapit_config = self._dcatapit_config
@@ -134,11 +134,11 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
                 tags.append({'name': tag})
 
             package_dict['tags'] = tags
-        
+
         # ------------------------------#
         #    MANDATORY FOR DCAT-AP_IT   #
         # ------------------------------#
-        
+
         #  -- identifier -- #
         identifier = iso_values["guid"]
         package_dict['extras'].append({'key': 'identifier', 'value': identifier})
@@ -151,10 +151,10 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
             dataset_themes = utils.get_controlled_vocabulary_values('eu_themes', controlled_vocabularies.get('dcatapit_skos_theme_id'), iso_values["keywords"])
 
         if dataset_themes and len(dataset_themes) > 1:
-        	dataset_themes = list(set(dataset_themes))
-        	dataset_themes = '{' + ','.join(str(l) for l in dataset_themes) + '}'
+            dataset_themes = list(set(dataset_themes))
+            dataset_themes = '{' + ','.join(str(l) for l in dataset_themes) + '}'
         else:
-        	dataset_themes = dataset_themes[0] if dataset_themes and len(dataset_themes) > 0 else dcatapit_config.get('dataset_themes')
+            dataset_themes = dataset_themes[0] if dataset_themes and len(dataset_themes) > 0 else dcatapit_config.get('dataset_themes')
 
         log.info("Medatata harvested dataset themes: %r", dataset_themes)
         package_dict['extras'].append({'key': 'theme', 'value': dataset_themes})
@@ -163,10 +163,10 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         citedResponsiblePartys = iso_values["cited-responsible-party"]
         agent_name, agent_code = utils.get_responsible_party(citedResponsiblePartys, agents.get('publisher'))
         package_dict['extras'].append({'key': 'publisher_name', 'value': agent_name})
-        package_dict['extras'].append({'key': 'publisher_identifier', 'value': agent_code or default_agent_code})            
+        package_dict['extras'].append({'key': 'publisher_identifier', 'value': agent_code or default_agent_code})
 
         #  -- modified -- #
-        revision_date = iso_values["date-updated"]
+        revision_date = iso_values["date-updated"] or iso_values["date-released"]
         package_dict['extras'].append({'key': 'modified', 'value': revision_date})
 
         #  -- frequency -- #
@@ -192,23 +192,23 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         #  -- geographical_name  -- #
         dataset_places = []
         if iso_values["keywords"]:
-        	dataset_places = utils.get_controlled_vocabulary_values('places', controlled_vocabularies.get('dcatapit_skos_places_id'), iso_values["keywords"])
+            dataset_places = utils.get_controlled_vocabulary_values('places', controlled_vocabularies.get('dcatapit_skos_places_id'), iso_values["keywords"])
 
         if dataset_places and len(dataset_places) > 1:
-        	dataset_places = list(set(dataset_places))
-        	dataset_places = '{' + ','.join(str(l) for l in dataset_places) + '}'
+            dataset_places = list(set(dataset_places))
+            dataset_places = '{' + ','.join(str(l) for l in dataset_places) + '}'
         else:
-        	dataset_places = dataset_places[0] if dataset_places and len(dataset_places) > 0 else dcatapit_config.get('dataset_places')
+            dataset_places = dataset_places[0] if dataset_places and len(dataset_places) > 0 else dcatapit_config.get('dataset_places')
 
         if dataset_places:
             log.info("Medatata harvested dataset places: %r", dataset_places)
             package_dict['extras'].append({'key': 'geographical_name', 'value': dataset_places})
 
         #  -- geographical_geonames_url nothing to do  -- #
-		
-		#  -- language -- #
+
+        #  -- language -- #
         dataset_languages = iso_values["dataset-language"]
-        language = None      
+        language = None
         if dataset_languages and len(dataset_languages) > 0:
             languages = []
             for language in dataset_languages:
@@ -223,23 +223,22 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
             log.info("Medatata harvested dataset languages: %r", language)
         else:
-        	language = dcatapit_config.get('dataset_language')
+            language = dcatapit_config.get('dataset_language')
 
         package_dict['extras'].append({'key': 'language', 'value': language})
 
         #  -- temporal_coverage -- #
         for key in ['temporal-extent-begin', 'temporal-extent-end']:
-        	if len(iso_values[key]) > 0:
-        		temporal_extent_value = iso_values[key][0]
-        		if key == 'temporal-extent-begin':
-        			package_dict['extras'].append({'key': 'temporal_start', 'value': temporal_extent_value})
+            if len(iso_values[key]) > 0:
+                temporal_extent_value = iso_values[key][0]
+                if key == 'temporal-extent-begin':
+                    package_dict['extras'].append({'key': 'temporal_start', 'value': temporal_extent_value})
+                if key == 'temporal-extent-end':
+                    package_dict['extras'].append({'key': 'temporal_end', 'value': temporal_extent_value})
 
-        		if key == 'temporal-extent-end':
-        			package_dict['extras'].append({'key': 'temporal_end', 'value': temporal_extent_value})
-
-       	#  -- conforms_to -- #
-       	conforms_to = iso_values["conformity-specification-title"]
-       	package_dict['extras'].append({'key': 'conforms_to', 'value': conforms_to})
+        #  -- conforms_to -- #
+        conforms_to = iso_values["conformity-specification-title"]
+        package_dict['extras'].append({'key': 'conforms_to', 'value': conforms_to})
 
         #  -- creator -- #
         citedResponsiblePartys = iso_values["cited-responsible-party"]
