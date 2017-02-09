@@ -82,10 +82,16 @@ class DCATAPITCommands(CkanCommand):
 
         if cmd == 'load':
             self.load()
+        elif cmd == 'initdb':
+            self.initdb()
         else:
             print self.usage
             log.error('ERROR: Command "%s" not recognized' % (cmd,))
             return
+
+    def initdb(self):
+        from ckanext.dcatapit.model import setup as db_setup        
+        db_setup()
 
     def load(self):
     	##
