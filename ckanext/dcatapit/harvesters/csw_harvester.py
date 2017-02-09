@@ -65,7 +65,7 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
                     'groups': [2]  # optional, dependes by the regular expression
                 },
                 'name_regex': {
-                    'regex': '([^(]*)(\(IPa[^)]*\))(.+)',
+                    'regex': '([^(]*)(\(IPA[^)]*\))(.+)',
                     'groups': [1, 3]  # optional, dependes by the regular expression
                 }
             },
@@ -77,7 +77,7 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
                     'groups': [2]  # optional, dependes by the regular expression
                 },
                 'name_regex': {
-                    'regex': '([^(]*)(\(IPa[^)]*\))(.+)',
+                    'regex': '([^(]*)(\(IPA[^)]*\))(.+)',
                     'groups': [1, 3]  # optional, dependes by the regular expression
                 }
             },
@@ -89,7 +89,7 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
                     'groups': [2]  # optional, dependes by the regular expression
                 },
                 'name_regex': {
-                    'regex': '([^(]*)(\(IPa[^)]*\))(.+)',
+                    'regex': '([^(]*)(\(IPA[^)]*\))(.+)',
                     'groups': [1, 3]  # optional, dependes by the regular expression
                 }
             }
@@ -111,18 +111,24 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
     def get_package_dict(self, iso_values, harvest_object):
         package_dict = super(DCATAPITCSWHarvester, self).get_package_dict(iso_values, harvest_object)
 
-        mapping_frequencies_to_mdr_vocabulary = self.source_config.get('mapping_frequencies_to_mdr_vocabulary', utils._mapping_frequencies_to_mdr_vocabulary)
-        mapping_languages_to_mdr_vocabulary = self.source_config.get('mapping_languages_to_mdr_vocabulary', utils._mapping_languages_to_mdr_vocabulary)
+        mapping_frequencies_to_mdr_vocabulary = self.source_config.get('mapping_frequencies_to_mdr_vocabulary', \
+            utils._mapping_frequencies_to_mdr_vocabulary)
+        mapping_languages_to_mdr_vocabulary = self.source_config.get('mapping_languages_to_mdr_vocabulary', \
+            utils._mapping_languages_to_mdr_vocabulary)
 
-        dcatapit_config = self.source_config.get('dcatapit_config', None)
-        if dcatapit_config and not all(name in dcatapit_config for name in self._dcatapit_config):
-            dcatapit_config = self._dcatapit_config
-            log.warning('Some keys are missing in dcatapit_config configuration property, keyes to use are: dataset_theme, dataset_language, agent_code, frequency, agent_code_regex, org_name_regex and dcatapit_skos_theme_id. Using defaults')
-        elif not dcatapit_config:
-            dcatapit_config = self._dcatapit_config
+        dcatapit_config = self.source_config.get('dcatapit_config', self._dcatapit_config)
 
-        controlled_vocabularies = dcatapit_config.get('controlled_vocabularies')
-        agents = dcatapit_config.get('agents')
+        #if dcatapit_config and not all(name in dcatapit_config for name in self._dcatapit_config):
+        #    dcatapit_config = self._dcatapit_config
+        #    log.warning('Some keys are missing in dcatapit_config configuration property, \
+        #        keyes to use are: dataset_theme, dataset_language, agent_code, frequency, \
+        #        agent_code_regex, org_name_regex and dcatapit_skos_theme_id. Using defaults')
+        #elif not dcatapit_config:
+        #    dcatapit_config = self._dcatapit_config
+
+        controlled_vocabularies = dcatapit_config.get('controlled_vocabularies', \
+            self._dcatapit_config.get('controlled_vocabularies'))
+        agents = dcatapit_config.get('agents', self._dcatapit_config.get('agents'))
 
         #
         # Increase the tag name max length limit to 100 as set at DB level (instead 50 as did by the ckanext-spatial)
@@ -148,20 +154,24 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         #  -- theme -- #
         dataset_themes = []
         if iso_values["keywords"]:
-            dataset_themes = utils.get_controlled_vocabulary_values('eu_themes', controlled_vocabularies.get('dcatapit_skos_theme_id'), iso_values["keywords"])
+            default_vocab_id = self._dcatapit_config.get('controlled_vocabularies').get('dcatapit_skos_theme_id')
+            dataset_themes = utils.get_controlled_vocabulary_values('eu_themes', \
+                controlled_vocabularies.get('dcatapit_skos_theme_id', default_vocab_id), iso_values["keywords"])
 
         if dataset_themes and len(dataset_themes) > 1:
             dataset_themes = list(set(dataset_themes))
             dataset_themes = '{' + ','.join(str(l) for l in dataset_themes) + '}'
         else:
-            dataset_themes = dataset_themes[0] if dataset_themes and len(dataset_themes) > 0 else dcatapit_config.get('dataset_themes')
+            dataset_themes = dataset_themes[0] if dataset_themes and len(dataset_themes) > 0 else dcatapit_config.get('dataset_themes', \
+                self._dcatapit_config.get('dataset_themes'))
 
         log.info("Medatata harvested dataset themes: %r", dataset_themes)
         package_dict['extras'].append({'key': 'theme', 'value': dataset_themes})
 
         #  -- publisher -- #
         citedResponsiblePartys = iso_values["cited-responsible-party"]
-        agent_name, agent_code = utils.get_responsible_party(citedResponsiblePartys, agents.get('publisher'))
+        agent_name, agent_code = utils.get_responsible_party(citedResponsiblePartys, agents.get('publisher', \
+            self._dcatapit_config.get('agents').get('publisher')))
         package_dict['extras'].append({'key': 'publisher_name', 'value': agent_name})
         package_dict['extras'].append({'key': 'publisher_identifier', 'value': agent_code or default_agent_code})
 
@@ -171,11 +181,14 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
         #  -- frequency -- #
         updateFrequency = iso_values["frequency-of-update"]
-        package_dict['extras'].append({'key': 'frequency', 'value': mapping_frequencies_to_mdr_vocabulary.get(updateFrequency, dcatapit_config.get('frequency'))})
+        package_dict['extras'].append({'key': 'frequency', 'value': \
+            mapping_frequencies_to_mdr_vocabulary.get(updateFrequency, \
+            dcatapit_config.get('frequency', self._dcatapit_config.get('frequency')))})
 
         #  -- rights_holder -- #
         citedResponsiblePartys = iso_values["cited-responsible-party"]
-        agent_name, agent_code = utils.get_responsible_party(citedResponsiblePartys, agents.get('owner'))
+        agent_name, agent_code = utils.get_responsible_party(citedResponsiblePartys, \
+            agents.get('owner', self._dcatapit_config.get('agents').get('owner')))
         package_dict['extras'].append({'key': 'holder_name', 'value': agent_name})
         package_dict['extras'].append({'key': 'holder_identifier', 'value': agent_code or default_agent_code})
 
@@ -192,13 +205,16 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         #  -- geographical_name  -- #
         dataset_places = []
         if iso_values["keywords"]:
-            dataset_places = utils.get_controlled_vocabulary_values('places', controlled_vocabularies.get('dcatapit_skos_places_id'), iso_values["keywords"])
+            default_vocab_id = self._dcatapit_config.get('controlled_vocabularies').get('dcatapit_skos_theme_id')
+            dataset_places = utils.get_controlled_vocabulary_values('places', \
+                controlled_vocabularies.get('dcatapit_skos_places_id', default_vocab_id), iso_values["keywords"])
 
         if dataset_places and len(dataset_places) > 1:
             dataset_places = list(set(dataset_places))
             dataset_places = '{' + ','.join(str(l) for l in dataset_places) + '}'
         else:
-            dataset_places = dataset_places[0] if dataset_places and len(dataset_places) > 0 else dcatapit_config.get('dataset_places')
+            dataset_places = dataset_places[0] if dataset_places and len(dataset_places) > 0 else dcatapit_config.get('dataset_places', \
+                self._dcatapit_config.get('dataset_places'))
 
         if dataset_places:
             log.info("Medatata harvested dataset places: %r", dataset_places)
@@ -219,7 +235,8 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
             if len(languages) > 1:
                 language = '{' + ','.join(str(l) for l in languages) + '}'
             else:
-                language = languages[0] if len(languages) > 0 else dcatapit_config.get('dataset_languages')
+                language = languages[0] if len(languages) > 0 else dcatapit_config.get('dataset_languages', \
+                    self._dcatapit_config.get('dataset_languages'))
 
             log.info("Medatata harvested dataset languages: %r", language)
         else:
@@ -242,7 +259,8 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
         #  -- creator -- #
         citedResponsiblePartys = iso_values["cited-responsible-party"]
-        agent_name, agent_code = utils.get_responsible_party(citedResponsiblePartys, agents.get('author'))
+        agent_name, agent_code = utils.get_responsible_party(citedResponsiblePartys, \
+            agents.get('author', self._dcatapit_config.get('agents').get('author')))
         package_dict['extras'].append({'key': 'creator_name', 'value': agent_name})
         package_dict['extras'].append({'key': 'creator_identifier', 'value': agent_code or default_agent_code})
 
