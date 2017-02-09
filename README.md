@@ -10,7 +10,7 @@ CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
 - [Demo Instance](#demo-instance)
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [DCAT_AP-IT CSW Harvester](#dcatapit-csw-harvester)
+- [DCAT_AP-IT CSW Harvester](#dcat_ap-it-csw-harvester)
 - [Test Instance and Validation](#test-instance-and-validation)
 - [Development Installation](#development-installation)
 - [Extending the package schema in your own extension](#extending-the-package-schema-in-your-own-extension)
@@ -100,7 +100,7 @@ The ckanext-dcatapit RDF harvester also harvests localized fields in multiple la
     
     `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf  --name filetype --config=/etc/ckan/default/production.ini`
     
-## DCATAPIT CSW Harvester
+## DCAT_AP-IT CSW Harvester
 The ckanext-dcatapit extension provides also a CSW harvester built on the **ckanext-spatial** extension, and inherits all of its functionalities. With this harvester you can harvest dcatapit dataset fields from the ISO metadata. The CSW harvester uses a default configuration usefull for populating mandatory fields into the source metadata, this json configuration can be customized into the harvest source form (please see the default one [here](https://github.com/geosolutions-it/ckanext-dcatapit/blob/master/ckanext/dcatapit/harvesters/csw_harvester.py#L54)). Below an example of the available configuration properties (for any configuration property not specified, the default one will be used):
 
     {
