@@ -39,19 +39,23 @@ This extension provides plugins that allow CKAN to expose and consume metadata f
 
 The ckanext-dcatapit extension has been developed for CKAN 2.4 or later and is based on the [ckanext-dcat plugin](https://github.com/ckan/ckanext-dcat).
 
+In order to use the dcatapit CSW harvester functionalities, you need to install also the [ckanext-spatial](https://github.com/ckan/ckanext-spatial) extension.
+
 If you want to manage localized fields, the ckanext-dcatapit extension requires also the [ckanext-multilang plugin](https://github.com/geosolutions-it/ckanext-multilang/tree/ckan-2.5.2) installed (see the [WIKI](https://github.com/geosolutions-it/ckanext-multilang/wiki) for more details about that).
 
 ## Installation
 
-1. (Optional) Install the **ckanext-multilang** extension as described [here](https://github.com/geosolutions-it/ckanext-multilang/blob/master/README.rst#installation)
+1. (**Optional**) Install the **ckanext-multilang** extension as described [here](https://github.com/geosolutions-it/ckanext-multilang/blob/master/README.rst#installation). Install this extension only if you need to manage multilingual fields for dataset, groups, tags ad organizations
 
-2. Install the **ckanext-dcat** extension as described [here](https://github.com/ckan/ckanext-dcat/blob/master/README.md#installation).
+2. (**Optional**) Install the **ckanext-spatial** extension as described [here](https://github.com/ckan/ckanext-spatial). Install this extension only if you need to use the dcatapit CSW harvester (see below).
 
-3. Activate your CKAN virtual environment, for example:
+3. Install the **ckanext-dcat** extension as described [here](https://github.com/ckan/ckanext-dcat/blob/master/README.md#installation).
+
+4. Activate your CKAN virtual environment, for example:
 
      `. /usr/lib/ckan/default/bin/activate`
      
-4. Go into your CKAN path for extension (like /usr/lib/ckan/default/src):
+5. Go into your CKAN path for extension (like /usr/lib/ckan/default/src):
 
     `git clone https://github.com/geosolutions-it/ckanext-dcatapit.git`
     
@@ -59,7 +63,7 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
     
     `pip install -e .`
 
-5. Add ``dcatapit_pkg`` and ``dcatapit_org`` and ``dcatapit_config`` to the ``ckan.plugins`` setting in your CKAN
+6. Add ``dcatapit_pkg`` and ``dcatapit_org`` and ``dcatapit_config`` to the ``ckan.plugins`` setting in your CKAN
    config file (by default the config file is located at ``/etc/ckan/default/production.ini``).
 
    * **dcatapit_pkg**: extends the package schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
@@ -69,27 +73,27 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
     The ckanext-dcatapit allows to localize the package fields (eg. title, description etc.) according to the schema definition, but to
     do that requires the ckanext-multilang installed.
 
-6. In order to enable also the RDF harvester add ``dcatapit_harvester`` to the ``ckan.plugins`` setting in your CKAN. 
+7. In order to enable also the RDF harvester add ``dcatapit_harvester`` to the ``ckan.plugins`` setting in your CKAN. 
 The ckanext-dcatapit RDF harvester also harvests localized fields in multiple languages, but to do that requires the ckanext-multilang installed.
 
-7. In order to enable also the CSW harvester add ``dcatapit_csw_harvester`` to the ``ckan.plugins`` setting in your CKAN.
+8. In order to enable also the CSW harvester add ``dcatapit_csw_harvester`` to the ``ckan.plugins`` setting in your CKAN.
 
-6. Enable the dcatapit profile adding the following configuration property in the ``production.ini`` file:
+9. Enable the dcatapit profile adding the following configuration property in the ``production.ini`` file:
 
     `ckanext.dcat.rdf.profiles = euro_dcat_ap it_dcat_ap`
 
-7. Configure the CKAN base URI as reported in the [dcat documentation](https://github.com/ckan/ckanext-dcat/blob/master/README.md#uris):
+10. Configure the CKAN base URI as reported in the [dcat documentation](https://github.com/ckan/ckanext-dcat/blob/master/README.md#uris):
     `ckanext.dcat.base_uri = YOUR_BASE_URI`
 
-8. Initialize the CKAN DB with the mandatory table needed for localized vocabulary voices:
+11. Initialize the CKAN DB with the mandatory table needed for localized vocabulary voices:
 
     `paster --plugin=ckanext-dcatapit vocabulary initdb --config=/etc/ckan/default/production.ini`
 
-9. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu:
+12. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu:
 
      `sudo service apache2 reload`
      
-10. The EU controlled vocabularies must be populated before start using the dcatapit plugin. Execute in sequence these commands:
+13. The EU controlled vocabularies must be populated before start using the dcatapit plugin. Execute in sequence these commands:
 
     `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf --name languages --config=/etc/ckan/default/production.ini`
     
