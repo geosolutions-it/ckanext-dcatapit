@@ -101,7 +101,7 @@ The ckanext-dcatapit RDF harvester also harvests localized fields in multiple la
     `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf  --name filetype --config=/etc/ckan/default/production.ini`
     
 ## DCATAPIT CSW Harvester
-The ckanext-dcatapit extension provides also a CSW harvester built on the **ckanext-spatial** extension, and inherits all of its functionalities. With this harvester you can harvest dcatapit dataset fields from the ISO metadata. The CSW harvester uses a default configuration usefull for populating mandatory fields into the source metadata, this json configuration can be customized into the harvest source form. Below an example of the available configuration properties (for any configuration property not specified, the default one will be used):
+The ckanext-dcatapit extension provides also a CSW harvester built on the **ckanext-spatial** extension, and inherits all of its functionalities. With this harvester you can harvest dcatapit dataset fields from the ISO metadata. The CSW harvester uses a default configuration usefull for populating mandatory fields into the source metadata, this json configuration can be customized into the harvest source form (please see the default one [here](https://github.com/geosolutions-it/ckanext-dcatapit/blob/master/ckanext/dcatapit/harvesters/csw_harvester.py#L54)). Below an example of the available configuration properties (for any configuration property not specified, the default one will be used):
 
     {
        "dcatapit_config":{
@@ -158,10 +158,10 @@ The ckanext-dcatapit extension provides also a CSW harvester built on the **ckan
 * ``dataset_places``: default value to use for the dataset geographical name field if the thesaurus keywords are missing in the ISO metadata. The source metadata should have thesaurus keywords from the EU controlled vocabulary (places-skos.rdf). Multiple values must be set between braces and comma separated values.
 * ``dataset_languages``: default value to use for the dataset languages field. Metadata languages are harvested by the che ckanext-spatial extension (see the 'dataset-language' in iso_values). Internally the harvester map the ISO languages to the mdr vocabulary languages. The default configuration for that can be overridden in harvest source configuration by using an additional configuration property, like:
 
-        mapping_languages_to_mdr_vocabulary = {
-            'ita': 'ITA',
-            'ger': 'DEU',
-            'eng': 'ENG'
+        "mapping_languages_to_mdr_vocabulary": {
+            "ita': "ITA",
+            "ger': "DEU",
+            "eng': "ENG"
         }
         
 * ``frequency``: default value to use for the dataset frequency field. Metadata frequencies are harvested by the che ckanext-spatial extension (see the 'frequency-of-update' in iso_values). Internally the harvester automatically map the ISO frequencies to the mdr vocabulary frequencies.
