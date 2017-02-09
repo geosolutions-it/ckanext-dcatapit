@@ -10,6 +10,7 @@ CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
 - [Demo Instance](#demo-instance)
 - [Requirements](#requirements)
 - [Installation](#installation)
+- [DCAT_AP-IT CSW Harvester](#dcatapit-csw-harvester)
 - [Test Instance and Validation](#test-instance-and-validation)
 - [Development Installation](#development-installation)
 - [Extending the package schema in your own extension](#extending-the-package-schema-in-your-own-extension)
@@ -18,7 +19,7 @@ CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
     - [Updating an existing translation](#updating-an-existing-translation)
 - [Pending issues](#pending-issues)
 - [Contributing](#contributing)
-- [Professional Support and Credits](#professional-support-and-credits)
+- [Support, Communication and Credits](#support-communication-and-credits)
 
 ## License
 
@@ -37,19 +38,19 @@ This extension provides plugins that allow CKAN to expose and consume metadata f
 ## Requirements
 
 The ckanext-dcatapit extension has been developed for CKAN 2.4 or later and is based on [ckanext-dcat plugin](https://github.com/ckan/ckanext-dcat) 
-The ckanext-dcatapit extension requires also the [ckanext-multilang plugin](https://github.com/geosolutions-it/ckanext-multilang/tree/ckan-2.5.2) installed on CKAN in order to manage localized fields (see the [WIKI](https://github.com/geosolutions-it/ckanext-multilang/wiki) for more details about that). 
-
-If the ckanext-multilang extension is missing you can use the dcatapit extension without the multilingual management. This means that all the multilingual aspects will be ignored (ie. for vocabularies, the package editing and also during the RDF harvesting and the serialization procedures).
+If you want to manage localized fields, the ckanext-dcatapit extension requires also the [ckanext-multilang plugin](https://github.com/geosolutions-it/ckanext-multilang/tree/ckan-2.5.2) installed (see the [WIKI](https://github.com/geosolutions-it/ckanext-multilang/wiki) for more details about that).
 
 ## Installation
 
-1. Install the **ckanext-multilang** extension as described [here](https://github.com/geosolutions-it/ckanext-multilang/blob/master/README.rst#installation) and **ckanext-dcat** [here](https://github.com/ckan/ckanext-dcat/blob/master/README.md#installation).
+1. (Optional) Install the **ckanext-multilang** extension as described [here](https://github.com/geosolutions-it/ckanext-multilang/blob/master/README.rst#installation)
 
-2. Activate your CKAN virtual environment, for example:
+2. Install the **ckanext-dcat** extension as described [here](https://github.com/ckan/ckanext-dcat/blob/master/README.md#installation).
+
+3. Activate your CKAN virtual environment, for example:
 
      `. /usr/lib/ckan/default/bin/activate`
      
-3. Go into your CKAN path for extension (like /usr/lib/ckan/default/src):
+4. Go into your CKAN path for extension (like /usr/lib/ckan/default/src):
 
     `git clone https://github.com/geosolutions-it/ckanext-dcatapit.git`
     
@@ -57,7 +58,7 @@ If the ckanext-multilang extension is missing you can use the dcatapit extension
     
     `pip install -e .`
 
-4. Add ``dcatapit_pkg`` and ``dcatapit_org`` and ``dcatapit_config`` to the ``ckan.plugins`` setting in your CKAN
+5. Add ``dcatapit_pkg`` and ``dcatapit_org`` and ``dcatapit_config`` to the ``ckan.plugins`` setting in your CKAN
    config file (by default the config file is located at ``/etc/ckan/default/production.ini``).
 
    * **dcatapit_pkg**: extends the package schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
@@ -67,8 +68,10 @@ If the ckanext-multilang extension is missing you can use the dcatapit extension
     The ckanext-dcatapit allows to localize the package fields (eg. title, description etc.) according to the schema definition, but to
     do that requires the ckanext-multilang installed.
 
-5. In order to enable also the RDF harvester add ``dcatapit_harvester`` to the ``ckan.plugins`` setting in your CKAN. 
-The ckanext-dcatapit RDF harvester also harvests localized fields, but to do that requires the ckanext-multilang installed.
+6. In order to enable also the RDF harvester add ``dcatapit_harvester`` to the ``ckan.plugins`` setting in your CKAN. 
+The ckanext-dcatapit RDF harvester also harvests localized fields in multiple languages, but to do that requires the ckanext-multilang installed.
+
+7. In order to enable also the CSW harvester add ``dcatapit_csw_harvester`` to the ``ckan.plugins`` setting in your CKAN.
 
 6. Enable the dcatapit profile adding the following configuration property in the ``production.ini`` file:
 
@@ -77,11 +80,15 @@ The ckanext-dcatapit RDF harvester also harvests localized fields, but to do tha
 7. Configure the CKAN base URI as reported in the [dcat documentation](https://github.com/ckan/ckanext-dcat/blob/master/README.md#uris):
     `ckanext.dcat.base_uri = YOUR_BASE_URI`
 
-8. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu:
+8. Initialize the CKAN DB with the mandatory table needed for localized vocabulary voices:
+
+    `paster --plugin=ckanext-dcatapit vocabulary initdb --config=/etc/ckan/default/production.ini`
+
+9. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu:
 
      `sudo service apache2 reload`
      
-9. The EU controlled vocabularies must be populated before start using the dcatapit plugin. Execute in sequence these commands:
+10. The EU controlled vocabularies must be populated before start using the dcatapit plugin. Execute in sequence these commands:
 
     `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf --name languages --config=/etc/ckan/default/production.ini`
     
@@ -92,13 +99,97 @@ The ckanext-dcatapit RDF harvester also harvests localized fields, but to do tha
     `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf --name frequencies --config=/etc/ckan/default/production.ini`
     
     `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf  --name filetype --config=/etc/ckan/default/production.ini`
+    
+## DCATAPIT CSW Harvester
+The ckanext-dcatapit extension provides also a CSW harvester built on the **ckanext-spatial** extension, and inherits all of its functionalities. With this harvester you can harvest dcatapit dataset fields from the ISO metadata. The CSW harvester uses a default configuration usefull for populating mandatory fields into the source metadata, this json configuration can be customized into the harvest source form. Below an example of the available configuration properties (for any configuration property not specified, the default one will be used):
+
+    {
+       "dcatapit_config":{
+          "dataset_themes":"OP_DATPRO",
+          "dataset_places":"ITA_BZO",
+          "dataset_languages":"{ITA,DEU}",
+          "frequency":"UNKNOWN",
+          "agents":{
+             "publisher":{
+                "code":"p_bz",
+                "role":"publisher",
+                "code_regex":{
+                   "regex":"\\(([^)]+)\\:([^)]+)\\)",
+                   "groups":[2]
+                },
+                "name_regex":{
+                   "regex":"([^(]*)(\\(IPa[^)]*\\))(.+)",
+                   "groups":[1, 3]
+                }
+             },
+             "owner":{
+                "code":"p_bz",
+                "role":"owner",
+                "code_regex":{
+                   "regex":"\\(([^)]+)\\:([^)]+)\\)",
+                   "groups":[2]
+                },
+                "name_regex":{
+                   "regex":"([^(]*)(\\(IPa[^)]*\\))(.+)",
+                   "groups":[1, 3]
+                }
+             },
+             "author":{
+                "code":"p_bz",
+                "role":"author",
+                "code_regex":{
+                   "regex":"\\(([^)]+)\\:([^)]+)\\)",
+                   "groups":[2]
+                },
+                "name_regex":{
+                   "regex":"([^(]*)(\\(IPa[^)]*\\))(.+)",
+                   "groups":[1, 3]
+                }
+             }
+          },
+          "controlled_vocabularies":{
+             "dcatapit_skos_theme_id":"theme.data-theme-skos",
+             "dcatapit_skos_places_id":"theme.places-skos"
+          }
+       }
+    }
+
+* ``dataset_themes``: default value to use for the dataset themes field if the thesaurus keywords are missing in the ISO metadata. The source metadata should have thesaurus keywords from the EU controlled vocabulary (data-theme-skos.rdf). Multiple values must be set between braces and comma separated values.
+* ``dataset_places``: default value to use for the dataset geographical name field if the thesaurus keywords are missing in the ISO metadata. The source metadata should have thesaurus keywords from the EU controlled vocabulary (places-skos.rdf). Multiple values must be set between braces and comma separated values.
+* ``dataset_languages``: default value to use for the dataset languages field. Metadata languages are harvested by the che ckanext-spatial extension (see the 'dataset-language' in iso_values). Internally the harvester map the ISO languages to the mdr vocabulary languages. The default configuration for that can be overridden in harvest source configuration by using an additional configuration property, like:
+
+        mapping_languages_to_mdr_vocabulary = {
+            'ita': 'ITA',
+            'ger': 'DEU',
+            'eng': 'ENG'
+        }
+        
+* ``frequency``: default value to use for the dataset frequency field. Metadata frequencies are harvested by the che ckanext-spatial extension (see the 'frequency-of-update' in iso_values). Internally the harvester automatically map the ISO frequencies to the mdr vocabulary frequencies.
+* ``agents``: Configuration for harvesting the dcatapit dataset agents from the responsible party metadata element. Below more details on the agent configuration:
+
+         "publisher":{
+            "code":"p_bz",      --> the IPA/IVA code to use as default for the agent identifier
+            "role":"publisher", --> the responsible party role to harvest for this agent
+            "code_regex":{      --> a regular expression to extrapolate a substring from the responsible party organization name
+               "regex":"\\(([^)]+)\\:([^)]+)\\)",
+               "groups":[2]     --> optional, dependes by the regular expression
+            },
+            "name_regex":{      --> a regular expression to extrapolate the IPA/IVA code from the responsible party organization name
+               "regex":"([^(]*)(\\(IPA[^)]*\\))(.+)",
+               "groups":[1, 3]  --> optional, dependes by the regular expression
+            }
+         }
+     
+* ``controlled_vocabularies``: To harvest 'dataset_themes' and 'dataset_places' the harvester needs to know the thesaurus ID or TITLE as specified into the source metadata.
+
+**NOTES**: The default IPA code to use is extrapolated by the metadata identifier in respect to the RNDT specifications (ipa_code:UUID).
+This represents a last fallback if the agent regex does not match any code and if the agent code has not been specified in configuration.
 
 ## Test Instance and Validation
 
 We have a test instance available at [this link](http://dcatapit.geo-solutions.it/) with a few sample datasets; a specific test dataset is available [here](http://dcatapit.geo-solutions.it/dataset/dcatapit-test-dataset).
 
 If you want to test validation please use the online validator available [here](http://52.50.205.146:3031/dcat-ap_validator.html). To get no errors you should validate the entire catalog (e.g. [this link](http://dcatapit.geo-solutions.it/catalog.rdf)) if you validate a single dataset (e.g. using [this link](http://dcatapit.geo-solutions.it/dataset/dcatapit-test-dataset.rdf)) you will always get an error for "...missing catalog...".
-
 
 ## Development Installation
 
