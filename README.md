@@ -37,7 +37,8 @@ This extension provides plugins that allow CKAN to expose and consume metadata f
 
 ## Requirements
 
-The ckanext-dcatapit extension has been developed for CKAN 2.4 or later and is based on [ckanext-dcat plugin](https://github.com/ckan/ckanext-dcat) 
+The ckanext-dcatapit extension has been developed for CKAN 2.4 or later and is based on the [ckanext-dcat plugin](https://github.com/ckan/ckanext-dcat).
+
 If you want to manage localized fields, the ckanext-dcatapit extension requires also the [ckanext-multilang plugin](https://github.com/geosolutions-it/ckanext-multilang/tree/ckan-2.5.2) installed (see the [WIKI](https://github.com/geosolutions-it/ckanext-multilang/wiki) for more details about that).
 
 ## Installation
