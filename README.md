@@ -45,7 +45,7 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
 
 ## Installation
 
-1. (**Optional**) Install the **ckanext-multilang** extension as described [here](https://github.com/geosolutions-it/ckanext-multilang/blob/master/README.rst#installation). Install this extension only if you need to manage multilingual fields for dataset, groups, tags ad organizations
+1. (**Optional**) Install the **ckanext-multilang** extension as described [here](https://github.com/geosolutions-it/ckanext-multilang/blob/master/README.rst#installation). Install this extension only if you need to manage multilingual fields for dataset, groups, tags and organizations
 
 2. (**Optional**) Install the **ckanext-spatial** extension as described [here](https://github.com/ckan/ckanext-spatial). Install this extension only if you need to use the dcatapit CSW harvester (see below).
 
