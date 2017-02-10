@@ -9,14 +9,6 @@ install:
 services:
     - redis-server
 script: sh bin/travis-run.sh
-before_script:
-    - "sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ main restricted'"
-    - "sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ universe'"
-    - "sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ multiverse'"
-    - "sudo add-apt-repository http://archive.ubuntu.com/ubuntu/"
-    - "sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/ universe'"
-    - "sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/ multiverse'"
-    - "sudo apt-get -qq --fix-missing update"
 before_install:
     - pip install codecov
 after_success:

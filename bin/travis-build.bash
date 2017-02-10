@@ -4,6 +4,13 @@ set -e
 echo "This is travis-build.bash..."
 
 echo "Installing the packages that CKAN requires..."
+sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ main restricted'
+sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ universe'
+sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ multiverse'
+sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/'
+sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/ universe'
+sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/ multiverse'
+sudo apt-get -qq --fix-missing update
 sudo apt-get install postgresql-$PGVERSION solr-jetty libcommons-fileupload-java:amd64=1.2.2-1
 
 echo "Installing CKAN and its Python dependencies..."
