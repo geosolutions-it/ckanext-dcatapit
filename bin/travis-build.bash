@@ -4,7 +4,7 @@ set -e
 echo "This is travis-build.bash..."
 
 echo "Installing the packages that CKAN requires..."
-sudo apt-get update -qq --fix-missing
+sudo apt-get --fix-missing update -qq 
 sudo apt-get install postgresql-$PGVERSION solr-jetty libcommons-fileupload-java:amd64=1.2.2-1
 
 echo "Installing CKAN and its Python dependencies..."
