@@ -2,6 +2,7 @@
 set -e
 
 echo "This is travis-build.bash..."
+echo "test message..."
 
 echo "Installing the packages that CKAN requires..."
 sudo apt-get update -qq
