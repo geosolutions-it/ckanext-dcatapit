@@ -1,4 +1,6 @@
 # UNDER DEVELOPMENT
+[![Build Status](https://travis-ci.org/geosolutions-it/ckanext-dcatapit.svg?branch=master)](https://travis-ci.org/geosolutions-it/ckanext-dcatapit)
+<!-- [![Code Coverage](https://codecov.io/github/geosolutions-it/ckanext-dcatapit/coverage.svg?branch=master)](https://codecov.io/github/geosolutions-it/ckanext-dcatapit?branch=master) -->
 
 # ckanext-dcatapit
 CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
