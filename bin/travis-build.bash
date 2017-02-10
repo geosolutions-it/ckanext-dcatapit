@@ -10,11 +10,20 @@ sudo apt-get install postgresql-$PGVERSION solr-jetty libcommons-fileupload-java
 echo "Installing CKAN and its Python dependencies..."
 git clone https://github.com/ckan/ckan
 cd ckan
-git checkout release-v2.2
+if [ $CKANVERSION != 'master' ]
+then
+    git checkout release-v$CKANVERSION-latest
+fi
 python setup.py develop
+
 pip install -r requirements.txt --allow-all-external
 pip install -r dev-requirements.txt --allow-all-external
 cd -
+
+echo "Setting up Solr..."
+printf "NO_START=0\nJETTY_HOST=127.0.0.1\nJETTY_PORT=8983\nJAVA_HOME=$JAVA_HOME" | sudo tee /etc/default/jetty
+sudo cp ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
+sudo service jetty restart
 
 echo "Creating the PostgreSQL user and database..."
 sudo -u postgres psql -c "CREATE USER ckan_default WITH PASSWORD 'pass';"
@@ -25,9 +34,25 @@ cd ckan
 paster db init -c test-core.ini
 cd -
 
+echo "Installing ckanext-harvest and its requirements..."
+git clone https://github.com/ckan/ckanext-harvest
+cd ckanext-harvest
+python setup.py develop
+pip install -r pip-requirements.txt --allow-all-external
+paster harvester initdb -c ../ckan/test-core.ini
+cd -
+
+echo "Installing ckanext-dcat and its requirements..."
+git clone https://github.com/ckan/ckanext-dcat
+cd ckanext-harvest
+python setup.py develop
+pip install -r requirements.txt --allow-all-external
+cd -
+
 echo "Installing ckanext-ckanext-dcatapit and its requirements..."
 python setup.py develop
 pip install -r dev-requirements.txt
+paster vocabulary initdb -c ../ckan/test-core.ini
 
 echo "Moving test.ini into a subdir..."
 mkdir subdir
