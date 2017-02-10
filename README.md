@@ -1,4 +1,6 @@
 # UNDER DEVELOPMENT
+[![Build Status](https://travis-ci.org/tdipisa/ckanext-dcatapit.svg?branch=dev)](https://travis-ci.org/tdipisa/ckanext-dcatapit)
+[![Code Coverage](https://codecov.io/github/tdipisa/ckanext-dcatapit/coverage.svg?branch=dev)](https://codecov.io/github/tdipisa/ckanext-dcatapit?branch=dev)
 
 # ckanext-dcatapit
 CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
