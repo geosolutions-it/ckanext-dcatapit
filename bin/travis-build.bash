@@ -50,7 +50,7 @@ cd -
 
 echo "Installing ckanext-dcat and its requirements..."
 git clone https://github.com/ckan/ckanext-dcat
-cd ckanext-harvest
+cd ckanext-dcat
 python setup.py develop
 pip install -r requirements.txt --allow-all-external
 cd -
