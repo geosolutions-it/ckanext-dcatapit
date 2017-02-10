@@ -58,7 +58,7 @@ cd -
 echo "Installing ckanext-ckanext-dcatapit and its requirements..."
 python setup.py develop
 pip install -r dev-requirements.txt
-paster vocabulary initdb -c ../ckan/test-core.ini
+paster vocabulary initdb -c ckan/test-core.ini
 
 echo "Moving test.ini into a subdir..."
 mkdir subdir
