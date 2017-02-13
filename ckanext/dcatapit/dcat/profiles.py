@@ -14,6 +14,7 @@ from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF, ADMS
 from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
 
 import ckanext.dcatapit.interfaces as interfaces
+import ckanext.dcatapit.helpers as helpers
 
 
 DCATAPIT = Namespace('http://dati.gov.it/onto/dcatapit#')
@@ -90,7 +91,8 @@ class ItalianDCATAPProfile(RDFProfile):
             value = self._object_value(dataset_ref, predicate)
             if value:
                 self._remove_from_extra(dataset_dict, key)
-                value = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
+
+                value = helpers.format(value, _format='%Y-%m-%d', _type='date')
                 dataset_dict[key] = value
             else:
                 logf('No %s found for dataset "%s"', predicate, dataset_dict.get('title', '---'))
@@ -138,7 +140,7 @@ class ItalianDCATAPProfile(RDFProfile):
                 ):
             if v:
                 self._remove_from_extra(dataset_dict, key)
-                value = datetime.datetime.strptime(v, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
+                value = helpers.format(value, _format='%Y-%m-%d', _type='date')
                 dataset_dict[key] = value
             else:
                 log.warn('No %s Date found for dataset "%s"', key, dataset_dict.get('title', '---'))
