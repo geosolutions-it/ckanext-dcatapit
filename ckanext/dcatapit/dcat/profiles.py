@@ -229,7 +229,7 @@ class ItalianDCATAPProfile(RDFProfile):
         # We'll collect all of the resources' licenses, then we will postprocess them
         licenses = [] #  contains tuples (url, name)
 
-        for resource_dict in dataset_dict['resources']:
+        for resource_dict in dataset_dict.get('resources', []):
             resource_uri = resource_dict['uri']
             if not resource_uri:
                 log.warn("URI not defined for resource %s", resource_dict['name'])
@@ -320,9 +320,9 @@ class ItalianDCATAPProfile(RDFProfile):
                 lang_dict[lang_mapping_xmllang_to_ckan.get(lang)] = value
 
     def _remove_from_extra(self, dataset_dict, key):
-
+        
         #  search and replace
-        for extra in dataset_dict['extras']:
+        for extra in dataset_dict.get('extras', []):
             if extra['key'] == key:
                 dataset_dict['extras'].pop(dataset_dict['extras'].index(extra))
                 return
@@ -330,7 +330,7 @@ class ItalianDCATAPProfile(RDFProfile):
     def _add_or_replace_extra(self, dataset_dict, key, value):
 
         #  search and replace
-        for extra in dataset_dict['extras']:
+        for extra in dataset_dict.get('extras', []):
             if extra['key'] == key:
                 extra['value'] = value
                 return
@@ -501,7 +501,12 @@ class ItalianDCATAPProfile(RDFProfile):
 
         # get orga info
         org_show = logic.get_action('organization_show')
-        org_dict = org_show({}, {'id': org_id})
+
+        try:
+            org_dict = org_show({}, {'id': org_id})
+        except Exception, e:
+            org_dict = {}
+
         org_uri = organization_uri(org_dict)
 
         poc = URIRef(org_uri)
@@ -760,7 +765,7 @@ def organization_uri(orga_dict):
     Returns a string with the resource URI.
     '''
 
-    uri = '{0}/organization/{1}'.format(catalog_uri().rstrip('/'), orga_dict['id'])
+    uri = '{0}/organization/{1}'.format(catalog_uri().rstrip('/'), orga_dict.get('id', None))
 
     return uri
 

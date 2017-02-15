@@ -1,6 +1,6 @@
 # UNDER DEVELOPMENT
 [![Build Status](https://travis-ci.org/geosolutions-it/ckanext-dcatapit.svg?branch=master)](https://travis-ci.org/geosolutions-it/ckanext-dcatapit)
-<!-- [![Code Coverage](https://codecov.io/github/geosolutions-it/ckanext-dcatapit/coverage.svg?branch=master)](https://codecov.io/github/geosolutions-it/ckanext-dcatapit?branch=master) -->
+[![Code Coverage](https://codecov.io/github/geosolutions-it/ckanext-dcatapit/coverage.svg?branch=master)](https://codecov.io/github/geosolutions-it/ckanext-dcatapit?branch=master)
 
 # ckanext-dcatapit
 CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
@@ -12,10 +12,11 @@ CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
 - [Demo Instance](#demo-instance)
 - [Requirements](#requirements)
 - [Installation](#installation)
+- [Development Installation](#development-installation)
+- [Running the Tests](#running-the-tests)
 - [DCAT_AP-IT CSW Harvester](#dcat_ap-it-csw-harvester)
     - [CSW Metadata Guidelines](#csw-metadata-guidelines)
 - [Test Instance and Validation](#test-instance-and-validation)
-- [Development Installation](#development-installation)
 - [Extending the package schema in your own extension](#extending-the-package-schema-in-your-own-extension)
 - [Managing translations](#managing-translations)
     - [Creating a new translation](#creating-a-new-translation)
@@ -120,6 +121,22 @@ To install `ckanext-dcatapit` for development, activate your CKAN virtualenv and
 
     pip install -r dev-requirements.txt
     
+## Running the Tests
+
+To prepare the environment for running tests, follow instructions reported [here](http://docs.ckan.org/en/latest/contributing/test.html)
+Then initialize the test database:
+
+    cd /usr/lib/ckan/default/src/ckan
+	paster db init -c test-core.ini
+
+Finally to run tests, do:
+
+    cd /usr/lib/ckan/default/src/ckanext-dcatapit
+    
+    . /usr/lib/ckan/default/bin/activate
+    
+    nosetests --ckan --nologcapture --with-pylons=test.ini --with-coverage --cover-package=ckanext.dcatapit --cover-inclusive --cover-erase --cover-tests ckanext/dcatapit
+
 ## DCAT_AP-IT CSW Harvester
 The ckanext-dcatapit extension provides also a CSW harvester built on the **ckanext-spatial** extension, and inherits all of its functionalities. With this harvester you can harvest dcatapit dataset fields from the ISO metadata. The CSW harvester uses a default configuration usefull for populating mandatory fields into the source metadata, this json configuration can be customized into the harvest source form (please see the default one [here](https://github.com/geosolutions-it/ckanext-dcatapit/blob/master/ckanext/dcatapit/harvesters/csw_harvester.py#L54)). Below an example of the available configuration properties (for any configuration property not specified, the default one will be used):
 
