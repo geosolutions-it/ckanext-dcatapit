@@ -90,7 +90,7 @@ def get_custom_package_schema():
 	package_schema = [
 	    {
 		    'name': 'identifier',
-		    'validator': ['not_empty'],
+		    'validator': ['not_empty', 'dcatapit_id_unique'],
 		    'element': 'input',
 		    'type': 'text',
 		    'label': _('Dataset Identifier'),

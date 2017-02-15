@@ -210,7 +210,8 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     def get_validators(self):
         return {
             'couple_validator': validators.couple_validator,
-            'no_number': validators.no_number
+            'no_number': validators.no_number,
+            'dcatapit_id_unique': validators.dcatapit_id_unique
         }
 
     # ------------- ITemplateHelpers ---------------#

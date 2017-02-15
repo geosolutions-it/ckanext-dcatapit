@@ -26,3 +26,18 @@ def no_number(value, context):
 		raise Invalid(_('This field cannot be a number'))
 
 	return value
+
+def dcatapit_id_unique(value, context):
+    model = context['model']
+    session = context['session']
+
+    package = context.get('package', None)
+    if package:
+    	package_id = package.id
+
+    	result = session.query(model.PackageExtra).filter(model.PackageExtra.package_id != package_id, model.PackageExtra.key == 'identifier', model.PackageExtra.value == value).first()
+
+    	if result:
+    		raise Invalid(_('Another package exists with the same identifier'))
+
+    return value
