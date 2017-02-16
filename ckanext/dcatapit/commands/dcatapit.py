@@ -97,6 +97,7 @@ class DCATAPITCommands(CkanCommand):
     	##
         # Checking command given options
         ##
+        print "________{0}".format(self.options)
         url = self.options.url
         filename = self.options.filename
 
