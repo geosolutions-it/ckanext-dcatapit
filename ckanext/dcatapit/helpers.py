@@ -140,6 +140,6 @@ def validate_dateformat(date_string, date_format):
 		date = datetime.datetime.strptime(date_string, date_format)
 		return date
 	except ValueError:
-		log.debug('Incorrect date format {0} for date string {1}'.format(date_format, date_string))
+		log.debug(u'Incorrect date format {0} for date string {1}'.format(date_format, date_string))
 		return None
 
