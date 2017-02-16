@@ -12,20 +12,20 @@ def is_blank (string):
     return not (string and string.strip())
 
 def couple_validator(value, context):
-	if not is_blank(value):
-		couples = value.split(',')
+    if not is_blank(value):
+        couples = value.split(',')
 
-		for c in couples:
-			if not c:
-				raise Invalid(_('Invalid couple, one value is missing'))
+        for c in couples:
+            if not c:
+                raise Invalid(_('Invalid couple, one value is missing'))
 
-	return value
+    return value
 
 def no_number(value, context):
-	if value and value.isdigit():
-		raise Invalid(_('This field cannot be a number'))
+    if value and value.isdigit():
+        raise Invalid(_('This field cannot be a number'))
 
-	return value
+    return value
 
 def dcatapit_id_unique(value, context):
     model = context['model']
@@ -33,11 +33,11 @@ def dcatapit_id_unique(value, context):
 
     package = context.get('package', None)
     if package:
-    	package_id = package.id
+        package_id = package.id
 
-    	result = session.query(model.PackageExtra).filter(model.PackageExtra.package_id != package_id, model.PackageExtra.key == 'identifier', model.PackageExtra.value == value).first()
+        result = session.query(model.PackageExtra).filter(model.PackageExtra.package_id != package_id, model.PackageExtra.key == 'identifier', model.PackageExtra.value == value).first()
 
-    	if result:
-    		raise Invalid(_('Another package exists with the same identifier'))
+        if result:
+            raise Invalid(_('Another package exists with the same identifier'))
 
     return value
