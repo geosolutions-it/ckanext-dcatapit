@@ -1,7 +1,6 @@
 
 import nose
 import ckanext.dcatapit.validators as validators
-import ckan.tests.helpers as helpers
 
 eq_ = nose.tools.eq_
 ok_ = nose.tools.ok_
@@ -20,12 +19,13 @@ def test_no_number():
 
     try:
         value = validators.no_number(test_number, None)
-    except Exception, e:
+        ok_(value)
+    except Exception:
         eq_(True, True)
 
 def test_dcatapit_id_unique():
     '''
-    result = helpers.call_action('package_create', 
+    result = helpers.call_action('package_create',
         name='test_dcatapit_package',
         identifier='4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
         theme='{ECON,ENVI}',
