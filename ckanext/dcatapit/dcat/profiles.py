@@ -174,15 +174,17 @@ class ItalianDCATAPProfile(RDFProfile):
         # Spatial
         spatial_tags = []
         geonames_url = None
-        for _s, spatial_literal in self.g.subject_objects(predicate=DCATAPIT.geographicalIdentifier):
-            spatial_value = spatial_literal.value
-            if GEO_BASE_URI in spatial_value:
-                spatial_tags.append(self._strip_uri(spatial_value, GEO_BASE_URI))
-            else:
-                if geonames_url:
-                    log.warn("GeoName URL is already set to %s, value %s will not be imported", geonames_url, spatial_value)
-                else:
-                    geonames_url = spatial_value
+
+        for spatial in self.g.objects(dataset_ref, DCT.spatial):
+           for spatial_literal in self.g.objects(spatial, DCATAPIT.geographicalIdentifier):
+               spatial_value = spatial_literal.value
+               if GEO_BASE_URI in spatial_value:
+                   spatial_tags.append(self._strip_uri(spatial_value, GEO_BASE_URI))
+               else:
+                   if geonames_url:
+                       log.warn("GeoName URL is already set to %s, value %s will not be imported", geonames_url, spatial_value)
+                   else:
+                       geonames_url = spatial_value
 
         if len(spatial_tags) > 0:
             value = ','.join(spatial_tags)
