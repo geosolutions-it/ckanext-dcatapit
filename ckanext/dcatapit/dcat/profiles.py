@@ -141,7 +141,7 @@ class ItalianDCATAPProfile(RDFProfile):
             if v:
                 self._remove_from_extra(dataset_dict, key)
                 
-                value = helpers.format(value, '%Y-%m-%d', 'date')
+                value = helpers.format(v, '%Y-%m-%d', 'date')
                 dataset_dict[key] = value
             else:
                 log.warn('No %s Date found for dataset "%s"', key, dataset_dict.get('title', '---'))
