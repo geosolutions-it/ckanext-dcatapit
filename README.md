@@ -225,9 +225,27 @@ The ckanext-dcatapit extension provides also a CSW harvester built on the **ckan
 **NOTES**: The default IPA code to use is extrapolated by the metadata identifier in respect to the RNDT specifications (ipa_code:UUID).
 This represents a last fallback if the agent regex does not match any code and if the agent code has not been specified in configuration.
 
+#### Harvest source configuration
+In order to set the dcatapit CSW harvester:
+
+1. Specify a valid csw endpoint in the URL field 
+2. Specify a title and a description for the harvest source
+3. Select 'DCAT_AP-IT CSW Harvester' as source type
+4. Provide your own configuration to override the default one
+
 ### CSW Metadata Guidelines
 
-**TODO**
+* The dataset unique identifier will be harvested from the metadata fileIdentifier (see the above paragraph for additional notes about the IPA code).
+
+* In order to harvest dcatapit dataset themes, the source metadata should have thesaurus keywords from the EU controlled vocabulary (data-theme-skos.rdf). Then the thesaurus identifier or title must be specified into the controlled_vocabularies->dcatapit_skos_theme_id configuration property
+
+* In order to harvest dcatapit dataset geographical names, the source metadata should have thesaurus keywords from the EU controlled vocabulary (places-skos.rdf). Then the thesaurus identifier or title must be specified into the controlled_vocabularies->dcatapit_skos_places_id configuration property
+
+* The dcatapit agents (publisher, holder, creator) will be harvested from the responsible party with the role specified in configuration (see 'agents' configuration property explained above)
+
+* The dataset languages are harvested using the xpaths reported [here](https://github.com/ckan/ckanext-spatial/blob/master/ckanext/spatial/model/harvested_metadata.py#L723)
+
+* The dataset frequency of update is harvested using the xpath reported [here](https://github.com/ckan/ckanext-spatial/blob/master/ckanext/spatial/model/harvested_metadata.py#L597)
 
 ## Test Instance and Validation
 
