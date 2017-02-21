@@ -59,7 +59,7 @@ def update_solr_package_indexes(package_dict):
 
         count = 0
         q = []
-        
+
         q.append('id:"%s"' % (package_dict.get('id')))
         count += 1
         if count % BATCH_SIZE == 0:
@@ -123,9 +123,9 @@ def update_extra_package_multilang(extra, pkg_id, field, lang, field_type='extra
         log.warn('DCAT-AP_IT: multilang extension not available.')
         return
 
-    if extra.get('key') == field.get('name', None) and field.get('localized', False) == True:        
+    if extra.get('key') == field.get('name', None) and field.get('localized', False) == True:
         log.debug(':::::::::::::::Localizing schema field: %r', field['name'])
-        
+
         f = PackageMultilang.get(pkg_id, field['name'], lang, field_type)
         if f:
             if extra.get('value') == '':
@@ -150,13 +150,13 @@ def get_localized_field_value(field=None, pkg_id=None, field_type='extra'):
 
     if field and pkg_id:
         lang = get_language()
-        if lang: 
+        if lang:
             localized_value = PackageMultilang.get(pkg_id, field, lang, field_type)
             if localized_value:
                 return localized_value.text
             else:
                 return None
-        else: 
+        else:
             return None
     else:
         return None
@@ -180,7 +180,6 @@ def get_for_package(pkg_id):
     records = PackageMultilang.get_for_package(pkg_id)
     return _multilang_to_dict(records)
 
-
 def get_for_resource(res_id):
     '''
     Returns all the localized fields of a dataset's resources, in a dict of dicts, i.e.:
@@ -199,14 +198,12 @@ def get_for_resource(res_id):
     records = ResourceMultilang.get_for_resource_id(res_id)
     return _multilang_to_dict(records)
 
-
 def _multilang_to_dict(records):
-    
     fields_dict = {}
 
     for r in records:
         fieldname = r.field
-        lang  = r.lang
+        lang = r.lang
         value = r.text
 
         lang_dict = fields_dict.get(fieldname, {})
@@ -216,7 +213,6 @@ def _multilang_to_dict(records):
         lang_dict[lang] = value
 
     return fields_dict
-
 
 def persist_tag_multilang(name, lang, localized_text, vocab_name):
     log.info('DCAT-AP_IT: persisting tag multilang for tag %r ...', name)
@@ -230,11 +226,11 @@ def persist_tag_multilang(name, lang, localized_text, vocab_name):
 
             try:
                 tag.save()
-                logging.info('::::::::: OBJECT TAG UPDATED SUCCESSFULLY :::::::::') 
+                log.info('::::::::: OBJECT TAG UPDATED SUCCESSFULLY :::::::::')
                 pass
             except Exception, e:
                 # on rollback, the same closure of state
-                # as that of commit proceeds. 
+                # as that of commit proceeds.
                 Session.rollback()
 
                 log.error('Exception occurred while persisting DB objects: %s', e)
@@ -246,17 +242,27 @@ def persist_tag_multilang(name, lang, localized_text, vocab_name):
 
         if existing_tag:
             DCATAPITTagVocabulary.persist({'id': existing_tag.id, 'name': name, 'text': localized_text}, lang)
-            logging.info('::::::::: OBJECT TAG PERSISTED SUCCESSFULLY :::::::::')
+            log.info('::::::::: OBJECT TAG PERSISTED SUCCESSFULLY :::::::::')
 
-
-def get_localized_tag_name(tag_name=None):
+def get_localized_tag_name(tag_name=None, fallback_lang=None):
     if tag_name:
         lang = get_language()
+
         localized_tag_name = DCATAPITTagVocabulary.by_name(tag_name, lang)
+
         if localized_tag_name:
             return localized_tag_name.text
         else:
-            return tag_name
+            if fallback_lang:
+                fallback_name = DCATAPITTagVocabulary.by_name(tag_name, fallback_lang)
+
+                if fallback_name:
+                    fallback_name = fallback_name.text
+                    return fallback_name
+                else:
+                    return tag_name
+            else:
+                return tag_name
     else:
         return None
 
