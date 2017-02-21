@@ -226,7 +226,8 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'couple_to_string': helpers.couple_to_string,
             'format': helpers.format,
             'validate_dateformat': helpers.validate_dateformat,
-            'get_localized_field_value': helpers.get_localized_field_value
+            'get_localized_field_value': helpers.get_localized_field_value,
+            'get_package_resource_dcatapit_format_list': helpers.get_package_resource_dcatapit_format_list
         }
 
     # ------------- IPackageController ---------------#

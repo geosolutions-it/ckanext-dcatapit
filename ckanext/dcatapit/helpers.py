@@ -1,5 +1,6 @@
 import logging
 
+import ckan.lib.helpers as h
 import ckan.plugins.toolkit as toolkit
 import ckanext.dcatapit.schema as dcatapit_schema
 
@@ -54,6 +55,19 @@ def get_vocabulary_items(vocabulary_name, keys=None):
         return tag_list
     except toolkit.ObjectNotFound:
         return []
+
+def get_package_resource_dcatapit_format_list(pkg_resources, fallback_lang=None):
+    resources = []
+    if pkg_resources:
+        resources = h.dict_list_reduce(pkg_resources, 'format')
+
+    package_res = []
+    for resource in resources:
+        localized_resource_name = interfaces.get_localized_tag_name(resource, fallback_lang)
+        package_res.append(localized_resource_name)
+
+    resources = package_res
+    return resources
 
 def get_localized_field_value(field=None, pkg_id=None, field_type='extra'):
     log.debug('Retrieving localized package field...')
