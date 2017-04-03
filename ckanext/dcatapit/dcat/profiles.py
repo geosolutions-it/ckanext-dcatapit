@@ -140,7 +140,7 @@ class ItalianDCATAPProfile(RDFProfile):
                 ):
             if v:
                 self._remove_from_extra(dataset_dict, key)
-                
+
                 value = helpers.format(v, '%Y-%m-%d', 'date')
                 dataset_dict[key] = value
             else:
@@ -322,7 +322,7 @@ class ItalianDCATAPProfile(RDFProfile):
                 lang_dict[lang_mapping_xmllang_to_ckan.get(lang)] = value
 
     def _remove_from_extra(self, dataset_dict, key):
-        
+
         #  search and replace
         for extra in dataset_dict.get('extras', []):
             if extra['key'] == key:
@@ -358,7 +358,7 @@ class ItalianDCATAPProfile(RDFProfile):
     def graph_from_dataset(self, dataset_dict, dataset_ref):
 
         title = dataset_dict.get('title')
-
+        
         g = self.g
 
         for prefix, namespace in it_namespaces.iteritems():
@@ -444,7 +444,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
                 standard = BNode()
                 self.g.add((dataset_ref, DCT.conformsTo, standard))
-                
+
                 self.g.add((standard, RDF['type'], DCT.Standard))
                 self.g.add((standard, RDF['type'], DCATAPIT.Standard))
                 self.g.add((standard, DCT.identifier, Literal(item)))
@@ -505,7 +505,14 @@ class ItalianDCATAPProfile(RDFProfile):
         org_show = logic.get_action('organization_show')
 
         try:
-            org_dict = org_show({}, {'id': org_id})
+            org_dict = org_show({}, 
+            	{'id': org_id,
+            	'include_datasets': False,
+            	'include_tags': False,
+            	'include_users': False,
+            	'include_groups': False,
+            	'include_extras': True,
+            	'include_followers': False})
         except Exception, e:
             org_dict = {}
 
