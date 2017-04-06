@@ -141,13 +141,11 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
         # Add default_tags from config
         default_tags = self.source_config.get('default_tags',[])
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> %r", default_tags)
         if default_tags:
            for tag in default_tags:
               tags.append({'name': tag})
 
         package_dict['tags'] = tags
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> %r", package_dict['tags'])
 
         # ------------------------------#
         #    MANDATORY FOR DCAT-AP_IT   #
