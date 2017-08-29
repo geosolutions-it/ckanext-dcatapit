@@ -270,18 +270,22 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                         self.update_loc_field(extra, pkg_dict.get('id'), field, lang)
 
     def after_search(self, search_results, search_params):
-        ## ##################################################################### ##
-        # This method move the dcatapit fields into the extras array (needed for  #
-        # the Ckan base harevsting).                                              #
-        # Basically dynamically rever what did by the 'convert_from_extras' to    #
-        # allow harvesting the plugin's custom fields.                            #
-        ## ##################################################################### ##
+        ## ##################################################################### 
+        # This method moves the dcatapit fields into the extras array (needed for
+        # the CKAN harvester).
+        # Basically it dynamically reverts what is done by the
+        # 'convert_from_extras' to allow harvesting this plugin's custom fields.
+        ## ##################################################################### 
         search_dicts = search_results.get('results', [])
 
         dcatapit_schema_fields = dcatapit_schema.get_custom_package_schema()
 
         for _dict in search_dicts:
-            _dict_extras = _dict.get('extras', [])
+            _dict_extras = _dict.get('extras', None)
+
+            if not _dict_extras:
+                _dict_extras = []
+                _dict['extras'] = _dict_extras
 
             for field in dcatapit_schema_fields:
                 field_couple = field.get('couples', [])
@@ -296,12 +300,10 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     def manage_extras_for_search(self, field, _dict, _dict_extras):
         field_name = field.get('name', None)
 
-        if field_name:
+        if field_name and field_name in _dict:
             field_value = _dict.get(field_name, None)
-
-            if field_value:
-                _dict_extras.append({'key': field_name, 'value': field_value})
-                del _dict[field_name]
+            _dict_extras.append({'key': field_name, 'value': field_value})
+            del _dict[field_name]
 
     def update_loc_field(self, extra, pkg_id, field, lang):
         interfaces.update_extra_package_multilang(extra, pkg_id, field, lang)
