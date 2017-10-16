@@ -12,6 +12,9 @@ import ckanext.dcatapit.validators as validators
 import ckanext.dcatapit.schema as dcatapit_schema
 import ckanext.dcatapit.helpers as helpers
 import ckanext.dcatapit.interfaces as interfaces
+from ckanext.dcatapit.model.dcatapit_model import populate_theme_groups
+from ckan.model.package import Package
+from ckan.model import Session, repo
 
 from routes.mapper import SubMapper, Mapper as _Mapper
 
@@ -237,7 +240,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         lang = interfaces.get_language()
         otype = pkg_dict.get('type')
 
-        if lang and otype == 'dataset':    
+        if lang and otype == 'dataset':
             for extra in pkg_dict.get('extras'):
                 for field in dcatapit_schema.get_custom_package_schema():
 
@@ -253,6 +256,12 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                             log.debug(':::::::::::::::Localizing custom schema field: %r', field['name'])
                             # Create the localized field record
                             self.create_loc_field(extra, lang, pkg_dict.get('id'))
+            
+        instance_id = pkg_dict['id']
+        instance_id = Session.query(Package).filter(Package.id==instance_id).get()
+
+        if instance is not None:
+            populate_theme_groups(instance)
 
     def after_update(self, context, pkg_dict):
         # During the harvest the get_lang() is not defined
@@ -268,6 +277,10 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                             self.update_loc_field(extra, pkg_dict.get('id'), couple, lang)
                     else:
                         self.update_loc_field(extra, pkg_dict.get('id'), field, lang)
+
+        instance = context.get('package')
+        if instance is not None:
+            populate_theme_groups(instance)
 
     def after_search(self, search_results, search_params):
         ## ##################################################################### 

@@ -1,4 +1,5 @@
 
+
 import logging
 import re
 
@@ -38,6 +39,22 @@ class DCATAPITCommands(CkanCommand):
           frequencies -> http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf
           filetype -> http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf
        PATH_TO_INI_FILE is the path to the Ckan configuration file
+
+
+     # load theme to groups mapping, and recreate existing mappings
+     paster --plugin=ckanext-dcatapit vocabulary import_theme_mapping FILE
+
+     Where:
+        FILE is a path to configuration file
+
+
+     Configuration file format: .ini:
+
+[dcatapit:theme_group_mapping]
+NAME_OF_THEM = list,of,groups,
+    separated by newline
+    or, by coma
+
     '''
 
     summary = __doc__.split('\n')[0]
@@ -84,6 +101,8 @@ class DCATAPITCommands(CkanCommand):
             self.load()
         elif cmd == 'initdb':
             self.initdb()
+        elif cmd == 'import_theme_mapping':
+            self.import_theme_mapping(self.args[1])
         else:
             print self.usage
             log.error('ERROR: Command "%s" not recognized' % (cmd,))
@@ -92,6 +111,33 @@ class DCATAPITCommands(CkanCommand):
     def initdb(self):
         from ckanext.dcatapit.model import setup as db_setup
         db_setup()
+
+    def import_theme_mapping(self, fname):
+        from ckanext.dcatapit.model.dcatapit_model import import_theme_to_group, get_theme_to_groups, populate_theme_groups
+        from ckan.model.package import Package
+        from ckan.model import meta, repo
+
+        import_theme_to_group(fname)
+
+        meta.Session.commit()
+        m = get_theme_to_groups()
+
+        print 'imported:'
+        for theme, groups in m.items():
+            print "theme", theme
+            for gname in groups:
+                print '  ', gname
+       
+        q = meta.Session.query(Package).filter(Package.state == 'active')
+        for dataset in q:
+            out = populate_theme_groups(dataset)
+            if out:
+                print "Groups for", dataset
+                for g in out:
+                    print " ", g.name
+
+        repo.new_revision()
+        meta.Session.commit()
 
     def load(self):
         ##
@@ -216,4 +262,3 @@ class DCATAPITCommands(CkanCommand):
                 interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
 
         print 'Vocabulary successfully loaded ({0})'.format(vocab_name)
-
