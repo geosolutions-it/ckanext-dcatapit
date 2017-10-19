@@ -258,7 +258,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                             self.create_loc_field(extra, lang, pkg_dict.get('id'))
             
         instance_id = pkg_dict['id']
-        instance_id = Session.query(Package).filter(Package.id==instance_id).get()
+        instance = Session.query(Package).filter(Package.id==instance_id).get()
 
         if instance is not None:
             populate_theme_groups(instance)

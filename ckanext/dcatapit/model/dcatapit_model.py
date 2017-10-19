@@ -1,19 +1,15 @@
 
 import os
-import sys
 import logging
 from ConfigParser import SafeConfigParser as ConfigParser
 
 from sqlalchemy import types, Column, Table, ForeignKey
-from sqlalchemy import orm
 
 from ckan.lib.base import config
-from ckan import model
 from ckan.model import Session
 from ckan.model import meta
 from ckan.model.domain_object import DomainObject
 from ckan.model.group import Group, Member
-from ckan.model.package import Package
 
 
 log = logging.getLogger(__name__)
@@ -28,16 +24,6 @@ dcatapit_vocabulary_table = Table('dcatapit_vocabulary', meta.metadata,
     Column('text', types.UnicodeText, nullable=False, index=True))
 
 
-dcatapit_theme_map_from = Table('dcatapit_theme_from', meta.metadata,
-    Column('id', types.Integer, primary_key=True),
-    Column('name', types.UnicodeText, nullable=False, index=False))
-
-dcatapit_group_map_to = Table('dcatapit_group_to', meta.metadata,
-    Column('id', types.Integer, primary_key=True),
-    Column('theme_id', types.Integer, ForeignKey('dcatapit_theme_from.id')),
-    Column('name', types.UnicodeText, nullable=False, index=False))
-    
-
 def setup():
     log.debug('DCAT_AP-IT tables defined in memory')
 
@@ -45,7 +31,7 @@ def setup():
     if not dcatapit_vocabulary_table.exists():
         try:
             dcatapit_vocabulary_table.create()
-        except Exception,e:
+        except Exception, e:
             # Make sure the table does not remain incorrectly created
             if dcatapit_vocabulary_table.exists():
                 Session.execute('DROP TABLE dcatapit_vocabulary')
@@ -56,10 +42,6 @@ def setup():
         log.info('DCATAPIT Tag Vocabulary table created')
     else:
         log.info('DCATAPIT Tag Vocabulary table already exist')
-
-    for t in (dcatapit_theme_map_from, dcatapit_group_map_to,):
-        if not t.exists():
-            t.create()
 
 
 class DCATAPITTagVocabulary(DomainObject):
@@ -112,53 +94,23 @@ class DCATAPITTagVocabulary(DomainObject):
             log.error('Exception occurred while persisting DB objects: %s', e)
             raise
 
-class _Queryable(object):
-
-    def __init__(self, **kwargs):
-        for k, v in kwargs.items():
-            setattr(self, k, v)
-
-    @classmethod
-    def create(cls, **kwargs):
-        inst = cls(**kwargs)
-        meta.Session.add(inst)
-        meta.Session.commit()
-        return inst
-
-    @classmethod
-    def query(cls):
-        return meta.Session.query(cls)
-
-
-class DCATAPITThemeMapFrom(_Queryable):
-    pass
-
-class DCATAPITTGroupMapTo(_Queryable):
-    pass
-
 
 meta.mapper(DCATAPITTagVocabulary, dcatapit_vocabulary_table)
-meta.mapper(DCATAPITThemeMapFrom, dcatapit_theme_map_from)
-meta.mapper(DCATAPITTGroupMapTo, dcatapit_group_map_to,
-        properties={
-            'theme': orm.relation(
-                DCATAPITThemeMapFrom,
-                lazy=True,
-                backref=u'groups',
-            )}
-        )
+
+MAPPING_SECTION = 'dcatapit:theme_group_mapping'
+DCATAPIT_THEME_TO_MAPPING_SOURCE = 'ckanext.dcatapit.theme_group_mapping.file'
 
 
 def get_theme_to_groups():
     """
     Returns dictionary with groups for themes
     """
-    q = DCATAPITThemeMapFrom.query().all()
-    out = {}
-    for theme in q:
-        groups = [g.name for g in theme.groups]
-        out[theme.name] = groups
-    return out
+    fname = config.get(DCATAPIT_THEME_TO_MAPPING_SOURCE)
+    if not fname or not os.path.exists(fname):
+        log.warning("Cannot parse theme mapping, no such file: %s", fname)
+        return
+    return import_theme_to_group(fname)
+
 
 def _clean_groups(package):
     """
@@ -208,6 +160,9 @@ def populate_theme_groups(instance, clean_existing=False):
         log.debug("no theme from %s", instance)
         return
     theme_map = get_theme_to_groups()
+    if not theme_map:
+        log.warning("Theme to group map is empty")
+        return
     if not isinstance(themes, list):
         themes = [themes]
     all_groups = set()
@@ -230,9 +185,6 @@ def populate_theme_groups(instance, clean_existing=False):
         groups.append(group)
     _add_groups(instance, groups)
     return groups
-
-MAPPING_SECTION = 'dcatapit:theme_group_mapping'
-
 
 def import_theme_to_group(fname):
     """
@@ -268,12 +220,8 @@ OP_DATPRO = test01
         log.warning("Theme to groups mapping config: cannot find %s section in %s",
                     MAPPING_SECTION, fpath)
         return
-    log.info("Read theme to groups mapping definition from %s. Replacing configuration", fpath)
-    DCATAPITTGroupMapTo.query().delete()
+    out = {}
     for theme_name, groups in conf.items(MAPPING_SECTION, raw=True):
-        _groups = groups.replace('\n', ',').split(',')
-        theme = DCATAPITThemeMapFrom.create(name=theme_name)
-        for g in _groups:
-            if g.strip():
-                DCATAPITTGroupMapTo.create(theme_id=theme.id, name=g.strip())
-
+        out[theme_name] = groups.replace('\n', ',').split(',')
+    log.info("Read theme to groups mapping definition from %s. %s themes to map.", fpath, len(out.keys()))
+    return out
