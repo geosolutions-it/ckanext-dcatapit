@@ -101,8 +101,6 @@ NAME_OF_THEM = list,of,groups,
             self.load()
         elif cmd == 'initdb':
             self.initdb()
-        elif cmd == 'import_theme_mapping':
-            self.import_theme_mapping(self.args[1])
         else:
             print self.usage
             log.error('ERROR: Command "%s" not recognized' % (cmd,))
@@ -111,33 +109,6 @@ NAME_OF_THEM = list,of,groups,
     def initdb(self):
         from ckanext.dcatapit.model import setup as db_setup
         db_setup()
-
-    def import_theme_mapping(self, fname):
-        from ckanext.dcatapit.model.dcatapit_model import import_theme_to_group, get_theme_to_groups, populate_theme_groups
-        from ckan.model.package import Package
-        from ckan.model import meta, repo
-
-        import_theme_to_group(fname)
-
-        meta.Session.commit()
-        m = get_theme_to_groups()
-
-        print 'imported:'
-        for theme, groups in m.items():
-            print "theme", theme
-            for gname in groups:
-                print '  ', gname
-       
-        q = meta.Session.query(Package).filter(Package.state == 'active')
-        for dataset in q:
-            out = populate_theme_groups(dataset)
-            if out:
-                print "Groups for", dataset
-                for g in out:
-                    print " ", g.name
-
-        repo.new_revision()
-        meta.Session.commit()
 
     def load(self):
         ##
