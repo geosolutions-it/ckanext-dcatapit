@@ -1,6 +1,13 @@
+import os
+import json
 import logging
+from ConfigParser import SafeConfigParser as ConfigParser
 
 import ckan.plugins as p
+from ckan.lib.base import config
+from paste.deploy.converters import asbool
+
+
 
 from ckanext.dcat.interfaces import IDCATRDFHarvester
 
@@ -9,6 +16,61 @@ import ckanext.dcatapit.interfaces as interfaces
 
 log = logging.getLogger(__name__)
 
+DCATAPIT_THEMES_MAP = 'ckanext.dcatapit.nonconformant_themes_mapping.file'
+DCATAPIT_THEMES_MAP_SECTION = 'terms_theme_mapping'
+
+
+def _map_themes_json(fdesc):
+    data = json.load(fdesc)
+    out = {}
+    for map_item in data['data']:
+        for syn in map_item['syn']:
+            try:
+                out[syn].append(map_item['name'])
+            except KeyError:
+                out[syn] = [map_item['name']]
+    return out
+
+
+def _map_themes_ini(fdesc):
+    c = ConfigParser()
+    c.readfp(fdesc)
+    out = {}
+    section = 'dcatapit:{}'.format(DCATAPIT_THEMES_MAP_SECTION)
+    for theme_in, themes_out in c.items(section_name, raw=True):
+        out[theme_in] = [t.strip() for t in themes_out.replace('\n', ',').split(',') if t.strip()]
+    return out
+
+
+def map_nonconformant_themes(dataset_dict, temp_dict):
+    fpath = config.get(DCATAPIT_THEMES_MAP)
+    if not fpath:
+        return
+    if not os.path.exists(fpath):
+        log.warning("Mapping themes in %s doesn't exist", fpath)
+        return
+    base, ext = os.path.splitext(fpath)
+    if ext == '.json':
+        handler = _map_themes_json
+    else:
+        handler = _map_themes_ini
+
+    with open(fpath) as f:
+        map_data = handler(f)
+    themes = dataset_dict['extras'].get('themes') or []
+    new_themes = []
+
+    # if theme is not in mapping list, keep it
+    # otherwise, replace it with mapped themes
+    for theme in themes:
+        map_to = map_data.get(theme)
+        if map_to:
+            new_themes.extend(map_to)
+        else:
+            new_themes.append(theme)
+    return new_themes
+
+        
 class DCATAPITHarvesterPlugin(p.SingletonPlugin):
 
     p.implements(IDCATRDFHarvester)
@@ -31,6 +93,11 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
     def after_create(self, harvest_object, dataset_dict, temp_dict):
         return self._after(dataset_dict, temp_dict)
 
+    def _map_themes(self, dataset_dict, temp_dict):
+        print(dataset_dict)
+        new_themes = map_nonconformant_themes(dataset_dict, temp_dict)
+        dataset_dict['extras']['themes'] = new_themes
+
     def _before(self, dataset_dict, temp_dict):
         loc_dict = dataset_dict.pop(LOCALISED_DICT_NAME_BASE, {})
         res_dict = dataset_dict.pop(LOCALISED_DICT_NAME_RESOURCES, {})
@@ -39,6 +106,9 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
                 LOCALISED_DICT_NAME_BASE: loc_dict,
                 LOCALISED_DICT_NAME_RESOURCES: res_dict
             }
+
+        self._map_themes(dataset_dict, temp_dict)
+
 
     def _after(self, dataset_dict, temp_dict):
         dcatapit_dict = temp_dict.get('dcatapit')

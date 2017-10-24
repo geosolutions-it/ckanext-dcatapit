@@ -7,6 +7,7 @@ from rdflib import Graph, URIRef, BNode, Literal
 from rdflib.namespace import RDF
 
 from ckan.plugins import toolkit
+from ckan.lib.base import config
 
 try:
     from ckan.tests import helpers
@@ -15,6 +16,7 @@ except ImportError:
 
 from ckanext.dcat.processors import RDFParser
 from ckanext.dcatapit.dcat.profiles import (DCATAPIT)
+from ckanext.dcatapit.dcat.harvester import DCATAPIT_THEMES_MAP, map_nonconformant_themes
 
 eq_ = nose.tools.eq_
 ok_ = nose.tools.ok_
@@ -120,3 +122,20 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         eq_(multilang_title['de'], u'Dcatapit Test-Dataset')
         eq_(multilang_title['it'], u'Dataset di test DCAT_AP-IT')
         eq_(multilang_title['en_GB'], u'DCAT_AP-IT test dataset')
+
+    def test_themes_mapping(self):
+        config[DCATAPIT_THEMES_MAP] = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'examples', 'themes_mapping.json')
+
+        contents = self._get_file_contents('dataset.rdf')
+        p = RDFParser(profiles=['it_dcat_ap'])
+        p.parse(contents)
+        datasets = [d for d in p.datasets()]
+        eq_(len(datasets), 1)
+        dataset = datasets[0]
+        print(dataset)
+        temp = {}
+        out = map_nonconformant_themes(dataset, temp)
+
+        print(out)
+
+        
