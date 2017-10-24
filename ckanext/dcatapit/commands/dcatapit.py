@@ -39,22 +39,6 @@ class DCATAPITCommands(CkanCommand):
           frequencies -> http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf
           filetype -> http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf
        PATH_TO_INI_FILE is the path to the Ckan configuration file
-
-
-     # load theme to groups mapping, and recreate existing mappings
-     paster --plugin=ckanext-dcatapit vocabulary import_theme_mapping FILE
-
-     Where:
-        FILE is a path to configuration file
-
-
-     Configuration file format: .ini:
-
-[dcatapit:theme_group_mapping]
-NAME_OF_THEM = list,of,groups,
-    separated by newline
-    or, by coma
-
     '''
 
     summary = __doc__.split('\n')[0]

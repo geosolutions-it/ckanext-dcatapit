@@ -6,13 +6,11 @@ from ckan import lib
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 
-import ckan.plugins as plugins
-
 import ckanext.dcatapit.validators as validators
 import ckanext.dcatapit.schema as dcatapit_schema
 import ckanext.dcatapit.helpers as helpers
 import ckanext.dcatapit.interfaces as interfaces
-from ckanext.dcatapit.model.dcatapit_model import populate_theme_groups
+from ckanext.dcatapit.mapping import populate_theme_groups
 from ckan.model.package import Package
 from ckan.model import Session, repo
 
@@ -257,11 +255,6 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                             # Create the localized field record
                             self.create_loc_field(extra, lang, pkg_dict.get('id'))
             
-        instance_id = pkg_dict['id']
-        instance = Session.query(Package).filter(Package.id==instance_id).get()
-
-        if instance is not None:
-            populate_theme_groups(instance)
 
     def after_update(self, context, pkg_dict):
         # During the harvest the get_lang() is not defined
@@ -278,9 +271,6 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                     else:
                         self.update_loc_field(extra, pkg_dict.get('id'), field, lang)
 
-        instance = context.get('package')
-        if instance is not None:
-            populate_theme_groups(instance)
 
     def after_search(self, search_results, search_params):
         ## ##################################################################### 
@@ -515,3 +505,19 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
         return {
             'get_dcatapit_configuration_schema': helpers.get_dcatapit_configuration_schema
         }
+
+
+class DCATAPITGroupMapper(plugins.SingletonPlugin):
+
+    plugins.implements(plugins.IPackageController, inherit=True)
+
+    def after_create(self, context, pkg_dict):
+        instance_id = pkg_dict['id']
+        instance = Package.get(instance_id)
+        if instance is not None:
+            populate_theme_groups(instance)
+
+    def after_update(self, context, pkg_dict):
+        instance = context.get('package')
+        if instance is not None:
+            populate_theme_groups(instance)
