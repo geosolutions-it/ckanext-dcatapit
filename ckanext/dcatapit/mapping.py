@@ -10,6 +10,48 @@ from ckan.model.group import Group, Member
 
 log = logging.getLogger(__name__)
 
+"""
+Theme to Group mapping
+======================
+
+This allows to automatically assing Groups to Dataset based on used themes. 
+This will work for harvested Datasets and with Datasets created with web ui.
+
+
+Configuration
+-------------
+
+ * add `dcatapit_theme_group_mapper` plugin to `ckan.plugins`
+
+ * set `ckanext.dcatapit.theme_group_mapping.file` - path to mapping file. 
+        See below for contents
+
+ * set `ckanext.dcatapit.theme_group_mapping.add_new_groups` to `true` if you want to 
+        enable automatic Group creation if one is missing, but it's defined in mapping
+
+Mapping file
+------------
+
+Mapping file is .ini-style map configuration. Contents should be following:
+
+ * it should have  `dcatapit:theme_group_mapping` section
+
+ * each key is name of theme
+ 
+ * value is a list of groups to assign to. It can be separated with comas or each item can be in new line.
+
+Sample file contents:
+
+.. code::
+
+ [dcatapit:theme_group_mapping]
+ thememap1 = somegroup1
+     somegroup2, existing-group
+
+If file is specified in configuration, but is not accessible by ckan, warning will be logged.
+
+"""
+
 
 MAPPING_SECTION = 'dcatapit:theme_group_mapping'
 DCATAPIT_THEME_TO_MAPPING_SOURCE = 'ckanext.dcatapit.theme_group_mapping.file'
