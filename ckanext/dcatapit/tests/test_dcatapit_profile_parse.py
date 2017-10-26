@@ -124,13 +124,10 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         eq_(multilang_title['en_GB'], u'DCAT_AP-IT test dataset')
 
     def test_themes_mapping(self):
-        config[DCATAPIT_THEMES_MAP] = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'examples', 'themes_mapping.json')
+        config[DCATAPIT_THEMES_MAP] = os.path.join(os.path.dirname(__file__), 
+                                                   '..', 
+                                                   '..', 
+                                                   '..', 
+                                                   'examples', 
+                                                   'themes_mapping.json')
 
-        contents = self._get_file_contents('dataset.rdf')
-        p = RDFParser(profiles=['it_dcat_ap'])
-        p.parse(contents)
-        datasets = [d for d in p.datasets()]
-        eq_(len(datasets), 1)
-        dataset = datasets[0]
-        temp = {}
-        out = map_nonconformant_themes(dataset, temp)

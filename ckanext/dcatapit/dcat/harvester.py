@@ -10,7 +10,7 @@ from ckan.model.meta import Session
 from ckan.lib.base import config
 from paste.deploy.converters import asbool
 
-from ckanext.harvester.queue import get_harvester
+from ckanext.harvest.queue import get_harvester
 from ckanext.dcat.interfaces import IDCATRDFHarvester
 
 from ckanext.dcatapit.dcat.profiles import LOCALISED_DICT_NAME_BASE, LOCALISED_DICT_NAME_RESOURCES
@@ -71,6 +71,8 @@ def _load_mapping_data():
 def _get_new_themes(themes, map_data, add_existing=True):
     if not themes:
         return
+
+    new_themes = []
     # if theme is not in mapping list, keep it
     # otherwise, replace it with mapped themes
     for theme in themes:
@@ -95,6 +97,18 @@ def map_nonconformant_themes(context, dataset_dict):
     """
     Change themes assigned to dataset based on available mapping.
     """
+
+    if not context:
+        # really bad default
+        user_name = 'harvester'
+
+        context = {
+            'model': model,
+            'session': Session,
+            'user': user_name,
+            'ignore_auth': True,
+        }
+
     themes_data = _load_mapping_data()
     if not themes_data:
         return
@@ -125,7 +139,7 @@ def map_nonconformant_groups(harvest_object):
 
     context = {
         'model': model,
-        'session': meta.Session,
+        'session': Session,
         'user': user_name,
         'ignore_auth': True,
 
@@ -169,8 +183,7 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
         return self._after(dataset_dict, temp_dict)
 
     def _map_themes(self, dataset_dict, temp_dict):
-        new_themes = map_nonconformant_themes(dataset_dict, temp_dict)
-        dataset_dict['extras']['themes'] = new_themes
+        map_nonconformant_themes({}, dataset_dict)
 
     def _before(self, dataset_dict, temp_dict):
         loc_dict = dataset_dict.pop(LOCALISED_DICT_NAME_BASE, {})

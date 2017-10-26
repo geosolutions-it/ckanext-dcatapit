@@ -8,13 +8,12 @@ import ckan.plugins.toolkit as toolkit
 
 import ckan.plugins as plugins
 
-from ckanext.harvester.interfaces import IHarvestPostprocessor
 import ckanext.dcatapit.validators as validators
 import ckanext.dcatapit.schema as dcatapit_schema
 import ckanext.dcatapit.helpers as helpers
 import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit.dcat.harvester import (map_nonconformant_themes,
-    map_nonconformant_groups_to_themes)
+    map_nonconformant_groups)
 
 from routes.mapper import SubMapper, Mapper as _Mapper
 
@@ -514,7 +513,6 @@ class DCATAPITThemeMapper(plugins.SingletonPlugin):
 
     """
     plugins.implements(plugins.IPackageController, inherit=True)
-    plugins.implements(plugins.IHarvestPostprocessor, inherit=True)
 
     def after_create(self, context, pkg_dict):
         instance_id = pkg_dict['id']
@@ -526,5 +524,5 @@ class DCATAPITThemeMapper(plugins.SingletonPlugin):
         if instance is not None:
             map_nonconformant_themes(context, instance)
 
-    def after_gather(self, harvest_object)
+    def after_gather(self, harvest_object):
         map_nonconformant_groups_to_themes(harvest_object)
