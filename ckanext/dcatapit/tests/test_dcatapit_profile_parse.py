@@ -132,10 +132,5 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         datasets = [d for d in p.datasets()]
         eq_(len(datasets), 1)
         dataset = datasets[0]
-        print(dataset)
         temp = {}
         out = map_nonconformant_themes(dataset, temp)
-
-        print(out)
-
-        
