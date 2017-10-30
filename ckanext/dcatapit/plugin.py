@@ -515,14 +515,7 @@ class DCATAPITThemeMapper(plugins.SingletonPlugin):
     plugins.implements(plugins.IPackageController, inherit=True)
 
     def after_create(self, context, pkg_dict):
-        instance_id = pkg_dict['id']
-        if instance is not None:
-            map_nonconformant_themes(context, instance)
+        map_nonconformant_themes(context, pkg_dict)
 
     def after_update(self, context, pkg_dict):
-        instance = context.get('package')
-        if instance is not None:
-            map_nonconformant_themes(context, instance)
-
-    def after_gather(self, harvest_object):
-        map_nonconformant_groups_to_themes(harvest_object)
+        map_nonconformant_themes(context, pkg_dict)

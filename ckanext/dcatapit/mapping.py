@@ -88,7 +88,9 @@ def _get_new_themes(themes, map_data, add_existing=True):
 
 def _save_theme_mapping(context, dataset_dict, to_themes):
     dataset_dict['theme'] = to_themes
-    p.toolkit.get_action('package_update')(context, dataset_dict) 
+    dataset_dict['extras'] = [v for v in dataset_dict['extras'] if v['key'] != 'theme']
+
+    p.toolkit.get_action('package_patch')(context, dataset_dict) 
 
 
 def map_nonconformant_themes(context, dataset_dict):
@@ -112,12 +114,27 @@ def map_nonconformant_themes(context, dataset_dict):
         return
 
     # get package with themes
-    dataset_dict = p.toolkit.get_action('package_show')(context, {'id': dataset_dict['id']})
-    new_themes = _get_new_themes(dataset_dict['theme'], themes_data, add_existing=True)
+    # dataset_dict = p.toolkit.get_action('package_show')(context, {'id': dataset_dict['id']})
+
+    # collect all themes
+    dtheme = dataset_dict.get('theme') or ''
+    dthemes = [item for item in dtheme.strip('{}').split(',') if item]
+    for e in (dataset_dict.get('extras') or []):
+        if e['key'] == 'theme':
+            if isinstance(e['value'], list):
+                dthemes.extend(e['value'])
+            else:
+                dthemes.extend([item for item in e['value'].strip('{}').split(',') if item])
+
+    new_themes = _get_new_themes(dthemes, themes_data, add_existing=True)
     if not new_themes:
         return
-    _save_theme_mapping(context, dataset_dict, new_themes)
 
+    # context may come from create call. we'll save it, use default update schema, and restore
+    # this one later
+    schema = context.pop('schema', None)
+    _save_theme_mapping(context, dataset_dict, new_themes)
+    context['schema'] = schema
 
 def map_nonconformant_groups(harvest_object):
     """
