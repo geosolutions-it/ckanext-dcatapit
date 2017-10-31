@@ -145,7 +145,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
         groups_non_mappable = [{'name': 'non-mappable', 'display_name': 'non-mappable'}], []
         groups_mappable = [{'name': 'agriculture', 'display_name': 'agricoltura-e-allevamento'}],\
-                           [{'key': 'theme', 'value': 'Agricoltura, pesca, silvicoltura e prodotti alimentari'}]
+                           [{'key': 'theme', 'value': 'agri'}]
 
 
         harvest_obj = self._make_harvest_object(url, groups_non_mappable[0])

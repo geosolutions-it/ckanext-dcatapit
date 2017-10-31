@@ -17,11 +17,12 @@ def _map_themes_json(fdesc):
     data = json.load(fdesc)
     out = {}
     for map_item in data['data']:
-        for syn in map_item['syn']:
+        map_to = map_item['syn'][0]
+        for syn in map_item['syn'][1:]:
             try:
-                out[syn].append(map_item['name'])
+                out[syn].append(map_to)
             except KeyError:
-                out[syn] = [map_item['name']]
+                out[syn] = [map_to]
     return out
 
 
