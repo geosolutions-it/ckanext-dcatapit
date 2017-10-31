@@ -6,7 +6,7 @@ from ckanext.dcat.interfaces import IDCATRDFHarvester
 
 from ckanext.dcatapit.dcat.profiles import LOCALISED_DICT_NAME_BASE, LOCALISED_DICT_NAME_RESOURCES
 import ckanext.dcatapit.interfaces as interfaces
-from ckanext.dcatapit.mapping import map_nonconformant_themes, map_nonconformant_groups
+from ckanext.dcatapit.mapping import map_nonconformant_groups
 
 log = logging.getLogger(__name__)
 
@@ -33,9 +33,6 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
     def after_create(self, harvest_object, dataset_dict, temp_dict):
         return self._after(dataset_dict, temp_dict)
 
-    def _map_themes(self, dataset_dict, temp_dict):
-        map_nonconformant_themes({}, dataset_dict)
-
     def _before(self, dataset_dict, temp_dict):
         loc_dict = dataset_dict.pop(LOCALISED_DICT_NAME_BASE, {})
         res_dict = dataset_dict.pop(LOCALISED_DICT_NAME_RESOURCES, {})
@@ -44,8 +41,6 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
                 LOCALISED_DICT_NAME_BASE: loc_dict,
                 LOCALISED_DICT_NAME_RESOURCES: res_dict
             }
-
-        self._map_themes(dataset_dict, temp_dict)
 
 
     def _after(self, dataset_dict, temp_dict):

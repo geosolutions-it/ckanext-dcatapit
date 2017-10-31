@@ -22,9 +22,8 @@ except ImportError:
 
 from ckanext.dcat.processors import RDFParser
 from ckanext.dcatapit.dcat.profiles import (DCATAPIT)
-from ckanext.dcatapit.mapping import DCATAPIT_THEMES_MAP, map_nonconformant_themes
+from ckanext.dcatapit.mapping import DCATAPIT_THEMES_MAP, map_nonconformant_groups
 
-from ckanext.dcatapit.dcat.harvester import map_nonconformant_groups
 from ckanext.dcatapit.harvesters.ckanharvester import CKANMappingHarvester
 from ckanext.harvest.model import HarvestObject
 
@@ -134,24 +133,6 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         eq_(multilang_title['it'], u'Dataset di test DCAT_AP-IT')
         eq_(multilang_title['en_GB'], u'DCAT_AP-IT test dataset')
 
-    def test_themes_to_themes_mapping(self):
-
-        config[DCATAPIT_THEMES_MAP] = os.path.join(os.path.dirname(__file__), 
-                                                   '..', 
-                                                   '..', 
-                                                   '..', 
-                                                   'examples', 
-                                                   'themes_mapping.json')
-
-        package = self._make_package('unmapped', themes=['non-mappable'])
-        eq_(package['theme'], '{non-mappable}')
-        Session.flush()
-        Session.revision = repo.new_revision()
-
-        package = self._make_package('mapped', themes=['non-mappable','agriculture', 'agricoltura-e-allevamento'])
-        eq_(package['theme'], '{non-mappable,agricoltura-pesca-silvicoltura-e-prodotti-alimentari}')
-
-
     def test_groups_to_themes_mapping(self):
         config[DCATAPIT_THEMES_MAP] = os.path.join(os.path.dirname(__file__), 
                                                    '..', 
@@ -222,79 +203,6 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         hobj = HarvestObject.get(harvest_object['id'])
         hobj.content = json.dumps(hdata)
         return hobj
-
-
-    def _make_package(self, name, themes=[]):
-
-        # multilang requires lang to be set
-        from pylons.i18n.translation import set_lang, get_lang
-        import pylons
-        class dummyreq(object):
-            class p(object):
-                translator = object()
-            environ = {'pylons.pylons': p()}
-        pylons.request = dummyreq()
-        pylons.translator.pylons_lang = 'en_GB'
-        set_lang('en_GB')
-        assert get_lang() == 'en_GB'
-
-        
-        default_ctx = {'defer_commit': True}
-        user = User.get('dummy')
-        if not user:
-            user = helpers.call_action('user_create',
-                                      default_ctx,
-                                      name='dummy',
-                                      password='dummy',
-                                      email='dummy@dummy.com')
-
-            user_name = user['name']
-        else:
-            user_name = user.name
-        Session.flush()
-        Session.revision = repo.new_revision()
-
-        org = Group.by_name('dummy')
-        if org is None:
-            org  = helpers.call_action('organization_create',
-                                context={'user': user_name,
-                                         'defer_commit': True},
-                                name='dummy')
-
-        Session.flush()
-        Session.revision = repo.new_revision()
-
-        existing_g = Group.by_name('existing-group')
-        if existing_g is None:
-            existing_g  = helpers.call_action('group_create',
-                                      context={'user': user_name,
-                                               'defer_commit': True},
-                                      name='existing-group')
-
-        Session.flush()
-        Session.revision = repo.new_revision()
-
-        context = {'user': 'dummy', 'defer_commit': True}
-        package_schema = schema.default_create_package_schema()
-        context['schema'] = package_schema
-        package_dict = {'frequency': 'manual',
-              'publisher_name': 'dummy',
-              'extras': [{'key':'theme', 'value':themes}],
-              'groups': [],
-              'title': name,
-              'holder_name': 'dummy',
-              'holder_identifier': 'dummy',
-              'name': name,
-              'frequency': 'manual',
-              'notes': 'dummy',
-              'owner_org': 'dummy',
-              'modified': datetime.now(),
-              'publisher_identifier': 'dummy',
-              'guid': unicode(uuid.uuid4()),
-              'identifier': name}
-        
-        package_data = helpers.call_action('package_create', context=context, **package_dict)
-        return package_data
 
     def setUp(self):
         helpers.reset_db()

@@ -3,14 +3,7 @@ import json
 import logging
 
 from ConfigParser import SafeConfigParser as ConfigParser
-from ckan import model
-import ckan.plugins as p
-from ckan.model.meta import Session
 from ckan.lib.base import config
-from paste.deploy.converters import asbool
-
-from ckanext.harvest.queue import get_harvester
-from ckanext.dcat.interfaces import IDCATRDFHarvester
 
 
 log = logging.getLogger(__name__)
@@ -85,57 +78,6 @@ def _get_new_themes(themes, map_data, add_existing=True):
         return
     return new_themes
 
-
-def _save_theme_mapping(context, dataset_dict, to_themes):
-    dataset_dict['theme'] = to_themes
-    dataset_dict['extras'] = [v for v in dataset_dict['extras'] if v['key'] != 'theme']
-
-    p.toolkit.get_action('package_patch')(context, dataset_dict) 
-
-
-def map_nonconformant_themes(context, dataset_dict):
-    """
-    Change themes assigned to dataset based on available mapping.
-    """
-
-    if not context:
-        # really bad default
-        user_name = 'harvester'
-
-        context = {
-            'model': model,
-            'session': Session,
-            'user': user_name,
-            'ignore_auth': True,
-        }
-
-    themes_data = _load_mapping_data()
-    if not themes_data:
-        return
-
-    # get package with themes
-    # dataset_dict = p.toolkit.get_action('package_show')(context, {'id': dataset_dict['id']})
-
-    # collect all themes
-    dtheme = dataset_dict.get('theme') or ''
-    dthemes = [item for item in dtheme.strip('{}').split(',') if item]
-    for e in (dataset_dict.get('extras') or []):
-        if e['key'] == 'theme':
-            if isinstance(e['value'], list):
-                dthemes.extend(e['value'])
-            else:
-                dthemes.extend([item for item in e['value'].strip('{}').split(',') if item])
-
-    new_themes = _get_new_themes(dthemes, themes_data, add_existing=True)
-    if not new_themes:
-        return
-
-    # context may come from create call. we'll save it, use default update schema, and restore
-    # this one later
-    schema = context.pop('schema', None)
-    _save_theme_mapping(context, dataset_dict, new_themes)
-    context['schema'] = schema
-
 def map_nonconformant_groups(harvest_object):
     """
     Adds themes to fetched data
@@ -143,13 +85,6 @@ def map_nonconformant_groups(harvest_object):
     themes_data = _load_mapping_data()
     if not themes_data:
         return
-
-    harvester = get_harvester(harvest_object.source.type)
-    try:
-        user_name = harvester._get_user_name()
-    except AttributeError:
-        # really bad default
-        user_name = 'harvester'
 
     data = json.loads(harvest_object.content)
     _groups = data.get('groups')
