@@ -1,7 +1,8 @@
 import os
 import logging
 from ConfigParser import SafeConfigParser as ConfigParser
-from paste.deploy.converters import asbool
+
+from ckan.plugins import toolkit
 
 from ckan.lib.base import config
 from ckan.model import Session, repo
@@ -88,6 +89,16 @@ def _add_groups(package, groups):
     for g in groups:
         if g.id is None:
             raise ValueError("No id in group %s" % g)
+
+        q = Session.query(Member).filter_by(state='active',
+                                           table_id=package.id,
+                                           group_id=g.id,
+                                           table_name='package')
+        # this group is already added to package, skipping
+        # note: this will work with groups flushed to db
+        if Session.query(q.exists()).scalar():
+            continue
+        
         member = Member(state='active',
                         table_id=package.id,
                         group_id=g.id,
@@ -109,7 +120,7 @@ def _get_group_from_session(gname):
                 return obj
 
 
-def populate_theme_groups(instance, clean_existing=False, add_new=False):
+def populate_theme_groups(instance, clean_existing=False):
     """
     For given instance, it finds groups from mapping corresponding to
     Dataset's themes, and will assign dataset to those groups.
@@ -120,7 +131,7 @@ def populate_theme_groups(instance, clean_existing=False, add_new=False):
     configuration option. If it's set to true, and mapped group doesn't exist,
     new group will be created.
     """
-    add_new = asbool(config.get(DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS))
+    add_new = toolkit.asbool(config.get(DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS))
     themes = instance.extras.get('theme')
     if not themes:
         log.debug("no theme from %s", instance)
@@ -142,20 +153,24 @@ def populate_theme_groups(instance, clean_existing=False, add_new=False):
         _clean_groups(instance)
     groups = []
     for gname in all_groups:
-        group =  Group.get(gname) or _get_group_from_session(gname)
+        gname = gname.strip()
+        if not gname:
+            continue
+        group = Group.get(gname) or _get_group_from_session(gname)
         if add_new and group is None:
             group = Group(name=gname)
             Session.add(group)
         if group:
             groups.append(group)
+    
     if Session.new:
         # flush to db, refresh with ids
         Session.flush()
         Session.revision = repo.new_revision()
         groups = [(Group.get(g.name) if g.id is None else g) for g in groups]
-    _add_groups(instance, groups)
+    _add_groups(instance, set(groups))
 
-    return groups
+    return set(groups)
 
 
 def import_theme_to_group(fname):

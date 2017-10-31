@@ -204,6 +204,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
         expected_groups_existing = ['existing-group']
         expected_groups_new = expected_groups_existing + ['somegroup1', 'somegroup2']
+        expected_groups_multi = expected_groups_new + ['othergroup']
 
         package_dict.pop('extras', None)
         p = Package.get(package_data['id'])
@@ -232,6 +233,35 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         p = Package.get(package_data['id'])
         groups = [g.name for g in p.get_groups() if not g.is_organization]
 
+        assert len(expected_groups_new) == len(groups), (expected_groups_new, 'vs', groups,)
         assert set(expected_groups_new) == set(groups), (expected_groups_new, 'vs', groups,)
+
+        package_dict['theme'] = ['non-mappable', 'thememap1', 'thememap-multi']
+        package_data = call_action('package_update', context=context, **package_dict)
+
+        meta.Session.flush()
+        meta.Session.revision = repo.new_revision()
+
+        # recheck - there should be no duplicates
+        p = Package.get(package_data['id'])
+        groups = [g.name for g in p.get_groups() if not g.is_organization]
+
+        assert len(expected_groups_multi) == len(groups), (expected_groups_multi, 'vs', groups,)
+        assert set(expected_groups_multi) == set(groups), (expected_groups_multi, 'vs', groups,)
+
+        package_data = call_action('package_update', context=context, **package_dict)
+
+        meta.Session.flush()
+        meta.Session.revision = repo.new_revision()
+
+        # recheck - there still should be no duplicates
+        p = Package.get(package_data['id'])
+        groups = [g.name for g in p.get_groups() if not g.is_organization]
+
+        assert len(expected_groups_multi) == len(groups), (expected_groups_multi, 'vs', groups,)
+        assert set(expected_groups_multi) == set(groups), (expected_groups_multi, 'vs', groups,)
+
+
+
 
         meta.Session.rollback()
