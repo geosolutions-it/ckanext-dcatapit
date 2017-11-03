@@ -1,4 +1,5 @@
 
+
 import logging
 import re
 
@@ -216,4 +217,3 @@ class DCATAPITCommands(CkanCommand):
                 interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
 
         print 'Vocabulary successfully loaded ({0})'.format(vocab_name)
-

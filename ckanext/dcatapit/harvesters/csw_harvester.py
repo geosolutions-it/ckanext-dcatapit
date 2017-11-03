@@ -130,23 +130,6 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
             self._dcatapit_config.get('controlled_vocabularies'))
         agents = dcatapit_config.get('agents', self._dcatapit_config.get('agents'))
 
-        #
-        # Increase the tag name max length limit to 100 as set at DB level (instead 50 as did by the ckanext-spatial)
-        #
-        tags = []
-        if 'tags' in iso_values:
-            for tag in iso_values['tags']:
-                tag = tag[:100] if len(tag) > 100 else tag
-                tags.append({'name': tag})
-
-        # Add default_tags from config
-        default_tags = self.source_config.get('default_tags',[])
-        if default_tags:
-           for tag in default_tags:
-              tags.append({'name': tag})
-
-        package_dict['tags'] = tags
-
         # ------------------------------#
         #    MANDATORY FOR DCAT-AP_IT   #
         # ------------------------------#
