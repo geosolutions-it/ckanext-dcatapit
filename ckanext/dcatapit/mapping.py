@@ -105,7 +105,13 @@ def map_nonconformant_groups(harvest_object):
         extra.append(tdata)
     data['extras'] = extra
     harvest_object.content = json.dumps(data)
-    harvest_object.save()
+    Session.add(harvest_object)
+    try:
+        rev = Session.revision
+    except AttributeError:
+        rev = None
+    Session.flush()
+    Session.revision = rev
     
 
 """
