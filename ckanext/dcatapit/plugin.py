@@ -512,15 +512,10 @@ class DCATAPITGroupMapper(plugins.SingletonPlugin):
     plugins.implements(plugins.IPackageController, inherit=True)
 
     def after_create(self, context, pkg_dict):
-        instance_id = pkg_dict['id']
-        instance = Package.get(instance_id)
-        if instance is not None:
-            populate_theme_groups(instance)
+        return populate_theme_groups(pkg_dict)
 
     def after_update(self, context, pkg_dict):
-        instance = context.get('package')
-        if instance is not None:
-            populate_theme_groups(instance)
+        return populate_theme_groups(pkg_dict)
 
 
 class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):

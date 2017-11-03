@@ -82,7 +82,7 @@ def _clean_groups(package):
                          .update({'state':'deleted'})
 
 
-def _add_groups(package, groups):
+def _add_groups(package_id, groups):
     """
     Adds groups to package
     """
@@ -91,7 +91,7 @@ def _add_groups(package, groups):
             raise ValueError("No id in group %s" % g)
 
         q = Session.query(Member).filter_by(state='active',
-                                           table_id=package.id,
+                                           table_id=package_id,
                                            group_id=g.id,
                                            table_name='package')
         # this group is already added to package, skipping
@@ -100,7 +100,7 @@ def _add_groups(package, groups):
             continue
         
         member = Member(state='active',
-                        table_id=package.id,
+                        table_id=package_id,
                         group_id=g.id,
                         table_name='package')
         Session.add(member)
@@ -132,14 +132,23 @@ def populate_theme_groups(instance, clean_existing=False):
     new group will be created.
     """
     add_new = toolkit.asbool(config.get(DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS))
-    themes = instance.extras.get('theme')
+    themes = []
+    for ex in instance['extras']:
+        if ex['key'] == 'theme':
+            _t = ex['value']
+            if isinstance(_t, list):
+                themes.extend(_t)
+            else:
+                themes.append([theme for theme in _t.strip('{}').split(',') if theme])
+
+    #themes = instance.extras.get('theme')
     if not themes:
         log.debug("no theme from %s", instance)
-        return
+        return instance
     theme_map = get_theme_to_groups()
     if not theme_map:
         log.warning("Theme to group map is empty")
-        return
+        return instance
     if not isinstance(themes, list):
         themes = [themes]
     all_groups = set()
@@ -168,9 +177,12 @@ def populate_theme_groups(instance, clean_existing=False):
         Session.flush()
         Session.revision = repo.new_revision()
         groups = [(Group.get(g.name) if g.id is None else g) for g in groups]
-    _add_groups(instance, set(groups))
+    
+    _add_groups(instance['id'], set(groups))
+    Session.flush()
+    Session.revision = repo.new_revision()
 
-    return set(groups)
+    return instance
 
 
 def import_theme_to_group(fname):
