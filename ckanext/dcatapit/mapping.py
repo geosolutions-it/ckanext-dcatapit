@@ -139,7 +139,7 @@ def populate_theme_groups(instance, clean_existing=False):
             if isinstance(_t, list):
                 themes.extend(_t)
             else:
-                themes.append([theme for theme in _t.strip('{}').split(',') if theme])
+                themes.extend([theme for theme in _t.strip('{}').split(',') if theme])
 
     #themes = instance.extras.get('theme')
     if not themes:
@@ -174,13 +174,17 @@ def populate_theme_groups(instance, clean_existing=False):
     
     if Session.new:
         # flush to db, refresh with ids
+        rev = Session.revision
         Session.flush()
-        Session.revision = repo.new_revision()
+        Session.revision = rev
         groups = [(Group.get(g.name) if g.id is None else g) for g in groups]
     
     _add_groups(instance['id'], set(groups))
+    
+    # preserve revision, since it's not a commit yet
+    rev = Session.revision
     Session.flush()
-    Session.revision = repo.new_revision()
+    Session.revision = rev
 
     return instance
 
