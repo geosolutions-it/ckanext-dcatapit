@@ -16,6 +16,9 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
     def before_download(self, url, harvest_job):
         return url, []
 
+    def update_session(self, session):
+        return session
+
     def after_download(self, content, harvest_job):
         return content, []
 
