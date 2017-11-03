@@ -15,6 +15,13 @@ DCATAPIT_THEMES_MAP = 'ckanext.dcatapit.nonconformant_themes_mapping.file'
 DCATAPIT_THEMES_MAP_SECTION = 'terms_theme_mapping'
 
 
+def _encode_list(items):
+    if items and len(items)> 1:
+        return '{{{}}}'.format(','.join(items))
+    if isinstance(items, list):
+        return items[0]
+    return items or ''
+
 def _map_themes_json(fdesc):
     data = json.load(fdesc)
     out = {}
@@ -98,10 +105,19 @@ def map_nonconformant_groups(harvest_object):
     groups.extend([g['display_name'] for g in _groups])
 
     new_themes = _get_new_themes(groups, themes_data, add_existing=False)
+    if not new_themes:
+        return
+    
+    tdata = {'key': 'theme', 'value': _encode_list(new_themes)}
+    existing = False
     extra = data.get('extras') or []
-    for t in new_themes:
-        tdata = {'key': 'theme', 'value': t}
-        #if extra and not tdata in extra:
+    for eitem in extra:
+        if eitem['key'] == 'theme':
+            existing = True
+            eitem['value'] = tdata['value']
+            break
+    
+    if not existing:
         extra.append(tdata)
     data['extras'] = extra
     harvest_object.content = json.dumps(data)
