@@ -65,12 +65,13 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
     
     `pip install -e .`
 
-6. Add ``dcatapit_pkg`` and ``dcatapit_org`` and ``dcatapit_config`` to the ``ckan.plugins`` setting in your CKAN
-   config file (by default the config file is located at ``/etc/ckan/default/production.ini``).
+6. Add the required plugins to the ``ckan.plugins`` setting in your CKAN config file 
+  (by default the config file is located at ``/etc/ckan/default/production.ini``).
 
-   * **dcatapit_pkg**: extends the package schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
-   * **dcatapit_org**: extends the organization schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
-   * **dcatapit_config**: extends the admin configuration schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
+   * `dcatapit_pkg`: extends the package schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
+   * `dcatapit_org`: extends the organization schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
+   * `dcatapit_config`: extends the admin configuration schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
+   * `dcatapit_subcatalog_facets`: when the property `ckanext.dcat.expose_subcatalogs` is set to `True` (see *transitive harvesting* in ckanext-dcat), this plugin will add a facet containing the harvested subcatalogs.
 
     The ckanext-dcatapit allows to localize the package fields (eg. title, description etc.) according to the schema definition, but to
     do that requires the ckanext-multilang installed.

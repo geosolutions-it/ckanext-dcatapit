@@ -521,3 +521,17 @@ class DCATAPITGroupMapper(plugins.SingletonPlugin):
         instance = context.get('package')
         if instance is not None:
             populate_theme_groups(instance)
+
+
+class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
+
+    plugins.implements(plugins.IFacets, inherit=True)
+
+    if plugins.toolkit.check_ckan_version(min_version='2.5.0'):
+        plugins.implements(plugins.ITranslation, inherit=True)
+
+    # IFacets
+    def dataset_facets(self, facets_dict, package_type):
+        facets_dict['source_catalog_title'] = plugins.toolkit._("Sources")
+        return facets_dict
+
