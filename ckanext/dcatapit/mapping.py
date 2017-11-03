@@ -107,8 +107,10 @@ def map_nonconformant_groups(harvest_object):
     new_themes = _get_new_themes(groups, themes_data, add_existing=False)
     if not new_themes:
         return
-    
-    tdata = {'key': 'theme', 'value': _encode_list(new_themes)}
+
+    # ensure themes are upper-case, otherwise will be discarded
+    # by validators
+    tdata = {'key': 'theme', 'value': _encode_list(new_themes).upper()}
     existing = False
     extra = data.get('extras') or []
     for eitem in extra:
@@ -120,6 +122,8 @@ def map_nonconformant_groups(harvest_object):
     if not existing:
         extra.append(tdata)
     data['extras'] = extra
+    data['theme'] = tdata['value']
+
     harvest_object.content = json.dumps(data)
     Session.add(harvest_object)
     try:
