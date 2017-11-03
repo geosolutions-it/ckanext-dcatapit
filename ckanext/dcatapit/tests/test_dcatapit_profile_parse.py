@@ -139,6 +139,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
     def test_mapping(self):
 
+        assert 'dcatapit_theme_group_mapper' in config['ckan.plugins'], "No dcatapit_theme_group_mapper plugin in config"
         contents = self._get_file_contents('dataset.rdf')
 
         p = RDFParser(profiles=['it_dcat_ap'])
@@ -150,20 +151,24 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
 
         user = User.get('dummy')
+        
         if not user:
-           user = call_action('user_create',
+            user = call_action('user_create',
                                name='dummy',
                                password='dummy',
                                email='dummy@dummy.com')
+            user_name = user['name']
+        else:
+            user_name = user.name
         org = Group.by_name('dummy')
         if org is None:
             org  = call_action('organization_create',
-                                context={'user': user.name},
+                                context={'user': user_name},
                                 name='dummy')
         existing_g = Group.by_name('existing-group')
         if existing_g is None:
             existing_g  = call_action('group_create',
-                                      context={'user': user.name},
+                                      context={'user': user_name},
                                       name='existing-group')
 
         context = {'user': 'dummy', 'defer_commit': True}
@@ -181,6 +186,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
               'owner_org': 'dummy',
               'modified': datetime.now(),
               'publisher_identifier': 'dummy',
+              'metadata_created' : datetime.now(),
               'guid': unicode(uuid.uuid4),
               'identifier': 'dummy'}
         
@@ -209,6 +215,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         package_dict.pop('extras', None)
         p = Package.get(package_data['id'])
         context['package'] = p 
+
         package_data = call_action('package_update', context=context, **package_dict)
         
         meta.Session.flush()
