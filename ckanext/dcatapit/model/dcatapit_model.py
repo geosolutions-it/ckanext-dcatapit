@@ -1,17 +1,11 @@
-
-import sys
 import logging
 
 from sqlalchemy import types, Column, Table, ForeignKey
-from sqlalchemy import orm
 
-from ckan.lib.base import config
-from ckan import model
 from ckan.model import Session
 from ckan.model import meta
 from ckan.model.domain_object import DomainObject
 
-from ckan import model
 
 log = logging.getLogger(__name__)
 
@@ -24,6 +18,7 @@ dcatapit_vocabulary_table = Table('dcatapit_vocabulary', meta.metadata,
     Column('lang', types.UnicodeText, nullable=False, index=True),
     Column('text', types.UnicodeText, nullable=False, index=True))
 
+
 def setup():
     log.debug('DCAT_AP-IT tables defined in memory')
 
@@ -31,7 +26,7 @@ def setup():
     if not dcatapit_vocabulary_table.exists():
         try:
             dcatapit_vocabulary_table.create()
-        except Exception,e:
+        except Exception, e:
             # Make sure the table does not remain incorrectly created
             if dcatapit_vocabulary_table.exists():
                 Session.execute('DROP TABLE dcatapit_vocabulary')
@@ -42,6 +37,7 @@ def setup():
         log.info('DCATAPIT Tag Vocabulary table created')
     else:
         log.info('DCATAPIT Tag Vocabulary table already exist')
+
 
 class DCATAPITTagVocabulary(DomainObject):
     def __init__(self, tag_id=None, tag_name=None, lang=None, text=None):
@@ -93,4 +89,7 @@ class DCATAPITTagVocabulary(DomainObject):
             log.error('Exception occurred while persisting DB objects: %s', e)
             raise
 
+
 meta.mapper(DCATAPITTagVocabulary, dcatapit_vocabulary_table)
+
+

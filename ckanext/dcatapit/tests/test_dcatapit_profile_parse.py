@@ -1,19 +1,31 @@
 import os
+import uuid
 import json
 from datetime import datetime
 import uuid
 
 import nose
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 
 from rdflib import Graph, URIRef, BNode, Literal
 from rdflib.namespace import RDF
 
+
 from ckan.model.meta import Session
-from ckan.model import repo
 from ckan.model import User, Group
 from ckan.plugins import toolkit
 from ckan.lib.base import config
 from ckan.logic import schema
+
+from ckan.tests.helpers import call_action
+from ckan.model import meta, repo
+from ckan.model.user import User
+from ckan.model.group import Group
+from ckan.model.package import Package
+
 
 try:
     from ckan.tests import helpers
@@ -22,10 +34,13 @@ except ImportError:
 
 from ckanext.dcat.processors import RDFParser
 from ckanext.dcatapit.dcat.profiles import (DCATAPIT)
-from ckanext.dcatapit.mapping import DCATAPIT_THEMES_MAP, map_nonconformant_groups
 
+from ckanext.dcatapit.mapping import DCATAPIT_THEMES_MAP, map_nonconformant_groups
+from ckanext.dcatapit.mapping import DCATAPIT_THEME_TO_MAPPING_SOURCE, DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS
 from ckanext.dcatapit.harvesters.ckanharvester import CKANMappingHarvester
 from ckanext.harvest.model import HarvestObject
+
+from ckanext.dcatapit.plugin import DCATAPITGroupMapper
 
 
 eq_ = nose.tools.eq_
@@ -133,6 +148,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         eq_(multilang_title['it'], u'Dataset di test DCAT_AP-IT')
         eq_(multilang_title['en_GB'], u'DCAT_AP-IT test dataset')
 
+
     def test_groups_to_themes_mapping(self):
         config[DCATAPIT_THEMES_MAP] = os.path.join(os.path.dirname(__file__), 
                                                    '..', 
@@ -209,3 +225,136 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
     def tearDown(self):
         Session.rollback()
+
+    def test_mapping(self):
+
+        assert 'dcatapit_theme_group_mapper' in config['ckan.plugins'], "No dcatapit_theme_group_mapper plugin in config"
+        contents = self._get_file_contents('dataset.rdf')
+
+        p = RDFParser(profiles=['it_dcat_ap'])
+
+        p.parse(contents)
+        datasets = [d for d in p.datasets()]
+        eq_(len(datasets), 1)
+        package_dict = datasets[0]
+
+
+        user = User.get('dummy')
+        
+        if not user:
+            user = call_action('user_create',
+                               name='dummy',
+                               password='dummy',
+                               email='dummy@dummy.com')
+            user_name = user['name']
+        else:
+            user_name = user.name
+        org = Group.by_name('dummy')
+        if org is None:
+            org  = call_action('organization_create',
+                                context={'user': user_name},
+                                name='dummy')
+        existing_g = Group.by_name('existing-group')
+        if existing_g is None:
+            existing_g  = call_action('group_create',
+                                      context={'user': user_name},
+                                      name='existing-group')
+
+        context = {'user': 'dummy', 'defer_commit': True}
+        package_schema = schema.default_create_package_schema()
+        context['schema'] = package_schema
+        _p = {'frequency': 'manual',
+              'publisher_name': 'dummy',
+              'extras': [{'key':'theme', 'value':['non-mappable', 'thememap1']}],
+              'groups': [],
+              'title': 'dummy',
+              'holder_name': 'dummy',
+              'holder_identifier': 'dummy',
+              'name': 'dummy',
+              'notes': 'dummy',
+              'owner_org': 'dummy',
+              'modified': datetime.now(),
+              'publisher_identifier': 'dummy',
+              'metadata_created' : datetime.now(),
+              'guid': unicode(uuid.uuid4),
+              'identifier': 'dummy'}
+        
+        package_dict.update(_p)
+        config[DCATAPIT_THEME_TO_MAPPING_SOURCE] = ''
+        package_data = call_action('package_create', context=context, **package_dict)
+
+        p = Package.get(package_data['id'])
+
+        # no groups should be assigned at this point (no map applied)
+        assert {'theme': ['non-mappable', 'thememap1']} == p.extras, (_p['extras'], 'vs', p.extras,)
+        assert [] == p.get_groups()
+
+        package_data = call_action('package_show', context=context, id=package_data['id'])
+
+        # use test mapping, which replaces thememap1 to thememap2 and thememap3
+        test_map_file = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'examples', 'test_map.ini')
+        config[DCATAPIT_THEME_TO_MAPPING_SOURCE] = test_map_file
+
+        package_dict['theme'] = ['non-mappable', 'thememap1']
+
+        expected_groups_existing = ['existing-group']
+        expected_groups_new = expected_groups_existing + ['somegroup1', 'somegroup2']
+        expected_groups_multi = expected_groups_new + ['othergroup']
+
+        package_dict.pop('extras', None)
+        p = Package.get(package_data['id'])
+        context['package'] = p 
+
+        package_data = call_action('package_update', context=context, **package_dict)
+        
+        meta.Session.flush()
+        meta.Session.revision = repo.new_revision()
+
+        # check - only existing group should be assigned
+        p = Package.get(package_data['id'])
+        groups = [g.name for g in p.get_groups() if not g.is_organization]
+        assert expected_groups_existing == groups, (expected_groups_existing, 'vs', groups,)
+
+        config[DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS] = 'true'
+
+
+        package_dict['theme'] = ['non-mappable', 'thememap1']
+        package_data = call_action('package_update', context=context, **package_dict)
+
+
+        meta.Session.flush()
+        meta.Session.revision = repo.new_revision()
+
+        # recheck - this time, new groups should appear
+        p = Package.get(package_data['id'])
+        groups = [g.name for g in p.get_groups() if not g.is_organization]
+
+        assert len(expected_groups_new) == len(groups), (expected_groups_new, 'vs', groups,)
+        assert set(expected_groups_new) == set(groups), (expected_groups_new, 'vs', groups,)
+
+        package_dict['theme'] = ['non-mappable', 'thememap1', 'thememap-multi']
+        package_data = call_action('package_update', context=context, **package_dict)
+
+        meta.Session.flush()
+        meta.Session.revision = repo.new_revision()
+
+        # recheck - there should be no duplicates
+        p = Package.get(package_data['id'])
+        groups = [g.name for g in p.get_groups() if not g.is_organization]
+
+        assert len(expected_groups_multi) == len(groups), (expected_groups_multi, 'vs', groups,)
+        assert set(expected_groups_multi) == set(groups), (expected_groups_multi, 'vs', groups,)
+
+        package_data = call_action('package_update', context=context, **package_dict)
+
+        meta.Session.flush()
+        meta.Session.revision = repo.new_revision()
+
+        # recheck - there still should be no duplicates
+        p = Package.get(package_data['id'])
+        groups = [g.name for g in p.get_groups() if not g.is_organization]
+
+        assert len(expected_groups_multi) == len(groups), (expected_groups_multi, 'vs', groups,)
+        assert set(expected_groups_multi) == set(groups), (expected_groups_multi, 'vs', groups,)
+
+        meta.Session.rollback()

@@ -10,7 +10,11 @@ import ckanext.dcatapit.validators as validators
 import ckanext.dcatapit.schema as dcatapit_schema
 import ckanext.dcatapit.helpers as helpers
 import ckanext.dcatapit.interfaces as interfaces
-from ckanext.dcatapit.dcat.harvester import map_nonconformant_groups
+from   ckanext.dcatapit.dcat.harvester import map_nonconformant_groups
+from   ckanext.dcatapit.mapping import populate_theme_groups
+
+from ckan.model.package import Package
+from ckan.model import Session, repo
 
 from routes.mapper import SubMapper, Mapper as _Mapper
 
@@ -236,7 +240,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         lang = interfaces.get_language()
         otype = pkg_dict.get('type')
 
-        if lang and otype == 'dataset':    
+        if lang and otype == 'dataset':
             for extra in pkg_dict.get('extras'):
                 for field in dcatapit_schema.get_custom_package_schema():
 
@@ -252,6 +256,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                             log.debug(':::::::::::::::Localizing custom schema field: %r', field['name'])
                             # Create the localized field record
                             self.create_loc_field(extra, lang, pkg_dict.get('id'))
+            
 
     def after_update(self, context, pkg_dict):
         # During the harvest the get_lang() is not defined
@@ -267,6 +272,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                             self.update_loc_field(extra, pkg_dict.get('id'), couple, lang)
                     else:
                         self.update_loc_field(extra, pkg_dict.get('id'), field, lang)
+
 
     def after_search(self, search_results, search_params):
         ## ##################################################################### 
@@ -503,9 +509,21 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
         }
 
 
+class DCATAPITGroupMapper(plugins.SingletonPlugin):
+
+    plugins.implements(plugins.IPackageController, inherit=True)
+
+    def after_create(self, context, pkg_dict):
+        return populate_theme_groups(pkg_dict)
+
+    def after_update(self, context, pkg_dict):
+        return populate_theme_groups(pkg_dict)
+
+
 class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
-    
+
     plugins.implements(plugins.IFacets, inherit=True)
+
     if plugins.toolkit.check_ckan_version(min_version='2.5.0'):
         plugins.implements(plugins.ITranslation, inherit=True)
 
@@ -513,3 +531,4 @@ class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
     def dataset_facets(self, facets_dict, package_type):
         facets_dict['source_catalog_title'] = plugins.toolkit._("Sources")
         return facets_dict
+
