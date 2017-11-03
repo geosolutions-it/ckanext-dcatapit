@@ -5,6 +5,7 @@ import re
 
 import ckan.plugins.toolkit as toolkit
 import ckanext.dcatapit.interfaces as interfaces
+from ckanext.dcatapit.model.license import load_from_graph as load_licenses_from_graph
 
 from pylons import config
 from ckan.lib.cli import CkanCommand
@@ -18,6 +19,7 @@ EUROPEAN_THEME_NAME = 'eu_themes'
 LOCATIONS_THEME_NAME = 'places'
 FREQUENCIES_THEME_NAME = 'frequencies'
 FILETYPE_THEME_NAME = 'filetype'
+LICENSES_NAME = 'licenses'
 
 log = logging.getLogger(__name__)
 
@@ -31,7 +33,7 @@ class DCATAPITCommands(CkanCommand):
      Where:
        URL  is the url to a SKOS document
        FILE is the local path to a SKOS document
-       NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies)
+       NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies, licenses)
        Where the corresponding rdf are:
           languages   -> http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf
           eu_themes   -> http://publications.europa.eu/mdr/resource/authority/data-theme/skos/data-theme-skos.rdf
@@ -62,7 +64,7 @@ class DCATAPITCommands(CkanCommand):
         'es': 'SPA'
     }
 
-    _controlled_vocabularies_allowed = [EUROPEAN_THEME_NAME, LOCATIONS_THEME_NAME, LANGUAGE_THEME_NAME, FREQUENCIES_THEME_NAME, FILETYPE_THEME_NAME]
+    _controlled_vocabularies_allowed = [EUROPEAN_THEME_NAME, LOCATIONS_THEME_NAME, LANGUAGE_THEME_NAME, FREQUENCIES_THEME_NAME, FILETYPE_THEME_NAME, LICENSES_NAME]
 
     def __init__(self, name):
         self.parser.add_option('--filename', dest='filename', default=None,
@@ -91,8 +93,9 @@ class DCATAPITCommands(CkanCommand):
             return
 
     def initdb(self):
-        from ckanext.dcatapit.model import setup as db_setup
+        from ckanext.dcatapit.model import setup as db_setup, setup_license_models
         db_setup()
+        setup_license_models()
 
     def load(self):
         ##
@@ -117,6 +120,10 @@ class DCATAPITCommands(CkanCommand):
             print "ERROR: Incorrect vocabulary name, only one of these values are allowed: {0}".format(self._controlled_vocabularies_allowed)
             print self.usage
             return
+        
+        if vocab_name == LICENSES_NAME:
+            return load_licenses_from_graph(filename, url)
+
 
         if vocab_name == LANGUAGE_THEME_NAME:
             ckan_offered_languages = config.get('ckan.locales_offered', []).split(' ')
