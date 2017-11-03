@@ -6,8 +6,6 @@ from ckan import lib
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 
-import ckan.plugins as plugins
-
 import ckanext.dcatapit.validators as validators
 import ckanext.dcatapit.schema as dcatapit_schema
 import ckanext.dcatapit.helpers as helpers
@@ -503,3 +501,15 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
         return {
             'get_dcatapit_configuration_schema': helpers.get_dcatapit_configuration_schema
         }
+
+
+class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
+    
+    plugins.implements(plugins.IFacets, inherit=True)
+    if plugins.toolkit.check_ckan_version(min_version='2.5.0'):
+        plugins.implements(plugins.ITranslation, inherit=True)
+
+    # IFacets
+    def dataset_facets(self, facets_dict, package_type):
+        facets_dict['source_catalog_title'] = plugins.toolkit._("Sources")
+        return facets_dict
