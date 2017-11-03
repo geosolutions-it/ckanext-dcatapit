@@ -230,7 +230,7 @@ def populate_theme_groups(instance, clean_existing=False):
     """
     add_new = toolkit.asbool(config.get(DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS))
     themes = []
-    for ex in instance['extras']:
+    for ex in (instance.get('extras') or []):
         if ex['key'] == 'theme':
             _t = ex['value']
             if isinstance(_t, list):
