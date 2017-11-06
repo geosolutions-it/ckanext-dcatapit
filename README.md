@@ -51,6 +51,9 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
 
 2. (**Optional**) Install the **ckanext-spatial** extension as described [here](https://github.com/ckan/ckanext-spatial). Install this extension only if you need to use the dcatapit CSW harvester (see below).
 
+2. (**Optional but recommended**) The ckanext-dcatapit extension allows to localize the package fields (eg. title,
+   description etc.) according to the schema definition, but to do that it requires the **ckanext-multilang** installed.
+
 3. Install the **ckanext-dcat** extension as described [here](https://github.com/ckan/ckanext-dcat/blob/master/README.md#installation).
 
 4. Activate your CKAN virtual environment, for example:
@@ -68,23 +71,34 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
 6. Add the required plugins to the ``ckan.plugins`` setting in your CKAN config file 
   (by default the config file is located at ``/etc/ckan/default/production.ini``).
 
-   * `dcatapit_pkg`: extends the package schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
-   * `dcatapit_org`: extends the organization schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
-   * `dcatapit_config`: extends the admin configuration schema allowing to edit and visualize extra fields according to the DCAT_AP-IT specs.
-   * `dcatapit_subcatalog_facets`: when the property `ckanext.dcat.expose_subcatalogs` is set to `True` (see *transitive harvesting* in ckanext-dcat), this plugin will add a facet containing the harvested subcatalogs.
+   * `dcatapit_pkg`: extends the package schema allowing to edit and visualize extra fields according to 
+     the DCAT_AP-IT specs.
+   * `dcatapit_org`: extends the organization schema allowing to edit and visualize extra fields according to 
+     the DCAT_AP-IT specs.
+   * `dcatapit_config`: extends the admin configuration schema allowing to edit and visualize extra fields according to 
+     the DCAT_AP-IT specs.
+   * `dcatapit_subcatalog_facets`: when the property `ckanext.dcat.expose_subcatalogs` is set to `True` 
+     (see *transitive harvesting* in ckanext-dcat), this plugin will add a facet containing the harvested subcatalogs.
    * `dcatapit_theme_group_mapper`: binds automatically a dataset to groups according to the themes in the dataset. 
-      In the configuration file you'll need to specify a file containing the mapping between the themes and the groups:
+     In the configuration file you'll need to specify a file containing the mapping between the themes and the groups:
       
-        `ckanext.dcatapit.theme_group_mapping.file=/path/to/your/file.ini`
+         ckanext.dcatapit.theme_group_mapping.file=/path/to/your/file.ini
       
-      The mapping ini file should have a section named `dcatapit:theme_group_mapping` and shall contain lines in the form:
+     The mapping ini file should have a section named `dcatapit:theme_group_mapping` and shall contain lines in the form:
       
-        `theme_key = group1 [, group2 ...]`
+         theme_key = group1 [, group2 ...]
+
+   * `dcatapit_ckan_harvester`: a CKAN harvester that binds remote CKAN groups into local themes; that is, given a local
+      group/themes mapping, if an harvested dataset belongs to a given remote group, the mapped themes will locally be added
+      to the harvested dataset.
+      You'll have to define the property:
+      
+         ckanext.dcatapit.nonconformant_themes_mapping.file = /path/to/your/group_to_theme_file
 	 
-
-    The ckanext-dcatapit allows to localize the package fields (eg. title, description etc.) according to the schema definition, but to
-    do that requires the ckanext-multilang installed.
-
+      The plugin will accept both json and ini file. The use of the file at
+          https://www.dati.gov.it/datigov/taxonomy/synonyms/topics.json
+      is strongly recommended.
+ 
 7. In order to enable also the RDF harvester add ``dcatapit_harvester`` to the ``ckan.plugins`` setting in your CKAN. 
 The ckanext-dcatapit RDF harvester also harvests localized fields in multiple languages, but to do that requires the ckanext-multilang installed.
 
