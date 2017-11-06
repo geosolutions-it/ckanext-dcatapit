@@ -22,41 +22,53 @@ __all__ = ['License', 'LocalizedLicenseName', 'setup_license_models']
 
 DeclarativeBase = declarative_base(metadata=meta.metadata)
 
-class License(DeclarativeBase):
+class _Base(object):
+
+    @classmethod
+    def q(cls):
+        """
+        Query object for current class
+        """
+        return Session.query(cls)
+
+class License(_Base, DeclarativeBase):
     __tablename__ = 'dcatapit_license'
     id = Column(types.Integer, primary_key=True)
-    license_type = Column(types.Unicode, nullable=False, unique=False)
+    license_type = Column(types.Unicode, nullable=True, unique=False)
     version = Column(types.Unicode, nullable=True)
     uri = Column(types.Unicode, nullable=False)
     rank_order = Column(types.Integer, nullable=False)
     default_name = Column(types.Unicode, nullable=False)
     parent_id = Column(types.Integer, ForeignKey('dcatapit_license.id'), nullable=True)
-
     parent = orm.relationship('License',
                               backref=orm.backref("children",
                                                   remote_side=[id]),
                               lazy=True)
-
-    def __str__(self):
-        return "License({}/{}: {})".format(self.license_type, self.version, self.default_name)
-
     
     @classmethod
     def get(cls, id_or_uri):
+        """
+        Get object for id or uri
+        """
         inst = None
         try:
-            inst = Session.query(cls).filter_by(id=int(id_or_uri)).first()
+            inst = cls.q().filter_by(id=int(id_or_uri)).first()
         except ValueError:
             pass
         if inst:
             return inst
-        return Session.query(cls).filter_by(uri=id_or_uri).first()
+        return cls.q().filter_by(uri=id_or_uri).first()
 
+    def __str__(self):
+        return "License({}/{}: {})".format(self.license_type, self.version, self.default_name)
 
     def set_parent(self, parent_uri):
+        """
+        Set parent for given license
+        """
         parent = License.get(parent_uri)
         if not parent:
-            return
+            raise ValueError("No parent %s object" % parent_uri)
         self.parent_id = parent.id
         Session.add(self)
         try:
@@ -66,6 +78,9 @@ class License(DeclarativeBase):
         Session.flush()
 
     def set_names(self, langs):
+        """
+        Set translated license names
+        """
 
         self.names = []
         for lang_name, label in langs.items():
@@ -91,6 +106,11 @@ class License(DeclarativeBase):
         Session.flush()
         Session.revision = rev
 
+
+    @classmethod
+    def for_license_uri(cls, uri, lang):
+        inst = cls.get(uri)
+        return inst.get_name(lang)
 
     @classmethod
     def from_data(cls, license_type, version, uri, rank_order, names, default_lang=None, parent=None):
@@ -121,12 +141,19 @@ class License(DeclarativeBase):
         Session.revision = rev
         return inst
 
+    @classmethod
     def for_select(cls, lang):
-        pass
-        
+        q = Session.query(cls.license_type, cls.uri, LocalizedLicenseName.label)\
+                   .join(LocalizedLicenseName)\
+                   .filter(LocalizedLicenseName.lang==lang,
+                           cls.rank_order > 1)\
+                   .order_by(cls.rank_order,
+                             cls.parent_id,
+                             cls.default_name)
+        return list(q)
 
 
-class LocalizedLicenseName(DeclarativeBase):
+class LocalizedLicenseName(_Base, DeclarativeBase):
     __tablename__ = 'dcatapit_localized_license_name'
     id = Column(types.Integer, primary_key=True)
     license_id = Column(types.Integer, ForeignKey(License.id))
@@ -167,11 +194,7 @@ namespaces = {
 }
 
 
-def load_from_graph(path=None, url=None):
-    """
-    Loads license tree into db from provided path or url
-
-    """
+def _get_graph(path=None, url=None):
     if (not path and not url) or (path and url):
         raise ValueError("You should provide either path or url")
     g = Graph()
@@ -182,19 +205,36 @@ def load_from_graph(path=None, url=None):
         g.parse(location=url)
     else:
         g.parse(source=path)
-    
-    License.clear()
 
+    return g
+
+def load_from_graph(path=None, url=None):
+    """
+    Loads license tree into db from provided path or url
+
+    """
+    g = _get_graph(path=path, url=url)
+    License.clear()
 
     for license in g.subjects(None, SKOS.Concept):
         rank_order = g.value(license, CLVAPIT.hasRankOrder)
-        license_type = g.value(license, DCT.type)
+        # 2nd level, we have exactMatch
+        license_type = g.value(license, SKOS.exactMatch)
+        if not license_type:
+            # 3rd level, need to go up
+            parent = g.value(license, SKOS.broader)
+            license_type = g.value(parent, SKOS.exactMatch)
 
         version = g.value(license, OWL.versionInfo)
         _labels = g.objects(license, SKOS.prefLabel)
         labels = dict((l.language, unicode(l),) for l in _labels)
         parent = None
-        l = License.from_data(unicode(license_type), str(version), str(license), int(str(rank_order)), labels, parent=parent)
+        l = License.from_data(unicode(license_type or ''),
+                              str(version),
+                              str(license),
+                              int(str(rank_order)),
+                              labels,
+                              parent=parent)
 
     for license in g.subjects(None, SKOS.Concept):
         parent = None
