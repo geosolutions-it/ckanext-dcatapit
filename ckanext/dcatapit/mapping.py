@@ -69,24 +69,24 @@ def _load_mapping_data():
         return map_data
 
 
-def _get_new_themes(themes, map_data, add_existing=True):
-    if not themes:
+def _get_new_themes(from_groups, map_data, add_existing=True):
+    if not from_groups:
         return
 
     new_themes = []
     # if theme is not in mapping list, keep it
     # otherwise, replace it with mapped themes
-    for theme in themes:
-        map_to = map_data.get(theme)
+    for group in from_groups:
+        map_to = map_data.get(group)
         if map_to:
             new_themes.extend(map_to)
         else:
             if add_existing:
-                new_themes.append(theme)
+                new_themes.append(group)
     # do not update if themes are the same
-    if set(themes) == set(new_themes):
+    if set(from_groups) == set(new_themes):
         return
-    return new_themes
+    return list(set(new_themes))
 
 def map_nonconformant_groups(harvest_object):
     """
