@@ -1,15 +1,138 @@
 import os
+import json
 import logging
+
 from ConfigParser import SafeConfigParser as ConfigParser
 
-from ckan.plugins import toolkit
-
 from ckan.lib.base import config
+from ckan.plugins import toolkit
 from ckan.model import Session, repo
 from ckan.model.group import Group, Member
 
-
 log = logging.getLogger(__name__)
+
+DCATAPIT_THEMES_MAP = 'ckanext.dcatapit.nonconformant_themes_mapping.file'
+DCATAPIT_THEMES_MAP_SECTION = 'terms_theme_mapping'
+
+
+def _encode_list(items):
+    if items and len(items)> 1:
+        return '{{{}}}'.format(','.join(items))
+    if isinstance(items, list):
+        return items[0]
+    return items or ''
+
+def _map_themes_json(fdesc):
+    data = json.load(fdesc)
+    out = {}
+    for map_item in data['data']:
+        map_to = map_item['syn'][0]
+        for syn in map_item['syn'][1:]:
+            try:
+                out[syn].append(map_to)
+            except KeyError:
+                out[syn] = [map_to]
+    return out
+
+
+def _map_themes_ini(fdesc):
+    c = ConfigParser()
+    c.readfp(fdesc)
+    out = {}
+    section_name = 'dcatapit:{}'.format(DCATAPIT_THEMES_MAP_SECTION)
+    for theme_in, themes_out in c.items(section_name, raw=True):
+        out[theme_in] = [t.strip() for t in themes_out.replace('\n', ',').split(',') if t.strip()]
+    return out
+
+
+def _load_mapping_data():
+    """
+    Retrives mapping data depending on configuration.
+
+    :returns: dict with from->[to] mapping or None, if no configuration is available
+    """
+    fpath = config.get(DCATAPIT_THEMES_MAP)
+    if not fpath:
+        return
+    if not os.path.exists(fpath):
+        log.warning("Mapping themes in %s doesn't exist", fpath)
+        return
+    base, ext = os.path.splitext(fpath)
+    if ext == '.json':
+        handler = _map_themes_json
+    else:
+        handler = _map_themes_ini
+
+    with open(fpath) as f:
+        map_data = handler(f)
+
+        return map_data
+
+
+def _get_new_themes(from_groups, map_data, add_existing=True):
+    if not from_groups:
+        return
+
+    new_themes = []
+    # if theme is not in mapping list, keep it
+    # otherwise, replace it with mapped themes
+    for group in from_groups:
+        map_to = map_data.get(group)
+        if map_to:
+            new_themes.extend(map_to)
+        else:
+            if add_existing:
+                new_themes.append(group)
+    # do not update if themes are the same
+    if set(from_groups) == set(new_themes):
+        return
+    return list(set(new_themes))
+
+def map_nonconformant_groups(harvest_object):
+    """
+    Adds themes to fetched data
+    """
+    themes_data = _load_mapping_data()
+    if not themes_data:
+        return
+
+    data = json.loads(harvest_object.content)
+    _groups = data.get('groups')
+    if not _groups:
+        return
+    
+    groups = [g['name'] for g in _groups]
+    groups.extend([g['display_name'] for g in _groups])
+
+    new_themes = _get_new_themes(groups, themes_data, add_existing=False)
+    if not new_themes:
+        return
+
+    # ensure themes are upper-case, otherwise will be discarded
+    # by validators
+    tdata = {'key': 'theme', 'value': _encode_list(new_themes).upper()}
+    existing = False
+    extra = data.get('extras') or []
+    for eitem in extra:
+        if eitem['key'] == 'theme':
+            existing = True
+            eitem['value'] = tdata['value']
+            break
+    
+    if not existing:
+        extra.append(tdata)
+    data['extras'] = extra
+    data['theme'] = tdata['value']
+
+    harvest_object.content = json.dumps(data)
+    Session.add(harvest_object)
+    try:
+        rev = Session.revision
+    except AttributeError:
+        rev = None
+    Session.flush()
+    Session.revision = rev
+    
 
 """
 Theme to Group mapping
@@ -133,7 +256,7 @@ def populate_theme_groups(instance, clean_existing=False):
     """
     add_new = toolkit.asbool(config.get(DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS))
     themes = []
-    for ex in instance['extras']:
+    for ex in (instance.get('extras') or []):
         if ex['key'] == 'theme':
             _t = ex['value']
             if isinstance(_t, list):

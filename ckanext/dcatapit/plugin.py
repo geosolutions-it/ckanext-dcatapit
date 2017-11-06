@@ -10,7 +10,9 @@ import ckanext.dcatapit.validators as validators
 import ckanext.dcatapit.schema as dcatapit_schema
 import ckanext.dcatapit.helpers as helpers
 import ckanext.dcatapit.interfaces as interfaces
-from ckanext.dcatapit.mapping import populate_theme_groups
+from   ckanext.dcatapit.dcat.harvester import map_nonconformant_groups
+from   ckanext.dcatapit.mapping import populate_theme_groups
+
 from ckan.model.package import Package
 from ckan.model import Session, repo
 

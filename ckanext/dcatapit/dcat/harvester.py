@@ -6,12 +6,14 @@ from ckanext.dcat.interfaces import IDCATRDFHarvester
 
 from ckanext.dcatapit.dcat.profiles import LOCALISED_DICT_NAME_BASE, LOCALISED_DICT_NAME_RESOURCES
 import ckanext.dcatapit.interfaces as interfaces
+from ckanext.dcatapit.mapping import map_nonconformant_groups
 
 log = logging.getLogger(__name__)
 
+        
 class DCATAPITHarvesterPlugin(p.SingletonPlugin):
 
-    p.implements(IDCATRDFHarvester)
+    p.implements(IDCATRDFHarvester, inherit=True)
 
     def before_download(self, url, harvest_job):
         return url, []
@@ -42,6 +44,7 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
                 LOCALISED_DICT_NAME_BASE: loc_dict,
                 LOCALISED_DICT_NAME_RESOURCES: res_dict
             }
+
 
     def _after(self, dataset_dict, temp_dict):
         dcatapit_dict = temp_dict.get('dcatapit')
