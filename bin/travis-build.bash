@@ -38,18 +38,23 @@ pip install -r requirements.txt --allow-all-external
 pip install -r dev-requirements.txt --allow-all-external
 cd -
 
+echo
 echo "Setting up Solr..."
 printf "NO_START=0\nJETTY_HOST=127.0.0.1\nJETTY_PORT=8983\nJAVA_HOME=$JAVA_HOME" | sudo tee /etc/default/jetty
 sudo cp ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
 sudo service jetty restart
 
+echo
 echo "Creating the PostgreSQL user and database..."
+
 sudo -u postgres psql -c "CREATE USER ckan_default WITH PASSWORD 'pass';"
 sudo -u postgres psql -c "CREATE USER datastore_default WITH PASSWORD 'pass';"
 sudo -u postgres psql -c 'CREATE DATABASE ckan_test WITH OWNER ckan_default;'
 sudo -u postgres psql -c 'CREATE DATABASE datastore_test WITH OWNER ckan_default;'
 
+echo
 echo "Setting up PostGIS on the database..."
+
 sudo -u postgres psql -d ckan_test -c 'CREATE EXTENSION postgis;'
 sudo -u postgres psql -d ckan_test -c 'ALTER VIEW geometry_columns OWNER TO ckan_default;'
 sudo -u postgres psql -d ckan_test -c 'ALTER TABLE spatial_ref_sys OWNER TO ckan_default;'
