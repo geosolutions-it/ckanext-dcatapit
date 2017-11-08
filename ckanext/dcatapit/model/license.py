@@ -1,4 +1,5 @@
 import sys
+import re
 import logging
 
 from sqlalchemy import types, Column, Table, ForeignKey
@@ -21,6 +22,8 @@ log = logging.getLogger(__name__)
 __all__ = ['License', 'LocalizedLicenseName', 'setup_license_models']
 
 DeclarativeBase = declarative_base(metadata=meta.metadata)
+
+NO_DIGITS = re.compile(r'\d+')
 
 class _Base(object):
 
@@ -82,17 +85,21 @@ class License(_Base, DeclarativeBase):
         """
         out = []
         if self.license_type:
-            license_type = self.license_type.split('/')[-1]
+            license_type = self.license_type.lower().split('/')[-1]
             # <skos:exactMatch rdf:resource="http://purl.org/adms/licencetype/NonCommercialUseOnly"/>
             out.extend([self.license_type, self.license_type.lower(), license_type, license_type.lower()])
     
         if self.uri:
             # <rdf:Description rdf:about="http://dati.gov.it/onto/controlledvocabulary/License/B1_NonCommercial">
-            uri = self.uri.split('/')[-1]
-            out.extend([self.uri, self.uri.lower(), uri.lower(), uri] + uri.split('_'))
+            uri = self.uri.lower().split('/')[-1]
+            usplit = uri.split('_')
+            out.extend([self.uri, self.uri.lower(), uri.lower(), uri] + usplit)
+            noversion = NO_DIGITS.split(usplit[-1])[0]
+            if noversion != usplit[-1]:
+                out.append(noversion)
         if self.document_uri:
             # <dcatapit:referenceDoc rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://creativecommons.org/licenses/by-nc/4.0/</dcatapit:referenceDoc>
-            out.extend([self.document_uri, self.document_uri.lower()])
+            out.append(self.document_uri.lower())
         return out
 
     def set_parent(self, parent_uri):
@@ -161,7 +168,10 @@ class License(_Base, DeclarativeBase):
         for l in cls.q():
             tokens = l.generate_tokens()
             for t in tokens:
-                out[t] = l
+                try:
+                    out[t].append(l)
+                except KeyError:
+                    out[t] = [l]
         return out
 
     @classmethod
@@ -169,7 +179,11 @@ class License(_Base, DeclarativeBase):
         tokenized = cls.get_as_tokens()
         token_normalized = token.replace(' ', '').replace('-', '').lower()
         try:
-            return tokenized[token_normalized]
+            from_tokenized = tokenized[token_normalized]
+            from_tokenized.sort(key=lambda t: t.version)
+            # return latest version
+            return from_tokenized[-1]
+                
         except KeyError:
             return cls.get(cls.DEFAULT_LICENSE)
 
@@ -304,7 +318,7 @@ def load_from_graph(path=None, url=None):
         l = License.from_data(unicode(license_type or ''),
                               str(version),
                               uri=str(license),
-                              document_uri=document_uri,
+                              document_uri=str(document_uri),
                               rank_order=int(str(rank_order)),
                               names=labels,
                               parent=parent)

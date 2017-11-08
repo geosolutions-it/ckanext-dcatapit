@@ -28,6 +28,7 @@ class LicenseTestCase(unittest.TestCase):
     def test_licenses(self):
 
         load_from_graph(path=self.licenses)
+        Session.flush()
 
         all_licenses = License.q()
         count = all_licenses.count()
@@ -46,12 +47,13 @@ class LicenseTestCase(unittest.TestCase):
     def test_tokenizer(self):
 
         load_from_graph(path=self.licenses)
+        Session.flush()
         tokens = License.get_as_tokens()
         self.assertTrue(len(tokens.keys())>0)
 
         from_token = License.find_by_token('cc-by-sa')
         self.assertTrue(from_token)
-        self.assertTrue(from_token.uri)
+        self.assertTrue('ccbysa' in from_token.uri.lower())
 
     def tearDown(self):
         Session.rollback()
