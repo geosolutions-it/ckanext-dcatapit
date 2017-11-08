@@ -11,11 +11,7 @@ sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/'
 sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/ universe'
 sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/ multiverse'
 sudo apt-get -qq --fix-missing update
-<<<<<<< HEAD
-sudo apt-get install postgresql-$PGVERSION solr-jetty libcommons-fileupload-java
-=======
 sudo apt-get install solr-jetty libcommons-fileupload-java
->>>>>>> #78: fix travis build
 
 # PostGIS 2.1 already installed on Travis
 
