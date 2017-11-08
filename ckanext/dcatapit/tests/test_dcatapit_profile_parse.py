@@ -228,6 +228,18 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
     def test_mapping(self):
 
+        # multilang requires lang to be set
+        from pylons.i18n.translation import set_lang, get_lang
+        import pylons
+        class dummyreq(object):
+            class p(object):
+                translator = object()
+            environ = {'pylons.pylons': p()}
+        pylons.request = dummyreq()
+        pylons.translator.pylons_lang = 'en_GB'
+        set_lang('en_GB')
+        assert get_lang() == 'en_GB'
+
         assert 'dcatapit_theme_group_mapper' in config['ckan.plugins'], "No dcatapit_theme_group_mapper plugin in config"
         contents = self._get_file_contents('dataset.rdf')
 
