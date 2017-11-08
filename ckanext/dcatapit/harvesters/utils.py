@@ -5,6 +5,7 @@ from ckan.model import Session
 from ckan.model import Tag
 
 from ckanext.dcatapit.model import DCATAPITTagVocabulary
+from ckanext.dcatapit.model.license import License
 
 log = logging.getLogger(__name__)
 
@@ -129,3 +130,15 @@ def get_agent(agent_string, agent_config):
         agent_name = agent_name.lstrip()
 
     return [agent_code, agent_name]
+
+def get_license(dcat_license, dcatapit_license=None):
+    """
+    Returns license for either dcatapit or dcat license vocabulary.
+    """
+    if dcatapit_license:
+        l = License.get(dcatapit_license)
+        if l:
+            return l
+    return License.get(dcat_license)
+        
+
