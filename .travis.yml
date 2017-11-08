@@ -3,11 +3,17 @@ language: python
 python:
     - "2.7"
 env:
-    - CKANVERSION=2.5 PGVERSION=9.1 POSTGISVERSION=2
+    - CKANVERSION=2.5 POSTGISVERSION=2
 install:
     - bash bin/travis-build.bash
+addons:
+  postgresql: 9.6
+  apt:
+    packages:
+    - postgresql-9.6-postgis-2.3
 services:
     - redis-server
+    - postgresql
 script: sh bin/travis-run.sh
 before_install:
     - pip install codecov
