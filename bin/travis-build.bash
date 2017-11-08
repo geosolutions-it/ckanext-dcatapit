@@ -19,15 +19,16 @@ sudo apt-get install solr-jetty libcommons-fileupload-java
 
 # PostGIS 2.1 already installed on Travis
 
-echo "Patching lxml..."
-wget ftp://xmlsoft.org/libxml2/libxml2-2.9.0.tar.gz
-tar zxf libxml2-2.9.0.tar.gz
-cd libxml2-2.9.0/
-./configure --quiet --libdir=/usr/lib/x86_64-linux-gnu
-make --silent
-sudo make --silent install
-xmllint --version
-cd -
+##lxml patching no longer required, since travis provides 2.9.1
+#echo "Patching lxml..."
+#wget ftp://xmlsoft.org/libxml2/libxml2-2.9.0.tar.gz
+#tar zxf libxml2-2.9.0.tar.gz
+#cd libxml2-2.9.0/
+#./configure --quiet --libdir=/usr/lib/x86_64-linux-gnu
+#make --silent
+#sudo make --silent install
+#xmllint --version
+#cd -
 
 echo "Installing CKAN and its Python dependencies..."
 git clone https://github.com/ckan/ckan
