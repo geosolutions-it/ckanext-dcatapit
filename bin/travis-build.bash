@@ -11,13 +11,12 @@ sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/'
 sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/ universe'
 sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/ multiverse'
 sudo apt-get -qq --fix-missing update
+<<<<<<< HEAD
 sudo apt-get install postgresql-$PGVERSION solr-jetty libcommons-fileupload-java
+=======
+sudo apt-get install solr-jetty libcommons-fileupload-java
+>>>>>>> #78: fix travis build
 
-echo "Installing PostGIS..."
-if [ $POSTGISVERSION == '1' ]
-then
-    sudo apt-get install postgresql-9.1-postgis=1.5.3-2
-fi
 # PostGIS 2.1 already installed on Travis
 
 echo "Patching lxml..."
@@ -50,21 +49,14 @@ sudo service jetty restart
 
 echo "Creating the PostgreSQL user and database..."
 sudo -u postgres psql -c "CREATE USER ckan_default WITH PASSWORD 'pass';"
+sudo -u postgres psql -c "CREATE USER datastore_default WITH PASSWORD 'pass';"
 sudo -u postgres psql -c 'CREATE DATABASE ckan_test WITH OWNER ckan_default;'
+sudo -u postgres psql -c 'CREATE DATABASE datastore_test WITH OWNER ckan_default;'
 
 echo "Setting up PostGIS on the database..."
-if [ $POSTGISVERSION == '1' ]
-then
-    sudo -u postgres psql -d ckan_test -f /usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql
-    sudo -u postgres psql -d ckan_test -f /usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql
-    sudo -u postgres psql -d ckan_test -c 'ALTER TABLE geometry_columns OWNER TO ckan_default;'
-    sudo -u postgres psql -d ckan_test -c 'ALTER TABLE spatial_ref_sys OWNER TO ckan_default;'
-elif [ $POSTGISVERSION == '2' ]
-then
-    sudo -u postgres psql -d ckan_test -c 'CREATE EXTENSION postgis;'
-    sudo -u postgres psql -d ckan_test -c 'ALTER VIEW geometry_columns OWNER TO ckan_default;'
-    sudo -u postgres psql -d ckan_test -c 'ALTER TABLE spatial_ref_sys OWNER TO ckan_default;'
-fi
+sudo -u postgres psql -d ckan_test -c 'CREATE EXTENSION postgis;'
+sudo -u postgres psql -d ckan_test -c 'ALTER VIEW geometry_columns OWNER TO ckan_default;'
+sudo -u postgres psql -d ckan_test -c 'ALTER TABLE spatial_ref_sys OWNER TO ckan_default;'
 
 echo "Install other libraries required..."
 sudo apt-get install python-dev libxml2-dev libxslt1-dev libgeos-c1
@@ -104,7 +96,7 @@ python setup.py develop
 paster multilangdb initdb -c ../ckan/test-core.ini
 cd -
 
-echo "Installing ckanext-ckanext-dcatapit and its requirements..."
+echo "Installing ckanext-dcatapit and its requirements..."
 python setup.py develop
 pip install -r dev-requirements.txt
 paster vocabulary initdb -c ckan/test-core.ini
