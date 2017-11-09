@@ -65,14 +65,14 @@ class DCATAPITCommands(CkanCommand):
     _controlled_vocabularies_allowed = [EUROPEAN_THEME_NAME, LOCATIONS_THEME_NAME, LANGUAGE_THEME_NAME, FREQUENCIES_THEME_NAME, FILETYPE_THEME_NAME]
 
     def __init__(self, name):
+        super(DCATAPITCommands, self).__init__(name)
+
         self.parser.add_option('--filename', dest='filename', default=None,
                                help='Path to a file')
         self.parser.add_option('--url', dest='url', default=None,
                                help='URL to a resource')
         self.parser.add_option('--name', dest='name', default=None,
                                help='Name of the vocabulary to work with')
-
-        super(DCATAPITCommands, self).__init__(name)
 
     def command(self):
         '''
@@ -117,103 +117,116 @@ class DCATAPITCommands(CkanCommand):
             print "ERROR: Incorrect vocabulary name, only one of these values are allowed: {0}".format(self._controlled_vocabularies_allowed)
             print self.usage
             return
+        
+        do_load(vocab_name, url=url, filename=filename)
 
-        if vocab_name == LANGUAGE_THEME_NAME:
-            ckan_offered_languages = config.get('ckan.locales_offered', []).split(' ')
-            for offered_language in ckan_offered_languages:
-                if offered_language not in self._ckan_language_theme_mapping:
-                    print "INFO: '{0}' CKAN locale is not mapped in this plugin and will be skipped during the import stage (vocabulary name '{1}')".format(offered_language, vocab_name)
 
-        ##
-        # Loading the RDF vocabulary
-        ##
-        print "Loading graph ..."
+def do_load(vocab_name, url=None, filename=None):
 
-        g = Graph()
-        for prefix, namespace in namespaces.iteritems():
-            g.bind(prefix, namespace)
+    if vocab_name == LANGUAGE_THEME_NAME:
+        ckan_offered_languages = config.get('ckan.locales_offered', 'it').split(' ')
+        for offered_language in ckan_offered_languages:
+            if offered_language not in self._ckan_language_theme_mapping:
+                print "INFO: '{0}' CKAN locale is not mapped in this plugin and will be skipped during the import stage (vocabulary name '{1}')".format(offered_language, vocab_name)
 
-        try:
-            if url:
-                g.parse(location=url)
-            else:
-                g.parse(source=filename)
-        except Exception,e:
-            log.error("ERROR: Problem occurred while retrieving the document %r", e)
-            print self.usage
-            return
+    ##
+    # Loading the RDF vocabulary
+    ##
+    print "Loading graph ..."
 
-        concepts = []
-        pref_labels = []
+    g = Graph()
+    for prefix, namespace in namespaces.iteritems():
+        g.bind(prefix, namespace)
 
-        for concept,_pred,_conc in g.triples((None, None, SKOS.Concept)):
-            about = str(concept)
-            identifier = str(g.value(subject=concept, predicate=DC.identifier))
+    try:
+        if url:
+            g.parse(location=url)
+        else:
+            g.parse(source=filename)
+    except Exception,e:
+        log.error("ERROR: Problem occurred while retrieving the document %r", e)
+        return
 
-            #
-            # Skipping the ckan locales not mapped in this plugin (subject: language theme)
-            #
-            if vocab_name == 'languages' and identifier not in self._ckan_language_theme_mapping.values():
-                continue
+    concepts = []
+    pref_labels = []
 
-            #
-            # Skipping the ckan places not in italy according to the regex (subject: places theme)
-            #
-            if vocab_name == 'places' and not re.match(self.places_theme_regex, identifier, flags=0):
-                continue
+    for concept,_pred,_conc in g.triples((None, None, SKOS.Concept)):
+        about = str(concept)
+        identifier = str(g.value(subject=concept, predicate=DC.identifier))
 
-            print 'Concept {0} ({1})'.format(about, identifier)
-            concepts.append(identifier)
+        #
+        # Skipping the ckan locales not mapped in this plugin (subject: language theme)
+        #
+        if vocab_name == 'languages' and identifier not in DCATAPITCommands._ckan_language_theme_mapping.values():
+            continue
 
-            for pref_label in g.objects(concept, SKOS.prefLabel):
-                lang = pref_label.language
-                label = pref_label.value
+        #
+        # Skipping the ckan places not in italy according to the regex (subject: places theme)
+        #
+        if vocab_name == 'places' and not re.match(DCATAPITCommands.places_theme_regex, identifier, flags=0):
+            continue
 
-                print u'    Label {0}: {1}'.format(lang, label)
-                pref_labels.append({
-                    'name': identifier,
-                    'lang': lang,
-                    'localized_text': label
-                })
+        # print 'Concept {0} ({1})'.format(about, identifier)
+        concepts.append(identifier)
 
-        ##
-        # Creating the Tag Vocabulary using the given name
-        ##
-        log.info('Creating tag vocabulary {0} ...'.format(vocab_name))
+        langs = set()
 
-        user = toolkit.get_action('get_site_user')({'ignore_auth': True}, {})
-        context = {'user': user['name'], 'ignore_auth': True}
+        for pref_label in g.objects(concept, SKOS.prefLabel):
+            lang = pref_label.language
+            label = pref_label.value
 
-        print "Using site user '{0}'".format(user['name'])
+            langs.add(lang)
 
-        try:
-            data = {'id': vocab_name}
-            toolkit.get_action('vocabulary_show')(context, data)
+            # print u'    Label {0}: {1}'.format(lang, label)
+            pref_labels.append({
+                'name': identifier,
+                'lang': lang,
+                'localized_text': label
+            })
 
-            log.info("Vocabulary {0} already exists, skipping...".format(vocab_name))
-        except toolkit.ObjectNotFound:
-            log.info("Creating vocabulary '{0}'".format(vocab_name))
+        print 'Loaded concept: URI[{0}] ID[{1}] languages[{2}]'.format(about, identifier, len(langs))
 
-            data = {'name': vocab_name}
-            vocab = toolkit.get_action('vocabulary_create')(context, data)
+    ##
+    # Creating the Tag Vocabulary using the given name
+    ##
+    log.info('Creating tag vocabulary {0} ...'.format(vocab_name))
 
-            for tag in concepts:
-                log.info("Adding tag {0} to vocabulary '{1}'".format(tag, vocab_name))
+    user = toolkit.get_action('get_site_user')({'ignore_auth': True}, {})
+    context = {'user': user['name'], 'ignore_auth': True}
 
-                data = {'name': tag, 'vocabulary_id': vocab['id']}
-                toolkit.get_action('tag_create')(context, data)
+    print "Using site user '{0}'".format(user['name'])
 
-        ##
-        # Persisting Multilag Tags or updating existing
-        ##
-        log.info('Creating the corresponding multilang tags for vocab: {0} ...'.format(vocab_name))
+    try:
+        data = {'id': vocab_name}
+        toolkit.get_action('vocabulary_show')(context, data)
 
-        for pref_label in pref_labels:
-            if pref_label['lang'] in self._locales_ckan_mapping:
-                tag_name = pref_label['name']
-                tag_lang = self._locales_ckan_mapping[pref_label['lang']]
-                tag_localized_name = pref_label['localized_text']
+        log.info("Vocabulary {0} already exists, skipping...".format(vocab_name))
+    except toolkit.ObjectNotFound:
+        log.info("Creating vocabulary '{0}'".format(vocab_name))
 
-                interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
+        data = {'name': vocab_name}
+        vocab = toolkit.get_action('vocabulary_create')(context, data)
 
-        print 'Vocabulary successfully loaded ({0})'.format(vocab_name)
+        for tag in concepts:
+            log.info("Adding tag {0} to vocabulary '{1}'".format(tag, vocab_name))
+            print("Adding tag {0} to vocabulary '{1}'".format(tag, vocab_name))
+
+            data = {'name': tag, 'vocabulary_id': vocab['id']}
+            toolkit.get_action('tag_create')(context, data)
+
+    ##
+    # Persisting Multilag Tags or updating existing
+    ##
+    log.info('Creating the corresponding multilang tags for vocab: {0} ...'.format(vocab_name))
+    print('Creating the corresponding multilang tags for vocab: {0} ...'.format(vocab_name))
+
+    for pref_label in pref_labels:
+        if pref_label['lang'] in DCATAPITCommands._locales_ckan_mapping:
+            tag_name = pref_label['name']
+            tag_lang = DCATAPITCommands._locales_ckan_mapping[pref_label['lang']]
+            tag_localized_name = pref_label['localized_text']
+
+            print u'Storing tag: name[{0}] lang[{1}] label[{2}]'.format(tag_name, tag_lang, tag_localized_name)
+            interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
+
+    print 'Vocabulary successfully loaded ({0})'.format(vocab_name)

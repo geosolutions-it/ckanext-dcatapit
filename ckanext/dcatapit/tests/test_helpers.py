@@ -1,5 +1,7 @@
 
 import nose
+import os
+
 import ckanext.dcatapit.helpers as helpers
 
 eq_ = nose.tools.eq_
@@ -26,7 +28,15 @@ def test_get_dcatapit_resource_schema():
     eq_(schema[0].get('name'), 'distribution_format')
 
 def test_get_vocabulary_items():
-    vocabularies_items = helpers.get_vocabulary_items('eu_themes')
+    # Load themes voc    
+    from ckanext.dcatapit.commands.dcatapit import EUROPEAN_THEME_NAME, do_load
+
+    path = os.path.join(os.path.dirname(__file__),
+                    '..', '..', '..', 'vocabularies', 'data-theme-skos.rdf')
+    do_load(EUROPEAN_THEME_NAME, filename=path)    
+    
+    # test it
+    vocabularies_items = helpers.get_vocabulary_items(EUROPEAN_THEME_NAME)
     ok_(vocabularies_items)
     
 def test_list_to_string():
