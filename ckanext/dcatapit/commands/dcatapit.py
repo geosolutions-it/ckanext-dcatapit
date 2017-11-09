@@ -5,7 +5,10 @@ import re
 
 import ckan.plugins.toolkit as toolkit
 import ckanext.dcatapit.interfaces as interfaces
-from ckanext.dcatapit.model.license import load_from_graph as load_licenses_from_graph
+from ckanext.dcatapit.model.license import (
+    load_from_graph as load_licenses_from_graph,
+    clear_licenses)
+from ckan.model.meta import Session
 
 from pylons import config
 from ckan.lib.cli import CkanCommand
@@ -122,7 +125,10 @@ class DCATAPITCommands(CkanCommand):
             return
         
         if vocab_name == LICENSES_NAME:
-            return load_licenses_from_graph(filename, url)
+            clear_licenses()
+            load_licenses_from_graph(filename, url)
+            Session.commit()
+            return
 
 
         if vocab_name == LANGUAGE_THEME_NAME:

@@ -1,6 +1,6 @@
-import sys
 import re
 import logging
+from urlparse import urlparse
 
 from sqlalchemy import types, Column, Table, ForeignKey
 from sqlalchemy import orm
@@ -23,7 +23,32 @@ __all__ = ['License', 'LocalizedLicenseName', 'setup_license_models']
 
 DeclarativeBase = declarative_base(metadata=meta.metadata)
 
-NO_DIGITS = re.compile(r'\d+')
+DIGITS = re.compile(r'\d+')
+
+DIGITS_AND_COMMAS = re.compile(r'[\d\.]+')
+
+# https://creativecommons.org/publicdomain/zero/1.0
+# but also
+# http://creativecommons.org/licenses/by-nd/1.0/
+CC_LICENSE = re.compile(r'https{0,1}://creativecommons.org/(licenses|publicdomain)/(?P<license>[\w\-\.]+)/')
+CC_LICENSE_NAME = re.compile(r'creative commons \w ', re.I)
+
+# http://www.dati.gov.it/iodl/2.0
+DATI_LICENSE = re.compile(r'https{0,1}://www.dati.gov.it/(?P<license>[\w\-\.]+)/')
+
+# https://opendatacommons.org/licenses/odbl/summary/
+# but also
+# https://opendatacommons.org/category/odc-by/
+OPENDATA_LICENSE = re.compile(r'https{0,1}://opendatacommons.org/(licenses|category)/(?P<license>[\w\-\.]+)/')
+
+# http://www.formez.it/iodl/
+FORMEZ_LICENSE = re.compile(r'https{0,1}://www.formez.it/(?P<license>[\w\-\.]+)/')
+
+# https://www.gnu.org/licenses/fdl.html
+GNU_LICENSE = re.compile(r'https{0,1}://www.gnu.org/licenses/(?P<license>[\w\-\.]+).html/')
+
+LICENSES = (CC_LICENSE, OPENDATA_LICENSE, DATI_LICENSE, FORMEZ_LICENSE, GNU_LICENSE,)
+
 
 class _Base(object):
 
@@ -76,7 +101,7 @@ class License(_Base, DeclarativeBase):
         return cls.q().filter_by(license_type=id_or_uri).first()
 
     def __str__(self):
-        return "License({}/{}: {})".format(self.license_type, self.version, self.default_name)
+        return "License({}/version {}: {}{})".format(self.license_type, self.version, self.default_name, ' [doc: {}]'.format(self.document_uri) if self.document_uri else '')
 
     def generate_tokens(self):
         """
@@ -87,19 +112,34 @@ class License(_Base, DeclarativeBase):
         if self.license_type:
             license_type = self.license_type.lower().split('/')[-1]
             # <skos:exactMatch rdf:resource="http://purl.org/adms/licencetype/NonCommercialUseOnly"/>
+            # -> NonCommercialUseOnly
             out.extend([self.license_type, self.license_type.lower(), license_type, license_type.lower()])
     
         if self.uri:
             # <rdf:Description rdf:about="http://dati.gov.it/onto/controlledvocabulary/License/B1_NonCommercial">
+            # B1_NonCommercial
             uri = self.uri.lower().split('/')[-1]
             usplit = uri.split('_')
             out.extend([self.uri, self.uri.lower(), uri.lower(), uri] + usplit)
-            noversion = NO_DIGITS.split(usplit[-1])[0]
+            noversion = DIGITS.split(usplit[-1])[0]
             if noversion != usplit[-1]:
                 out.append(noversion)
         if self.document_uri:
             # <dcatapit:referenceDoc rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://creativecommons.org/licenses/by-nc/4.0/</dcatapit:referenceDoc>
-            out.append(self.document_uri.lower())
+            # -> by-nc
+            uri = self.document_uri.lower()
+            out.append(uri)
+            for lre in LICENSES:
+                m = lre.search(uri)
+                if m:
+                    lname = m.groupdict()['license']
+                    out.extend([lname, lname.replace('-', '')])
+        if self.default_name:
+            dn = self.default_name.lower()
+            out.append(dn)
+            s = CC_LICENSE_NAME.search(dn)
+            if s:
+                out.append(s.groups()[0])
         return out
 
     def set_parent(self, parent_uri):
@@ -175,17 +215,61 @@ class License(_Base, DeclarativeBase):
         return out
 
     @classmethod
-    def find_by_token(cls, token):
+    def find_by_token(cls, *search_for):
+        """
+        Try to find license based on token provided. If no license can match,
+        return default license defined in License.DEFAULT_LICENSE (unknown license)
+        When multiple licenses are found for given token, they are sorted by version,
+        and License with newest version will be returned.
+
+        :param *search_for: List of strings to be searched for. This list will be tokenized
+            and used in order provided
+        :type *search_for: list of str
+
+        :return: Returns tuple of License and fallback marker as boolean. 
+            Fallback set to True means that no license could be found for 
+            given token, and license returned is a default one.
+
+        :rtype: (License, bool,)
+        """
+        # get list of token-> license mapping
         tokenized = cls.get_as_tokens()
-        token_normalized = token.replace(' ', '').replace('-', '').lower()
-        try:
-            from_tokenized = tokenized[token_normalized]
-            from_tokenized.sort(key=lambda t: t.version)
-            # return latest version
-            return from_tokenized[-1]
-                
-        except KeyError:
-            return cls.get(cls.DEFAULT_LICENSE)
+
+        # generate tokens from input
+        normalized_tokens = cls.generate_tokens_from_str(*search_for)
+        for token in normalized_tokens:
+            try:
+                from_tokenized = tokenized[token]
+                from_tokenized.sort(key=lambda t: t.version)
+                # return latest version
+                license = from_tokenized[-1]
+                return license, False
+            except KeyError, err:
+                pass
+        # return default if nothing was found
+        license = cls.get(cls.DEFAULT_LICENSE)
+        assert license is not None
+        return license, True
+
+    @classmethod
+    def generate_tokens_from_str(cls, *strings):
+        for s in strings:
+            s = s.lower()
+            if s.startswith('http'):
+                yield s.split('/')[-1]
+
+            else:
+                # CC SOMETHING
+                subs = s.split(' ')[-1]
+                # cc-zero
+                yield subs
+                if subs.startswith('cc') and len(subs)> 2:
+                    yield subs[2:]
+                yield s.split('-')[-1]
+            yield s.replace(' ', '')
+            yield s.replace('-', '')
+            yield s.replace(' ', '').replace('-', '')
+
 
     @classmethod
     def from_data(cls,
@@ -293,6 +377,7 @@ def _get_graph(path=None, url=None):
 
     return g
 
+
 def load_from_graph(path=None, url=None):
     """
     Loads license tree into db from provided path or url
@@ -330,3 +415,7 @@ def load_from_graph(path=None, url=None):
             parent = parents[0]
             License.get(license).set_parent(parent)
 
+
+def clear_licenses():
+    LocalizedLicenseName.q().delete()
+    License.q().delete()

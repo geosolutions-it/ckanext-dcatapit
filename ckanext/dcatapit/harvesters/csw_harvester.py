@@ -49,6 +49,18 @@ ISOKeyword.elements.append(
         multiplicity="1",
     ))
 
+ISOKeyword.elements.append(
+    ISOElement(
+        name="license",
+        search_paths=["//LegalConstraints",
+                      "//useLimitation",
+                      "//otherConstraints"
+                        ],
+        multiplicity="0..1",
+
+    ))
+
+
 class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
     _dcatapit_config = {
@@ -255,3 +267,7 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
         # End of processing, return the modified package
         return package_dict
+
+    def import_stage(self, harvest_object):
+        return super(DCATAPITCSWHarvester, self).import_stage(harvest_object)
+

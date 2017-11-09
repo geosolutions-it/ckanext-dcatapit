@@ -1,3 +1,4 @@
+import json
 import logging
 import re
 
@@ -131,14 +132,46 @@ def get_agent(agent_string, agent_config):
 
     return [agent_code, agent_name]
 
-def get_license(dcat_license, dcatapit_license=None):
+def get_license_from_package(pkg_dict):
     """
-    Returns license for either dcatapit or dcat license vocabulary.
+    Returns license from package
     """
-    if dcatapit_license:
-        l = License.get(dcatapit_license)
-        if l:
-            return l
-    return License.get(dcat_license)
-        
 
+    for_license = pkg_dict.get('license_title')
+    license, fallback = License.find_by_token(for_license or 'Unknown')
+    if fallback:
+        log.warning("Got fallback license for %s", for_license)
+    return license
+
+
+def map_ckan_license(harvest_object=None, pkg_dict=None):
+    """
+    license in resources' extra:
+        if it exists, perform simple validation. If not valid, replace with the unknown license type
+        if it does not exist, try to map the dataset's license to a license in the controlled voc
+        fallback to the unknown license type
+    :param harvest_object:
+    :param pkg_dict:
+    :type harvest_object: HarvestObject model
+    :type pkg_dict: dict dictized dataset
+
+    :return: This will return dataset's dict with modified licenses
+    :rtype: dict with dictized dataset
+    """
+    if not (harvest_object or pkg_dict) or (harvest_object and pkg_dict):
+        raise ValueError("You should provide either harvest_object or pkg_dict")
+    
+    if harvest_object:
+        data = json.loads(harvest_object.content)
+    else:
+        data = pkg_dict
+
+    dataset_license = get_license_from_package(data)
+
+    for res in data.get('resources') or []:
+        if res.get('license_type'):
+            l, _ = License.find_by_token(res['license_type'])
+            res['license_type'] = l.license_type
+        else:
+            res['license_type'] = dataset_license.license_type
+    return data
