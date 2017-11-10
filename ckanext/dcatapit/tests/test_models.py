@@ -68,8 +68,5 @@ class LicenseTestCase(unittest.TestCase):
 
         self.assertTrue('Attribution' in from_token.license_type)
 
-
-
-
     def tearDown(self):
         Session.rollback()

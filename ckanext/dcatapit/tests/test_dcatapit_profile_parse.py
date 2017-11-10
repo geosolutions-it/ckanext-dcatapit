@@ -42,6 +42,8 @@ from ckanext.harvest.model import HarvestObject
 
 from ckanext.dcatapit.plugin import DCATAPITGroupMapper
 
+from ckanext.dcatapit.model.license import _get_graph, load_from_graph
+
 
 eq_ = nose.tools.eq_
 ok_ = nose.tools.ok_
@@ -167,6 +169,19 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         harvest_obj = self._make_harvest_object(url, groups_non_mappable[0])
 
         harvester = CKANMappingHarvester()
+        
+        def get_path(fname):
+            return os.path.join(os.path.dirname(__file__),
+                                '..', '..', '..', 'examples', fname)
+
+        licenses = get_path('licenses.rdf')
+        self.g = _get_graph(path=licenses)
+
+        load_from_graph(path=licenses)
+        rev = getattr(Session, 'revision', None)
+        Session.flush()
+        Session.revision = rev
+
 
         # clean, no mapping
         harvester.import_stage(harvest_obj)
