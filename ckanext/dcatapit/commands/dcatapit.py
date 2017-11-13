@@ -126,7 +126,7 @@ def do_load(vocab_name, url=None, filename=None):
     if vocab_name == LANGUAGE_THEME_NAME:
         ckan_offered_languages = config.get('ckan.locales_offered', 'it').split(' ')
         for offered_language in ckan_offered_languages:
-            if offered_language not in self._ckan_language_theme_mapping:
+            if offered_language not in DCATAPITCommands._ckan_language_theme_mapping:
                 print "INFO: '{0}' CKAN locale is not mapped in this plugin and will be skipped during the import stage (vocabulary name '{1}')".format(offered_language, vocab_name)
 
     ##
