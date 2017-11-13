@@ -49,13 +49,15 @@ lang_mapping_ckan_to_voc = {
     'de': 'DEU',
     'en': 'ENG',
     'en_GB': 'ENG',
+    'fr': 'FRA',
 }
 
 lang_mapping_xmllang_to_ckan = {
     'it' : 'it',
     'de' : 'de',
     'en' : 'en_GB' ,
-}
+    'fr' : 'fr',
+} 
 
 format_mapping = {
     'WMS': 'MAP_SRVC',
@@ -753,7 +755,8 @@ class ItalianDCATAPProfile(RDFProfile):
 
         for lang_offered in langs.split():
             lang_code = lang_mapping_ckan_to_voc.get(lang_offered)
-            self.g.add((catalog_ref, DCT.language, URIRef(LANG_BASE_URI + lang_code)))
+            if lang_code:
+                self.g.add((catalog_ref, DCT.language, URIRef(LANG_BASE_URI + lang_code)))
 
         self.g.remove((catalog_ref, DCT.language, Literal(config.get('ckan.locale_default', 'en'))))
 
