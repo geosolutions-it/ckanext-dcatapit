@@ -102,7 +102,7 @@ def map_nonconformant_groups(harvest_object):
         return
     
     groups = [g['name'] for g in _groups]
-    groups.extend([g['display_name'] for g in _groups])
+    groups.extend([g['display_name'] for g in _groups if 'display_name' in g])
 
     new_themes = _get_new_themes(groups, themes_data, add_existing=False)
     if not new_themes:
