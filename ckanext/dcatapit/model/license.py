@@ -407,10 +407,10 @@ def load_from_graph(path=None, url=None):
         license_path=str(license).split('/')[-1].split('_')[0]
         document_uri = g.value(license, DCATAPIT.referenceDoc)
         l = License.from_data(unicode(license_type or ''),
-                              str(version),
+                              str(version) if version else None,
                               uri=str(license),
                               path=license_path,
-                              document_uri=str(document_uri),
+                              document_uri=str(document_uri) if document_uri else None,
                               rank_order=int(str(rank_order)),
                               names=labels,
                               parent=parent)
