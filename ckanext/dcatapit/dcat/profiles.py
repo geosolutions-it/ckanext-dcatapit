@@ -263,10 +263,12 @@ class ItalianDCATAPProfile(RDFProfile):
             if license:
 
                 license_doc = str(license)
-                dcat_license = self._value(distribution, DCT.type)
+                dcat_license = self._object_value(distribution, DCT.type)
                 license_name = self._object_value(license, FOAF.name) # may be either the title or the id
 
-                license_type = interfaces.get_license_from_dcat(dcat_license, license_name)
+                license_type = interfaces.get_license_from_dcat(license_doc,
+                                                                dcat_license,
+                                                                license_name)
 
                 resource_dict['license_type'] = license_type
                 licenses.append((str(license), license_name))
