@@ -283,3 +283,10 @@ def get_resource_licenses_tree(value, lang):
                     'level': license.rank_order})
     return out
 
+def get_license_for_dcat(license_type):
+    l = License.get(license_type)
+    return l.license_type, l.default_name, l.document_uri
+
+
+
+

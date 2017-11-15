@@ -567,6 +567,8 @@ class ItalianDCATAPProfile(RDFProfile):
                     log.warn('No format for resource: %s / %s', dataset_dict.get('title', 'N/A'), resource_dict.get('description', 'N/A') )
                     self.g.add((distribution, DCT['format'], URIRef(FORMAT_BASE_URI + DEFAULT_FORMAT_CODE)))
 
+
+            
             ### license
             # <dct:license rdf:resource="http://creativecommons.org/licenses/by/3.0/it/"/>
             #
@@ -581,15 +583,21 @@ class ItalianDCATAPProfile(RDFProfile):
             # "license_title" : "Creative Commons CCZero",
             # "license_url" : "http://www.opendefinition.org/licenses/cc-zero",
 
-            license_url = dataset_dict.get('license_url', '')
-            license_id = dataset_dict.get('license_id', '')
-            license_title = dataset_dict.get('license_title', '')
+            if resource_dict.get('license_type'):
+                license_id = None
+                license_info = interfaces.get_license_for_dcat(resource_dict['license_type'])
+                dcat_license, license_title, license_url = license_info
+            else:
+                license_url = dataset_dict.get('license_url', '')
+                license_id = dataset_dict.get('license_id', '')
+                license_title = dataset_dict.get('license_title', '')
+                dcat_license = 'http://purl.org/adms/licencetype/Attribution'
 
             if license_url:
                 license = URIRef(license_url)
                 g.add((license, RDF['type'], DCATAPIT.LicenseDocument))
                 g.add((license, RDF['type'], DCT.LicenseDocument))
-                g.add((license, DCT['type'], URIRef('http://purl.org/adms/licencetype/Attribution'))) # TODO: infer from CKAN license
+                g.add((license, DCT['type'], URIRef(dcat_license)))
 
                 g.add((distribution, DCT.license, license))
 
