@@ -171,7 +171,7 @@ def map_ckan_license(harvest_object=None, pkg_dict=None):
     for res in data.get('resources') or []:
         if res.get('license_type'):
             l, _ = License.find_by_token(res['license_type'])
-            res['license_type'] = l.license_type
+            res['license_type'] = l.uri
         else:
-            res['license_type'] = dataset_license.license_type
+            res['license_type'] = dataset_license.uri
     return data
