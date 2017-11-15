@@ -131,6 +131,10 @@ The ckanext-dcatapit RDF harvester also harvests localized fields in multiple la
     
     `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf  --name filetype --config=/etc/ckan/default/production.ini`
     
+ 14. DCATAPIT license tree. Download [license mapping file](https://github.com/italia/daf-ontologie-vocabolari-controllati/blob/master/VocabolariControllati/Licenze/Licenze.rdf). Alternatively you can use ``examples/licenses.rdf``, but mind that it may be outdated. Import `license.rdf` it with command:
+
+    `paster --plugin=ckanext-dcatapit vocabulary load --filename path/to/license.rdf --name licenses --config=/etc/ckan/default/production.ini`
+
 ## Development Installation
 
 To install `ckanext-dcatapit` for development, activate your CKAN virtualenv and do:
