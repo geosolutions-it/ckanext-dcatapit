@@ -261,14 +261,14 @@ class ItalianDCATAPProfile(RDFProfile):
             # License
             license = self._object(distribution, DCT.license)
             if license:
-                # just add this info in the resource extras
-                resource_dict['license_url'] = str(license)
+
+                license_doc = str(license)
+                dcat_license = self._value(distribution, DCT.type)
                 license_name = self._object_value(license, FOAF.name) # may be either the title or the id
-                if(license_name):
-                    # just add this info in the resource extras
-                    resource_dict['license_name'] = license_name
-                else:
-                    license_name = "unknown"
+
+                license_type = interfaces.get_license_from_dcat(dcat_license, license_name)
+
+                resource_dict['license_type'] = license_type
                 licenses.append((str(license), license_name))
             else:
                 log.warn('No license found for resource "%s"::"%s"',

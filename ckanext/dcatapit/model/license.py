@@ -84,6 +84,7 @@ class License(_Base, DeclarativeBase):
             * id
             * license uri (dcatapit vocabulary)
             * document uri (dcatapit reference to normative doc)
+            * license name (dcatapit refererence from foaf:name)
             * license_type (dcat uri)
         """
         inst = None
@@ -97,6 +98,9 @@ class License(_Base, DeclarativeBase):
         if inst:
             return inst
         inst = cls.q().filter_by(document_uri=id_or_uri).first()
+        if inst:
+            return inst
+        inst = cls.q().filter_by(default_name=id_or_uri).first()
         if inst:
             return inst
         return cls.q().filter_by(license_type=id_or_uri).first()
