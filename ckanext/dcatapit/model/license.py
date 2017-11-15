@@ -273,6 +273,9 @@ class License(_Base, DeclarativeBase):
                 if subs.startswith('cc') and len(subs)> 2:
                     yield subs[2:]
                 yield s.split('-')[-1]
+            if 'odbl' in s:
+                yield 'odbl'
+
             yield s.replace(' ', '')
             yield s.replace('-', '')
             yield s.replace(' ', '').replace('-', '')

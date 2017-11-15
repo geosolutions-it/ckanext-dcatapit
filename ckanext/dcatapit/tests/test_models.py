@@ -68,5 +68,13 @@ class LicenseTestCase(unittest.TestCase):
 
         self.assertTrue('Attribution' in from_token.license_type)
 
+        odbl = """["Open Data Commons Open Database License / OSM (ODbL/OSM): You are free to copy, distribute, transmit and adapt our data, as long as you credit OpenStreetMap and its contributors\nIf you alter or build upon our data, you may distribute the result only under the same licence. (http://www.openstreetmap.org/copyright)"]"""
+
+        from_token, default = License.find_by_token(odbl, 'other')
+        self.assertFalse(default)
+        self.assertTrue(from_token)
+        self.assertTrue('odbl' in from_token.default_name.lower())
+
+
     def tearDown(self):
         Session.rollback()

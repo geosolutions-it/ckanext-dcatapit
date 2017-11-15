@@ -271,21 +271,24 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         license_id = pkg_dict.get('license_id')
         license_url = None
         license = None
+        access_constraints = None
         for ex in pkg_dict['extras']:
             if ex['key'] == 'license_url':
                 license_url = ex['value']
             elif ex['key'] == 'license':
                 license = ex['value']
+            elif ex['key'] == 'access_constraints':
+                access_constraints = ex['value']
 
-        if not (license_id or license or license_url):
+        if not (access_constraints or license_id or license or license_url):
             l = License.get(License.DEFAULT_LICENSE)
 
         else:
-            l = License.find_by_token(license, license_id, license_url)
+            l, default = License.find_by_token(access_constraints, license, license_id, license_url)
         
         for res in pkg_dict['resources']:
             res['license_type'] = l.uri
-        
+
         return pkg_dict
 
             
