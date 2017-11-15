@@ -259,6 +259,8 @@ class License(_Base, DeclarativeBase):
     @classmethod
     def generate_tokens_from_str(cls, *strings):
         for s in strings:
+            if not s:
+                continue
             s = s.lower()
             if s.startswith('http'):
                 yield s.split('/')[-1]

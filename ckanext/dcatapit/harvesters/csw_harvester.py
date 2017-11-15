@@ -9,6 +9,8 @@ from ckanext.spatial.model import ISOElement
 from ckanext.spatial.model import ISOKeyword
 from ckanext.spatial.model import ISOResponsibleParty
 
+from ckanext.dcatapit.model import License
+
 log = logging.getLogger(__name__)
 
 ISODocument.elements.append(
@@ -47,17 +49,6 @@ ISOKeyword.elements.append(
             "gmd:thesaurusName/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code/gco:CharacterString/text()",
         ],
         multiplicity="1",
-    ))
-
-ISOKeyword.elements.append(
-    ISOElement(
-        name="license",
-        search_paths=["//LegalConstraints",
-                      "//useLimitation",
-                      "//otherConstraints"
-                        ],
-        multiplicity="0..1",
-
     ))
 
 
@@ -270,4 +261,32 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
     def import_stage(self, harvest_object):
         return super(DCATAPITCSWHarvester, self).import_stage(harvest_object)
+
+
+
+
+    def get_package_dict(self, iso_values, harvest_object):
+        pkg_dict = super(CSWHarvester, self).get_package_dict(iso_values, harvest_object)
+
+        license_id = pkg_dict.get('license_id')
+        license_url = None
+        license = None
+        for ex in pkg_dict['extras']:
+            if ex['key'] == 'license_url':
+                license_url = ex['value']
+            elif ex['key'] == 'license':
+                license = ex['value']
+
+        if not (license_id or license or license_url):
+            l = License.get(License.DEFAULT_LICENSE)
+
+        else:
+            l = License.find_by_token(license, license_id, license_url)
+        
+        for res in pkg_dict['resources']:
+            res['license_type'] = l.uri
+        
+        return pkg_dict
+
+            
 
