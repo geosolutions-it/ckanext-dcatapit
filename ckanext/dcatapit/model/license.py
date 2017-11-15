@@ -64,7 +64,8 @@ class License(_Base, DeclarativeBase):
     id = Column(types.Integer, primary_key=True)
     license_type = Column(types.Unicode, nullable=True, unique=False)
     version = Column(types.Unicode, nullable=True)
-    uri = Column(types.Unicode, nullable=False)
+    uri = Column(types.Unicode, nullable=False, unique=True)
+    path = Column(types.Unicode, nullable=False, unique=True)
     document_uri = Column(types.Unicode, nullable=True)
     rank_order = Column(types.Integer, nullable=False)
     default_name = Column(types.Unicode, nullable=False)
@@ -276,6 +277,7 @@ class License(_Base, DeclarativeBase):
                   license_type,
                   version,
                   uri,
+                  path,
                   document_uri,
                   rank_order,
                   names,
@@ -294,6 +296,7 @@ class License(_Base, DeclarativeBase):
         inst = cls(license_type=license_type,
                    version=version,
                    uri=uri,
+                   path=path,
                    document_uri=document_uri,
                    rank_order=rank_order,
                    parent_id=parent,
@@ -312,13 +315,11 @@ class License(_Base, DeclarativeBase):
 
     @classmethod
     def for_select(cls, lang):
-        q = Session.query(cls.license_type, cls.uri, LocalizedLicenseName.label)\
+        q = Session.query(cls, LocalizedLicenseName.label)\
                    .join(LocalizedLicenseName)\
                    .filter(LocalizedLicenseName.lang==lang,
-                           cls.rank_order > 1)\
-                   .order_by(cls.rank_order,
-                             cls.parent_id,
-                             cls.default_name)
+                           cls.rank_order>1)\
+                   .order_by(cls.path)
         return list(q)
 
 
@@ -399,10 +400,12 @@ def load_from_graph(path=None, url=None):
         _labels = g.objects(license, SKOS.prefLabel)
         labels = dict((l.language, unicode(l),) for l in _labels)
         parent = None
+        license_path=str(license).split('/')[-1].split('_')[0]
         document_uri = g.value(license, DCATAPIT.referenceDoc)
         l = License.from_data(unicode(license_type or ''),
                               str(version),
                               uri=str(license),
+                              path=license_path,
                               document_uri=str(document_uri),
                               rank_order=int(str(rank_order)),
                               names=labels,

@@ -8,7 +8,7 @@ from ckan.model import Session
 from pylons.i18n.translation import get_lang
 
 from ckan.plugins.interfaces import Interface
-from ckanext.dcatapit.model import DCATAPITTagVocabulary
+from ckanext.dcatapit.model import DCATAPITTagVocabulary, License
 
 log = logging.getLogger(__name__)
 
@@ -268,3 +268,18 @@ def get_localized_tag_name(tag_name=None, fallback_lang=None):
 
 def get_all_localized_tag_labels(tag_name):
     return DCATAPITTagVocabulary.all_by_name(tag_name)
+
+def get_resource_licenses_tree(value, lang):
+    options = License.for_select(lang)
+
+    out = []
+    for license, label in options:
+        out.append({'selected': license.uri == value,
+                    'value': license.uri,
+                    # let's do indentation
+                    'text': label,
+                    'depth': license.rank_order -1,
+                    'depth_str': '&nbsp;&nbsp;'*(license.rank_order-1) or '',
+                    'level': license.rank_order})
+    return out
+

@@ -230,7 +230,8 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'format': helpers.format,
             'validate_dateformat': helpers.validate_dateformat,
             'get_localized_field_value': helpers.get_localized_field_value,
-            'get_package_resource_dcatapit_format_list': helpers.get_package_resource_dcatapit_format_list
+            'get_package_resource_dcatapit_format_list': helpers.get_package_resource_dcatapit_format_list,
+            'get_resource_licenses_tree': helpers.get_resource_licenses_tree,
         }
 
     # ------------- IPackageController ---------------#
