@@ -273,6 +273,17 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                     else:
                         self.update_loc_field(extra, pkg_dict.get('id'), field, lang)
 
+    def before_index(self, dataset_dict):
+        '''
+        Insert `dcat_theme` into solr
+        '''
+        
+        extra_theme = dataset_dict.get("extras_theme" , None)
+        search_terms = [theme for theme in extra_theme.strip('{}').split(',') if theme] if extra_theme else []
+        if search_terms:
+            dataset_dict['dcat_theme'] = search_terms
+
+        return dataset_dict
 
     def after_search(self, search_results, search_params):
         ## ##################################################################### 

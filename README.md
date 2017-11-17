@@ -115,6 +115,12 @@ The ckanext-dcatapit RDF harvester also harvests localized fields in multiple la
 
     `paster --plugin=ckanext-dcatapit vocabulary initdb --config=/etc/ckan/default/production.ini`
 
+11. Update the Solr schema.xml file used by CKAN introducing the following element:
+
+        <field name="dcat_theme" type="string" indexed="true" stored="false" multiValued="true"/>
+        
+11. Restart Solr.
+
 12. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu:
 
      `sudo service apache2 reload`
