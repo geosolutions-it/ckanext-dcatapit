@@ -287,7 +287,7 @@ def get_license_for_dcat(license_type):
     l = License.get(license_type or License.DEFAULT_LICENSE)
     if not l:
         l = License.get(License.DEFAULT_LICENSE)
-    return l.license_type, l.default_name, l.document_uri
+    return l.license_type, l.default_name, l.document_uri, l.version
 
 def get_license_from_dcat(license_doc, license_type, license_name):
 

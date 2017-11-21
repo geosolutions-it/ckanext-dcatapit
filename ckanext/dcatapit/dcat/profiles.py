@@ -10,7 +10,7 @@ from rdflib import URIRef, BNode, Literal
 
 import ckan.logic as logic
 
-from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF, ADMS
+from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF, ADMS, OWL
 from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
 
 import ckanext.dcatapit.interfaces as interfaces
@@ -586,12 +586,13 @@ class ItalianDCATAPProfile(RDFProfile):
             # "license_url" : "http://www.opendefinition.org/licenses/cc-zero",
 
             license_info = interfaces.get_license_for_dcat(resource_dict.get('license_type'))
-            dcat_license, license_title, license_url = license_info
+            dcat_license, license_title, license_url, license_version = license_info
 
             license = URIRef(license_url or dcat_license)
             g.add((license, RDF.type, DCATAPIT.LicenseDocument))
             g.add((license, RDF.type, DCT.LicenseDocument))
             g.add((license, DCT.type, URIRef(dcat_license)))
+            g.add((license, OWL.versionInfo, Literal(license_version)))
             g.add((license, FOAF.name, Literal(license_title)))
             
             g.add((distribution, DCT.license, license))
