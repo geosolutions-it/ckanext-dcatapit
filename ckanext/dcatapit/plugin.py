@@ -543,6 +543,6 @@ class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
 
     # IFacets
     def dataset_facets(self, facets_dict, package_type):
-        facets_dict['source_catalog_title'] = plugins.toolkit._("Sources")
+        facets_dict['source_catalog_title'] = plugins.toolkit._("Source catalogs")
         return facets_dict
 

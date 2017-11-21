@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-12-07 04:04+0100\n"
+"POT-Creation-Date: 2017-11-11 10:35+0100\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -18,7 +18,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ckanext/dcatapit/schema.py:15 ckanext/dcatapit/schema.py:134
+#: ckanext/dcatapit/plugin.py:546
+#, fuzzy
+msgid "Source catalogs"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:15 ckanext/dcatapit/schema.py:135
 msgid "Dataset Editor"
 msgstr "Dataset-Editor"
 
@@ -34,8 +39,8 @@ msgstr "Die verantwortliche Organisation des Katalogs"
 msgid "Catalog Organization Code"
 msgstr "Katalog Organisationscode"
 
-#: ckanext/dcatapit/schema.py:26 ckanext/dcatapit/schema.py:147
-#: ckanext/dcatapit/schema.py:271 ckanext/dcatapit/schema.py:293
+#: ckanext/dcatapit/schema.py:26 ckanext/dcatapit/schema.py:149
+#: ckanext/dcatapit/schema.py:277 ckanext/dcatapit/schema.py:300
 msgid "IPA/IVA"
 msgstr "IPA/IVA"
 
@@ -47,190 +52,200 @@ msgstr "Die IVA / IPA-Code der Katalogorganisation"
 msgid "Catalog Release Date"
 msgstr "Katalogerscheinungsdatum"
 
-#: ckanext/dcatapit/schema.py:36
+#: ckanext/dcatapit/schema.py:37
 msgid "catalog release date"
 msgstr "Katalog Veröffentlichungstermine"
 
-#: ckanext/dcatapit/schema.py:37
+#: ckanext/dcatapit/schema.py:38
 msgid "The creation date of the catalog"
 msgstr "Das Erstellungsdatum des Katalogs"
 
-#: ckanext/dcatapit/schema.py:64
+#: ckanext/dcatapit/schema.py:65
 msgid "EMail"
 msgstr "email"
 
-#: ckanext/dcatapit/schema.py:65
+#: ckanext/dcatapit/schema.py:66
 msgid "organization email"
 msgstr "Organisation E-Mail"
 
-#: ckanext/dcatapit/schema.py:73
+#: ckanext/dcatapit/schema.py:74
 msgid "Telephone"
 msgstr "Telefon"
 
-#: ckanext/dcatapit/schema.py:74
+#: ckanext/dcatapit/schema.py:75
 msgid "organization telephone"
 msgstr "Organisation Telefon"
 
-#: ckanext/dcatapit/schema.py:82
+#: ckanext/dcatapit/schema.py:83
 msgid "Site URL"
 msgstr "Seiten-URL"
 
-#: ckanext/dcatapit/schema.py:83
+#: ckanext/dcatapit/schema.py:84
 msgid "organization site url"
 msgstr "Organisation Website-URL"
 
-#: ckanext/dcatapit/schema.py:95
+#: ckanext/dcatapit/schema.py:96
 msgid "Dataset Identifier"
 msgstr "Dataset Identifier"
 
-#: ckanext/dcatapit/schema.py:96
+#: ckanext/dcatapit/schema.py:97
 msgid "dataset identifier"
 msgstr "dataset identifier"
 
-#: ckanext/dcatapit/schema.py:104
+#: ckanext/dcatapit/schema.py:105
 msgid "Other Identifier"
 msgstr "Andere Bezeichnung"
 
-#: ckanext/dcatapit/schema.py:105
+#: ckanext/dcatapit/schema.py:106
 msgid "other identifier"
 msgstr "anderen Bezeichner"
 
-#: ckanext/dcatapit/schema.py:114
+#: ckanext/dcatapit/schema.py:115
 msgid "Dataset Themes"
 msgstr "Dataset-Designs"
 
-#: ckanext/dcatapit/schema.py:115
+#: ckanext/dcatapit/schema.py:116
 msgid "eg. education, agriculture, energy"
 msgstr "g. Bildung, Landwirtschaft, Energie"
 
-#: ckanext/dcatapit/schema.py:126
+#: ckanext/dcatapit/schema.py:127
 msgid "Sub Theme"
 msgstr "Unter Thema"
 
-#: ckanext/dcatapit/schema.py:127
+#: ckanext/dcatapit/schema.py:128
 msgid "sub theme of the dataset"
 msgstr "Unterthema des Datensatzes"
 
-#: ckanext/dcatapit/schema.py:140 ckanext/dcatapit/schema.py:262
-#: ckanext/dcatapit/schema.py:286
+#: ckanext/dcatapit/schema.py:141 ckanext/dcatapit/schema.py:268
+#: ckanext/dcatapit/schema.py:292
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:90
 msgid "Name"
 msgstr "Name"
 
-#: ckanext/dcatapit/schema.py:142
+#: ckanext/dcatapit/schema.py:143
 msgid "publisher name"
 msgstr "Name des Herausgebers"
 
-#: ckanext/dcatapit/schema.py:149
+#: ckanext/dcatapit/schema.py:151
 msgid "publisher identifier"
 msgstr "anderen Bezeichner"
 
-#: ckanext/dcatapit/schema.py:158
+#: ckanext/dcatapit/schema.py:160
 msgid "Release Date"
 msgstr "Veröffentlichungsdatum"
 
-#: ckanext/dcatapit/schema.py:159
+#: ckanext/dcatapit/schema.py:162
 msgid "release date"
 msgstr "Veröffentlichungsdatum"
 
-#: ckanext/dcatapit/schema.py:167
+#: ckanext/dcatapit/schema.py:170
 msgid "Modification Date"
 msgstr "Änderungsdatum"
 
-#: ckanext/dcatapit/schema.py:168
+#: ckanext/dcatapit/schema.py:172
 msgid "modification date"
 msgstr "Änderungsdatum"
 
-#: ckanext/dcatapit/schema.py:177
+#: ckanext/dcatapit/schema.py:181
 msgid "Geographical Name"
 msgstr "geografischen Abdeckung"
 
-#: ckanext/dcatapit/schema.py:178
+#: ckanext/dcatapit/schema.py:182
 msgid "geographical name"
 msgstr "geografischen Abdeckung"
 
-#: ckanext/dcatapit/schema.py:181
+#: ckanext/dcatapit/schema.py:185
 msgid "Organizational Unit Responsible Competence Area"
 msgstr "Zuständigkeitsgebiet der Organisationseinheit"
 
-#: ckanext/dcatapit/schema.py:188
+#: ckanext/dcatapit/schema.py:192
 msgid "GeoNames URL"
 msgstr "GeoNames-URL"
 
-#: ckanext/dcatapit/schema.py:189
+#: ckanext/dcatapit/schema.py:193
 msgid "http://www.geonames.org/3175395"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:198
+#: ckanext/dcatapit/schema.py:202
 msgid "Dataset Languages"
 msgstr "Dataset Sprachen"
 
-#: ckanext/dcatapit/schema.py:199
+#: ckanext/dcatapit/schema.py:203
 msgid "eg. italian, german, english"
 msgstr "z.B. Italienisch, deutsch, englisch"
 
-#: ckanext/dcatapit/schema.py:206
+#: ckanext/dcatapit/schema.py:210
 msgid "Temporal Coverage"
 msgstr "Zeitliche Deckung"
 
-#: ckanext/dcatapit/schema.py:211
+#: ckanext/dcatapit/schema.py:215
 msgid "Start Date"
 msgstr "Anfangsdatum"
 
-#: ckanext/dcatapit/schema.py:214 ckanext/dcatapit/schema.py:221
+#: ckanext/dcatapit/schema.py:219 ckanext/dcatapit/schema.py:227
 msgid "temporal coverage"
 msgstr "zeitliche Abdeckung"
 
-#: ckanext/dcatapit/schema.py:218
+#: ckanext/dcatapit/schema.py:223
 msgid "End Date"
 msgstr "Enddatum"
 
-#: ckanext/dcatapit/schema.py:231
+#: ckanext/dcatapit/schema.py:237
 msgid "Frequency"
 msgstr "Frequenz"
 
-#: ckanext/dcatapit/schema.py:232
+#: ckanext/dcatapit/schema.py:238
 msgid "accrual periodicity"
 msgstr "Periodendauer"
 
-#: ckanext/dcatapit/schema.py:241
+#: ckanext/dcatapit/schema.py:247
 msgid "Version Of"
 msgstr "Version von"
 
-#: ckanext/dcatapit/schema.py:242
+#: ckanext/dcatapit/schema.py:248
 msgid "is version of a related dataset URI"
 msgstr "Ist die Version eines verknüpften Dataset-URI"
 
-#: ckanext/dcatapit/schema.py:250
+#: ckanext/dcatapit/schema.py:256
 msgid "Conforms To"
 msgstr "Entspricht"
 
-#: ckanext/dcatapit/schema.py:251
+#: ckanext/dcatapit/schema.py:257
 msgid "conforms to"
 msgstr "entspricht"
 
-#: ckanext/dcatapit/schema.py:257
+#: ckanext/dcatapit/schema.py:263
 msgid "Rights Holder"
 msgstr "Rechteinhaber"
 
-#: ckanext/dcatapit/schema.py:265 ckanext/dcatapit/schema.py:274
+#: ckanext/dcatapit/schema.py:271 ckanext/dcatapit/schema.py:280
 msgid "rights holder of the dataset"
 msgstr "Rechteinhaber des Datenbestandes"
 
-#: ckanext/dcatapit/schema.py:281
+#: ckanext/dcatapit/schema.py:287
 msgid "Creator"
 msgstr "Schöpfer"
 
-#: ckanext/dcatapit/schema.py:289 ckanext/dcatapit/schema.py:296
+#: ckanext/dcatapit/schema.py:295 ckanext/dcatapit/schema.py:303
 msgid "creator of the dataset"
 msgstr "Ersteller des Datensatzes"
 
-#: ckanext/dcatapit/schema.py:320
+#: ckanext/dcatapit/schema.py:327
 msgid "Distribution Format"
 msgstr "Verteilungsformat"
 
-#: ckanext/dcatapit/schema.py:321
+#: ckanext/dcatapit/schema.py:328
 msgid "distribution format"
 msgstr "Verteilungsformat"
+
+#: ckanext/dcatapit/schema.py:336
+#: ckanext/dcatapit/templates/package/resource_read.html:23
+msgid "License"
+msgstr ""
+
+#: ckanext/dcatapit/schema.py:337
+msgid "license type"
+msgstr ""
 
 #: ckanext/dcatapit/validators.py:20
 msgid "Invalid couple, one value is missing"
@@ -240,6 +255,10 @@ msgstr "Ungültiges Paar, ein Wert fehlt"
 msgid "This field cannot be a number"
 msgstr "Dieses Feld kann keine Zahl sein"
 
+#: ckanext/dcatapit/validators.py:41
+msgid "Another package exists with the same identifier"
+msgstr ""
+
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:5
 msgid "This field is required"
 msgstr "Dieses Feld wird benötigt"
@@ -248,13 +267,77 @@ msgstr "Dieses Feld wird benötigt"
 msgid "Custom"
 msgstr "Brauch"
 
+#: ckanext/dcatapit/templates/package/resource_read.html:9
+#, fuzzy
+msgid "Resource Metadata"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/resource_read.html:13
+#: ckanext/dcatapit/templates/package/resource_read.html:38
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:84
+msgid "Field"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/resource_read.html:14
+#: ckanext/dcatapit/templates/package/resource_read.html:39
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:85
+msgid "Value"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/resource_read.html:19
+#: ckanext/dcatapit/templates/package/resource_read.html:52
+msgid "Format"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/resource_read.html:34
+#, fuzzy
+msgid "Additional Information"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/resource_read.html:44
+#, fuzzy
+msgid "Last updated"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/resource_read.html:45
+#: ckanext/dcatapit/templates/package/resource_read.html:49
+#: ckanext/dcatapit/templates/package/resource_read.html:53
+msgid "unknown"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/resource_read.html:48
+msgid "Created"
+msgstr ""
+
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:3
 msgid "Dataset Metadata"
 msgstr "Standard-Metadaten"
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:54
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:23
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:26
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:44
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:50
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:52
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:61
 msgid "N/D"
 msgstr "N/V"
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:80
+msgid "Source Catalog Info"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:97
+msgid "Description"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:105
+msgid "Homepage"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:117
+#, fuzzy
+msgid "Last Updated"
+msgstr ""
 
 #: ckanext/dcatapit/templates/package/snippets/resource_form.html:13
 msgid "Last Modified"
@@ -272,9 +355,6 @@ msgstr "Dateigröße"
 msgid "eg. 1024"
 msgstr "z.B. 1024"
 
-#~ msgid "Catalog Themes"
-#~ msgstr "Katalog Themen"
-
-#~ msgid "Themes of the catalog"
-#~ msgstr "Themen des Katalogs"
+#~ msgid "Sources"
+#~ msgstr ""
 
