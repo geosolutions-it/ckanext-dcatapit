@@ -432,8 +432,8 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         license_ref = g.value(r1, DCT.license)
         
         assert license_ref is not None
-        assert str(license_ref) == unknown.license_type
-
+        assert str(license_ref) == unknown.uri,\
+            "got license {}, instead of {}".format(license_ref, unknown.license_type)
 
         gpl = License.get(dataset['resources'][1]['license_type'])
         assert gpl is not None

@@ -264,15 +264,30 @@ class ItalianDCATAPProfile(RDFProfile):
 
                 license_doc = str(license)
                 dcat_license = self._object_value(distribution, DCT.type)
-                license_name = self._object_value(license, FOAF.name) # may be either the title or the id
+                license_names = self.g.objects(license, FOAF.name) # may be either the title or the id
                 license_version = self._object_value(license, FOAF.versionInfo)
 
+                names = {}
+                for l in license_names:
+                    names[l.language] = str(l)
                 license_type = interfaces.get_license_from_dcat(license_doc,
                                                                 dcat_license,
-                                                                license_name)
+                                                                **names)
                 if license_version and str(license_version) != license_type.version:
                     log.warning("License version mismatch between %s and %s", license_versions, license_type.version)
-                resource_dict['license_type'] = license_type
+                resource_dict['license_type'] = license_type.uri
+                try:
+                    license_name = names['it']
+                except KeyError:
+                    try:
+                        license_name = names['en']
+                    except KeyError:
+                        if names:
+                            license_name = names.values()[0]
+                        else:
+                            license_name = license_type.default_name
+
+                    
                 licenses.append((str(license), license_name))
             else:
                 log.warn('No license found for resource "%s"::"%s"',
