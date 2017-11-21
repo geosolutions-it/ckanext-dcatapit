@@ -588,7 +588,7 @@ class ItalianDCATAPProfile(RDFProfile):
             # "license_url" : "http://www.opendefinition.org/licenses/cc-zero",
 
             license_info = interfaces.get_license_for_dcat(resource_dict.get('license_type'))
-            dcat_license, license_title, license_url, license_version, dcatapit_license = license_info
+            dcat_license, license_title, license_url, license_version, dcatapit_license, names = license_info
 
             license = URIRef(license_url or dcatapit_license)
 
@@ -597,7 +597,8 @@ class ItalianDCATAPProfile(RDFProfile):
             g.add((license, DCT.type, URIRef(dcat_license)))
             if license_version:
                 g.add((license, OWL.versionInfo, Literal(license_version)))
-            g.add((license, FOAF.name, Literal(license_title)))
+            for n in names:
+                g.add((license, FOAF.name, Literal(n['name'], lang=n['lang'])))
             
             g.add((distribution, DCT.license, license))
 

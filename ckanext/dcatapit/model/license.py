@@ -180,6 +180,9 @@ class License(_Base, DeclarativeBase):
                 return localized.label
         return self.default_name
 
+    def get_names(self):
+        return [{'lang': l.lang, 'name': l.label} for l in self.names]
+
     @classmethod
     def clear(cls):
         Session.query(LocalizedLicenseName).delete()
