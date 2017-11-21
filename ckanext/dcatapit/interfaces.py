@@ -8,7 +8,7 @@ from ckan.model import Session
 from pylons.i18n.translation import get_lang
 
 from ckan.plugins.interfaces import Interface
-from ckanext.dcatapit.model import DCATAPITTagVocabulary
+from ckanext.dcatapit.model import DCATAPITTagVocabulary, License
 
 log = logging.getLogger(__name__)
 
@@ -268,3 +268,43 @@ def get_localized_tag_name(tag_name=None, fallback_lang=None):
 
 def get_all_localized_tag_labels(tag_name):
     return DCATAPITTagVocabulary.all_by_name(tag_name)
+
+def get_resource_licenses_tree(value, lang):
+    options = License.for_select(lang)
+
+    out = []
+    for license, label in options:
+        out.append({'selected': license.uri == value,
+                    'value': license.uri,
+                    # let's do indentation
+                    'text': label,
+                    'depth': license.rank_order -1,
+                    'depth_str': '&nbsp;&nbsp;'*(license.rank_order-1) or '',
+                    'level': license.rank_order})
+    return out
+
+def get_license_for_dcat(license_type):
+    l = License.get(license_type or License.DEFAULT_LICENSE)
+    if not l or not l.license_type:
+        l = License.get(License.DEFAULT_LICENSE)
+    names = l.get_names()
+    return l.license_type, l.default_name, l.document_uri, l.version, l.uri, names
+
+def get_license_from_dcat(license_doc, license_type, **license_names):
+
+    default = License.get(License.DEFAULT_LICENSE)
+    if license_doc == default.license_type:
+        return default.uri
+    
+    l = None
+    for lang, name in license_names.items():
+        l = License.get_by_lang(lang, _name)
+        if l:
+            break
+    if not l:
+        l = License.get(license_doc)
+    if not l:
+        l = License.get(license_type)
+    if not l:
+        l = default
+    return l

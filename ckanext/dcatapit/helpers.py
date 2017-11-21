@@ -73,6 +73,10 @@ def get_localized_field_value(field=None, pkg_id=None, field_type='extra'):
     log.debug('Retrieving localized package field...')
     return interfaces.get_localized_field_value(field, pkg_id, field_type)
 
+def get_resource_licenses_tree(value=None, lang=None):
+    return interfaces.get_resource_licenses_tree(value, lang)
+
+
 def list_to_string(_list, _format=None):
     if _list:
         _string = ''
@@ -156,4 +160,3 @@ def validate_dateformat(date_string, date_format):
     except ValueError:
         log.debug(u'Incorrect date format {0} for date string {1}'.format(date_format, date_string))
         return None
-
