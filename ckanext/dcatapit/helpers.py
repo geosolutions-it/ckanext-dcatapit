@@ -5,6 +5,7 @@ import ckan.plugins.toolkit as toolkit
 import ckanext.dcatapit.schema as dcatapit_schema
 
 import ckanext.dcatapit.interfaces as interfaces
+from ckanext.dcatapit.model.license import License
 
 import datetime
 from webhelpers.html import escape, HTML, literal, url_escape
@@ -55,6 +56,12 @@ def get_vocabulary_items(vocabulary_name, keys=None):
         return tag_list
     except toolkit.ObjectNotFound:
         return []
+
+def get_vocabulary_item(vocabulary_name, key):
+    return interfaces.get_localized_tag_name(key)
+
+def get_dcatapit_license(license_type):
+    return interfaces.get_license_for_dcat(license_type)
 
 def get_package_resource_dcatapit_format_list(pkg_resources, fallback_lang=None):
     resources = []

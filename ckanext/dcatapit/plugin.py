@@ -223,6 +223,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         return {
             'get_dcatapit_package_schema': helpers.get_dcatapit_package_schema,
             'get_vocabulary_items': helpers.get_vocabulary_items,
+            'get_vocabulary_item': helpers.get_vocabulary_item,
             'get_dcatapit_resource_schema': helpers.get_dcatapit_resource_schema,
             'list_to_string': helpers.list_to_string,
             'couple_to_html': helpers.couple_to_html,
@@ -232,6 +233,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'get_localized_field_value': helpers.get_localized_field_value,
             'get_package_resource_dcatapit_format_list': helpers.get_package_resource_dcatapit_format_list,
             'get_resource_licenses_tree': helpers.get_resource_licenses_tree,
+            'get_dcatapit_license': helpers.get_dcatapit_license,
         }
 
     # ------------- IPackageController ---------------#
