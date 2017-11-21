@@ -122,10 +122,9 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         
         eq_(dataset['is_version_of'], 'http://dcat.geo-solutions.it/dataset/energia-da-fonti-rinnovabili2')
 
-        conforms_to = dataset['conforms_to'].split(',') if ',' in dataset['conforms_to'] else [dataset['conforms_to']]
-        conforms_to.sort()
-        conforms_to = '{' + ','.join([str(x) for x in conforms_to]) + '}'
-        eq_(conforms_to, '{CONF1,CONF2,CONF3}')
+        conforms_to = json.loads(dataset['conforms_to'])
+        conforms_to_ids = set([c['identifier'] for c in conforms_to])
+        eq_(conforms_to_ids, set('CONF1,CONF2,CONF3'.split(',')))
 
         # Multilang values
         ok_(dataset['DCATAPIT_MULTILANG_BASE'])

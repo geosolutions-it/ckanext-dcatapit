@@ -1,4 +1,5 @@
 
+import json
 import ast
 import logging
 import datetime
@@ -342,13 +343,18 @@ class ItalianDCATAPProfile(RDFProfile):
         dataset_dict['extras'].append({'key': key, 'value': value})
 
     def _conforms_to(self, conforms_id):
-        ref_docs = [ str(val) for val in self.g.values(conforms_id, DCATAPIT.referenceDocumentation)]
+        ref_docs = [ str(val) for val in self.g.objects(conforms_id, DCATAPIT.referenceDocumentation)]
         out = {'_ref': str(conforms_id),
+               'identifier': str(self.g.value(conforms_id, DCT.identifier)),
                'title': {},
                'description': {},
                'referenceDocumentation': ref_docs}
-        #for t in self.g.values(conforms_id, DCT.title):
-        #    out['title'][t.
+        for t in self.g.objects(conforms_id, DCT.title):
+            out['title'][t.language] = str(t)
+
+        for t in self.g.objects(conforms_id, DCT.description):
+            out['description'][t.language] = str(t)
+
         return out
 
 
@@ -452,7 +458,12 @@ class ItalianDCATAPProfile(RDFProfile):
         self.g.remove((dataset_ref, DCT.conformsTo, None))
         value = self._get_dict_value(dataset_dict, 'conforms_to')
         if value:
-            conforms_to = json.loads(value)
+            try:
+                conforms_to = json.loads(value)
+            except (TypeError, ValueError,):
+                log.warning("Cannot deserialize DCATAPIT:conformsTo value: %s", value)
+                conforms_to = []
+
             for item in conforms_to:
                 if item.get('_ref'):
                     standard = Literal(item['_ref'])
@@ -462,9 +473,12 @@ class ItalianDCATAPProfile(RDFProfile):
                 self.g.add((standard, RDF['type'], DCT.Standard))
                 self.g.add((standard, RDF['type'], DCATAPIT.Standard))
                 self.g.add((standard, DCT.identifier, Literal(item['identifier'])))
-                #for lang, val in item.get('description') or []:
-                #    self.g.add((
 
+                for lang, val in (item.get('title') or {}).items():
+                    self.g.add((standard, DCT.title, Literal(val, lang=lang)))
+
+                for lang, val in (item.get('description') or {}).items():
+                    self.g.add((standard, DCT.description, Literal(val, lang=lang)))
 
         ### publisher
 
