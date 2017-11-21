@@ -127,10 +127,9 @@ class ItalianDCATAPProfile(RDFProfile):
         self._remove_from_extra(dataset_dict, 'conforms_to')
         conform_list = []
         for conforms_to in self.g.objects(dataset_ref, DCT.conformsTo):
-            conform_list.append(self._object_value(conforms_to, DCT.identifier))
+            conform_list.append(self._conforms_to(conforms_to))
         if conform_list:
-            value = ','.join(conform_list)
-            dataset_dict['conforms_to'] = value
+            dataset_dict['conforms_to'] = json.dumps(conform_list)
         else:
             log.debug('No DCT.conformsTo found for dataset "%s"', dataset_dict.get('title', '---'))
 
@@ -342,6 +341,17 @@ class ItalianDCATAPProfile(RDFProfile):
         # add if not found
         dataset_dict['extras'].append({'key': key, 'value': value})
 
+    def _conforms_to(self, conforms_id):
+        ref_docs = [ str(val) for val in self.g.values(conforms_id, DCATAPIT.referenceDocumentation)]
+        out = {'_ref': str(conforms_id),
+               'title': {},
+               'description': {},
+               'referenceDocumentation': ref_docs}
+        #for t in self.g.values(conforms_id, DCT.title):
+        #    out['title'][t.
+        return out
+
+
     def _parse_agent(self, subject, predicate, base_name):
 
         agent_dict = {}
@@ -442,14 +452,19 @@ class ItalianDCATAPProfile(RDFProfile):
         self.g.remove((dataset_ref, DCT.conformsTo, None))
         value = self._get_dict_value(dataset_dict, 'conforms_to')
         if value:
-            for item in value.split(','):
-
-                standard = BNode()
+            conforms_to = json.loads(value)
+            for item in conforms_to:
+                if item.get('_ref'):
+                    standard = Literal(item['_ref'])
+                else:
+                    standard = BNode()
                 self.g.add((dataset_ref, DCT.conformsTo, standard))
-
                 self.g.add((standard, RDF['type'], DCT.Standard))
                 self.g.add((standard, RDF['type'], DCATAPIT.Standard))
-                self.g.add((standard, DCT.identifier, Literal(item)))
+                self.g.add((standard, DCT.identifier, Literal(item['identifier'])))
+                #for lang, val in item.get('description') or []:
+                #    self.g.add((
+
 
         ### publisher
 

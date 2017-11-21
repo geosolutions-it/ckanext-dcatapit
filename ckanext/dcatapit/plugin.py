@@ -498,6 +498,9 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
     def update_config(self, config):
         # Add extension templates directory
         toolkit.add_template_directory(config, 'templates')
+        toolkit.add_public_directory(config, 'public')
+        print('dupp')
+        toolkit.add_resource('fanstatic', 'ckanext-dcatapit')
 
     def update_config_schema(self, schema):        
         for field in dcatapit_schema.get_custom_config_schema(False):

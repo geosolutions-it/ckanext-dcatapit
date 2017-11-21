@@ -62,7 +62,7 @@ def dcatapit_conforms_to(value, context):
     if not isinstance(data, list):
         raise Invalid(_("List expected for conforms_to values"))
 
-    allowed_keys = ['identifier', 'title', 'description', 'referenceDocumentation']
+    allowed_keys = ['_ref', 'identifier', 'title', 'description', 'referenceDocumentation']
 
     for elm in data:
         if not isinstance(elm, dict):
@@ -73,7 +73,8 @@ def dcatapit_conforms_to(value, context):
         if not isinstance(elm.get('identifier'), (str, unicode,)):
             raise Invalid(_("conforms_to element should contain identifier"))
 
-        for prop_name, allowed_types in (('title', (str, unicode,),),
+        for prop_name, allowed_types in (('_ref', (str, unicode,),),
+                                         ('title', (str, unicode,),),
                                          ('description', (str, unicode,),),
                                          ('referenceDocumentation', list,),
                                          ):

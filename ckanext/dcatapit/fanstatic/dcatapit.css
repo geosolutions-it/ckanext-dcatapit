@@ -1,0 +1,11 @@
+
+.template {
+    display: none;
+}
+
+.w200 {
+    max-width: 200px;
+}
+.add_new {
+    cursor: pointer;
+}

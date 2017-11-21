@@ -95,6 +95,36 @@ Old implementation of the couple element (one element with comma separated value
 
 {% endmacro %}
 
+{% macro conforms_to(name, id='', label='', value='', error='', classes=[], placeholder='') %}
+    {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
+    <input type="hidden" name="conforms_to" value="{value or dict()| safe}" />
+
+    <div class="conforms_to template" data-module="dcatapit-elm-template" data-module-container=".conforms_to_container">
+        <label><span class="w200">{% trans %}Identifier{% endtrans %}</span>
+            <input type="text" name="identifier" value="" placeholder="{% trans %}identifier{% endtrans %}"/>
+        </label>
+        <label><span class="w200">{% trans %}Title{% endtrans %}</span>
+            <input type="text" name="title" value="" placeholder="{% trans %}title{% endtrans %}"/>
+        </label>
+        <label><span class="w200">{% trans %}Description{% endtrans %}</span>
+            <input type="text" name="description" value="" placeholder="{% trans %}description{% endtrans %}"/>
+        </label>
+
+        <label><span class="w200">{% trans %}Reference documentation{% endtrans %}</span>
+            <div class="reference_container">
+            <input type="text" name="reference_documentation" placeholder="{% trans %}reference documentation (url){% endtrans %}" class="template" data-module="dcatapit-elm-template" data-module-container=".reference_container"/>
+
+            </div>
+        </label>
+    </div>
+
+    <div class="conforms_to_container"></div>
+
+
+    {% endcall %}
+{% endmacro %}
+
+
 {%- macro attributes(attrs={}) -%}
   {%- for key, value in attrs.items() -%}
   {{ " " }}{{ key }}{% if value != "" %}="{{ value }}"{% endif %}
