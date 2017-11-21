@@ -265,11 +265,13 @@ class ItalianDCATAPProfile(RDFProfile):
                 license_doc = str(license)
                 dcat_license = self._object_value(distribution, DCT.type)
                 license_name = self._object_value(license, FOAF.name) # may be either the title or the id
+                license_version = self._object_value(license, FOAF.versionInfo)
 
                 license_type = interfaces.get_license_from_dcat(license_doc,
                                                                 dcat_license,
                                                                 license_name)
-
+                if license_version and str(license_version) != license_type.version:
+                    log.warning("License version mismatch between %s and %s", license_versions, license_type.version)
                 resource_dict['license_type'] = license_type
                 licenses.append((str(license), license_name))
             else:
@@ -586,13 +588,15 @@ class ItalianDCATAPProfile(RDFProfile):
             # "license_url" : "http://www.opendefinition.org/licenses/cc-zero",
 
             license_info = interfaces.get_license_for_dcat(resource_dict.get('license_type'))
-            dcat_license, license_title, license_url, license_version = license_info
+            dcat_license, license_title, license_url, license_version, dcatapit_license = license_info
 
-            license = URIRef(license_url or dcat_license)
+            license = URIRef(license_url or dcatapit_license)
+
             g.add((license, RDF.type, DCATAPIT.LicenseDocument))
             g.add((license, RDF.type, DCT.LicenseDocument))
             g.add((license, DCT.type, URIRef(dcat_license)))
-            g.add((license, OWL.versionInfo, Literal(license_version)))
+            if license_version:
+                g.add((license, OWL.versionInfo, Literal(license_version)))
             g.add((license, FOAF.name, Literal(license_title)))
             
             g.add((distribution, DCT.license, license))
