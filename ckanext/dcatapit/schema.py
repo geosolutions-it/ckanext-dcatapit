@@ -249,6 +249,16 @@ def get_custom_package_schema():
 		    'is_required': False
 	    },
 	    {
+		    'name': 'conforms_to',
+		    'validator': ['ignore_missing', 'dcatapit_conforms_to'],
+		    'element': 'conforms_to',
+		    'type': 'conforms_to',
+		    'label': _('Conforms To'),
+		    'placeholder': _('conforms to'),
+		    'is_required': False
+	    },
+
+	    {
 		    'name': 'rights_holder',
 		    'element': 'couple',
 		    'label': _('Rights Holder'),
@@ -318,15 +328,6 @@ def get_custom_resource_schema():
 		    'label': _('Distribution Format'),
 		    'placeholder': _('distribution format'),
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=filetype&incomplete=?',
-		    'is_required': False
-	    },
-	    {
-		    'name': 'conforms_to',
-		    'validator': ['ignore_missing', 'no_number'],
-		    'element': 'conforms_to',
-		    'type': 'conforms_to',
-		    'label': _('Conforms To'),
-		    'placeholder': _('conforms to'),
 		    'is_required': False
 	    },
 	]
