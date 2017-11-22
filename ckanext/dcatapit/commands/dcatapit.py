@@ -5,6 +5,10 @@ import re
 
 import ckan.plugins.toolkit as toolkit
 import ckanext.dcatapit.interfaces as interfaces
+from ckanext.dcatapit.model.license import (
+    load_from_graph as load_licenses_from_graph,
+    clear_licenses)
+from ckan.model.meta import Session
 
 from pylons import config
 from ckan.lib.cli import CkanCommand
@@ -18,6 +22,7 @@ EUROPEAN_THEME_NAME = 'eu_themes'
 LOCATIONS_THEME_NAME = 'places'
 FREQUENCIES_THEME_NAME = 'frequencies'
 FILETYPE_THEME_NAME = 'filetype'
+LICENSES_NAME = 'licenses'
 
 log = logging.getLogger(__name__)
 
@@ -31,7 +36,7 @@ class DCATAPITCommands(CkanCommand):
      Where:
        URL  is the url to a SKOS document
        FILE is the local path to a SKOS document
-       NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies)
+       NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies, licenses)
        Where the corresponding rdf are:
           languages   -> http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf
           eu_themes   -> http://publications.europa.eu/mdr/resource/authority/data-theme/skos/data-theme-skos.rdf
@@ -62,7 +67,7 @@ class DCATAPITCommands(CkanCommand):
         'es': 'SPA'
     }
 
-    _controlled_vocabularies_allowed = [EUROPEAN_THEME_NAME, LOCATIONS_THEME_NAME, LANGUAGE_THEME_NAME, FREQUENCIES_THEME_NAME, FILETYPE_THEME_NAME]
+    _controlled_vocabularies_allowed = [EUROPEAN_THEME_NAME, LOCATIONS_THEME_NAME, LANGUAGE_THEME_NAME, FREQUENCIES_THEME_NAME, FILETYPE_THEME_NAME, LICENSES_NAME]
 
     def __init__(self, name):
         super(DCATAPITCommands, self).__init__(name)
@@ -91,8 +96,9 @@ class DCATAPITCommands(CkanCommand):
             return
 
     def initdb(self):
-        from ckanext.dcatapit.model import setup as db_setup
+        from ckanext.dcatapit.model import setup as db_setup, setup_license_models
         db_setup()
+        setup_license_models()
 
     def load(self):
         ##
@@ -118,6 +124,12 @@ class DCATAPITCommands(CkanCommand):
             print self.usage
             return
         
+        if vocab_name == LICENSES_NAME:
+            clear_licenses()
+            load_licenses_from_graph(filename, url)
+            Session.commit()
+            return
+
         do_load(vocab_name, url=url, filename=filename)
 
 

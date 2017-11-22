@@ -330,4 +330,12 @@ def get_custom_resource_schema():
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=filetype&incomplete=?',
 		    'is_required': False
 	    },
+        {
+            'name': 'license_type',
+            'validator': ['ignore_missing'],
+            'element': 'licenses_tree',
+            'label': _('License'),
+            'placeholder': _('license type'),
+            'is_required': True
+        }
 	]

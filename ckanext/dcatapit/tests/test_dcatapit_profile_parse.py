@@ -32,8 +32,10 @@ try:
 except ImportError:
     from ckan.new_tests import helpers
 
-from ckanext.dcat.processors import RDFParser
+from ckanext.dcat.processors import RDFParser, RDFSerializer
 from ckanext.dcatapit.dcat.profiles import (DCATAPIT)
+
+from ckanext.dcat.profiles import (DCAT, DCT, FOAF, OWL)
 
 from ckanext.dcatapit.mapping import DCATAPIT_THEMES_MAP, map_nonconformant_groups
 from ckanext.dcatapit.mapping import DCATAPIT_THEME_TO_MAPPING_SOURCE, DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS
@@ -41,6 +43,8 @@ from ckanext.dcatapit.harvesters.ckanharvester import CKANMappingHarvester
 from ckanext.harvest.model import HarvestObject
 
 from ckanext.dcatapit.plugin import DCATAPITGroupMapper
+
+from ckanext.dcatapit.model.license import _get_graph, load_from_graph, License
 
 
 eq_ = nose.tools.eq_
@@ -166,6 +170,19 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         harvest_obj = self._make_harvest_object(url, groups_non_mappable[0])
 
         harvester = CKANMappingHarvester()
+        
+        def get_path(fname):
+            return os.path.join(os.path.dirname(__file__),
+                                '..', '..', '..', 'examples', fname)
+
+        licenses = get_path('licenses.rdf')
+        self.g = _get_graph(path=licenses)
+
+        load_from_graph(path=licenses)
+        rev = getattr(Session, 'revision', None)
+        Session.flush()
+        Session.revision = rev
+
 
         # clean, no mapping
         harvester.import_stage(harvest_obj)
@@ -369,3 +386,90 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         assert set(expected_groups_multi) == set(groups), (expected_groups_multi, 'vs', groups,)
 
         meta.Session.rollback()
+
+    def test_license(self):
+        
+        def get_path(fname):
+            return os.path.join(os.path.dirname(__file__),
+                        '..', '..', '..', 'examples', fname)
+        licenses = get_path('licenses.rdf')
+        load_from_graph(path=licenses)
+        Session.flush()
+
+
+        dataset = {'title': 'some title',
+                   'id': 'sometitle',
+                   'resources': [
+                            {
+                                'id': 'resource/1111',
+                                'uri': 'http://resource/1111',
+                                'license_type': 'invalid',
+                            },
+                            {
+                                'id': 'resource/2222',
+                                'uri': 'http://resource/2222',
+                                'license_type': 'http://dati.gov.it/onto/controlledvocabulary/License/A311_GFDL13'
+                            }
+                        ]
+                    }
+       
+
+        p = RDFParser(profiles=['euro_dcat_ap', 'it_dcat_ap'])
+
+        s = RDFSerializer()
+
+
+        dataset_ref = s.graph_from_dataset(dataset)
+
+        g = s.g
+
+        r1 = URIRef(dataset['resources'][0]['uri'])
+        r2 = URIRef(dataset['resources'][1]['uri'])
+
+        unknown = License.get(License.DEFAULT_LICENSE)
+
+        license_ref = g.value(r1, DCT.license)
+        
+        assert license_ref is not None
+        assert str(license_ref) == unknown.uri,\
+            "got license {}, instead of {}".format(license_ref, unknown.license_type)
+
+        gpl = License.get(dataset['resources'][1]['license_type'])
+        assert gpl is not None
+
+        license_ref = g.value(r2, DCT.license)
+        license_type = g.value(license_ref, DCT.type)
+        
+        assert license_ref is not None
+
+        assert str(license_ref) == gpl.document_uri
+        assert str(license_type) == gpl.license_type
+
+        serialized = s.serialize_dataset(dataset)
+
+        p.parse(serialized)
+        datasets = list(p.datasets())
+        assert len(datasets) == 1
+        new_dataset = datasets[0]
+        resources = new_dataset['resources']
+
+        def _find_res(res_uri):
+            for res in resources:
+                if res_uri == res['uri']:
+                    return res
+            raise ValueError("No resource for {}".format(res_uri))
+
+        new_res_unknown = _find_res(str(r1))
+        new_res_gpl = _find_res(str(r2))
+
+        assert new_res_unknown['license_type'] == unknown.uri, (new_res_unknown['license_type'], unknown.uri,)
+        assert new_res_gpl['license_type'] == dataset['resources'][1]['license_type']
+
+
+
+
+
+
+
+
+

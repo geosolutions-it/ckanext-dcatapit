@@ -6,6 +6,7 @@ import ckan.plugins.toolkit as toolkit
 import ckanext.dcatapit.schema as dcatapit_schema
 
 import ckanext.dcatapit.interfaces as interfaces
+from ckanext.dcatapit.model.license import License
 
 import datetime
 from webhelpers.html import escape, HTML, literal, url_escape
@@ -57,6 +58,12 @@ def get_vocabulary_items(vocabulary_name, keys=None):
     except toolkit.ObjectNotFound:
         return []
 
+def get_vocabulary_item(vocabulary_name, key):
+    return interfaces.get_localized_tag_name(key)
+
+def get_dcatapit_license(license_type):
+    return interfaces.get_license_for_dcat(license_type)
+
 def get_package_resource_dcatapit_format_list(pkg_resources, fallback_lang=None):
     resources = []
     if pkg_resources:
@@ -73,6 +80,10 @@ def get_package_resource_dcatapit_format_list(pkg_resources, fallback_lang=None)
 def get_localized_field_value(field=None, pkg_id=None, field_type='extra'):
     log.debug('Retrieving localized package field...')
     return interfaces.get_localized_field_value(field, pkg_id, field_type)
+
+def get_resource_licenses_tree(value=None, lang=None):
+    return interfaces.get_resource_licenses_tree(value, lang)
+
 
 def list_to_string(_list, _format=None):
     if _list:
