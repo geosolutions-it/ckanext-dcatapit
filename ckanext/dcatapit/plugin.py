@@ -500,7 +500,6 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
         # Add extension templates directory
         toolkit.add_template_directory(config, 'templates')
         toolkit.add_public_directory(config, 'public')
-        print('dupp')
         toolkit.add_resource('fanstatic', 'ckanext-dcatapit')
 
     def update_config_schema(self, schema):        
@@ -520,7 +519,9 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
 
     def get_helpers(self):
         return {
-            'get_dcatapit_configuration_schema': helpers.get_dcatapit_configuration_schema
+            'get_dcatapit_configuration_schema': helpers.get_dcatapit_configuration_schema,
+            'json_load': helpers.json_load,
+            'json_dump': helpers.json_dump,
         }
 
 

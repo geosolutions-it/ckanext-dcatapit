@@ -48,8 +48,8 @@ def dcatapit_conforms_to(value, context):
     """
     Validates conforms to structure
     [ {'identifier': str,
-       'title': str,
-       'description': str
+       'title': {lang: str},
+       'description': {lang: str},
        'referenceDocumentation: [ str, str],
       },..
     ]
@@ -74,8 +74,8 @@ def dcatapit_conforms_to(value, context):
             raise Invalid(_("conforms_to element should contain identifier"))
 
         for prop_name, allowed_types in (('_ref', (str, unicode,),),
-                                         ('title', (str, unicode,),),
-                                         ('description', (str, unicode,),),
+                                         ('title', dict,),
+                                         ('description', dict,),
                                          ('referenceDocumentation', list,),
                                          ):
             # those are not obligatory
@@ -88,6 +88,16 @@ def dcatapit_conforms_to(value, context):
 
             if not isinstance(prop_val, allowed_types):
                 raise Invalid(_("conforms_to property {} is not valid type").format(prop_name))
+
+            # {lang -> value} mapping
+            if allowed_types == dict:
+                for k, v in prop_val.items():
+                    if not isinstance(k, (str, unicode,)):
+                        raise Invalid(_("conforms_to property {} should have {} key as string").format(prop_name, k))
+                    if not isinstance(v, (str, unicode,)):
+                        raise Invalid(_("conforms_to property {} should have {} value as string").format(prop_name, k))
+                    if not v:
+                        raise Invalid(_("conforms_to property {} for {} lang should not be empty").format(prop_name, k))
 
         if prop_name == 'referenceDocumentation':
             if prop_val:

@@ -1,3 +1,4 @@
+import json
 import logging
 
 import ckan.lib.helpers as h
@@ -157,3 +158,14 @@ def validate_dateformat(date_string, date_format):
         log.debug(u'Incorrect date format {0} for date string {1}'.format(date_format, date_string))
         return None
 
+def json_load(val):
+    try:
+        return json.loads(val)
+    except (TypeError, ValueError,):
+        pass
+
+def json_dump(val):
+    try:
+        return json.dumps(val)
+    except (TypeError, ValueError,):
+        pass

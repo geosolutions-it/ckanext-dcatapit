@@ -1,117 +1,52 @@
+/** 
 
-/**
-    dcatapit-is-template is a way to make elements dynamically added
-
-    markup:
-
-    <div class="template" data-module="dcatapit-elm-template" data-module-container="#container">
-        ...
-    </div>
-
-    <div id="container">
-
-    </div>
+ Handles conforms to data edition.
 
 
-    .template class will hide template markup, but each copy added to container, will have this class stripped, and
-    will be a copy of template node
+
 
 */
-ckan.module('dcatapit-elm-template', function($){
-    return {
-        initialize: function(){
-            $.proxyAll(this, /_on/);
-
-            if (!$(this.el).hasClass('template')){
-                return;
-            }
-            var tmpl = this.get_template(this.el);
-            var container = this.get_container(this.options.container);
-            var _add = container.find('span.add_new');
-
-            var that = this;
-
-            this.bind_evt(_add, container, tmpl);
-            $(this.el).data('elm-template', this);
-
-        },
-        on_container_change: function(evt, added){
-
-        },
-        bind_evt: function(elm, container, tmpl){
-            that = this;
-            var h = function(evt){
-                     that.add_new(evt, container, tmpl)}
-            elm.click(h);
-
-
-        },
-
-        add_new: function(evt, container, template){
-            var _add = container.find('span.add_new').remove();
-            var t = this.get_template(template)
-            container.append(t);
-            container.append(_add);
-            this.on_container_change(evt, t);
-            // need to rebind, because we've removed that element from dom
-            this.bind_evt(_add, container, template);
-            return t;
-        },
-
-        /**
-            Returns template clone processed, ready to append to container
-            @param root template element
-        */
-        get_template: function(t){
-            return t.clone().removeClass('template');
-        },
-        
-        /**
-            Returns container element, where templates will be appended
-            @param container jquery selector
-        */
-        get_container: function(container){
-            var c = $(container);
-            if (c.find('span.add_new').length < 1){
-                c.append($('<span class="add_new"><i class="icon-plus"></i> Add new</span>'));
-            };
-            return c;
-        }
-     }
-    });
-
-
 ckan.module('dcatapit-conforms-to', function($){
     return {
         initialize: function(){
             $.proxyAll(this, /_on/);
-            if (this.el.value){
-                var val = $.parseJSON(this.el.value);
-            } else {
-                var val = [];
-            };
+            var val = $.parseJSON($(this.el).val() || '[]');
 
             this.lang = this.options.lang;
             this.tmpl = $(this.options.template);
             this.container = $(this.options.container);
             this.val = val;
+
+            this.localized = ['title', 'description'];
             this.populate_items(this.val, this.tmpl, this.container);
 
-
             this.add_handlers($(this.el).parent());
+            this.add_form_handlers($(this.el.parent()));
+        },
+
+        /** 
+            add submit event handler to disable input elements for elm
+        */
+        add_form_handlers: function(elm){
+            elm.parents('form').submit(
+                function(){
+                        $('input', elm).attr('disabled', true);
+                        $('input[name=conforms_to]', elm).attr('disabled', false);
+                   }
+                 )
         },
 
         /** install onclick handlers for main templates
         */
         add_handlers: function(ctx){
             var that = this;
+
             $('.add_new_container', ctx).each(function(idx, elm){
                 var add_with = $($(elm).data("add-with"));
                 var tmpl = $($(elm).data('add-template'));
 
                 var h = function(evt){
-                    var t = tmpl.clone(true).removeClass('template');
-                    elm.append(t[0]);
+                    var t = that.add_row(tmpl, elm, []);
                     $('input', t).each(function(iidx, ielm){
                             var ch = function(evt){
                                     that.extract_values();
@@ -119,25 +54,24 @@ ckan.module('dcatapit-conforms-to', function($){
                             $(ielm).change(ch);
                         });
                 }
-
                 add_with.click(h);
             });
         },
 
         add_row: function(template, container, values){
             var t = template.clone(true).removeClass('template');
-            container.append(t);
+            container.append(t[0]);
             this.add_values(t, values);
-
             this.add_handlers(t);
             return t;
         },
 
-        add_values: function(template, values){
+        add_values: function(ui, values){
             for (var k in values){
                 var val = values[k];
+                var input_name = 'conforms_to_' + k;
 
-                if (k == 'referenceDocumentation'){
+                if (k == 'referfenceDocumentation'){
                     var refdoc_ui = $('.reference_documentation.template', template);
                     var refdocs_container = $('.reference_container', template);
                     for (var i = 0; i< val.length; i++){
@@ -148,12 +82,18 @@ ckan.module('dcatapit-conforms-to', function($){
                     }
 
                 } else {
-                    var local_val = val[this.lang];
-                    ui.find('input[name=' + k + ']').val(local_val);
+
+                    if ($.inArray(k, this.localized)> -1){
+                        var local_val = val[this.lang];
+                    } else {
+                        var local_val = val;
+                    }
+
+                    ui.find('input[name=' + input_name + ']').val(local_val);
                     ui.attr('lang', this.lang);
                 }
             }
-            template.data('conforms-to', values);
+            ui.data('conforms-to', values);
         },
 
         populate_items: function(values, template, tmpl_container){
@@ -162,7 +102,7 @@ ckan.module('dcatapit-conforms-to', function($){
 
             for (var i=0; i< values.length; i++){
                 var value = values[i];
-                var ui = this.add_row(template, tmpl_container, value);
+                this.add_row(template, tmpl_container, value);
 
             }
         },
@@ -181,12 +121,18 @@ ckan.module('dcatapit-conforms-to', function($){
                 var elm_name = _elm_name.slice('conforms_to_'.length);
 
                 if (elm_name != 'referenceDocumentation'){
-                    if (!$.isPlainObject(out[elm_name])){
+                    if ($.inArray(elm_name, that.localized)> -1){
+                        if (!$.isPlainObject(out[elm_name])){
                         out[elm_name] = {};
+                        }
+                        var elval = elm.val();
+                        if (elval !== ""){
+                            out[elm_name][that.lang] = elval;
+                        }
                     }
-                    var elval = elm.val();
-                    if (elval !== ""){
-                        out[elm_name][that.lang] = elval;
+                    else {
+                        var elval = elm.val();
+                        out[elm_name] = elval;
                     }
                 } else {
                     if (!$.isArray(out[elm_name])){
@@ -197,6 +143,7 @@ ckan.module('dcatapit-conforms-to', function($){
                         out[elm_name].push(elval);
                     }
                 }
+                
             });
             return out;
         },
@@ -214,6 +161,5 @@ ckan.module('dcatapit-conforms-to', function($){
             this.el.val(JSON.stringify(out));
             return out;
         }
-
      }
     });

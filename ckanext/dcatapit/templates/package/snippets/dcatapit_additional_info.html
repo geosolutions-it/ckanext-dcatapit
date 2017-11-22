@@ -1,5 +1,7 @@
 <section class="additional-info">
   <h3>{{ _('Dataset Metadata') }}</h3>
+    
+    {% resource 'ckanext-dcatapit/dcatapit.css' %}
 
   <table class="table table-striped table-bordered table-condensed">
     <tbody>
@@ -26,6 +28,47 @@
 				          	{% endif %}
 				          </td>
 					    </tr>
+
+                    {% elif field.element == 'conforms_to' %}
+                        {% set conforms_to = h.json_load(pkg_dict[field.name]) %}
+
+		  		        <tr>
+					      <th scope="row" class="dataset-label">{{ field.label }}</th>
+				          <td class="dataset-details">
+                            {% if not conforms_to %}
+				          		{{ _('N/D') }}
+                            {% else %}
+                                {% for std in conforms_to %}
+                                <div class="std">
+                                    <div class="row">
+                                        <div class="span4 std-key">Identifier</div>
+                                        <div class="span8 std-value">{{ std.identifier }}</div>
+                                    </div>
+                                
+                                    <div class="row">
+                                        <div class="span4 std-key">Title</div>
+                                        <div class="span8 std-value">{{ std.title[h.lang()] }}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="span4 std-key">Description</div>
+                                        <div class="span8 std-value">{{ std.title[h.lang()] }}</div>
+                                    </div>
+
+                                    <div class="row odd">
+                                        <div class="span12 std-key">Reference documentation</div>
+                                    </div>
+                                    {% for ref in std['referenceDocumentation'] %}
+                                        <div class="row">
+                                            <div class="span12 std-value"><a href="{{ ref }}">{{ ref }}</a></div>
+                                        </div>
+                                    {% endfor %}
+
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+				          </td>
+					    </tr>
+                    
 
 					{% else %}
 

@@ -9,3 +9,11 @@
 .add_new {
     cursor: pointer;
 }
+
+.std-key {
+    font-weight: bold;
+}
+
+.std .row:even {
+    background: #f2f2f2
+}

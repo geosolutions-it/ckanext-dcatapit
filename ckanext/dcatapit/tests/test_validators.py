@@ -56,10 +56,19 @@ def test_conforms_to():
                    (json.dumps([{'identifier': 'abc', 'title': 'title', 'referenceDocumentation': 'abc'}]), False,),
                    (json.dumps([{'identifier': 'abc', 'title': 'title', 'referenceDocumentation': ['abc erwer ew']}]), False,),
                    (json.dumps([{'identifier': 'abc', 'title': 'title', 'referenceDocumentation': ['abc']}]), False,),
-                   (json.dumps([{'identifier': 'abc', 'title': 'title', 'referenceDocumentation': ['http://abc.efg/']}]), True),
+                   (json.dumps([{'identifier': 'abc',
+                                 'title': {'en': 'title'},
+                                 'referenceDocumentation': ['http://abc.efg/']}]), True),
+                   (json.dumps([{'identifier': 'abc',
+                                 'title': {'en': ''},
+                                 'referenceDocumentation': ['http://abc.efg/']}]), False),
 
-                   (json.dumps([{'identifier': 'abc', 'title': 'title', 'referenceDocumentation': ['http://abc.efg/'],},
-                                {'identifier': 'efg', 'title': 'title', 'referenceDocumentation': ['http://abc.efg/'],},
+                   (json.dumps([{'identifier': 'abc',
+                                 'title': {'en': 'title', 'it': 'title'},
+                                 'referenceDocumentation': ['http://abc.efg/'],},
+                                {'identifier': 'efg',
+                                 'title': {'en': 'title', 'it': 'title'},
+                                 'referenceDocumentation': ['http://abc.efg/'],},
                                  ]), True,),
                    )
 
@@ -71,4 +80,4 @@ def test_conforms_to():
             passed = True
         except validators.Invalid, err:
             pass
-        assert passed == is_valid, 'failed for {}: {}'.format(test_val, err)
+        assert passed == is_valid, 'failed for {}: {}'.format(test_val, err or 'no validation error')
