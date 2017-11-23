@@ -77,7 +77,7 @@ ckan.module('dcatapit-conforms-to', function($){
         },
 
         add_row: function(template, container, values){
-            var t = template.clone(true).removeClass('template');
+            var t = template.clone().removeClass('template');
 
             container.append(t[0]);
             this.add_values(t, values);
