@@ -18,8 +18,9 @@ ckan.module('dcatapit-conforms-to', function($){
             this.val = val;
 
             this.localized = ['title', 'description'];
-            this.populate_items(this.val, this.tmpl, this.container);
 
+
+            this.populate_items(this.val, this.tmpl, this.container);
             this.add_handlers($(this.el).parent());
             this.add_form_handlers($(this.el.parent()));
         },
@@ -30,7 +31,8 @@ ckan.module('dcatapit-conforms-to', function($){
         add_form_handlers: function(elm){
             elm.parents('form').submit(
                 function(){
-                        $('input', elm).attr('disabled', true);
+                        var inputs = $('.conforms_to input', elm);
+                        inputs.attr('disabled', true);
                         $('input[name=conforms_to]', elm).attr('disabled', false);
                    }
                  )
@@ -41,25 +43,42 @@ ckan.module('dcatapit-conforms-to', function($){
         add_handlers: function(ctx){
             var that = this;
 
+            /* each container will have a configuration
+               data-add-with - element selector that allows to add new elements from template
+               data-add-template - element selector with template to add. it's good to have
+                 this element with template class.
+            */
             $('.add_new_container', ctx).each(function(idx, elm){
-                var add_with = $($(elm).data("add-with"));
-                var tmpl = $($(elm).data('add-template'));
+                var add_with = $($(elm).data("add-with"), $(elm).parent());
+                var tmpl = $($(elm).data('add-template'), $(elm).parent());
 
+                // marker to check if we didn't add handlers already
+                if (add_with.data('has-container-cb')){
+                    return;
+                }
+
+                /* callback for onclick - add new template
+                     and add callbacks for inputs to update conforms_to after change
+                */
                 var h = function(evt){
                     var t = that.add_row(tmpl, elm, []);
-                    $('input', t).each(function(iidx, ielm){
-                            var ch = function(evt){
-                                    that.extract_values();
-                             }
-                            $(ielm).change(ch);
-                        });
                 }
+                add_with.data('has-container-cb', true);
+
+                $('input', ctx).each(function(iidx, ielm){
+                        var ch = function(evt){
+                                that.extract_values();
+                         }
+                        $(ielm).change(ch);
+                    });
+
                 add_with.click(h);
             });
         },
 
         add_row: function(template, container, values){
             var t = template.clone(true).removeClass('template');
+
             container.append(t[0]);
             this.add_values(t, values);
             this.add_handlers(t);
@@ -71,14 +90,17 @@ ckan.module('dcatapit-conforms-to', function($){
                 var val = values[k];
                 var input_name = 'conforms_to_' + k;
 
-                if (k == 'referfenceDocumentation'){
-                    var refdoc_ui = $('.reference_documentation.template', template);
-                    var refdocs_container = $('.reference_container', template);
+                if (k == 'referenceDocumentation'){
+                    
+                    var refdoc_ui = $('.reference_documentation.template', ui);
+                    var refdocs_container = $('.reference_container', ui);
+
                     for (var i = 0; i< val.length; i++){
-                        var refdoc_val = refdocs[i];
+                        var refdoc_val = val[i];
                         var to_add = refdoc_ui.clone().removeClass('template');
-                        refdoc_ui.val(refdoc_val);
-                        refdocs_container.append(refdoc_ui);
+                        refdocs_container.append(to_add);
+                        to_add.val(refdoc_val);
+
                     }
 
                 } else {
