@@ -29,11 +29,13 @@ ckan.module('dcatapit-conforms-to', function($){
             add submit event handler to disable input elements for elm
         */
         add_form_handlers: function(elm){
+            var that = this;
             elm.parents('form').submit(
                 function(){
                         var inputs = $('.conforms_to input', elm);
                         inputs.attr('disabled', true);
                         $('input[name=conforms_to]', elm).attr('disabled', false);
+                        that.extract_values();
                    }
                  )
         },
@@ -65,15 +67,14 @@ ckan.module('dcatapit-conforms-to', function($){
                 }
                 add_with.data('has-container-cb', true);
 
-                $('input', ctx).each(function(iidx, ielm){
-                        var ch = function(evt){
-                                that.extract_values();
-                         }
-                        $(ielm).change(ch);
-                    });
-
                 add_with.click(h);
             });
+            var remove_h = function(evt){
+                var elm = $(evt.delegateTarget);
+                elm.parent().remove();
+
+            }
+            $('.remove', ctx).click(remove_h);
         },
 
         add_row: function(template, container, values){
@@ -99,7 +100,7 @@ ckan.module('dcatapit-conforms-to', function($){
                         var refdoc_val = val[i];
                         var to_add = refdoc_ui.clone().removeClass('template');
                         refdocs_container.append(to_add);
-                        to_add.val(refdoc_val);
+                        $('input', to_add).val(refdoc_val);
 
                     }
 

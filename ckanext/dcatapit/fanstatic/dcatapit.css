@@ -17,3 +17,10 @@
 .std .row:even {
     background: #f2f2f2
 }
+.conforms_to {
+}
+.conforms_to .remove_conforms_to {
+    text-align: right;
+    cursor: pointer;
+    color: #e33;
+}

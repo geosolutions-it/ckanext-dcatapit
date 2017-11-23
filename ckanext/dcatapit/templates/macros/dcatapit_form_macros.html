@@ -115,12 +115,17 @@ Old implementation of the couple element (one element with comma separated value
 
         {% call input_block('referenceDocumentation', label="Reference documentation") %}
 
-                <input type="text" name="conforms_to_referenceDocumentation" placeholder="{% trans %}reference documentation (url){% endtrans %}" class="reference_documentation template"/>
+                <span  class="reference_documentation template">
+                    <input type="text" name="conforms_to_referenceDocumentation" placeholder="{% trans %}reference documentation (url){% endtrans %}"/>
+                    <span class="remove remove_reference_documentation"><i class="icon-minus" title="remove"></i></span>
+                </span>
 
                 <div class="reference_container add_new_container" data-add-with=".add_new_reference" data-add-template=".reference_documentation.template">
                 </div>
                 <span class="add_new_reference add_new"><i class="icon-plus"></i> {% trans %}Add new reference{% endtrans %}</span>
         {% endcall %}
+
+        <span class="remove remove_conforms_to"><i class="icon-minus"></i> {% trans %}Remove{% endtrans %}</span>
     </div>
 
     <div class="conforms_to_container add_new_container" data-add-with=".add_new_conforms_to" data-add-template=".conforms_to.template"></div>
