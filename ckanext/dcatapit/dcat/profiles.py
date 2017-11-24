@@ -499,6 +499,10 @@ class ItalianDCATAPProfile(RDFProfile):
                 for lang, val in (item.get('description') or {}).items():
                     self.g.add((standard, DCT.description, Literal(val, lang=lang)))
 
+
+                for reference_document in (item.get('referenceDocumentation') or []):
+                    self.g.add((standard, DCATAPIT.referenceDocumentation, URIRef(reference_document)))
+
         ### publisher
 
         # DCAT by default creates this node

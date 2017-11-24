@@ -45,6 +45,16 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
 
     def test_graph_from_dataset(self):
 
+        conforms_to_in = [{'identifier': 'CONF1',
+                                       '_ref': 'conf01',
+                                 'title': {'en': 'title', 'it': 'title'},
+                                 'referenceDocumentation': ['http://abc.efg/'],},
+                                {'identifier': 'CONF2',
+                                 'title': {'en': 'title', 'it': 'title'},
+                                 'description': {'en': 'descen', 'it': 'descit'},
+                                 'referenceDocumentation': ['http://abc.efg/'],},
+                                 ]
+
         dataset = {
             'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
             'name': 'test-dataset',
@@ -70,7 +80,7 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             'geographical_geonames_url':'http://www.geonames.org/3181913',
             'language':'{DEU,ENG,ITA}',
             'is_version_of':'http://dcat.geo-solutions.it/dataset/energia-da-fonti-rinnovabili2',
-            'conforms_to':'{CONF1,CONF2,CONF3}'
+            'conforms_to':json.dumps(conforms_to_in)
         }
 
         s = RDFSerializer()
@@ -91,5 +101,48 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
         eq_(len([t for t in g.triples((dataset_ref, DCAT.keyword, None))]), 2)
         for tag in dataset['tags']:
             assert self._triple(g, dataset_ref, DCAT.keyword, tag['name'])
+        conforms_to = list(g.triples((None, DCT.conformsTo, None)))
+        assert conforms_to
+
+        conforms_to_dict = dict((d['identifier'], d) for d in conforms_to_in)
+        for conf in conforms_to:
+            conf_id = conf[-1]
+            for t in g.triples((conf_id, None, None)):
+                print t
+
+            identifier = g.value(conf_id, DCT.identifier)
+            titles = list(g.objects(conf_id, DCT.title))
+            descs = list(g.objects(conf_id, DCT.description))
+            references = list(g.objects(conf_id, DCATAPIT.referenceDocumentation))
+            
+            check = conforms_to_dict.get(str(identifier))
+            
+            assert isinstance(check, dict)
+
+            if check.get('_ref'):
+                assert check['_ref'] == str(conf_id)
+            assert len(titles), "missing titles"
+            
+            assert (len(descs)> 0) == bool(check.get('description')), "missing descriptions"
+
+            for title in titles:
+                tlang = title.language
+                tval = str(title)
+                assert tval == check['title'][tlang], (tlang, tval, check['title'])
+
+            for desc in descs:
+                tlang = desc.language
+                tval = str(desc)
+                assert tval == check['description'][tlang], (tlang, str(tval), check['description'])
+            
+            ref_docs = check.get('referenceDocumentation')
+            print(references)
+            assert len(references) == len(ref_docs), "missing reference documentation"
+            
+            for dref in references:
+                assert str(dref) in ref_docs, "{} not in {}".format(dref, ref_docs)
+                                                                
+            for ref in ref_docs:
+                assert URIRef(ref) in references
 
 
