@@ -363,11 +363,13 @@ class ItalianDCATAPProfile(RDFProfile):
 
     def _conforms_to(self, conforms_id):
         ref_docs = [ str(val) for val in self.g.objects(conforms_id, DCATAPIT.referenceDocumentation)]
+
         out = {'_ref': str(conforms_id),
                'identifier': str(self.g.value(conforms_id, DCT.identifier)),
                'title': {},
                'description': {},
                'referenceDocumentation': ref_docs}
+
         for t in self.g.objects(conforms_id, DCT.title):
             out['title'][t.language] = str(t)
 
@@ -484,13 +486,16 @@ class ItalianDCATAPProfile(RDFProfile):
                 conforms_to = []
 
             for item in conforms_to:
+
                 if item.get('_ref'):
-                    standard = Literal(item['_ref'])
+                    standard = URIRef(item['_ref'])
                 else:
                     standard = BNode()
+
                 self.g.add((dataset_ref, DCT.conformsTo, standard))
                 self.g.add((standard, RDF['type'], DCT.Standard))
                 self.g.add((standard, RDF['type'], DCATAPIT.Standard))
+
                 self.g.add((standard, DCT.identifier, Literal(item['identifier'])))
 
                 for lang, val in (item.get('title') or {}).items():

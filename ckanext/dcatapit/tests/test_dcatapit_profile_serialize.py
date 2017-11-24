@@ -107,8 +107,6 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
         conforms_to_dict = dict((d['identifier'], d) for d in conforms_to_in)
         for conf in conforms_to:
             conf_id = conf[-1]
-            for t in g.triples((conf_id, None, None)):
-                print t
 
             identifier = g.value(conf_id, DCT.identifier)
             titles = list(g.objects(conf_id, DCT.title))
@@ -136,7 +134,6 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
                 assert tval == check['description'][tlang], (tlang, str(tval), check['description'])
             
             ref_docs = check.get('referenceDocumentation')
-            print(references)
             assert len(references) == len(ref_docs), "missing reference documentation"
             
             for dref in references:
