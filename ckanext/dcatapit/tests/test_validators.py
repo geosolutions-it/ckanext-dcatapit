@@ -1,4 +1,4 @@
-
+import json
 import nose
 import ckanext.dcatapit.validators as validators
 
@@ -41,3 +41,43 @@ def test_dcatapit_id_unique():
 
     pass
 
+
+def test_conforms_to():
+    
+    # list of input, valid flag
+    test_values = ((None, False,),
+                   ('', False,),
+                   (json.dumps({'test': 'fail'}), False,),
+                   (json.dumps([]), True,),
+                   (json.dumps([{'identifier': 'abc'}, 'fail']), False,),
+                   (json.dumps([{'identifier': None,}]), False,),
+                   (json.dumps([{'identifier': 'abc'}]), True,),
+                   (json.dumps([{'identifier': 'abc', 'title': ['some', 'description']}]), False),
+                   (json.dumps([{'identifier': 'abc', 'title': 'title', 'referenceDocumentation': 'abc'}]), False,),
+                   (json.dumps([{'identifier': 'abc', 'title': 'title', 'referenceDocumentation': ['abc erwer ew']}]), False,),
+                   (json.dumps([{'identifier': 'abc', 'title': 'title', 'referenceDocumentation': ['abc']}]), False,),
+                   (json.dumps([{'identifier': 'abc',
+                                 'title': {'en': 'title'},
+                                 'referenceDocumentation': ['http://abc.efg/']}]), True),
+                   (json.dumps([{'identifier': 'abc',
+                                 'title': {'en': ''},
+                                 'referenceDocumentation': ['http://abc.efg/']}]), False),
+
+                   (json.dumps([{'identifier': 'abc',
+                                 'title': {'en': 'title', 'it': 'title'},
+                                 'referenceDocumentation': ['http://abc.efg/'],},
+                                {'identifier': 'efg',
+                                 'title': {'en': 'title', 'it': 'title'},
+                                 'referenceDocumentation': ['http://abc.efg/'],},
+                                 ]), True,),
+                   )
+
+    for test_val, is_valid in test_values:
+        passed = False
+        err = None
+        try:
+            value = validators.dcatapit_conforms_to(test_val, None)
+            passed = True
+        except validators.Invalid, err:
+            pass
+        assert passed == is_valid, 'failed for {}: {}'.format(test_val, err or 'no validation error')

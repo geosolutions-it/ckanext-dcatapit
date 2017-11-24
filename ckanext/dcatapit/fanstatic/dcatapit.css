@@ -1,0 +1,26 @@
+
+.template {
+    display: none!important;
+}
+
+.w200 {
+    max-width: 200px;
+}
+.add_new {
+    cursor: pointer;
+}
+
+.std-key {
+    font-weight: bold;
+}
+
+.std .row:even {
+    background: #f2f2f2
+}
+.conforms_to {
+}
+.conforms_to .remove_conforms_to {
+    text-align: right;
+    cursor: pointer;
+    color: #e33;
+}

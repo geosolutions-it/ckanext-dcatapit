@@ -95,13 +95,54 @@ Old implementation of the couple element (one element with comma separated value
 
 {% endmacro %}
 
+{% macro conforms_to(name, id='', label='', value='', error='', classes=[], placeholder='', lang='') %}
+    {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
+
+    <div class="conforms_to template">
+        
+        <input type="hidden" name="conforms_to__ref" value=""/>
+        
+        <label for="conforms_to_identifier">{% trans %}Identifier{% endtrans %}
+        </label>
+            <input type="text" name="conforms_to_identifier" value="" placeholder="{% trans %}identifier{% endtrans %}"/>
+        <label for="conforms_to_title">{% trans %}Title{% endtrans %}
+        </label>
+            <input type="text" name="conforms_to_title" value="" placeholder="{% trans %}title{% endtrans %}"/>
+        <label for="conforms_to_description">{% trans %}Description{% endtrans %}
+        </label>
+            <input type="text" name="conforms_to_description" value="" placeholder="{% trans %}description{% endtrans %}"/>
+
+
+        {% call input_block('referenceDocumentation', label="Reference documentation") %}
+
+                <span  class="reference_documentation template">
+                    <input type="text" name="conforms_to_referenceDocumentation" placeholder="{% trans %}reference documentation (url){% endtrans %}"/>
+                    <span class="remove remove_reference_documentation"><i class="icon-minus" title="remove"></i></span>
+                </span>
+
+                <div class="reference_container add_new_container" data-add-with=".add_new_reference" data-add-template=".reference_documentation.template">
+                </div>
+                <span class="add_new_reference add_new"><i class="icon-plus"></i> {% trans %}Add new reference{% endtrans %}</span>
+        {% endcall %}
+
+        <span class="remove remove_conforms_to"><i class="icon-minus"></i> {% trans %}Remove{% endtrans %}</span>
+    </div>
+
+    <div class="conforms_to_container add_new_container" data-add-with=".add_new_conforms_to" data-add-template=".conforms_to.template"></div>
+
+    <span class="add_new_conforms_to add_new"><i class="icon-plus"></i> {% trans %}Add new conforms to{% endtrans %}</span>
+
+    <input type="hidden" name="conforms_to" value="{{ value or dict()| safe}}" data-module="dcatapit-conforms-to" data-module-template=".conforms_to" data-module-container=".conforms_to_container" data-module-lang="{{ lang }}"/>
+
+    {% endcall %}
+{% endmacro %}
+
+
 {%- macro attributes(attrs={}) -%}
   {%- for key, value in attrs.items() -%}
   {{ " " }}{{ key }}{% if value != "" %}="{{ value }}"{% endif %}
   {%- endfor -%}
 {%- endmacro -%}
-
-
 
 
 {# this is sightly modified `ckan.templates.macros.form.select` version, which also makes indentations based on value from options
@@ -121,4 +162,3 @@ Old implementation of the couple element (one element with comma separated value
     </select>
   {% endcall %}
 {% endmacro %}
-
