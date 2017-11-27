@@ -129,7 +129,6 @@ class ItalianDCATAPProfile(RDFProfile):
             alternate_id = self._alternate_id(dataset_ref, alt_id)
             if alternate_id:
                 alt_ids.append(alternate_id)
-            
         dataset_dict['alternate_identifier'] = json.dumps(alt_ids)
 
 
@@ -390,8 +389,10 @@ class ItalianDCATAPProfile(RDFProfile):
     def _alternate_id(self, dataset_ref, alt_id):
         out = {}
         identifier = self.g.value(alt_id, SKOS.notation)
+
         if not identifier:
             return out
+
         out['identifier'] = str(identifier)
 
         predicate, basekey = DCT.creator, 'creator'
@@ -542,15 +543,17 @@ class ItalianDCATAPProfile(RDFProfile):
             identifier = Literal(alt_identifier['identifier'])
             self.g.add((node, SKOS.notation, identifier))
 
-            if alt_identifier['agent']:
+            if alt_identifier.get('agent'):
                 adata = alt_identifier['agent']
                 agent = BNode()
 
                 self.g.add((agent, RDF['type'], DCATAPIT.Agent))
                 self.g.add((agent, RDF['type'], FOAF.Agent))
                 self.g.add((node, DCT.creator, agent))
-                self.g.add((agent, FOAF.name, Literal(adata['name'])))
-                self.g.add((agent, DCT.identifier, Literal(adata['id'])))
+                if adata.get('agent_name'):
+                    self.g.add((agent, FOAF.name, Literal(adata['agent_name'])))
+                if adata.get('agent_identifier'):
+                    self.g.add((agent, DCT.identifier, Literal(adata['agent_identifier'])))
 
 
         ### publisher

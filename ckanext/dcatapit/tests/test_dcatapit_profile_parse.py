@@ -107,10 +107,8 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         eq_(dataset['holder_name'], 'bolzano')
         eq_(dataset['holder_identifier'], '234234234')
 
-        alternate_identifier = dataset['alternate_identifier'].split(',') if ',' in dataset['alternate_identifier'] else [dataset['alternate_identifier']]
-        alternate_identifier.sort()
-        alternate_identifier = ','.join([str(x) for x in alternate_identifier])
-        eq_(alternate_identifier, 'ISBN,TEST')
+        alternate_identifiers = json.loads(dataset['alternate_identifier'])
+        eq_(set([ai['identifier'] for ai in alternate_identifiers]), set(['ISBN:123', 'TEST']))
 
         theme = dataset['theme'][1:-1].split(',') if ',' in dataset['theme'] else [dataset['theme']]
         theme.sort()

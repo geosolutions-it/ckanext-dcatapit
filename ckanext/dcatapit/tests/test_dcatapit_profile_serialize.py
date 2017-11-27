@@ -55,6 +55,12 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
                                  'referenceDocumentation': ['http://abc.efg/'],},
                                  ]
 
+        alternate_identifiers = [{'identifier': 'aaaabc',
+                                 'agent': {'agent_identifier': 'agent01',
+                                           'agent_name': 'Agent 01'},
+                                 },
+                                 {'identifier': 'other identifier'}]
+
         dataset = {
             'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
             'name': 'test-dataset',
@@ -75,7 +81,7 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             'creator_identifier':'412946129',
             'holder_name':'bolzano',
             'holder_identifier':'234234234',
-            'alternate_identifier':'ISBN,TEST',
+            'alternate_identifier':json.dumps(alternate_identifiers),
             'theme':'{ECON,ENVI}',
             'geographical_geonames_url':'http://www.geonames.org/3181913',
             'language':'{DEU,ENG,ITA}',
@@ -101,6 +107,8 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
         eq_(len([t for t in g.triples((dataset_ref, DCAT.keyword, None))]), 2)
         for tag in dataset['tags']:
             assert self._triple(g, dataset_ref, DCAT.keyword, tag['name'])
+        
+        # conformsTo
         conforms_to = list(g.triples((None, DCT.conformsTo, None)))
         assert conforms_to
 
@@ -142,4 +150,19 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             for ref in ref_docs:
                 assert URIRef(ref) in references
 
-
+        # alternate identifiers
+        alt_ids = [a[-1] for a in g.triples((None, ADMS.identifier, None))]
+        alt_ids_dict = dict((a['identifier'], a) for a in alternate_identifiers)
+        for alt_id in alt_ids:
+            identifier = g.value(alt_id, SKOS.notation)
+            check = alt_ids_dict[str(identifier)]
+            assert str(identifier) == check['identifier']
+            if check.get('agent'):
+                agent_ref = g.value(alt_id, DCT.creator)
+                assert agent_ref is not None
+                agent_name = g.value(agent_ref, FOAF.name)
+                agent_identifier = g.value(agent_ref, DCT.identifier)
+                assert str(agent_name) == check['agent']['agent_name'],\
+                    "expected {}, got {} for {}".format(check['agent']['agent_name'], agent_name, agent_ref)
+                assert str(agent_identifier) == check['agent']['agent_identifier'],\
+                    "expected {}, got {}".format(check['agent']['agent_identifier'], agent_identifier)
