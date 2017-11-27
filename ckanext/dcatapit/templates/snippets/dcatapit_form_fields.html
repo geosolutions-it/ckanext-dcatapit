@@ -97,6 +97,16 @@
                                    selected=data[field.name],
                                    error=errors[field.name]) }}
 
+            {% elif field.element == 'alternate_identifier' %}
+
+                    {{ dcatapit_form_macros.alternate_identifier(field.name,
+                                                                 label=field.label,
+                                                                 id='field-'+field.name,
+                                                                 value=data[field.name],
+                                                                 error=errors[field.name],
+                                                                 lang=h.lang()) }}
+
+
             {% endif %}
 
       {% endif %}

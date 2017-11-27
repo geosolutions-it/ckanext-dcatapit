@@ -100,7 +100,7 @@ def get_custom_package_schema():
 	    {
 		    'name': 'alternate_identifier',
 		    'validator': ['ignore_missing', 'no_number'],
-		    'element': 'input',
+		    'element': 'alternate_identifier',
 		    'type': 'text',
 		    'label': _('Other Identifier'),
 		    'placeholder': _('other identifier'),

@@ -29,7 +29,34 @@
 				          </td>
 					    </tr>
 
+                    {% elif field.element == 'alternate_identifier' %}
+
+                        {% set alt_identifiers = (h.json_load(pkg_dict[field.name]) or []) %}
+
+                        <tr>
+                            <th scope="row" class="dataset-label">{{ field.label }}</th>
+                            <td class="dataset-details">
+                            {% for alt_id in alt_identifiers %}
+                                <div class="row">
+                                        <div class="span4 std-key">Identifier</div>
+                                        <div class="span8 std-value">{{ alt_id.identifier }}</div>
+                                </div>
+                                {% if alt_id.agent %}
+                                <div class="row">
+                                        <div class="span4 std-key">Agent name</div>
+                                        <div class="span8 std-value">{{ alt_id.agent.agent_name }}</div>
+                                </div>
+                                <div class="row">
+                                        <div class="span4 std-key">Agent ID</div>
+                                        <div class="span8 std-value">{{ alt_id.agent.agent_idnetifier }}</div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                            </td>
+                        </tr>
+
                     {% elif field.element == 'conforms_to' %}
+
                         {% set conforms_to = h.json_load(pkg_dict[field.name]) %}
 
 		  		        <tr>

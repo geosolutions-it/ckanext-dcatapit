@@ -113,7 +113,6 @@ class ItalianDCATAPProfile(RDFProfile):
 
         # 0..n predicates list
         for predicate, key, logf in (
-                (ADMS.identifier, 'alternate_identifier', log.debug),
                 (DCT.isVersionOf, 'is_version_of', log.debug),
                 ):
             valueList = self._object_value_list(dataset_ref, predicate)
@@ -123,6 +122,16 @@ class ItalianDCATAPProfile(RDFProfile):
                 dataset_dict[key] = value
             else:
                 logf('No %s found for dataset "%s"', predicate, dataset_dict.get('title', '---'))
+
+        alternate_identifiers = self.g.objects(dataset_ref, ADMS.identifier)
+        alt_ids = []
+        for alt_id in alternate_identifiers:
+            alternate_id = self._alternate_id(dataset_ref, alt_id)
+            if alternate_id:
+                alt_ids.append(alternate_id)
+            
+        dataset_dict['alternate_identifier'] = json.dumps(alt_ids)
+
 
         # conformsTo
         self._remove_from_extra(dataset_dict, 'conforms_to')
@@ -378,6 +387,17 @@ class ItalianDCATAPProfile(RDFProfile):
 
         return out
 
+    def _alternate_id(self, dataset_ref, alt_id):
+        out = {}
+        identifier = self.g.value(alt_id, SKOS.notation)
+        if not identifier:
+            return out
+        out['identifier'] = str(identifier)
+
+        predicate, basekey = DCT.creator, 'creator'
+        agent_dict, agent_loc_dict = self._parse_agent(alt_id, predicate, basekey)
+        out['agent'] = agent_dict
+        return out
 
     def _parse_agent(self, subject, predicate, base_name):
 
@@ -507,6 +527,31 @@ class ItalianDCATAPProfile(RDFProfile):
 
                 for reference_document in (item.get('referenceDocumentation') or []):
                     self.g.add((standard, DCATAPIT.referenceDocumentation, URIRef(reference_document)))
+
+        ### ADMS:identifier alternative identifiers
+        self.g.remove((dataset_ref, ADMS.identifier, None,))
+        try:
+            alt_ids = json.loads(dataset_dict['alternate_identifier'])
+        except (KeyError, TypeError, ValueError,):
+            alt_ids = []
+
+        for alt_identifier in alt_ids:
+            node = BNode()
+            self.g.add((dataset_ref, ADMS.identifier, node))
+
+            identifier = Literal(alt_identifier['identifier'])
+            self.g.add((node, SKOS.notation, identifier))
+
+            if alt_identifier['agent']:
+                adata = alt_identifier['agent']
+                agent = BNode()
+
+                self.g.add((agent, RDF['type'], DCATAPIT.Agent))
+                self.g.add((agent, RDF['type'], FOAF.Agent))
+                self.g.add((node, DCT.creator, agent))
+                self.g.add((agent, FOAF.name, Literal(adata['name'])))
+                self.g.add((agent, DCT.identifier, Literal(adata['id'])))
+
 
         ### publisher
 

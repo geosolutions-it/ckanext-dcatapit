@@ -1,44 +1,36 @@
-/** 
+var dcatapit = window.dcatapit || {};
 
- Handles conforms to data edition.
-
-
-
-
-*/
-ckan.module('dcatapit-conforms-to', function($){
-    return {
+dcatapit.templated_input = {
         initialize: function(){
             $.proxyAll(this, /_on/);
-            var val = $.parseJSON($(this.el).val() || '[]');
+            try {
+                var val = $.parseJSON($(this.el).val() || '[]');
+            } catch (SyntaxError){
+                var val = [];
+            }
 
             this.lang = this.options.lang;
             this.tmpl = $(this.options.template);
             this.container = $(this.options.container);
             this.val = val;
 
-            this.localized = ['title', 'description'];
 
+            this.sub_initialize();
 
             this.populate_items(this.val, this.tmpl, this.container);
             this.add_handlers($(this.el).parent());
-            this.add_form_handlers($(this.el.parent()));
+
         },
 
-        /** 
-            add submit event handler to disable input elements for elm
+        /** per-subclass overrides
         */
-        add_form_handlers: function(elm){
-            var that = this;
-            elm.parents('form').submit(
-                function(){
-                        var inputs = $('.conforms_to input', elm);
-                        inputs.attr('disabled', true);
-                        $('input[name=conforms_to]', elm).attr('disabled', false);
-                        that.extract_values();
-                   }
-                 )
+        sub_initialize: function(){
+
         },
+        sub_add_values: function(){
+
+        },
+
 
         /** install onclick handlers for main templates
         */
@@ -60,7 +52,7 @@ ckan.module('dcatapit-conforms-to', function($){
                 }
 
                 /* callback for onclick - add new template
-                     and add callbacks for inputs to update conforms_to after change
+                     and add callbacks for inputs to update main input after change
                 */
                 var h = function(evt){
                     var t = that.add_row(tmpl, elm, []);
@@ -87,9 +79,82 @@ ckan.module('dcatapit-conforms-to', function($){
         },
 
         add_values: function(ui, values){
+            this.sub_add_values(ui, values);
+
+            ui.data(this.options.data_name, values);
+        },
+
+        populate_items: function(values, template, tmpl_container){
+            //clear container
+            tmpl_container.html('');
+
+            for (var i=0; i< values.length; i++){
+                var value = values[i];
+                this.add_row(template, tmpl_container, value);
+
+            }
+        },
+
+        extract_from_element: function(elms){
+            var out = {};
+            var existing = $(elms).data(this.options.data_name) || {};
+            $.merge(out, existing);
+            var lang = this.lang;
+            var inputs = $('input', elms);
+            var that = this;
+
+            inputs.each(function(idx, elm){
+                that.extract_from_each_element(idx, elm, out, lang);
+            });
+            return out;
+        },
+        extract_values: function(){
+            var out = [];
+            var containers = $(this.options.template, this.root);
+            var that = this;
+            containers.each(function(idx, elm){
+                if ($(elm).hasClass('template')){
+                    return;
+                }
+                var elval = that.extract_from_element(elm);
+                out.push(elval);
+                });
+            this.el.val(JSON.stringify(out));
+            return out;
+        }
+     }
+
+/** 
+ Handles conforms to data edition.
+
+*/
+ckan.module('dcatapit-conforms-to', function($){
+    var conforms_to = {
+
+        sub_initialize: function(){
+            this.add_form_handlers($(this.el.parent()));
+
+            this.localized = ['title', 'description'];
+        },
+        /** 
+            add submit event handler to disable input elements for elm
+        */
+        add_form_handlers: function(elm){
+            var that = this;
+            elm.parents('form').submit(
+                function(){
+                        var inputs = $('.conforms_to input', elm);
+                        inputs.attr('disabled', true);
+                        $('input[name=conforms_to]', elm).attr('disabled', false);
+                        that.extract_values();
+                   }
+                 )
+        },
+        sub_add_values: function(ui, values){
+
             for (var k in values){
                 var val = values[k];
-                var input_name = 'conforms_to_' + k;
+                var input_name = this.options.input_prefix + k;
 
                 if (k == 'referenceDocumentation'){
                     
@@ -116,41 +181,21 @@ ckan.module('dcatapit-conforms-to', function($){
                     ui.attr('lang', this.lang);
                 }
             }
-            ui.data('conforms-to', values);
         },
 
-        populate_items: function(values, template, tmpl_container){
-            //clear container
-            tmpl_container.html('');
-
-            for (var i=0; i< values.length; i++){
-                var value = values[i];
-                this.add_row(template, tmpl_container, value);
-
-            }
-        },
-
-        extract_from_element: function(elms){
-            var out = {};
-            var existing = $(elms).data('conforms-to') || {};
-            $.merge(out, existing);
-            var lang = this.lang;
-            var inputs = $('input', elms);
-            var that = this;
-
-            inputs.each(function(idx, elm){
+        extract_from_each_element: function(idx, elm, out, lang){
                 var elm = $(elm);
                 var _elm_name = elm.attr('name');
-                var elm_name = _elm_name.slice('conforms_to_'.length);
+                var elm_name = _elm_name.slice(this.options.input_prefix.length);
 
                 if (elm_name != 'referenceDocumentation'){
-                    if ($.inArray(elm_name, that.localized)> -1){
+                    if ($.inArray(elm_name, this.localized)> -1){
                         if (!$.isPlainObject(out[elm_name])){
                         out[elm_name] = {};
                         }
                         var elval = elm.val();
                         if (elval !== ""){
-                            out[elm_name][that.lang] = elval;
+                            out[elm_name][lang] = elval;
                         }
                     }
                     else {
@@ -166,23 +211,67 @@ ckan.module('dcatapit-conforms-to', function($){
                         out[elm_name].push(elval);
                     }
                 }
-                
-            });
-            return out;
-        },
-        extract_values: function(){
-            var out = [];
-            var containers = $('.conforms_to', this.root);
-            var that = this;
-            containers.each(function(idx, elm){
-                if ($(elm).hasClass('template')){
-                    return;
-                }
-                var elval = that.extract_from_element(elm);
-                out.push(elval);
-                });
-            this.el.val(JSON.stringify(out));
-            return out;
         }
-     }
-    });
+    };
+    return $.extend({}, dcatapit.templated_input, conforms_to);
+ });
+
+
+ckan.module('dcatapit-alternate-identifier', function($){
+    var alternate_identifier= {
+
+        sub_initialize: function(){
+            this.add_form_handlers($(this.el.parent()));
+        },
+        /** 
+            add submit event handler to disable input elements for elm
+        */
+        add_form_handlers: function(elm){
+            var that = this;
+            elm.parents('form').submit(
+                function(){
+                        var inputs = $('.alternate_identifier input', elm);
+                        inputs.attr('disabled', true);
+                        $('input[name=alternate_identifier]', elm).attr('disabled', false);
+                        that.extract_values();
+                   }
+                 )
+        },
+
+        extract_from_each_element: function(idx, elm, out, lang){
+                var elm = $(elm);
+                var _elm_name = elm.attr('name');
+                var elm_name = _elm_name.slice(this.options.input_prefix.length);
+                var agent = out['agent'] || {};
+                if (elm_name.startsWith('agent_')){
+                   agent[elm_name] = elm.val();
+                } else {
+                    out[elm_name] = elm.val();
+                }
+                out['agent'] = agent;
+        },
+
+        sub_add_values: function(ui, values){
+
+            for (var k in values){
+                var val = values[k];
+
+                if (k == 'agent'){
+                    for (var a in val){
+                        var input_name = this.options.input_prefix + a;
+                        var local_val = val[a];
+                        ui.find('input[name=' + input_name + ']').val(local_val);
+                    }
+                } else {
+                    var input_name = this.options.input_prefix + k;
+                    var local_val = val;
+                    ui.find('input[name=' + input_name + ']').val(local_val);
+                }
+
+                }
+
+        },
+
+    };
+    return $.extend({}, dcatapit.templated_input, alternate_identifier);
+ });

@@ -19,7 +19,7 @@
 }
 .conforms_to {
 }
-.conforms_to .remove_conforms_to {
+.conforms_to .remove_conforms_to, .alternate_identifier .remove {
     text-align: right;
     cursor: pointer;
     color: #e33;
