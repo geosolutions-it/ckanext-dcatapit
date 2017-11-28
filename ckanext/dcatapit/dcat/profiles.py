@@ -397,10 +397,15 @@ class ItalianDCATAPProfile(RDFProfile):
 
         predicate, basekey = DCT.creator, 'creator'
         agent_dict, agent_loc_dict = self._parse_agent(alt_id, predicate, basekey)
-        out['agent'] = agent_dict
-        if agent_loc_dict.get('agent_name'):
-            out['agent']['agent_name'] = agent_loc_dict['agent_name']
-
+        agent = {}
+        for k, v in agent_dict.items():
+            new_k = 'agent_{}'.format(k[len(basekey)+1:])
+            agent[new_k] = v
+        
+        out['agent'] = agent
+        if agent_loc_dict.get('creator_name'):
+            out['agent']['agent_name'] = agent_loc_dict['creator_name']
+        
         return out
 
     def _parse_agent(self, subject, predicate, base_name):
@@ -416,7 +421,6 @@ class ItalianDCATAPProfile(RDFProfile):
 
     def _strip_uri(self, value, base_uri):
         return value.replace(base_uri, '')
-
 
     def graph_from_dataset(self, dataset_dict, dataset_ref):
 

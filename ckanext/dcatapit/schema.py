@@ -286,6 +286,7 @@ def get_custom_package_schema():
 		    'name': 'creator',
 		    'element': 'creator',
 		    'label': _('Creator'),
+		    'validator': ['ignore_missing', 'dcatapit_creator'],
 		    'is_required': False,
 		    'couples': [
 		    	{

@@ -19,7 +19,9 @@
 }
 .conforms_to {
 }
-.conforms_to .remove_conforms_to, .alternate_identifier .remove {
+.conforms_to .remove_conforms_to, .alternate_identifier .remove, .creator .remove {
+    float: right;
+    padding-right: 20px;
     text-align: right;
     cursor: pointer;
     color: #e33;

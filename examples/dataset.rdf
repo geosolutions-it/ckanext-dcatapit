@@ -165,6 +165,7 @@
       </skos:Concept>
     </dcat:theme>
 
+    <adms:identifier>STR ID</adms:identifier>
     <adms:identifier>
       <rdf:Description rdf:nodeID="Na36ea4ff20f24900b6745815b33d10fb">
         <skos:notation>TEST</skos:notation>

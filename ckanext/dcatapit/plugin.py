@@ -217,6 +217,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'dcatapit_id_unique': validators.dcatapit_id_unique,
             'dcatapit_conforms_to': validators.dcatapit_conforms_to,
             'dcatapit_alternate_identifier': validators.dcatapit_alternate_identifier,
+            'dcatapit_creator': validators.dcatapit_creator,
         }
 
     # ------------- ITemplateHelpers ---------------#
@@ -236,6 +237,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'get_package_resource_dcatapit_format_list': helpers.get_package_resource_dcatapit_format_list,
             'get_resource_licenses_tree': helpers.get_resource_licenses_tree,
             'get_dcatapit_license': helpers.get_dcatapit_license,
+            'load_json_or_list': helpers.load_json_or_list,
         }
 
     # ------------- IPackageController ---------------#

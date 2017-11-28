@@ -54,11 +54,18 @@ def dcatapit_conforms_to(value, context):
       },..
     ]
 
+    This should also handle old notation: 'VAL1,VAL2'
     """
+    if not value:
+        raise Invalid(_("Conforms to value should not be empty"))
     try:
         data = json.loads(value)
     except (TypeError, ValueError,):
-        raise Invalid(_("Invalid payload for conforms_to"))
+        try:
+            old_data = value.split(',')
+            return json.dumps([{'identifier': v, 'title': {}, 'description': {}, 'referenceDocumentation': []} for v in old_data])
+        except (AttributeError, TypeError, ValueError,):
+            raise Invalid(_("Invalid payload for conforms_to"))
     if not isinstance(data, list):
         raise Invalid(_("List expected for conforms_to values"))
 
@@ -122,13 +129,21 @@ def dcatapit_alternate_identifier(value, context):
 
 
     ]
+
+    This should also handle old
     """
+    if not value:
+        raise Invalid(_("Alternate Identifier value should not be empty"))
     try:
         data = json.loads(value)
     except (TypeError, ValueError,):
-        raise Invalid(_("Invalid payload for alternate_identifier"))
+        try:
+            old_data = value.split(',')
+            return json.dumps([{'identifier': v, 'agent': {}} for v in old_data])
+        except (AttributeError, TypeError, ValueError,):
+            raise Invalid(_("Invalid payload for alternate_identifier"))
     if not isinstance(data, list):
-        raise Invalid(_("List expected for alternate_identifier values"))
+        raise Invalid(_("Invalid payload type {} for alternate_identifier").format(type(data)))
 
     allowed_keys = ['identifier', 'agent']
     agent_allowed_keys = ['agent_identifier', 'agent_name']
@@ -148,7 +163,7 @@ def dcatapit_alternate_identifier(value, context):
 
         for k, v in elm['agent'].items():
             if k not in agent_allowed_keys:
-                raise Invalid(_("alternate_identifier agent dict contains disallowedelement should contain agent"))
+                raise Invalid(_("alternate_identifier agent dict contains disallowed: {}").format(k))
             if k == 'agent_name':
                 if not isinstance(v, dict):
                     raise Invalid(_("alternate_identifier agent name should be a dict"))
@@ -156,4 +171,35 @@ def dcatapit_alternate_identifier(value, context):
                 if not isinstance(v, (str,unicode,)):
                     raise Invalid(_("alternate_identifier agent {} key should be string").format(k))
 
+    return value
+
+
+def dcatapit_creator(value, context):
+    """
+    Validates creator list
+
+    """
+    if not value:
+        raise Invalid(_("Creator value should not be empty"))
+    try:
+        data = json.loads(value)
+    except (TypeError, ValueError,):
+        try:
+            old_data = value.split(',')
+            return json.dumps([{'creator_name': old_data[0], 'creator_identifier': old_data[1]}])
+        except (AttributeError, TypeError, ValueError,):
+            raise Invalid(_("Invalid creator payload"))
+    if not isinstance(data, list):
+        raise Invalid(_("Invalid payload type {} for creator").format(type(data)))
+
+    allowed_keys = ['creator_name', 'creator_identifier']
+    for elm in data:
+        if not isinstance(elm, dict):
+            raise Invalid(_("Each creator element should be a dict"))
+        for k in elm.keys():
+            if k not in allowed_keys:
+                raise Invalid(_("Unexpected {} key in creator value").format(k))
+        for k, val in elm.items():
+            if not isinstance(val, (str, unicode,)):
+                raise Invalid(_("Creator {} value should be string").format(k))
     return value

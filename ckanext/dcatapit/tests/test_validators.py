@@ -47,6 +47,7 @@ def test_conforms_to():
     # list of input, valid flag
     test_values = ((None, False,),
                    ('', False,),
+                   ('ABC,DEF', True,), # old notation
                    (json.dumps({'test': 'fail'}), False,),
                    (json.dumps([]), True,),
                    (json.dumps([{'identifier': 'abc'}, 'fail']), False,),
@@ -81,3 +82,41 @@ def test_conforms_to():
         except validators.Invalid, err:
             pass
         assert passed == is_valid, 'failed for {}: {}'.format(test_val, err or 'no validation error')
+
+
+
+def test_alternate_identifier():
+    
+    # list of input, valid flag
+    test_values = ((None, False,),
+                   ('', False,),
+                   ('ABC,DEF', True,), # old notation
+                   (json.dumps({'test': 'fail'}), False,),
+                   (json.dumps([]), True,),
+                   (json.dumps([{'identifier': 'abc'}, 'fail']), False,),
+                   (json.dumps([{'identifier': None,}]), False,),
+                   (json.dumps([{'identifier': 'abc'}]), False,),
+                   (json.dumps([{'identifier': 'abc', 'agent': {}}]), True,),
+                   (json.dumps([{'identifier': 'abc', 'agent': {'agent_name': 'abc'}}]), False,),
+                   (json.dumps([{'identifier': 'abc', 'title': ['some', 'description']}]), False),
+
+                   (json.dumps([{'identifier': 'abc',
+                                 'agent': {
+                                     'agent_name': {'en': 'title', 'it': 'title'},
+                                     'agent_identifier': 'abc'},
+                                 },
+                                {'identifier': 'efg',
+                                 'agent': {}}
+                                 ]), True,),
+                   )
+
+    for test_val, is_valid in test_values:
+        passed = False
+        err = None
+        try:
+            value = validators.dcatapit_alternate_identifier(test_val, None)
+            passed = True
+        except validators.Invalid, err:
+            pass
+        assert passed == is_valid, 'failed for {}: {}'.format(test_val, err or 'no validation error')
+

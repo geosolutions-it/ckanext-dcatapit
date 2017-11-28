@@ -180,3 +180,10 @@ def json_dump(val):
         return json.dumps(val)
     except (TypeError, ValueError,):
         pass
+
+def load_json_or_list(val):
+    try:
+        return json.loads(val)
+    except (TypeError, ValueError,):
+        if val:
+            return [{'identifier': v} for v in val.split(',')]

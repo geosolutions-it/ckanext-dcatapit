@@ -29,9 +29,20 @@
 				          </td>
 					    </tr>
 
+                    {% elif field.element == 'creator' %}
+                        {% set creators = (h.load_json_or_list(pkg_dict[field.name]) or []) %}
+
+                        {% for creator in creators %}
+		  		        <tr>
+					      <th scope="row" class="dataset-label">{{ field.label }}</th>
+				          <td class="dataset-details">
+                             {{ creator }}
+				          </td>
+					    </tr>
+                        {% endfor %}
                     {% elif field.element == 'alternate_identifier' %}
 
-                        {% set alt_identifiers = (h.json_load(pkg_dict[field.name]) or []) %}
+                        {% set alt_identifiers = (h.load_json_or_list(pkg_dict[field.name]) or []) %}
                         {% set lang = h.lang() %}
 
                         <tr>
@@ -58,7 +69,8 @@
 
                     {% elif field.element == 'conforms_to' %}
 
-                        {% set conforms_to = h.json_load(pkg_dict[field.name]) %}
+                        {% set conforms_to = h.load_json_or_list(pkg_dict[field.name]) %}
+                        {% set lang = h.lang() %}
 
 		  		        <tr>
 					      <th scope="row" class="dataset-label">{{ field.label }}</th>
@@ -75,11 +87,11 @@
                                 
                                     <div class="row">
                                         <div class="span4 std-key">Title</div>
-                                        <div class="span8 std-value">{{ std.title[h.lang()] }}</div>
+                                        <div class="span8 std-value">{{ std.title[lang] }}</div>
                                     </div>
                                     <div class="row">
                                         <div class="span4 std-key">Description</div>
-                                        <div class="span8 std-value">{{ std.title[h.lang()] }}</div>
+                                        <div class="span8 std-value">{{ std.title[lang] }}</div>
                                     </div>
 
                                     <div class="row odd">
