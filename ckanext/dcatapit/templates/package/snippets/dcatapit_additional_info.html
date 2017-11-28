@@ -36,7 +36,13 @@
 		  		        <tr>
 					      <th scope="row" class="dataset-label">{{ field.label }}</th>
 				          <td class="dataset-details">
-                             {{ creator }}
+                             <span class="bold">{% trans %}Name:{% endtrans %}</span>
+                             <span>{{ creator.creator_name }}</span>
+                            <br/>
+                             <span class="bold">IPA/IVA</span>
+                             <span>{{ creator.creator_identifier }}</span>
+
+
 				          </td>
 					    </tr>
                         {% endfor %}

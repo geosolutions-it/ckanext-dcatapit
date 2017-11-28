@@ -286,9 +286,11 @@ def get_custom_package_schema():
 		    'name': 'creator',
 		    'element': 'creator',
 		    'label': _('Creator'),
+            'type': 'creator',
+            'placeholder': '-',
 		    'validator': ['ignore_missing', 'dcatapit_creator'],
 		    'is_required': False,
-		    'couples': [
+		    '_couples': [
 		    	{
 		    		'name': 'creator_name',
 		    		'label': _('Name'),
