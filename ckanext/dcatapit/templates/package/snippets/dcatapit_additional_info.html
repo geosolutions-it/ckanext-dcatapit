@@ -32,6 +32,7 @@
                     {% elif field.element == 'alternate_identifier' %}
 
                         {% set alt_identifiers = (h.json_load(pkg_dict[field.name]) or []) %}
+                        {% set lang = h.lang() %}
 
                         <tr>
                             <th scope="row" class="dataset-label">{{ field.label }}</th>
@@ -44,11 +45,11 @@
                                 {% if alt_id.agent %}
                                 <div class="row">
                                         <div class="span4 std-key">Agent name</div>
-                                        <div class="span8 std-value">{{ alt_id.agent.agent_name }}</div>
+                                        <div class="span8 std-value">{{ alt_id.agent.agent_name[lang] }}</div>
                                 </div>
                                 <div class="row">
                                         <div class="span4 std-key">Agent ID</div>
-                                        <div class="span8 std-value">{{ alt_id.agent.agent_idnetifier }}</div>
+                                        <div class="span8 std-value">{{ alt_id.agent.agent_identifier }}</div>
                                 </div>
                                 {% endif %}
                             {% endfor %}

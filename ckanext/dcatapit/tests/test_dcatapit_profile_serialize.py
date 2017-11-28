@@ -57,7 +57,7 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
 
         alternate_identifiers = [{'identifier': 'aaaabc',
                                  'agent': {'agent_identifier': 'agent01',
-                                           'agent_name': 'Agent 01'},
+                                           'agent_name': {'en': 'Agent en 01', 'it': 'Agent it 01'}},
                                  },
                                  {'identifier': 'other identifier'}]
 
@@ -160,9 +160,13 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             if check.get('agent'):
                 agent_ref = g.value(alt_id, DCT.creator)
                 assert agent_ref is not None
-                agent_name = g.value(agent_ref, FOAF.name)
+
                 agent_identifier = g.value(agent_ref, DCT.identifier)
-                assert str(agent_name) == check['agent']['agent_name'],\
+
+                agent_name = dict((v.language, str(v)) for v in g.objects(agent_ref, FOAF.name))
+                
+                assert set(agent_name.items()) == set(check['agent']['agent_name'].items()),\
                     "expected {}, got {} for {}".format(check['agent']['agent_name'], agent_name, agent_ref)
+
                 assert str(agent_identifier) == check['agent']['agent_identifier'],\
                     "expected {}, got {}".format(check['agent']['agent_identifier'], agent_identifier)

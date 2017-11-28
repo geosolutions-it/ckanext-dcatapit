@@ -215,7 +215,8 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'couple_validator': validators.couple_validator,
             'no_number': validators.no_number,
             'dcatapit_id_unique': validators.dcatapit_id_unique,
-            'dcatapit_conforms_to': validators.dcatapit_conforms_to
+            'dcatapit_conforms_to': validators.dcatapit_conforms_to,
+            'dcatapit_alternate_identifier': validators.dcatapit_alternate_identifier,
         }
 
     # ------------- ITemplateHelpers ---------------#

@@ -172,7 +172,8 @@
           <foaf:Agent rdf:nodeID="N59733bf89bd54e1e9525812053f41be4">
             <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Agent"/>
             <dct:identifier>agent01</dct:identifier>
-            <foaf:name>Agent 01</foaf:name>
+            <foaf:name xml:lang="en">Agent en 01</foaf:name>
+            <foaf:name xml:lang="it">Agent it 01</foaf:name>
           </foaf:Agent>
         </dct:creator>
       </rdf:Description>

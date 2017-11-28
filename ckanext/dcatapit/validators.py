@@ -110,3 +110,50 @@ def dcatapit_conforms_to(value, context):
                     if errors['ref_doc']:
                         raise Invalid(errors['ref_doc'])
     return value
+
+
+def dcatapit_alternate_identifier(value, context):
+    """
+    Validates alternate identifier structure (as json string):
+
+    [ {'identifier': str,
+       'agent': {'agent_name': {lang: str},
+                 'agent_identifier': str},},
+
+
+    ]
+    """
+    try:
+        data = json.loads(value)
+    except (TypeError, ValueError,):
+        raise Invalid(_("Invalid payload for alternate_identifier"))
+    if not isinstance(data, list):
+        raise Invalid(_("List expected for alternate_identifier values"))
+
+    allowed_keys = ['identifier', 'agent']
+    agent_allowed_keys = ['agent_identifier', 'agent_name']
+
+    for elm in data:
+        if not isinstance(elm, dict):
+            raise Invalid(_("Each alternate_identifier element should be a dict"))
+        for k in elm.keys():
+            if k not in allowed_keys:
+                raise Invalid(_("Unexpected {} key in alternate_identifier value").format(k))
+
+        if not isinstance(elm.get('identifier'), (str, unicode,)):
+            raise Invalid(_("alternate_identifier element should contain identifier"))
+
+        if not isinstance(elm.get('agent'), dict):
+            raise Invalid(_("alternate_identifier element should contain agent"))
+
+        for k, v in elm['agent'].items():
+            if k not in agent_allowed_keys:
+                raise Invalid(_("alternate_identifier agent dict contains disallowedelement should contain agent"))
+            if k == 'agent_name':
+                if not isinstance(v, dict):
+                    raise Invalid(_("alternate_identifier agent name should be a dict"))
+            else:
+                if not isinstance(v, (str,unicode,)):
+                    raise Invalid(_("alternate_identifier agent {} key should be string").format(k))
+
+    return value

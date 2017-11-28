@@ -222,6 +222,7 @@ ckan.module('dcatapit-alternate-identifier', function($){
 
         sub_initialize: function(){
             this.add_form_handlers($(this.el.parent()));
+            this.localized = ['agent_name'];
         },
         /** 
             add submit event handler to disable input elements for elm
@@ -243,10 +244,24 @@ ckan.module('dcatapit-alternate-identifier', function($){
                 var _elm_name = elm.attr('name');
                 var elm_name = _elm_name.slice(this.options.input_prefix.length);
                 var agent = out['agent'] || {};
+
                 if (elm_name.startsWith('agent_')){
-                   agent[elm_name] = elm.val();
+                    if ($.inArray(elm_name, this.localized)> -1){
+                        if (!$.isPlainObject(out[elm_name])){
+                            agent[elm_name] = {};
+                        }
+                        var elval = elm.val();
+                        if (elval !== ""){
+                            agent[elm_name][lang] = elval;
+                        }}
+                   else {
+                    agent[elm_name] = elm.val();
+
+                        }
                 } else {
-                    out[elm_name] = elm.val();
+
+                   out[elm_name] = elm.val();
+
                 }
                 out['agent'] = agent;
         },
@@ -255,20 +270,27 @@ ckan.module('dcatapit-alternate-identifier', function($){
 
             for (var k in values){
                 var val = values[k];
-
                 if (k == 'agent'){
                     for (var a in val){
+                        var adata = val[a];
+
+                        if ($.inArray(a, this.localized)> -1){
+                            var local_val = adata[this.lang];
+                        } else {
+                            var local_val = adata;
+                        }
+
                         var input_name = this.options.input_prefix + a;
-                        var local_val = val[a];
                         ui.find('input[name=' + input_name + ']').val(local_val);
+                        ui.attr('lang', this.lang);
                     }
                 } else {
-                    var input_name = this.options.input_prefix + k;
-                    var local_val = val;
-                    ui.find('input[name=' + input_name + ']').val(local_val);
+                        var local_val = val;
+                        var input_name = this.options.input_prefix + k;
+                        ui.find('input[name=' + input_name + ']').val(local_val);
+                        ui.attr('lang', this.lang);
                 }
-
-                }
+            }
 
         },
 

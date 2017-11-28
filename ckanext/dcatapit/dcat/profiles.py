@@ -398,6 +398,9 @@ class ItalianDCATAPProfile(RDFProfile):
         predicate, basekey = DCT.creator, 'creator'
         agent_dict, agent_loc_dict = self._parse_agent(alt_id, predicate, basekey)
         out['agent'] = agent_dict
+        if agent_loc_dict.get('agent_name'):
+            out['agent']['agent_name'] = agent_loc_dict['agent_name']
+
         return out
 
     def _parse_agent(self, subject, predicate, base_name):
@@ -551,7 +554,9 @@ class ItalianDCATAPProfile(RDFProfile):
                 self.g.add((agent, RDF['type'], FOAF.Agent))
                 self.g.add((node, DCT.creator, agent))
                 if adata.get('agent_name'):
-                    self.g.add((agent, FOAF.name, Literal(adata['agent_name'])))
+                    for alang, aname in adata['agent_name'].items():
+                        self.g.add((agent, FOAF.name, Literal(aname, lang=alang)))
+
                 if adata.get('agent_identifier'):
                     self.g.add((agent, DCT.identifier, Literal(adata['agent_identifier'])))
 

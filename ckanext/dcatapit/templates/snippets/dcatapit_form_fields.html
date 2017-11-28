@@ -106,6 +106,16 @@
                                                                  error=errors[field.name],
                                                                  lang=h.lang()) }}
 
+            {% elif field.element == 'creator' %}
+
+                    {{ dcatapit_form_macros.creator(field.name,
+                                                    label=field.label,
+                                                    id='field-'+field.name,
+                                                    value=data[field.name],
+                                                    error=errors[field.name],
+                                                    lang=h.lang()) }}
+
+
 
             {% endif %}
 
