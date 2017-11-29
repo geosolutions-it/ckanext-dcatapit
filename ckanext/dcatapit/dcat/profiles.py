@@ -584,7 +584,9 @@ class ItalianDCATAPProfile(RDFProfile):
         holder_ref = self._add_agent(dataset_dict, dataset_ref, 'holder', DCT.rightsHolder)
 
         ### Autore : Agent
-        self._add_agent(dataset_dict, dataset_ref, 'creator', DCT.creator)
+        if dataset_dict.get('creator_name') or dataset_dict.get('creator_identifier'):
+            self._add_agent(dataset_dict, dataset_ref, 'creator', DCT.creator)
+        self._add_creators(dataset_dict, dataset_ref)
 
         ### Point of Contact
 
@@ -737,6 +739,23 @@ class ItalianDCATAPProfile(RDFProfile):
                    lang = lang.split('_')[0]  # rdflib is quite picky in lang names
                    self.g.add((ref, pred, Literal(value, lang=lang)))
 
+
+    def _add_creators(self, dataset_dict, ref):
+        """
+        new style creators. creator field is serialized json, with pairs of name/identifier
+        """
+        creators_data = dataset_dict.get('creator')
+        if not creators_data:
+            for extra in dataset_dict['extras']:
+                if extra['key'] == 'creator':
+                    creators_data = extra['value']
+
+        try:
+            creators = json.loads(creators_data)
+        except (TypeError, ValueError,), err:
+            creators = []
+        for creator in creators:
+            self._add_agent(creator, ref, 'creator', DCT.creator)
 
     def _add_agent(self, _dict, ref, basekey, _type):
         ''' Stores the Agent in this format:

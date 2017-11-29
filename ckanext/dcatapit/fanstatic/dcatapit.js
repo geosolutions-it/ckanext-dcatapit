@@ -338,7 +338,7 @@ ckan.module('dcatapit-creator', function($){
             for (var k in values){
                 var val = values[k];
                 var local_val = val;
-                var input_name = this.options.input_prefix + k;
+                var input_name = k //this.options.input_prefix + k;
                 ui.find('input[name=' + input_name + ']').val(local_val);
                 ui.attr('lang', this.lang);
             }
