@@ -220,6 +220,8 @@ class ItalianDCATAPProfile(RDFProfile):
         for predicate, basekey in (
                 (DCT.publisher, 'publisher'),
                 (DCT.rightsHolder, 'holder'),
+                # for backward compatibility only,
+                # new format is handled with self._parse_creators() below
                 (DCT.creator, 'creator'),
                 ):
             agent_dict, agent_loc_dict = self._parse_agent(dataset_ref, predicate, basekey)
@@ -227,6 +229,18 @@ class ItalianDCATAPProfile(RDFProfile):
                 self._remove_from_extra(dataset_dict, key)
                 dataset_dict[key] = v
             localized_dict.update(agent_loc_dict)
+
+        creators = self._parse_creators(dataset_ref)
+
+        # use data from old method to populate new format
+        from_old = {}
+        if dataset_dict.get('creator_name'):
+            from_old['creator_name'] = dataset_dict['creator_name']
+        if dataset_dict.get('creator_identifier'):
+            from_old['creator_identifier'] = dataset_dict['creator_identifier']
+
+        creators.append(from_old)
+        dataset_dict['creator'] = json.dumps(creators)
 
         # when all localized data have been parsed, check if there really any and add it to the dict
         if len(localized_dict) > 0:
@@ -406,6 +420,14 @@ class ItalianDCATAPProfile(RDFProfile):
         if agent_loc_dict.get('creator_name'):
             out['agent']['agent_name'] = agent_loc_dict['creator_name']
         
+        return out
+    def _parse_creators(self, dataset_ref):
+        out = []
+        for cref in self.g.objects(dataset_ref, DCT.creator):
+            creator = {}
+            creator['creator_identifier'] = self._object_value(cref, DCT.identifier)
+            creator['creator_name'] = self._object_value(cref, FOAF.name)
+            out.append(creator) 
         return out
 
     def _parse_agent(self, subject, predicate, base_name):
@@ -746,7 +768,7 @@ class ItalianDCATAPProfile(RDFProfile):
         """
         creators_data = dataset_dict.get('creator')
         if not creators_data:
-            for extra in dataset_dict['extras']:
+            for extra in (dataset_dict.get('extras') or []):
                 if extra['key'] == 'creator':
                     creators_data = extra['value']
 

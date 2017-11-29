@@ -60,6 +60,9 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
                                            'agent_name': {'en': 'Agent en 01', 'it': 'Agent it 01'}},
                                  },
                                  {'identifier': 'other identifier'}]
+        creators = [{'creator_name': 'abc', 'creator_identifier': "ABC"},
+                    {'creator_name': 'cde', 'creator_identifier': "CDE"},
+                    ]
 
         dataset = {
             'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
@@ -86,7 +89,8 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             'geographical_geonames_url':'http://www.geonames.org/3181913',
             'language':'{DEU,ENG,ITA}',
             'is_version_of':'http://dcat.geo-solutions.it/dataset/energia-da-fonti-rinnovabili2',
-            'conforms_to':json.dumps(conforms_to_in)
+            'conforms_to':json.dumps(conforms_to_in),
+            'creator': json.dumps(creators)
         }
 
         s = RDFSerializer()
@@ -153,6 +157,7 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
         # alternate identifiers
         alt_ids = [a[-1] for a in g.triples((None, ADMS.identifier, None))]
         alt_ids_dict = dict((a['identifier'], a) for a in alternate_identifiers)
+
         for alt_id in alt_ids:
             identifier = g.value(alt_id, SKOS.notation)
             check = alt_ids_dict[str(identifier)]
@@ -170,3 +175,16 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
 
                 assert str(agent_identifier) == check['agent']['agent_identifier'],\
                     "expected {}, got {}".format(check['agent']['agent_identifier'], agent_identifier)
+
+        creators.append({'creator_name':'test',
+                         'creator_identifier':'412946129'})
+        creators_in = list(g.objects(dataset_ref, DCT.creator))
+        assert len(creators) == len(creators_in)
+
+        for cref in creators_in:
+            c_name = g.value(cref, FOAF.name)
+            c_identifier = g.value(cref, DCT.identifier)
+            c_dict = {'creator_name': str(c_name),
+                      'creator_identifier': str(c_identifier)}
+            assert c_dict in creators, "no {} in {}".format(c_dict, creators)
+

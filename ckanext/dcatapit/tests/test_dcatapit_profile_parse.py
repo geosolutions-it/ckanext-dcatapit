@@ -475,7 +475,6 @@ class TestDCATAPITProfileParsing(BaseParseTest):
                                  'description': {'en': 'descen', 'it': 'descit'},
                                  'referenceDocumentation': ['http://abc.efg/'],},
                                  ]
-
         dataset = {
             'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
             'name': 'test-dataset',
@@ -534,3 +533,61 @@ class TestDCATAPITProfileParsing(BaseParseTest):
                     assert not check.get(k)
                 else:
                     assert check[k] == v
+
+    def test_creators(self):
+
+        creators = [{'creator_name': 'abc', 'creator_identifier': "ABC"},
+                    {'creator_name': 'cde', 'creator_identifier': "CDE"},
+                    ]
+        dataset = {
+            'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
+            'name': 'test-dataset',
+            'title': 'Dataset di test DCAT_AP-IT',
+            'notes': 'dcatapit dataset di test',
+            'metadata_created': '2015-06-26T15:21:09.034694',
+            'metadata_modified': '2015-06-26T15:21:09.075774',
+            'tags': [{'name': 'Tag 1'}, {'name': 'Tag 2'}],
+            'issued':'2016-11-29',
+            'modified':'2016-11-29',
+            'identifier':'ISBN',
+            'temporal_start':'2016-11-01',
+            'temporal_end':'2016-11-30',
+            'frequency':'UPDATE_CONT',
+            'publisher_name':'bolzano',
+            'publisher_identifier':'234234234',
+            'creator_name':'test',
+            'creator_identifier':'412946129',
+            'holder_name':'bolzano',
+            'holder_identifier':'234234234',
+            'alternate_identifier':'ISBN,TEST',
+            'theme':'{ECON,ENVI}',
+            'geographical_geonames_url':'http://www.geonames.org/3181913',
+            'language':'{DEU,ENG,ITA}',
+            'is_version_of':'http://dcat.geo-solutions.it/dataset/energia-da-fonti-rinnovabili2',
+            'creator': json.dumps(creators)
+        }
+
+        s = RDFSerializer()
+        p = RDFParser(profiles=['euro_dcat_ap', 'it_dcat_ap'])
+        
+        serialized = s.serialize_dataset(dataset)
+
+        p.parse(serialized)
+        datasets = list(p.datasets())
+        
+        assert len(datasets) == 1
+        d = datasets[0]
+        creators.append({'creator_identifier': dataset['creator_identifier'],
+                              'creator_name': dataset['creator_name']})
+        creators_dict = dict((v['creator_identifier'], v) for v in creators)
+
+        creators_in = json.loads(d['creator'])
+
+        for c in creators_in:
+            assert c['creator_identifier'] in creators_dict.keys(), "no {} key in {}".format(c['creator_identifier'],
+                                                                                             creators_dict.keys())
+            assert c['creator_name'] == creators_dict[c['creator_identifier']]['creator_name']
+        for c in creators_dict.keys():
+            assert c in [_c['creator_identifier'] for _c in creators_in]
+            cdata = creators_dict[c]
+            assert cdata in creators_in
