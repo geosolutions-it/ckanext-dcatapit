@@ -122,14 +122,43 @@ Old implementation of the couple element (one element with comma separated value
 
     <div class="creator_container add_new_container" data-add-with=".add_new_creator" data-add-template=".creator.template"></div>
 
-            <span class="add_new_creator add_new"><i class="icon-plus"></i> {% trans %}Add new creator{% endtrans %}</span>
+            <span class="add_new_creator add_new"><i class="icon-plus"></i> {% trans %}Add new Creator{% endtrans %}</span>
 
     <input type="hidden" name="creator" value="{{ value or dict()| safe}}" data-module="dcatapit-creator" data-module-template=".creator" data-module-container=".creator_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="creator" />
     </div>
 {% endmacro %}
 
-    
 
+{% macro temporal_coverage(name, id, label, value, error, couples, lang) %}
+    {% set labels = (couples[0].label, couples[1].label) %}
+    {% set names = (couples[0].name, couples[1].name) %}
+    {% set placeholders = (couples[0].placeholder, couples[1].placeholder) %}
+    {% set types = ['date', 'date'] %}
+    {% set values = ['', ''] %}
+
+    <div class="temporal-coverage-wrap">
+    <div class="temporal-coverage template control-custom">
+    {% call  couple(name,
+                labels=labels,
+                names=names,
+                id="",
+                label="",
+                values=values,
+                placeholders=placeholders,
+                error=error,
+                types=types) %}
+
+                <span class="remove" data-remove-parent=".temporal-coverage"><i class="icon-minus" title="remove"></i>{% trans %}Remove temporal-coverage{% endtrans %}</span>
+    {% endcall %}
+    </div>
+
+    <div class="temporal-coverage_container add_new_container" data-add-with=".add_new_temporal-coverage" data-add-template=".temporal-coverage.template"></div>
+
+            <span class="add_new_temporal-coverage add_new"><i class="icon-plus"></i> {% trans %}Add new Temporal Coverage{% endtrans %}</span>
+
+    <input type="hidden" name="temporal_coverage" value="{{ value or dict()| safe}}" data-module="dcatapit-temporal-coverage" data-module-template=".temporal-coverage" data-module-container=".temporal-coverage_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="temporal-coverage" />
+    </div>
+{% endmacro %}
 
 
 {% macro alternate_identifier(name, id='', label='', value='', error='', lang='') %}

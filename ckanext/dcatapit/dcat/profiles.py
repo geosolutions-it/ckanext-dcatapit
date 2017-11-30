@@ -11,7 +11,7 @@ from rdflib import URIRef, BNode, Literal
 
 import ckan.logic as logic
 
-from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF, ADMS, OWL
+from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF, ADMS, OWL, SCHEMA
 from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
 
 import ckanext.dcatapit.interfaces as interfaces
@@ -143,18 +143,11 @@ class ItalianDCATAPProfile(RDFProfile):
             log.debug('No DCT.conformsTo found for dataset "%s"', dataset_dict.get('title', '---'))
 
         # Temporal
-        start, end = self._time_interval(dataset_ref, DCT.temporal)
-        for v, key, logf in (
-                (start, 'temporal_start', log.debug),
-                (end, 'temporal_end', log.debug),
-                ):
-            if v:
-                self._remove_from_extra(dataset_dict, key)
-
-                value = helpers.format(v, '%Y-%m-%d', 'date')
-                dataset_dict[key] = value
-            else:
-                log.warn('No %s Date found for dataset "%s"', key, dataset_dict.get('title', '---'))
+        temporal_coverage = self._get_temporal_coverage(dataset_ref)
+        if temporal_coverage:
+            dataset_dict['temporal_coverage'] = json.dumps(temporal_coverage)
+        
+        #start, end = self._time_interval(dataset_ref, DCT.temporal)
 
         # URI 0..1
         for predicate, key, base_uri in (
@@ -383,6 +376,71 @@ class ItalianDCATAPProfile(RDFProfile):
         # add if not found
         dataset_dict['extras'].append({'key': key, 'value': value})
 
+    def _set_temporal_coverage(self, graph, dataset_dict, dataset_ref):
+        g = graph
+        d = dataset_dict
+        
+        # clean from dcat's data, to avoid duplicates
+        for obj in g.objects(dataset_ref, DCT.temporal):
+            g.remove((dataset_ref, DCT.temporal, obj,))
+
+        temp_cov = dataset_dict.get('temporal_coverage')
+
+        if temp_cov:
+            temp_cov = json.loads(temp_cov)
+        else:
+            temp_cov = []
+        
+        if d.get('temporal_start') or d.get('temporal_end'):
+            temp_cov.append({'temporal_start': d['temporal_start'],
+                             'temporal_end': d['temporal_end']})
+        if not temp_cov:
+            return
+
+        for tc in temp_cov:
+            start = tc['temporal_start']
+            end = tc['temporal_end']
+            temporal_extent = BNode()
+            g.add((temporal_extent, RDF.type, DCT.PeriodOfTime))
+            _added = False
+            if start:
+                _added = True
+                self._add_date_triple(temporal_extent, SCHEMA.startDate, start)
+            if end:
+                _added = True
+                self._add_date_triple(temporal_extent, SCHEMA.endDate, end)
+            if _added:
+                g.add((dataset_ref, DCT.temporal, temporal_extent))
+
+    def _get_temporal_coverage(self, dataset_ref):
+        pred = DCT.temporal
+        out = []
+        
+        for interval in self.g.objects(dataset_ref, pred):
+            # Fist try the schema.org way
+            start = self._object_value(interval, SCHEMA.startDate)
+            end = self._object_value(interval, SCHEMA.endDate)
+            if start or end:
+                out.append({'temporal_start': start,
+                            'temporal_end': end})
+                continue
+            start_nodes = [t for t in self.g.objects(interval,
+                                                     TIME.hasBeginning)]
+            end_nodes = [t for t in self.g.objects(interval,
+                                                   TIME.hasEnd)]
+            if start_nodes:
+                start = self._object_value(start_nodes[0],
+                                                TIME.inXSDDateTime)
+            if end_nodes:
+                end = self._object_value(end_nodes[0],
+                                              TIME.inXSDDateTime)
+
+            if start or end:
+                out.append({'temporal_start': start,
+                            'temporal_end': end})
+
+        return out
+
     def _conforms_to(self, conforms_id):
         ref_docs = [ str(val) for val in self.g.objects(conforms_id, DCATAPIT.referenceDocumentation)]
 
@@ -586,6 +644,7 @@ class ItalianDCATAPProfile(RDFProfile):
                 if adata.get('agent_identifier'):
                     self.g.add((agent, DCT.identifier, Literal(adata['agent_identifier'])))
 
+        self._set_temporal_coverage(self.g, dataset_dict, dataset_ref)
 
         ### publisher
 

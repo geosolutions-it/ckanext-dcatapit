@@ -29,6 +29,25 @@
 				          </td>
 					    </tr>
 
+                    {% elif field.element == 'temporal_coverage' %}
+                        {% set temp_cov = (h.load_json_or_list(pkg_dict[field.name]) or []) %}
+
+                        {% for temp in temp_cov %}
+		  		        <tr>
+					      <th scope="row" class="dataset-label">{{ field.label }}</th>
+				          <td class="dataset-details">
+                             <span class="bold">{% trans %}From{% endtrans %}</span>
+                             <span>{{ temp.temporal_start }}</span>
+                            <br/>
+                             <span class="bold">{% trans %}Until{% endtrans %}</span>
+                             <span>{{ temp.temporal_end }}</span>
+
+
+				          </td>
+					    </tr>
+                        {% endfor %}
+
+
                     {% elif field.element == 'creator' %}
                         {% set creators = (h.load_json_or_list(pkg_dict[field.name]) or []) %}
 

@@ -203,3 +203,53 @@ def dcatapit_creator(value, context):
             if not isinstance(val, (str, unicode,)):
                 raise Invalid(_("Creator {} value should be string").format(k))
     return value
+
+
+DATE_FORMATS = ['%Y-%m-%d',
+                '%Y%m%d',
+                '%Y-%m-%dT%H:%M:%S',
+                '%Y-%m-%d %H:%M:%S',
+                '%Y-%m-%d %H:%M']
+
+def parse_date(val):
+    for format in DATE_FORMATS:
+        try:
+            return datetime.strptime(val, format).date()
+        except (ValueError, TypeError,):
+            pass
+
+    raise Invalid(_("Invalid date input: {}").format(val))
+
+def dcatapit_temporal_coverage(value, context):
+    """
+    Validates temporal coverage data
+    """
+    if not value:
+        raise Invalid(_("Temporal coverage value should not be empty"))
+    try:
+        data = json.loads(value)
+    except (TypeError, ValueError,):
+        raise Invalid(_("Temporal coverage value is not valid"))
+    
+
+    if not isinstance(data, list):
+        raise Invalid(_("Temporal coverage values should be in a list, got {}").format(type(data)))
+
+    allowed_keys = {'temporal_start': parse_date,
+                    'temporal_end': parse_date}
+    allowed_keys_set = set(allowed_keys.keys())
+
+    for elm in data:
+        if not isinstance(elm, dict):
+            raise Invalid(_("Invalid temporal coverage item, should be a dict, got {}").format(type(elm)))
+        keys_set = set(elm.keys())
+        if keys_set != allowed_keys_set:
+            raise Invalid(_("Temporal coverage item contains invalid keys: {}").format(keys_set - allowed_keys_set))
+        tmp = {}
+        for k, v in elm.items():
+            parsed = allowed_keys[k](v)
+            tmp[k] = parsed
+        if tmp['temporal_start'] > tmp['temporal_end']:
+            raise Invalid(_("Temporal coverage start {} is after end {}").format(tmp['temporal_start'], tmp['temporal_end']))
+
+    return value

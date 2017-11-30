@@ -20,6 +20,7 @@ from ckanext.dcat.processors import RDFSerializer
 from ckanext.dcat.profiles import (DCAT, DCT, ADMS, XSD, VCARD, FOAF, SCHEMA,
                                    SKOS, LOCN, GSP, OWL, SPDX, GEOJSON_IMT)
 from ckanext.dcatapit.dcat.profiles import (DCATAPIT)
+from ckanext.dcatapit.validators import parse_date as pdate
 
 eq_ = nose.tools.eq_
 assert_true = nose.tools.assert_true
@@ -64,6 +65,9 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
                     {'creator_name': 'cde', 'creator_identifier': "CDE"},
                     ]
 
+        temporal_coverage = [{'temporal_start': '2001-01-01', 'temporal_end': '2001-02-01 10:11:12'},
+                             {'temporal_start': '2001-01-01', 'temporal_end': '2001-02-01 11:12:13'},
+                            ]
         dataset = {
             'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
             'name': 'test-dataset',
@@ -85,6 +89,7 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             'holder_name':'bolzano',
             'holder_identifier':'234234234',
             'alternate_identifier':json.dumps(alternate_identifiers),
+            'temporal_coverage': json.dumps(temporal_coverage),
             'theme':'{ECON,ENVI}',
             'geographical_geonames_url':'http://www.geonames.org/3181913',
             'language':'{DEU,ENG,ITA}',
@@ -175,7 +180,7 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
 
                 assert str(agent_identifier) == check['agent']['agent_identifier'],\
                     "expected {}, got {}".format(check['agent']['agent_identifier'], agent_identifier)
-
+        # creators
         creators.append({'creator_name':'test',
                          'creator_identifier':'412946129'})
         creators_in = list(g.objects(dataset_ref, DCT.creator))
@@ -188,3 +193,28 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
                       'creator_identifier': str(c_identifier)}
             assert c_dict in creators, "no {} in {}".format(c_dict, creators)
 
+        # temporal coverage
+        temporal_coverage.append({'temporal_start': dataset['temporal_start'],
+                                  'temporal_end': dataset['temporal_end']})
+        temp_exts = list(g.triples((dataset_ref, DCT.temporal, None)))
+        assert len(temp_exts) == len(temporal_coverage)
+        
+        # normalize values
+        for item in temporal_coverage:
+            for k, v in item.items():
+                item[k] = pdate(v)
+
+        temp_ext = []
+        for interval_t in temp_exts:
+            interval = interval_t[-1]
+            start = g.value(interval, SCHEMA.startDate)
+            end = g.value(interval, SCHEMA.endDate)
+            assert start is not None
+            assert end is not None
+            temp_ext.append({'temporal_start': pdate(str(start)),
+                             'temporal_end': pdate(str(end))})
+
+        set1 = set([tuple(d.items()) for d in temp_ext])
+        set2 = set([tuple(d.items()) for d in temporal_coverage])
+        assert set1 == set2, "Got different temporal coverage sets: \n{}\n vs\n {}".format(set1, set2)
+        

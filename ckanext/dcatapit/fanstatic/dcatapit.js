@@ -348,3 +348,48 @@ ckan.module('dcatapit-creator', function($){
     return $.extend({}, dcatapit.templated_input, creator);
  });
 
+ckan.module('dcatapit-temporal-coverage', function($){
+    var temporal_coverage = {
+
+        sub_initialize: function(){
+            this.add_form_handlers($(this.el.parent()));
+            this.localized = [];
+        },
+        /** 
+            add submit event handler to disable input elements for elm
+        */
+        add_form_handlers: function(elm){
+            var that = this;
+            elm.parents('form').submit(
+                function(){
+                        var inputs = $('input', elm);
+                        inputs.attr('disabled', true);
+                        $('input[name=temporal_coverage]', elm).attr('disabled', false);
+                        that.extract_values();
+                   }
+                 )
+        },
+
+        extract_from_each_element: function(idx, elm, out, lang){
+                var elm = $(elm);
+                var _elm_name = elm.attr('name');
+                var elm_name = _elm_name.slice(this.options.input_prefix.length);
+                out[elm_name] = elm.val();
+        },
+
+        sub_add_values: function(ui, values){
+
+            for (var k in values){
+                var val = values[k];
+                var local_val = val;
+                var input_name = k //this.options.input_prefix + k;
+                ui.find('input[name=' + input_name + ']').val(local_val);
+                ui.attr('lang', this.lang);
+            }
+        },
+
+    };
+    return $.extend({}, dcatapit.templated_input, temporal_coverage);
+ });
+
+
