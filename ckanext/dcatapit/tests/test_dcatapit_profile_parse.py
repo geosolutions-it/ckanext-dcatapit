@@ -47,6 +47,7 @@ from ckanext.dcatapit.plugin import DCATAPITGroupMapper
 
 from ckanext.dcatapit.model.license import _get_graph, load_from_graph, License
 
+DEFAULT_LANG = config.get('ckan.locale_default', 'en')
 
 eq_ = nose.tools.eq_
 ok_ = nose.tools.ok_
@@ -101,7 +102,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         geographical_name = '{' + ','.join([str(x) for x in geographical_name]) + '}'
         eq_(geographical_name, '{ITA_BZO}')
 
-        eq_(dataset['publisher_name'], 'bolzano')
+        eq_(dataset['publisher_name'], 'bolzano it')
         eq_(dataset['publisher_identifier'], '234234234')
         eq_(dataset['creator_name'], 'test')
         eq_(dataset['creator_identifier'], '412946129')
@@ -149,6 +150,12 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         eq_(multilang_title['de'], u'Dcatapit Test-Dataset')
         eq_(multilang_title['it'], u'Dataset di test DCAT_AP-IT')
         eq_(multilang_title['en_GB'], u'DCAT_AP-IT test dataset')
+
+        multilang_pub_name = dataset['DCATAPIT_MULTILANG_BASE'].get('publisher_name', None)
+        ok_(multilang_pub_name)
+        eq_(multilang_pub_name['en_GB'], u'bolzano en')
+        eq_(multilang_pub_name['it'], u'bolzano it it')
+        
 
 
     def test_groups_to_themes_mapping(self):
@@ -537,8 +544,8 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
     def test_creators(self):
 
-        creators = [{'creator_name': 'abc', 'creator_identifier': "ABC"},
-                    {'creator_name': 'cde', 'creator_identifier': "CDE"},
+        creators = [{'creator_name': {DEFAULT_LANG: 'abc', 'it': 'abc it'}, 'creator_identifier': "ABC"},
+                    {'creator_name': {DEFAULT_LANG: 'cde', 'it': 'cde it'}, 'creator_identifier': "CDE"},
                     ]
         dataset = {
             'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
@@ -579,7 +586,8 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         assert len(datasets) == 1
         d = datasets[0]
         creators.append({'creator_identifier': dataset['creator_identifier'],
-                              'creator_name': dataset['creator_name']})
+                              'creator_name': {DEFAULT_LANG: dataset['creator_name']}})
+
         creators_dict = dict((v['creator_identifier'], v) for v in creators)
 
         creators_in = json.loads(d['creator'])
@@ -587,7 +595,8 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         for c in creators_in:
             assert c['creator_identifier'] in creators_dict.keys(), "no {} key in {}".format(c['creator_identifier'],
                                                                                              creators_dict.keys())
-            assert c['creator_name'] == creators_dict[c['creator_identifier']]['creator_name']
+            assert c['creator_name'] == creators_dict[c['creator_identifier']]['creator_name'],\
+                "{} vs {}".format(c['creator_name'], creators_dict[c['creator_identifier']]['creator_name'])
         for c in creators_dict.keys():
             assert c in [_c['creator_identifier'] for _c in creators_in]
             cdata = creators_dict[c]

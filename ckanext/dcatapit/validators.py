@@ -193,6 +193,7 @@ def dcatapit_creator(value, context):
         raise Invalid(_("Invalid payload type {} for creator").format(type(data)))
 
     allowed_keys = ['creator_name', 'creator_identifier']
+    localized_keys  = ['creator_name']
     for elm in data:
         if not isinstance(elm, dict):
             raise Invalid(_("Each creator element should be a dict"))
@@ -200,8 +201,12 @@ def dcatapit_creator(value, context):
             if k not in allowed_keys:
                 raise Invalid(_("Unexpected {} key in creator value").format(k))
         for k, val in elm.items():
-            if not isinstance(val, (str, unicode,)):
-                raise Invalid(_("Creator {} value should be string").format(k))
+            if k in localized_keys:
+                if not isinstance(val, dict):
+                    raise Invalid(_("Creator {} value should be dict, got {} instead").format(k, type(val)))
+            else:
+                if not isinstance(val, (str, unicode,)):
+                    raise Invalid(_("Creator {} value should be string, got {} instead").format(k, type(val)))
     return value
 
 
@@ -230,7 +235,6 @@ def dcatapit_temporal_coverage(value, context):
         data = json.loads(value)
     except (TypeError, ValueError,):
         raise Invalid(_("Temporal coverage value is not valid"))
-    
 
     if not isinstance(data, list):
         raise Invalid(_("Temporal coverage values should be in a list, got {}").format(type(data)))

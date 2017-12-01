@@ -117,13 +117,14 @@ def test_creators():
                    (json.dumps([{'creator_identifier': 'abc'}, 'fail']), False,),
                    (json.dumps([{'creator_identifier': None,}]), False,),
                    (json.dumps([{'creator_identifier': 'abc'}]), True,),
-                   (json.dumps([{'creator_identifier': 'abc', 'creator_name': {}}]), False,),
-                   (json.dumps([{'creator_identifier': 'abc', 'creator_name': 'abc'}]), True,),
+                   (json.dumps([{'creator_identifier': 'abc', 'creator_name': {}}]), True,),
+                   (json.dumps([{'creator_identifier': 'abc', 'creator_name': 'abc'}]), False,),
+                   (json.dumps([{'creator_identifier': 'abc', 'creator_name': {'en': 'abc'}}]), True,),
 
                    (json.dumps([{'creator_identifier': 'abc',
-                                 'creator_name': 'abc'},
+                                 'creator_name': {'en': 'en abc', 'it': 'it abc'}},
                                 {'creator_identifier': 'def',
-                                 'creator_name': 'def'}]), True,),
+                                 'creator_name': {'en': 'def'}}]), True,),
                    )
 
     return _run_checks(test_values, validators.dcatapit_creator)

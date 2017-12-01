@@ -277,7 +277,7 @@ ckan.module('dcatapit-alternate-identifier', function($){
                 var val = values[k];
                 if (k == 'agent'){
                     for (var a in val){
-                        var adata = val[a];
+                        var adata = val[a];f
 
                         if ($.inArray(a, this.localized)> -1){
                             var local_val = adata[this.lang];
@@ -330,7 +330,17 @@ ckan.module('dcatapit-creator', function($){
                 var elm = $(elm);
                 var _elm_name = elm.attr('name');
                 var elm_name = _elm_name.slice(this.options.input_prefix.length);
-                out[elm_name] = elm.val();
+                var elm_val = elm.val();
+                if ($.inArray(elm_name, this.localized)){
+                    if (!$.isPlainObject(out[elm_name])){
+                        agent[elm_name] = {};
+                    }
+                    if (elval !== ""){
+                        agent[elm_name][lang] = elval;
+                    }
+                } else {
+                    out[elm_name] = elm_val;
+                }
         },
 
         sub_add_values: function(ui, values){

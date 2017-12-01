@@ -59,7 +59,9 @@
       <foaf:Agent rdf:nodeID="N362776781a3347869641a441062dce51">
         <dct:identifier>234234234</dct:identifier>
         <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Agent"/>
-        <foaf:name>bolzano</foaf:name>
+        <foaf:name>bolzano it</foaf:name>
+        <foaf:name xml:lang="it">bolzano it it</foaf:name>
+        <foaf:name xml:lang="en">bolzano en</foaf:name>
       </foaf:Agent>
     </dct:publisher>
     <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2016-11-29T00:00:00</dct:issued>
