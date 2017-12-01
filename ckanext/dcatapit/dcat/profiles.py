@@ -680,15 +680,14 @@ class ItalianDCATAPProfile(RDFProfile):
             #log.info("Removing publisher %r", o)
             g.remove((s, p, o))
 
-        self._add_agent(dataset_dict, dataset_ref, 'publisher', DCT.publisher)
+        publisher_ref = self._add_agent(dataset_dict, dataset_ref, 'publisher', DCT.publisher)
 
         ### Rights holder : Agent
         holder_ref = self._add_agent(dataset_dict, dataset_ref, 'holder', DCT.rightsHolder)
 
         ### Autore : Agent
-        if dataset_dict.get('creator_name') or dataset_dict.get('creator_identifier'):
-            self._add_agent(dataset_dict, dataset_ref, 'creator', DCT.creator)
         self._add_creators(dataset_dict, dataset_ref)
+
 
         ### Point of Contact
 
@@ -763,7 +762,7 @@ class ItalianDCATAPProfile(RDFProfile):
             'title': (dataset_ref, DCT.title),
             'notes': (dataset_ref, DCT.description),
             'holder_name': (holder_ref, FOAF.name),
-            'publisher_name': (dataset_ref, DCT.publisher),
+            'publisher_name': (publisher_ref, FOAF.name),
         }
 
         self._add_multilang_values(loc_dict, loc_package_mapping)
@@ -848,6 +847,8 @@ class ItalianDCATAPProfile(RDFProfile):
         """
         new style creators. creator field is serialized json, with pairs of name/identifier
         """
+        # clear any previous data
+        self.g.remove((ref, DCT.creator, None))
         creators_data = dataset_dict.get('creator')
         if not creators_data:
             for extra in (dataset_dict.get('extras') or []):
@@ -858,6 +859,21 @@ class ItalianDCATAPProfile(RDFProfile):
             creators = json.loads(creators_data)
         except (TypeError, ValueError,), err:
             creators = []
+        if dataset_dict.get('creator_identifier') or dataset_dict.get('creator_name'):
+            old_creator = {}
+            if dataset_dict.get('creator_identifier'):
+                old_creator['creator_identifier'] = dataset_dict['creator_identifier']
+            if dataset_dict.get('creator_name'):
+                old_creator['creator_name'] = {DEFAULT_LANG: dataset_dict['creator_name']}
+            old_to_add = bool(old_creator)
+            if old_creator.get('creator_identifier'):
+                for cr in creators:
+                    if cr.get('creator_identifier') and cr['creator_identifier'] == old_creator['creator_identifier']:
+                        old_to_add = False
+                        break
+            if old_to_add:
+                creators.append(old_creator)
+
         for creator in creators:
             self._add_agent(creator, ref, 'creator', DCT.creator)
 

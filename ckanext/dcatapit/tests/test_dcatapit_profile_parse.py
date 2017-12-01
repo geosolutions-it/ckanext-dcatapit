@@ -155,7 +155,6 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         ok_(multilang_pub_name)
         eq_(multilang_pub_name['en_GB'], u'bolzano en')
         eq_(multilang_pub_name['it'], u'bolzano it it')
-        
 
 
     def test_groups_to_themes_mapping(self):

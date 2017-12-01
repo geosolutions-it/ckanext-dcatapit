@@ -15,16 +15,19 @@ try:
 except ImportError:
     from ckan.new_tests import helpers, factories
 
+from ckan.model import Session, repo
 from ckanext.dcat import utils
 from ckanext.dcat.processors import RDFSerializer
 from ckanext.dcat.profiles import (DCAT, DCT, ADMS, XSD, VCARD, FOAF, SCHEMA,
                                    SKOS, LOCN, GSP, OWL, SPDX, GEOJSON_IMT)
 from ckanext.dcatapit.dcat.profiles import (DCATAPIT)
 from ckanext.dcatapit.validators import parse_date as pdate
+from ckanext.dcatapit import interfaces
 
 eq_ = nose.tools.eq_
 assert_true = nose.tools.assert_true
 
+DEFAULT_LANG = config.get('ckan.locale_default', 'en')
 
 class BaseSerializeTest(object):
 
@@ -60,9 +63,9 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
                                  'agent': {'agent_identifier': 'agent01',
                                            'agent_name': {'en': 'Agent en 01', 'it': 'Agent it 01'}},
                                  },
-                                 {'identifier': 'other identifier'}]
-        creators = [{'creator_name': 'abc', 'creator_identifier': "ABC"},
-                    {'creator_name': 'cde', 'creator_identifier': "CDE"},
+                                 {'identifier': 'other identifier', 'agent': {}}]
+        creators = [{'creator_name': {'en': 'abc'}, 'creator_identifier': "ABC"},
+                    {'creator_name': {'en': 'cde'}, 'creator_identifier': "CDE"},
                     ]
 
         temporal_coverage = [{'temporal_start': '2001-01-01', 'temporal_end': '2001-02-01 10:11:12'},
@@ -90,13 +93,39 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             'holder_identifier':'234234234',
             'alternate_identifier':json.dumps(alternate_identifiers),
             'temporal_coverage': json.dumps(temporal_coverage),
-            'theme':'{ECON,ENVI}',
+            'theme':'ECON',
             'geographical_geonames_url':'http://www.geonames.org/3181913',
             'language':'{DEU,ENG,ITA}',
             'is_version_of':'http://dcat.geo-solutions.it/dataset/energia-da-fonti-rinnovabili2',
             'conforms_to':json.dumps(conforms_to_in),
-            'creator': json.dumps(creators)
+            'creator': json.dumps(creators),
         }
+
+        
+        pkg_id = dataset['id']
+
+        
+        pub_names = {'it': 'IT publisher',
+                     'es': 'EN publisher'}
+        holder_names = {'it': 'IT holder name',
+                        'es': 'EN holder name'}
+
+        multilang_fields = [('publisher_name', 'package', k, v) for k, v in pub_names.items()] +\
+                           [('holder_name', 'package', k, v) for k, v in holder_names.items()]
+        
+        pkg = helpers.call_action('package_create', {'defer_commit': True}, **dataset)
+        rev = getattr(Session,  'revision', repo.new_revision())
+        Session.flush()
+        Session.revision = rev
+        pkg_id = pkg['id']
+
+        for field_name, field_type, lang, text in multilang_fields:
+            interfaces.upsert_package_multilang(pkg_id, field_name, field_type, lang, text)
+
+        loc_dict = interfaces.get_for_package(pkg_id)
+        #assert loc_dict['publisher_name'] == pub_names
+        #assert loc_dict['holder_name'] == holder_names
+
 
         s = RDFSerializer()
         g = s.g
@@ -181,15 +210,15 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
                 assert str(agent_identifier) == check['agent']['agent_identifier'],\
                     "expected {}, got {}".format(check['agent']['agent_identifier'], agent_identifier)
         # creators
-        creators.append({'creator_name':'test',
+        creators.append({'creator_name':{'en': 'test'},
                          'creator_identifier':'412946129'})
         creators_in = list(g.objects(dataset_ref, DCT.creator))
         assert len(creators) == len(creators_in)
 
         for cref in creators_in:
-            c_name = g.value(cref, FOAF.name)
+            cnames = dict((str(c.language) if c.language else DEFAULT_LANG, str(c)) for c in g.objects(cref, FOAF.name))
             c_identifier = g.value(cref, DCT.identifier)
-            c_dict = {'creator_name': str(c_name),
+            c_dict = {'creator_name': cnames,
                       'creator_identifier': str(c_identifier)}
             assert c_dict in creators, "no {} in {}".format(c_dict, creators)
 
@@ -217,4 +246,13 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
         set1 = set([tuple(d.items()) for d in temp_ext])
         set2 = set([tuple(d.items()) for d in temporal_coverage])
         assert set1 == set2, "Got different temporal coverage sets: \n{}\n vs\n {}".format(set1, set2)
-        
+
+        for pub_ref in g.objects(dataset_ref, DCT.publisher):
+            _pub_names = list(g.objects(pub_ref, FOAF.name))
+
+            assert len(_pub_names) 
+
+            for pub_name in _pub_names:
+                if pub_name.language:
+                    assert str(pub_name.language) in pub_names
+                    assert pub_names[str(pub_name.language)] == str(pub_name), "{} vs {}".format(pub_name, pub_names)
