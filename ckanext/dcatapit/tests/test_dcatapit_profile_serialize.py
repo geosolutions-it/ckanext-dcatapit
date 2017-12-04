@@ -100,10 +100,8 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             'conforms_to':json.dumps(conforms_to_in),
             'creator': json.dumps(creators),
         }
-
         
         pkg_id = dataset['id']
-
         
         pub_names = {'it': 'IT publisher',
                      'es': 'EN publisher'}
@@ -131,7 +129,9 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
         # which will return lang[0]
         pub_names.update({DEFAULT_LANG: dataset['publisher_name']})
         pub_names.update({DEFAULT_LANG[0]: dataset['publisher_name']})
-
+        holder_names.update({DEFAULT_LANG: dataset['holder_name']})
+        holder_names.update({DEFAULT_LANG[0]: dataset['holder_name']})
+        
         s = RDFSerializer()
         g = s.g
 
@@ -261,3 +261,13 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
                 if pub_name.language:
                     assert str(pub_name.language) in pub_names, "no {} in {}".format(pub_name.language, pub_names)
                     assert pub_names[str(pub_name.language)] == str(pub_name), "{} vs {}".format(pub_name, pub_names)
+
+        for holder_ref in g.objects(dataset_ref, DCT.rightsHolder):
+            _holder_names = list(g.objects(holder_ref, FOAF.name))
+
+            assert len(_holder_names) 
+
+            for holder_name in _holder_names:
+                if holder_name.language:
+                    assert str(holder_name.language) in holder_names, "no {} in {}".format(holder_name.language, holder_names)
+                    assert holder_names[str(holder_name.language)] == str(holder_name), "{} vs {}".format(holder_name, holder_names)

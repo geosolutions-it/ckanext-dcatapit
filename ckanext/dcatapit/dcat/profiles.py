@@ -683,7 +683,7 @@ class ItalianDCATAPProfile(RDFProfile):
         publisher_ref = self._add_agent(dataset_dict, dataset_ref, 'publisher', DCT.publisher, use_default_lang=True)
 
         ### Rights holder : Agent
-        holder_ref = self._add_agent(dataset_dict, dataset_ref, 'holder', DCT.rightsHolder)
+        holder_ref = self._add_agent(dataset_dict, dataset_ref, 'holder', DCT.rightsHolder, use_default_lang=True)
 
         ### Autore : Agent
         self._add_creators(dataset_dict, dataset_ref)
