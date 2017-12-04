@@ -23,12 +23,8 @@ class ICustomSchema(Interface):
 
 
 def get_language():
-    lang = get_lang()
+    return get_lang()
 
-    if lang is not None:
-        lang = unicode(lang[0])
-
-    return lang
 
 def update_solr_package_indexes(package_dict):
     # Updating Solr Index

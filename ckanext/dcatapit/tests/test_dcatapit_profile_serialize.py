@@ -128,9 +128,9 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
         # temporary bug for comaptibility with interfaces.get_language(),
         # which will return lang[0]
         pub_names.update({DEFAULT_LANG: dataset['publisher_name']})
-        pub_names.update({DEFAULT_LANG[0]: dataset['publisher_name']})
+        # pub_names.update({DEFAULT_LANG[0]: dataset['publisher_name']})
         holder_names.update({DEFAULT_LANG: dataset['holder_name']})
-        holder_names.update({DEFAULT_LANG[0]: dataset['holder_name']})
+        # holder_names.update({DEFAULT_LANG[0]: dataset['holder_name']})
         
         s = RDFSerializer()
         g = s.g
