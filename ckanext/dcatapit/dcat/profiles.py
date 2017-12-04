@@ -680,7 +680,7 @@ class ItalianDCATAPProfile(RDFProfile):
             #log.info("Removing publisher %r", o)
             g.remove((s, p, o))
 
-        publisher_ref = self._add_agent(dataset_dict, dataset_ref, 'publisher', DCT.publisher)
+        publisher_ref = self._add_agent(dataset_dict, dataset_ref, 'publisher', DCT.publisher, use_default_lang=True)
 
         ### Rights holder : Agent
         holder_ref = self._add_agent(dataset_dict, dataset_ref, 'holder', DCT.rightsHolder)
@@ -836,7 +836,6 @@ class ItalianDCATAPProfile(RDFProfile):
                 if not pred:
                     log.warn('Multilang field not mapped "%s"', field_name)
                     continue
-
                 for lang, value in lang_dict.iteritems():
                    lang = lang.split('_')[0]  # rdflib is quite picky in lang names
                    self.g.add((ref, pred, Literal(value, lang=lang)))
@@ -877,7 +876,7 @@ class ItalianDCATAPProfile(RDFProfile):
         for creator in creators:
             self._add_agent(creator, ref, 'creator', DCT.creator)
 
-    def _add_agent(self, _dict, ref, basekey, _type):
+    def _add_agent(self, _dict, ref, basekey, _type, use_default_lang=False):
         ''' Stores the Agent in this format:
                 <dct:publisher rdf:resource="http://dati.gov.it/resource/Amministrazione/r_liguri"/>
                     <dcatapit:Agent rdf:about="http://dati.gov.it/resource/Amministrazione/r_liguri">
@@ -902,7 +901,10 @@ class ItalianDCATAPProfile(RDFProfile):
             for lang, aname in agent_name.items():
                 self.g.add((agent, FOAF.name, Literal(aname, lang=lang)))
         else:
-            self.g.add((agent, FOAF.name, Literal(agent_name)))
+            if use_default_lang:
+                self.g.add((agent, FOAF.name, Literal(agent_name, lang=DEFAULT_LANG)))
+            else:
+                self.g.add((agent, FOAF.name, Literal(agent_name)))
         self.g.add((agent, DCT.identifier, Literal(agent_id)))
 
         return agent

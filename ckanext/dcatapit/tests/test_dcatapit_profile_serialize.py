@@ -127,6 +127,11 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
         #assert loc_dict['holder_name'] == holder_names
 
 
+        # temporary bug for comaptibility with interfaces.get_language(),
+        # which will return lang[0]
+        pub_names.update({DEFAULT_LANG: dataset['publisher_name']})
+        pub_names.update({DEFAULT_LANG[0]: dataset['publisher_name']})
+
         s = RDFSerializer()
         g = s.g
 
@@ -254,5 +259,5 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
 
             for pub_name in _pub_names:
                 if pub_name.language:
-                    assert str(pub_name.language) in pub_names
+                    assert str(pub_name.language) in pub_names, "no {} in {}".format(pub_name.language, pub_names)
                     assert pub_names[str(pub_name.language)] == str(pub_name), "{} vs {}".format(pub_name, pub_names)
