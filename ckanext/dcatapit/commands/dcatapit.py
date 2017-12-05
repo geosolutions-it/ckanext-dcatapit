@@ -40,7 +40,6 @@ class DCATAPITCommands(CkanCommand):
      Where:
        URL  is the url to a SKOS document
        FILE is the local path to a SKOS document
-       NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies)
        NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies, licenses, subthemes)
        Where the corresponding rdf are:
           languages   -> http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf
@@ -159,7 +158,6 @@ class DCATAPITCommands(CkanCommand):
             Session.commit()
             return
             
-
         do_load(vocab_name, url=url, filename=filename)
 
 

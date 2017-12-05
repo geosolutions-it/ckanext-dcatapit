@@ -100,3 +100,25 @@ Old implementation of the couple element (one element with comma separated value
   {{ " " }}{{ key }}{% if value != "" %}="{{ value }}"{% endif %}
   {%- endfor -%}
 {%- endmacro -%}
+
+
+
+
+{# this is sightly modified `ckan.templates.macros.form.select` version, which also makes indentations based on value from options
+
+    options can have additional `depth` value, which will be used to indent `option.text`
+#}
+{% macro select(name, id='', label='', options='', selected='', error='', classes=[], attrs={}, is_required=false) %}
+  {% set classes = (classes|list) %}
+  {% do classes.append('control-select') %}
+
+  {%- set extra_html = caller() if caller -%}
+  {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
+    <select id="{{ id or name }}" name="{{ name }}" {{ attributes(attrs) }}>
+      {% for option in options %}
+        <option value="{{ option.value }}"{% if option.value == selected %} selected{% endif %}>{{ option.depth_str|safe }}{{ option.text or option.value }}</option>
+      {% endfor %}
+    </select>
+  {% endcall %}
+{% endmacro %}
+
