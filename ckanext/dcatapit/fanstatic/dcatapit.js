@@ -77,7 +77,7 @@ dcatapit.templated_input = {
         add_row: function(template, container, values){
             var t = template.clone().removeClass('template');
 
-            container.append(t[0]);
+            $(container).append(t[0]);
             this.add_values(t, values);
             this.add_handlers(t);
             return t;
