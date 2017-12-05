@@ -10,7 +10,7 @@ from rdflib import URIRef, BNode, Literal
 
 import ckan.logic as logic
 
-from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF, ADMS
+from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF, ADMS, OWL
 from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
 
 import ckanext.dcatapit.interfaces as interfaces
@@ -261,14 +261,33 @@ class ItalianDCATAPProfile(RDFProfile):
             # License
             license = self._object(distribution, DCT.license)
             if license:
-                # just add this info in the resource extras
-                resource_dict['license_url'] = str(license)
-                license_name = self._object_value(license, FOAF.name) # may be either the title or the id
-                if(license_name):
-                    # just add this info in the resource extras
-                    resource_dict['license_name'] = license_name
-                else:
-                    license_name = "unknown"
+
+                license_doc = str(license)
+                dcat_license = self._object_value(distribution, DCT.type)
+                license_names = self.g.objects(license, FOAF.name) # may be either the title or the id
+                license_version = self._object_value(license, FOAF.versionInfo)
+
+                names = {}
+                for l in license_names:
+                    names[l.language] = str(l)
+                license_type = interfaces.get_license_from_dcat(license_doc,
+                                                                dcat_license,
+                                                                **names)
+                if license_version and str(license_version) != license_type.version:
+                    log.warning("License version mismatch between %s and %s", license_versions, license_type.version)
+                resource_dict['license_type'] = license_type.uri
+                try:
+                    license_name = names['it']
+                except KeyError:
+                    try:
+                        license_name = names['en']
+                    except KeyError:
+                        if names:
+                            license_name = names.values()[0]
+                        else:
+                            license_name = license_type.default_name
+
+                    
                 licenses.append((str(license), license_name))
             else:
                 log.warn('No license found for resource "%s"::"%s"',
@@ -567,6 +586,8 @@ class ItalianDCATAPProfile(RDFProfile):
                     log.warn('No format for resource: %s / %s', dataset_dict.get('title', 'N/A'), resource_dict.get('description', 'N/A') )
                     self.g.add((distribution, DCT['format'], URIRef(FORMAT_BASE_URI + DEFAULT_FORMAT_CODE)))
 
+
+            
             ### license
             # <dct:license rdf:resource="http://creativecommons.org/licenses/by/3.0/it/"/>
             #
@@ -581,27 +602,20 @@ class ItalianDCATAPProfile(RDFProfile):
             # "license_title" : "Creative Commons CCZero",
             # "license_url" : "http://www.opendefinition.org/licenses/cc-zero",
 
-            license_url = dataset_dict.get('license_url', '')
-            license_id = dataset_dict.get('license_id', '')
-            license_title = dataset_dict.get('license_title', '')
+            license_info = interfaces.get_license_for_dcat(resource_dict.get('license_type'))
+            dcat_license, license_title, license_url, license_version, dcatapit_license, names = license_info
 
-            if license_url:
-                license = URIRef(license_url)
-                g.add((license, RDF['type'], DCATAPIT.LicenseDocument))
-                g.add((license, RDF['type'], DCT.LicenseDocument))
-                g.add((license, DCT['type'], URIRef('http://purl.org/adms/licencetype/Attribution'))) # TODO: infer from CKAN license
+            license = URIRef(license_url or dcatapit_license)
 
-                g.add((distribution, DCT.license, license))
-
-                if license_id:
-                    # log.debug('Adding license id: %s', license_id)
-                    g.add((license, FOAF.name, Literal(license_id)))
-                elif license_title:
-                    # log.debug('Adding license title: %s', license_title)
-                    g.add((license, FOAF.name, Literal(license_title)))
-                else:
-                    g.add((license, FOAF.name, Literal('unknown')))
-                    log.warn('License not found for dataset: %s', title)
+            g.add((license, RDF.type, DCATAPIT.LicenseDocument))
+            g.add((license, RDF.type, DCT.LicenseDocument))
+            g.add((license, DCT.type, URIRef(dcat_license)))
+            if license_version:
+                g.add((license, OWL.versionInfo, Literal(license_version)))
+            for n in names:
+                g.add((license, FOAF.name, Literal(n['name'], lang=n['lang'])))
+            
+            g.add((distribution, DCT.license, license))
 
             ### Multilingual
             # Add localized entries in resource
