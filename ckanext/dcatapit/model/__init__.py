@@ -7,3 +7,5 @@ except ImportError:
     __path__ = pkgutil.extend_path(__path__, __name__)
 
 from dcatapit_model import *
+from license import *
+from subtheme import *
