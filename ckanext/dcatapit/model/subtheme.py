@@ -1,29 +1,28 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import re
 import logging
-from urlparse import urlparse
 
-from sqlalchemy import types, Column, Table, ForeignKey, Index
+from sqlalchemy import types, Column, ForeignKey, Index
 from sqlalchemy import orm
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 
-from rdflib.namespace import Namespace, RDF, XSD, SKOS, RDFS
+from rdflib.namespace import RDF, SKOS, OWL
 from rdflib import Graph, URIRef
 
+from ckanext.dcat.profiles import DCT
 from ckan.lib.base import config
-from ckan import model
 from ckan.model import Session
-from ckan.model import meta
+from ckan.model import meta, repo
 
-from ckan import model
 from ckanext.dcatapit.model.license import _Base
 
 
 log = logging.getLogger(__name__)
 
-__all__ = ['Subtheme', 'SubthemeLabel', 'setup_subtheme_models', 'load_subthemes', 'clear_subthemes']
+__all__ = ['Subtheme', 'SubthemeLabel',
+           'setup_subtheme_models',
+           'load_subthemes', 'clear_subthemes']
 
 DeclarativeBase = declarative_base(metadata=meta.metadata)
 CONFIG_THEME_LANGS = 'ckan.dcatapit.subthemes.langs'
@@ -41,7 +40,7 @@ class Subtheme(_Base, DeclarativeBase):
     uri = Column(types.Unicode, nullable=False, unique=True)
     default_label = Column(types.Unicode, nullable=False)
     theme = Column(types.Unicode, nullable=False, unique=False)
-    
+
     @classmethod
     def q(cls):
         return Session.query(cls)
@@ -60,8 +59,8 @@ class Subtheme(_Base, DeclarativeBase):
         return out
 
     def get_name(self, lang):
-        return self.get_names_dict()[lang]        
-    
+        return self.get_names_dict()[lang]
+
     @classmethod
     def add_for_theme(cls, g, theme_ref, subtheme_ref):
         labels = {}
@@ -89,7 +88,7 @@ class Subtheme(_Base, DeclarativeBase):
         Session.flush()
         Session.revision = revision
         return inst
-            
+
     @staticmethod
     def normalize_theme(theme_uri):
         s = str(theme_uri)
@@ -97,7 +96,8 @@ class Subtheme(_Base, DeclarativeBase):
 
     @classmethod
     def map_themes(cls, themes_g, eurovoc_g):
-        for theme in themes_g.subjects(RDF.type, URIRef('http://www.w3.org/2004/02/skos/core#Concept')):
+        concept = URIRef('http://www.w3.org/2004/02/skos/core#Concept')
+        for theme in themes_g.subjects(RDF.type, concept):
             sub_themes = themes_g.objects(theme, SKOS.narrowMatch)
             for sub_theme in sub_themes:
                 cls.add_for_theme(eurovoc_g, theme, sub_theme)
