@@ -23,7 +23,10 @@ class ICustomSchema(Interface):
 
 
 def get_language():
-    return get_lang()
+    lang = get_lang()
+    if lang and isinstance(lang, (list, tuple,)):
+        return lang[0]
+    return lang
 
 
 def update_solr_package_indexes(package_dict):
