@@ -277,7 +277,7 @@ ckan.module('dcatapit-alternate-identifier', function($){
                 var val = values[k];
                 if (k == 'agent'){
                     for (var a in val){
-                        var adata = val[a];f
+                        var adata = val[a];
 
                         if ($.inArray(a, this.localized)> -1){
                             var local_val = adata[this.lang];
