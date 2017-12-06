@@ -63,18 +63,24 @@ class Subtheme(_Base, DeclarativeBase):
 
     @classmethod
     def add_for_theme(cls, g, theme_ref, subtheme_ref):
+        existing = cls.q().filter_by(uri=str(subtheme_ref)).first()
+        
+        # several themes may refer to this subtheme, so we'll just return
+        # exising instance
+        if existing:
+            return existing
         labels = {}
-        for l in g.objects(theme_ref, SKOS.prefLabel):
-            labels[l.language] = str(l)
-
+        for l in g.objects(subtheme_ref, SKOS.prefLabel):
+            labels[l.language] = unicode(l)
         version = g.value(subtheme_ref, OWL.versionInfo) or ''
         identifier = g.value(subtheme_ref, DCT.identifier) or ''
         default_label = labels[DEFAULT_LANG]
-        inst = cls(version=version,
-                   identifier=identifier,
+        inst = cls(version=str(version),
+                   identifier=str(identifier),
                    uri=str(subtheme_ref),
                    default_label=default_label,
                    theme=cls.normalize_theme(theme_ref))
+        
         Session.add(inst)
 
         revision = getattr(Session, 'revision', None) or repo.new_revision()
@@ -110,7 +116,6 @@ class SubthemeLabel(_Base, DeclarativeBase):
     subtheme_id = Column(types.Integer, ForeignKey(Subtheme.id))
     lang = Column(types.Unicode, nullable=False)
     label = Column(types.Unicode, nullable=False)
-
     subtheme = orm.relationship(Subtheme, backref="names")
 
 
