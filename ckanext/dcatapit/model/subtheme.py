@@ -4,7 +4,7 @@
 import logging
 
 from sqlalchemy import types, Column, ForeignKey, Index, Table
-from sqlalchemy import orm
+from sqlalchemy import orm, and_
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 
 from rdflib.namespace import RDF, SKOS, OWL
@@ -75,9 +75,9 @@ class Subtheme(_Base, DeclarativeBase):
     default_label = Column(types.Unicode, nullable=False)
     parent_id = Column(types.Integer, ForeignKey('dcatapit_subtheme.id'), nullable=True)
     depth = Column(types.Integer, default=0)
-
+    path = Column(types.Unicode, nullable=False, unique=True)
     themes = orm.relationship(Tag, secondary=ThemeToSubtheme.__table__)
-    parent = orm.relationship('Subtheme', lazy=True)
+    parent = orm.relationship('Subtheme', lazy=True, uselist=False)
 
     @classmethod
     def q(cls):
@@ -95,6 +95,24 @@ class Subtheme(_Base, DeclarativeBase):
     def get_name(self, lang):
         return self.get_names_dict()[lang]
 
+    def get_path(self):
+        parent = self
+        old_parent = None
+        out = []
+
+        while parent and parent != old_parent:
+            out.append(parent.default_label)
+            old_parent = parent
+            parent = parent.parent
+        return '/'.join(reversed(out))
+
+    def update_path(self):
+        path = self.get_path()
+        self.path = path
+
+    def __str__(self):
+        return "Subtheme {} [{}] for {} themes".format(self.uri, self.default_label, ','.join([t.name for t in self.themes]))
+
     @classmethod
     def add_for_theme(cls, g, theme_ref, subtheme_ref, parent=None):
         theme = cls.normalize_theme(theme_ref)
@@ -111,7 +129,6 @@ class Subtheme(_Base, DeclarativeBase):
             Session.flush()
             Session.revision = revision
             log.error("Subtheme %s already exists. Skipping", subtheme_ref)
-            print("Subtheme {} already exists".format(subtheme_ref))
             return existing
 
         labels = {}
@@ -119,9 +136,7 @@ class Subtheme(_Base, DeclarativeBase):
             labels[l.language] = unicode(l)
         if not labels:
             log.error("NO labels for %s. Skipping", subtheme_ref)
-            print("no lables for subtheme {}".format(subtheme_ref))
             return
-        print("adding {}".format(subtheme_ref))
         version = g.value(subtheme_ref, OWL.versionInfo) or ''
         identifier = g.value(subtheme_ref, DCT.identifier) or ''
         default_label = labels[DEFAULT_LANG]
@@ -131,6 +146,7 @@ class Subtheme(_Base, DeclarativeBase):
                    default_label=default_label,
                    parent_id=parent.id if parent else None,
                    depth=parent.depth + 1 if parent else 0)
+        inst.update_path()
         Session.add(inst)
         Session.flush()
         Session.revision = revision
@@ -163,12 +179,18 @@ class Subtheme(_Base, DeclarativeBase):
     def map_themes(cls, themes_g, eurovoc_g):
         concept = SKOS.Concept
         for theme in themes_g.subjects(RDF.type, concept):
-            print("Theme", theme)
             sub_themes = themes_g.objects(theme, SKOS.narrowMatch)
             for sub_theme in sub_themes:
-                print('subtheme', sub_theme)
                 cls.add_for_theme(eurovoc_g, theme, sub_theme)
 
+    @classmethod
+    def for_theme(cls, theme):
+        tag = ThemeToSubtheme.get_tag(theme)
+        q = Session.query(cls).join(ThemeToSubtheme, 
+                                    and_(ThemeToSubtheme.tag_id == tag.id,
+                                    ThemeToSubtheme.subtheme_id == cls.id))\
+                              .order_by(cls.path)
+        return q
 
 class SubthemeLabel(_Base, DeclarativeBase):
     __tablename__ = 'dcatapit_subtheme_labels'

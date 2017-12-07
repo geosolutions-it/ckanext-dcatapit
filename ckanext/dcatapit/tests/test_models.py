@@ -4,7 +4,7 @@ import json
 import unittest
 import nose
 
-from rdflib import Graph
+from rdflib import Graph, RDF
 
 from ckan.model import Session
 from ckan.plugins import toolkit
@@ -114,7 +114,12 @@ class SubthemeTestCase(unittest.TestCase):
                 self.assertIsNotNone(subtheme)
             except Exception, err:
                 self.assertIsNone(err, "No results for {}: {}".format(ref, err))
-
+        themes = g.subjects(RDF.type, SKOS.Concept)
+        for theme in themes:
+            theme_len = g.objects(theme, SKOS.narrowMatch)
+            theme_name = Subtheme.normalize_theme(theme)
+            q = Subtheme.for_theme(theme_name)
+            self.assertTrue(q.count() >= len(list(theme_len)))
 
     def tearDown(self):
         Session.rollback()
