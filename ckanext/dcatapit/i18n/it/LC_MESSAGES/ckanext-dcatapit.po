@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-11-11 10:35+0100\n"
+"POT-Creation-Date: 2017-12-05 19:18+0100\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ckanext/dcatapit/plugin.py:546
+#: ckanext/dcatapit/plugin.py:554
 msgid "Source catalogs"
 msgstr "Cataloghi di origine"
 
@@ -39,7 +39,7 @@ msgid "Catalog Organization Code"
 msgstr "Codice dell'organizzazione relativa al catalogo"
 
 #: ckanext/dcatapit/schema.py:26 ckanext/dcatapit/schema.py:149
-#: ckanext/dcatapit/schema.py:277 ckanext/dcatapit/schema.py:300
+#: ckanext/dcatapit/schema.py:279 ckanext/dcatapit/schema.py:305
 msgid "IPA/IVA"
 msgstr "Codice IPA/IVA"
 
@@ -115,9 +115,9 @@ msgstr "Sottotema del dataset"
 msgid "sub theme of the dataset"
 msgstr "Sottotema del dataset"
 
-#: ckanext/dcatapit/schema.py:141 ckanext/dcatapit/schema.py:268
-#: ckanext/dcatapit/schema.py:292
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:90
+#: ckanext/dcatapit/schema.py:141 ckanext/dcatapit/schema.py:270
+#: ckanext/dcatapit/schema.py:297
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:197
 msgid "Name"
 msgstr "Nome"
 
@@ -177,85 +177,226 @@ msgstr "es. italiano, tedesco, inglese"
 msgid "Temporal Coverage"
 msgstr "Copertura temporale"
 
-#: ckanext/dcatapit/schema.py:215
+#: ckanext/dcatapit/schema.py:216
 msgid "Start Date"
 msgstr "Data inizio"
 
-#: ckanext/dcatapit/schema.py:219 ckanext/dcatapit/schema.py:227
+#: ckanext/dcatapit/schema.py:220 ckanext/dcatapit/schema.py:228
 msgid "temporal coverage"
 msgstr "Copertura temporale"
 
-#: ckanext/dcatapit/schema.py:223
+#: ckanext/dcatapit/schema.py:224
 msgid "End Date"
 msgstr "Data fine"
 
-#: ckanext/dcatapit/schema.py:237
+#: ckanext/dcatapit/schema.py:238
 msgid "Frequency"
 msgstr "Frequenza"
 
-#: ckanext/dcatapit/schema.py:238
+#: ckanext/dcatapit/schema.py:239
 msgid "accrual periodicity"
 msgstr "frequenza di aggiornamento"
 
-#: ckanext/dcatapit/schema.py:247
+#: ckanext/dcatapit/schema.py:248
 msgid "Version Of"
 msgstr "Versione di"
 
-#: ckanext/dcatapit/schema.py:248
+#: ckanext/dcatapit/schema.py:249
 msgid "is version of a related dataset URI"
 msgstr "è una versione del datase con URI"
 
-#: ckanext/dcatapit/schema.py:256
+#: ckanext/dcatapit/schema.py:257
 msgid "Conforms To"
 msgstr "Conforme a"
 
-#: ckanext/dcatapit/schema.py:257
+#: ckanext/dcatapit/schema.py:258
 msgid "conforms to"
 msgstr "Conforme a"
 
-#: ckanext/dcatapit/schema.py:263
+#: ckanext/dcatapit/schema.py:265
 msgid "Rights Holder"
 msgstr "Titolare"
 
-#: ckanext/dcatapit/schema.py:271 ckanext/dcatapit/schema.py:280
+#: ckanext/dcatapit/schema.py:273 ckanext/dcatapit/schema.py:282
 msgid "rights holder of the dataset"
 msgstr "Titolare del dataset"
 
-#: ckanext/dcatapit/schema.py:287
+#: ckanext/dcatapit/schema.py:289
 msgid "Creator"
 msgstr "Creatore"
 
-#: ckanext/dcatapit/schema.py:295 ckanext/dcatapit/schema.py:303
+#: ckanext/dcatapit/schema.py:300 ckanext/dcatapit/schema.py:308
 msgid "creator of the dataset"
 msgstr "creatore del dataset"
 
-#: ckanext/dcatapit/schema.py:327
+#: ckanext/dcatapit/schema.py:332
 msgid "Distribution Format"
 msgstr "Formato di distribuzione"
 
-#: ckanext/dcatapit/schema.py:328
+#: ckanext/dcatapit/schema.py:333
 msgid "distribution format"
 msgstr "formato di distribuzione"
 
-#: ckanext/dcatapit/schema.py:336
+#: ckanext/dcatapit/schema.py:341
 #: ckanext/dcatapit/templates/package/resource_read.html:23
 msgid "License"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:337
+#: ckanext/dcatapit/schema.py:342
 msgid "license type"
 msgstr ""
 
-#: ckanext/dcatapit/validators.py:20
+#: ckanext/dcatapit/validators.py:22
 msgid "Invalid couple, one value is missing"
 msgstr "Coppia invalida, uno dei valori risulta mancante"
 
-#: ckanext/dcatapit/validators.py:26
+#: ckanext/dcatapit/validators.py:28
 msgid "This field cannot be a number"
 msgstr "Questo campo non può essere un numero"
 
-#: ckanext/dcatapit/validators.py:41
+#: ckanext/dcatapit/validators.py:43
 msgid "Another package exists with the same identifier"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:60
+msgid "Conforms to value should not be empty"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:68
+msgid "Invalid payload for conforms_to"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:70
+msgid "List expected for conforms_to values"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:76
+msgid "Each conforms_to element should be a dict"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:79
+msgid "Unexpected {} key in conforms_to value"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:81
+msgid "conforms_to element should contain identifier"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:97
+msgid "conforms_to property {} is not valid type"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:103
+msgid "conforms_to property {} should have {} key as string"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:105
+msgid "conforms_to property {} should have {} value as string"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:107
+msgid "conforms_to property {} for {} lang should not be empty"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:113
+msgid "conforms_to property referenceDocumentation should contain urls"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:136
+msgid "Alternate Identifier value should not be empty"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:144
+msgid "Invalid payload for alternate_identifier"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:146
+msgid "Invalid payload type {} for alternate_identifier"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:153
+msgid "Each alternate_identifier element should be a dict"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:156
+msgid "Unexpected {} key in alternate_identifier value"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:159
+msgid "alternate_identifier element should contain identifier"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:162
+msgid "alternate_identifier element should contain agent"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:166
+msgid "alternate_identifier agent dict contains disallowed: {}"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:169
+msgid "alternate_identifier agent name should be a dict"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:172
+msgid "alternate_identifier agent {} key should be string"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:183
+msgid "Creator value should not be empty"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:191
+msgid "Invalid creator payload"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:193
+msgid "Invalid payload type {} for creator"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:199
+msgid "Each creator element should be a dict"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:202
+msgid "Unexpected {} key in creator value"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:206
+msgid "Creator {} value should be dict, got {} instead"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:209
+msgid "Creator {} value should be string, got {} instead"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:226
+msgid "Invalid date input: {}"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:233
+msgid "Temporal coverage value should not be empty"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:237
+#, fuzzy
+msgid "Temporal coverage value is not valid"
+msgstr "Copertura temporale"
+
+#: ckanext/dcatapit/validators.py:240
+msgid "Temporal coverage values should be in a list, got {}"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:248
+msgid "Invalid temporal coverage item, should be a dict, got {}"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:251
+msgid "Temporal coverage item contains invalid keys: {}"
+msgstr ""
+
+#: ckanext/dcatapit/validators.py:257
+msgid "Temporal coverage start {} is after end {}"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:5
@@ -266,6 +407,99 @@ msgstr "Il campo è obbligatorio"
 msgid "Custom"
 msgstr "Campo personalizzato"
 
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:119
+msgid "Remove creator"
+msgstr ""
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:125
+msgid "Add new Creator"
+msgstr ""
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:151
+#, fuzzy
+msgid "Remove temporal-coverage"
+msgstr "Copertura temporale"
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:157
+#, fuzzy
+msgid "Add new Temporal Coverage"
+msgstr "Copertura temporale"
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:169
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:205
+#, fuzzy
+msgid "Identifier"
+msgstr "Altro identificativo"
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:170
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:180
+#, fuzzy
+msgid "identifier.."
+msgstr "Altro identificativo"
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:174
+msgid "Agent name"
+msgstr ""
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:175
+#, fuzzy
+msgid "name.."
+msgstr "Nome"
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:179
+#, fuzzy
+msgid "Agent identifier"
+msgstr "Identificativo del dataset"
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:183
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:235
+msgid "Remove"
+msgstr ""
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:189
+#, fuzzy
+msgid "Add new identifier"
+msgstr "Identificativo del dataset"
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:207
+#, fuzzy
+msgid "identifier"
+msgstr "Altro identificativo"
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:210
+msgid "Title"
+msgstr ""
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:212
+msgid "title"
+msgstr ""
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:216
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:204
+msgid "Description"
+msgstr ""
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:218
+msgid "description"
+msgstr ""
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:223
+msgid "Reference documentation"
+msgstr ""
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:226
+msgid "reference documentation (url)"
+msgstr ""
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:232
+msgid "Add new reference"
+msgstr ""
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:240
+#, fuzzy
+msgid "Add new conforms to"
+msgstr "Conforme a"
+
 #: ckanext/dcatapit/templates/package/resource_read.html:9
 #, fuzzy
 msgid "Resource Metadata"
@@ -273,13 +507,13 @@ msgstr "Metadati della Risorsa"
 
 #: ckanext/dcatapit/templates/package/resource_read.html:13
 #: ckanext/dcatapit/templates/package/resource_read.html:38
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:84
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:191
 msgid "Field"
 msgstr ""
 
 #: ckanext/dcatapit/templates/package/resource_read.html:14
 #: ckanext/dcatapit/templates/package/resource_read.html:39
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:85
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:192
 msgid "Value"
 msgstr ""
 
@@ -308,32 +542,42 @@ msgstr "Sconosciuto"
 msgid "Created"
 msgstr "Creato"
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:3
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:2
 msgid "Dataset Metadata"
 msgstr "Metadati del Dataset"
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:23
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:26
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:44
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:50
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:52
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:61
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:24
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:27
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:104
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:151
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:157
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:159
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:168
 msgid "N/D"
 msgstr "N/A"
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:80
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:39
+msgid "From"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:42
+msgid "Until"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:58
+#, fuzzy
+msgid "Name:"
+msgstr "Nome"
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:187
 msgid "Source Catalog Info"
 msgstr "Catalogo d'origine"
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:97
-msgid "Description"
-msgstr ""
-
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:105
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:212
 msgid "Homepage"
 msgstr ""
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:117
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:224
 #, fuzzy
 msgid "Last Updated"
 msgstr "Data di rilascio"
@@ -353,7 +597,4 @@ msgstr "Dimensione del file"
 #: ckanext/dcatapit/templates/package/snippets/resource_form.html:15
 msgid "eg. 1024"
 msgstr "eg. 1024"
-
-#~ msgid "Sources"
-#~ msgstr ""
 

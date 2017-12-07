@@ -218,6 +218,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'dcatapit_conforms_to': validators.dcatapit_conforms_to,
             'dcatapit_alternate_identifier': validators.dcatapit_alternate_identifier,
             'dcatapit_creator': validators.dcatapit_creator,
+            'dcatapit_temporal_coverage': validators.dcatapit_temporal_coverage,
         }
 
     # ------------- ITemplateHelpers ---------------#
@@ -246,7 +247,6 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         # During the harvest the get_lang() is not defined
         lang = interfaces.get_language()
         otype = pkg_dict.get('type')
-
         if lang and otype == 'dataset':
             for extra in pkg_dict.get('extras'):
                 for field in dcatapit_schema.get_custom_package_schema():
@@ -256,7 +256,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                         for couple in couples:
                             if extra.get('key') == couple.get('name', None) and couple.get('localized', False) == True:
                                 log.debug(':::::::::::::::Localizing custom schema field: %r', couple['name'])
-                                # Create the localized field record
+                                # Create the localized field recorcd
                                 self.create_loc_field(extra, lang, pkg_dict.get('id'))
                     else:
                         if extra.get('key') == field.get('name', None) and field.get('localized', False) == True:

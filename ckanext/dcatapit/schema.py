@@ -206,10 +206,11 @@ def get_custom_package_schema():
 	    },
 	    {
 		    'name': 'temporal_coverage',
-		    'element': 'couple',
+		    'element': 'temporal_coverage',
 		    'label': _('Temporal Coverage'),
+            'validator': ['ignore_missing', 'dcatapit_temporal_coverage'],
 		    'is_required': False,
-		    'couples': [
+		    '_couples': [
 		    	{
 		    		'name': 'temporal_start',
 		    		'label': _('Start Date'),
@@ -286,9 +287,11 @@ def get_custom_package_schema():
 		    'name': 'creator',
 		    'element': 'creator',
 		    'label': _('Creator'),
+            'type': 'creator',
+            'placeholder': '-',
 		    'validator': ['ignore_missing', 'dcatapit_creator'],
 		    'is_required': False,
-		    'couples': [
+		    '_couples': [
 		    	{
 		    		'name': 'creator_name',
 		    		'label': _('Name'),

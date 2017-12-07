@@ -108,15 +108,23 @@
 
             {% elif field.element == 'creator' %}
 
-                    {{ dcatapit_form_macros.creator(field.name,
+                    {{ dcatapit_form_macros.creator(name=field.name,
                                                     label=field.label,
                                                     id='field-'+field.name,
                                                     value=data[field.name],
                                                     error=errors[field.name],
-                                                    couples=field.couples,
+                                                    couples=field._couples,
                                                     lang=h.lang()) }}
 
+            {% elif field.element == 'temporal_coverage' %}
 
+                    {{ dcatapit_form_macros.temporal_coverage(name=field.name,
+                                                               label=field.label,
+                                                               id='field-'+field.name,
+                                                               value=data[field.name],
+                                                               error=errors[field.name],
+                                                               couples=field._couples,
+                                                               lang=h.lang()) }}
 
             {% endif %}
 
