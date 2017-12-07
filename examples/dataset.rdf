@@ -11,6 +11,7 @@
   xmlns:vcard="http://www.w3.org/2006/vcard/ns#"
   xmlns:schema="http://schema.org/"
 >
+
   <dcat:Dataset rdf:about="http://dcatapit.geo-solutions.it/dataset/d95f1717-0ab4-4075-bd7d-809cb516245d">
     <dcat:landingPage rdf:resource="http://dcatapit.geo-solutions.it/dataset/dcatapit-test-dataset"/>
     <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/DEU"/>
@@ -124,7 +125,11 @@
         <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Agent"/>
       </foaf:Agent>
     </dct:rightsHolder>
-    <adms:identifier>ISBN</adms:identifier>
+    <adms:identifier>
+      <rdf:Description rdf:nodeID="Na36ea4ff20f24900b6745815b33d10fe">
+        <skos:notation>ISBN:123</skos:notation>
+      </rdf:Description>
+    </adms:identifier>
     <dct:spatial>
       <dct:Location rdf:nodeID="N3484e7c2130e4d49a7b1a20dc47ffc59">
         <dcatapit:geographicalIdentifier>http://www.geonames.org/3181913</dcatapit:geographicalIdentifier>
@@ -159,7 +164,21 @@
         <skos:prefLabel xml:lang="de">Wirtschaft und Finanzen</skos:prefLabel>
       </skos:Concept>
     </dcat:theme>
-    <adms:identifier>TEST</adms:identifier>
+
+    <adms:identifier>STR ID</adms:identifier>
+    <adms:identifier>
+      <rdf:Description rdf:nodeID="Na36ea4ff20f24900b6745815b33d10fb">
+        <skos:notation>TEST</skos:notation>
+        <dct:creator>
+          <foaf:Agent rdf:nodeID="N59733bf89bd54e1e9525812053f41be4">
+            <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Agent"/>
+            <dct:identifier>agent01</dct:identifier>
+            <foaf:name xml:lang="en">Agent en 01</foaf:name>
+            <foaf:name xml:lang="it">Agent it 01</foaf:name>
+          </foaf:Agent>
+        </dct:creator>
+      </rdf:Description>
+    </adms:identifier>
     <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
   </dcat:Dataset>
   <dct:LicenseDocument rdf:about="http://www.opendefinition.org/licenses/cc-zero">

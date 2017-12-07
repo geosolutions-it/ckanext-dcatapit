@@ -1,4 +1,5 @@
 
+import json
 import ast
 import logging
 import datetime
@@ -112,7 +113,6 @@ class ItalianDCATAPProfile(RDFProfile):
 
         # 0..n predicates list
         for predicate, key, logf in (
-                (ADMS.identifier, 'alternate_identifier', log.debug),
                 (DCT.isVersionOf, 'is_version_of', log.debug),
                 ):
             valueList = self._object_value_list(dataset_ref, predicate)
@@ -123,14 +123,22 @@ class ItalianDCATAPProfile(RDFProfile):
             else:
                 logf('No %s found for dataset "%s"', predicate, dataset_dict.get('title', '---'))
 
+        alternate_identifiers = self.g.objects(dataset_ref, ADMS.identifier)
+        alt_ids = []
+        for alt_id in alternate_identifiers:
+            alternate_id = self._alternate_id(dataset_ref, alt_id)
+            if alternate_id:
+                alt_ids.append(alternate_id)
+        dataset_dict['alternate_identifier'] = json.dumps(alt_ids)
+
+
         # conformsTo
         self._remove_from_extra(dataset_dict, 'conforms_to')
         conform_list = []
         for conforms_to in self.g.objects(dataset_ref, DCT.conformsTo):
-            conform_list.append(self._object_value(conforms_to, DCT.identifier))
+            conform_list.append(self._conforms_to(conforms_to))
         if conform_list:
-            value = ','.join(conform_list)
-            dataset_dict['conforms_to'] = value
+            dataset_dict['conforms_to'] = json.dumps(conform_list)
         else:
             log.debug('No DCT.conformsTo found for dataset "%s"', dataset_dict.get('title', '---'))
 
@@ -361,6 +369,45 @@ class ItalianDCATAPProfile(RDFProfile):
         # add if not found
         dataset_dict['extras'].append({'key': key, 'value': value})
 
+    def _conforms_to(self, conforms_id):
+        ref_docs = [ str(val) for val in self.g.objects(conforms_id, DCATAPIT.referenceDocumentation)]
+
+        out = {'_ref': str(conforms_id),
+               'identifier': str(self.g.value(conforms_id, DCT.identifier)),
+               'title': {},
+               'description': {},
+               'referenceDocumentation': ref_docs}
+
+        for t in self.g.objects(conforms_id, DCT.title):
+            out['title'][t.language] = str(t)
+
+        for t in self.g.objects(conforms_id, DCT.description):
+            out['description'][t.language] = str(t)
+
+        return out
+
+    def _alternate_id(self, dataset_ref, alt_id):
+        out = {}
+        identifier = self.g.value(alt_id, SKOS.notation)
+
+        if not identifier:
+            return out
+
+        out['identifier'] = str(identifier)
+
+        predicate, basekey = DCT.creator, 'creator'
+        agent_dict, agent_loc_dict = self._parse_agent(alt_id, predicate, basekey)
+        agent = {}
+        for k, v in agent_dict.items():
+            new_k = 'agent_{}'.format(k[len(basekey)+1:])
+            agent[new_k] = v
+        
+        out['agent'] = agent
+        if agent_loc_dict.get('creator_name'):
+            out['agent']['agent_name'] = agent_loc_dict['creator_name']
+        
+        return out
+
     def _parse_agent(self, subject, predicate, base_name):
 
         agent_dict = {}
@@ -374,7 +421,6 @@ class ItalianDCATAPProfile(RDFProfile):
 
     def _strip_uri(self, value, base_uri):
         return value.replace(base_uri, '')
-
 
     def graph_from_dataset(self, dataset_dict, dataset_ref):
 
@@ -461,14 +507,63 @@ class ItalianDCATAPProfile(RDFProfile):
         self.g.remove((dataset_ref, DCT.conformsTo, None))
         value = self._get_dict_value(dataset_dict, 'conforms_to')
         if value:
-            for item in value.split(','):
+            try:
+                conforms_to = json.loads(value)
+            except (TypeError, ValueError,):
+                log.warning("Cannot deserialize DCATAPIT:conformsTo value: %s", value)
+                conforms_to = []
 
-                standard = BNode()
+            for item in conforms_to:
+
+                if item.get('_ref'):
+                    standard = URIRef(item['_ref'])
+                else:
+                    standard = BNode()
+
                 self.g.add((dataset_ref, DCT.conformsTo, standard))
-
                 self.g.add((standard, RDF['type'], DCT.Standard))
                 self.g.add((standard, RDF['type'], DCATAPIT.Standard))
-                self.g.add((standard, DCT.identifier, Literal(item)))
+
+                self.g.add((standard, DCT.identifier, Literal(item['identifier'])))
+
+                for lang, val in (item.get('title') or {}).items():
+                    self.g.add((standard, DCT.title, Literal(val, lang=lang)))
+
+                for lang, val in (item.get('description') or {}).items():
+                    self.g.add((standard, DCT.description, Literal(val, lang=lang)))
+
+
+                for reference_document in (item.get('referenceDocumentation') or []):
+                    self.g.add((standard, DCATAPIT.referenceDocumentation, URIRef(reference_document)))
+
+        ### ADMS:identifier alternative identifiers
+        self.g.remove((dataset_ref, ADMS.identifier, None,))
+        try:
+            alt_ids = json.loads(dataset_dict['alternate_identifier'])
+        except (KeyError, TypeError, ValueError,):
+            alt_ids = []
+
+        for alt_identifier in alt_ids:
+            node = BNode()
+            self.g.add((dataset_ref, ADMS.identifier, node))
+
+            identifier = Literal(alt_identifier['identifier'])
+            self.g.add((node, SKOS.notation, identifier))
+
+            if alt_identifier.get('agent'):
+                adata = alt_identifier['agent']
+                agent = BNode()
+
+                self.g.add((agent, RDF['type'], DCATAPIT.Agent))
+                self.g.add((agent, RDF['type'], FOAF.Agent))
+                self.g.add((node, DCT.creator, agent))
+                if adata.get('agent_name'):
+                    for alang, aname in adata['agent_name'].items():
+                        self.g.add((agent, FOAF.name, Literal(aname, lang=alang)))
+
+                if adata.get('agent_identifier'):
+                    self.g.add((agent, DCT.identifier, Literal(adata['agent_identifier'])))
+
 
         ### publisher
 

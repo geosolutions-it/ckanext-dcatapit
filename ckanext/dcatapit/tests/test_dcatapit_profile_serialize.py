@@ -45,6 +45,22 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
 
     def test_graph_from_dataset(self):
 
+        conforms_to_in = [{'identifier': 'CONF1',
+                                       '_ref': 'conf01',
+                                 'title': {'en': 'title', 'it': 'title'},
+                                 'referenceDocumentation': ['http://abc.efg/'],},
+                                {'identifier': 'CONF2',
+                                 'title': {'en': 'title', 'it': 'title'},
+                                 'description': {'en': 'descen', 'it': 'descit'},
+                                 'referenceDocumentation': ['http://abc.efg/'],},
+                                 ]
+
+        alternate_identifiers = [{'identifier': 'aaaabc',
+                                 'agent': {'agent_identifier': 'agent01',
+                                           'agent_name': {'en': 'Agent en 01', 'it': 'Agent it 01'}},
+                                 },
+                                 {'identifier': 'other identifier'}]
+
         dataset = {
             'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
             'name': 'test-dataset',
@@ -65,12 +81,12 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             'creator_identifier':'412946129',
             'holder_name':'bolzano',
             'holder_identifier':'234234234',
-            'alternate_identifier':'ISBN,TEST',
+            'alternate_identifier':json.dumps(alternate_identifiers),
             'theme':'{ECON,ENVI}',
             'geographical_geonames_url':'http://www.geonames.org/3181913',
             'language':'{DEU,ENG,ITA}',
             'is_version_of':'http://dcat.geo-solutions.it/dataset/energia-da-fonti-rinnovabili2',
-            'conforms_to':'{CONF1,CONF2,CONF3}'
+            'conforms_to':json.dumps(conforms_to_in)
         }
 
         s = RDFSerializer()
@@ -91,5 +107,66 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
         eq_(len([t for t in g.triples((dataset_ref, DCAT.keyword, None))]), 2)
         for tag in dataset['tags']:
             assert self._triple(g, dataset_ref, DCAT.keyword, tag['name'])
+        
+        # conformsTo
+        conforms_to = list(g.triples((None, DCT.conformsTo, None)))
+        assert conforms_to
 
+        conforms_to_dict = dict((d['identifier'], d) for d in conforms_to_in)
+        for conf in conforms_to:
+            conf_id = conf[-1]
 
+            identifier = g.value(conf_id, DCT.identifier)
+            titles = list(g.objects(conf_id, DCT.title))
+            descs = list(g.objects(conf_id, DCT.description))
+            references = list(g.objects(conf_id, DCATAPIT.referenceDocumentation))
+            
+            check = conforms_to_dict.get(str(identifier))
+            
+            assert isinstance(check, dict)
+
+            if check.get('_ref'):
+                assert check['_ref'] == str(conf_id)
+            assert len(titles), "missing titles"
+            
+            assert (len(descs)> 0) == bool(check.get('description')), "missing descriptions"
+
+            for title in titles:
+                tlang = title.language
+                tval = str(title)
+                assert tval == check['title'][tlang], (tlang, tval, check['title'])
+
+            for desc in descs:
+                tlang = desc.language
+                tval = str(desc)
+                assert tval == check['description'][tlang], (tlang, str(tval), check['description'])
+            
+            ref_docs = check.get('referenceDocumentation')
+            assert len(references) == len(ref_docs), "missing reference documentation"
+            
+            for dref in references:
+                assert str(dref) in ref_docs, "{} not in {}".format(dref, ref_docs)
+                                                                
+            for ref in ref_docs:
+                assert URIRef(ref) in references
+
+        # alternate identifiers
+        alt_ids = [a[-1] for a in g.triples((None, ADMS.identifier, None))]
+        alt_ids_dict = dict((a['identifier'], a) for a in alternate_identifiers)
+        for alt_id in alt_ids:
+            identifier = g.value(alt_id, SKOS.notation)
+            check = alt_ids_dict[str(identifier)]
+            assert str(identifier) == check['identifier']
+            if check.get('agent'):
+                agent_ref = g.value(alt_id, DCT.creator)
+                assert agent_ref is not None
+
+                agent_identifier = g.value(agent_ref, DCT.identifier)
+
+                agent_name = dict((v.language, str(v)) for v in g.objects(agent_ref, FOAF.name))
+                
+                assert set(agent_name.items()) == set(check['agent']['agent_name'].items()),\
+                    "expected {}, got {} for {}".format(check['agent']['agent_name'], agent_name, agent_ref)
+
+                assert str(agent_identifier) == check['agent']['agent_identifier'],\
+                    "expected {}, got {}".format(check['agent']['agent_identifier'], agent_identifier)

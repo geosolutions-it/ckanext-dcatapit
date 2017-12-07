@@ -76,6 +76,16 @@
 
                   {{ form.textarea(field.name, label=field.label, id='field-' + field.name, placeholder=field.placeholder, value=data[field.name], error=errors[field.name], classes=['control-full']) }}
 
+            {% elif field.element == 'conforms_to' %}
+                
+                {{ dcatapit_form_macros.conforms_to(field.name,
+                                                    label=field.label,
+                                                    id='field-'+field.name,
+                                                    placeholder=field.placeholder,
+                                                    value=data[field.name],
+                                                    error=errors[field.name],
+                                                    lang=h.lang(),
+                                                    classes=[]) }}
             {% elif field.element == 'licenses_tree' %}
 
                 {% set licenses = h.get_resource_licenses_tree(data[field.name], lang=h.lang()) %}
@@ -86,6 +96,27 @@
                                    options=licenses,
                                    selected=data[field.name],
                                    error=errors[field.name]) }}
+
+            {% elif field.element == 'alternate_identifier' %}
+
+                    {{ dcatapit_form_macros.alternate_identifier(field.name,
+                                                                 label=field.label,
+                                                                 id='field-'+field.name,
+                                                                 value=data[field.name],
+                                                                 error=errors[field.name],
+                                                                 lang=h.lang()) }}
+
+            {% elif field.element == 'creator' %}
+
+                    {{ dcatapit_form_macros.creator(field.name,
+                                                    label=field.label,
+                                                    id='field-'+field.name,
+                                                    value=data[field.name],
+                                                    error=errors[field.name],
+                                                    couples=field.couples,
+                                                    lang=h.lang()) }}
+
+
 
             {% endif %}
 

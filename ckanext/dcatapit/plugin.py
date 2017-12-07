@@ -214,7 +214,10 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         return {
             'couple_validator': validators.couple_validator,
             'no_number': validators.no_number,
-            'dcatapit_id_unique': validators.dcatapit_id_unique
+            'dcatapit_id_unique': validators.dcatapit_id_unique,
+            'dcatapit_conforms_to': validators.dcatapit_conforms_to,
+            'dcatapit_alternate_identifier': validators.dcatapit_alternate_identifier,
+            'dcatapit_creator': validators.dcatapit_creator,
         }
 
     # ------------- ITemplateHelpers ---------------#
@@ -234,6 +237,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'get_package_resource_dcatapit_format_list': helpers.get_package_resource_dcatapit_format_list,
             'get_resource_licenses_tree': helpers.get_resource_licenses_tree,
             'get_dcatapit_license': helpers.get_dcatapit_license,
+            'load_json_or_list': helpers.load_json_or_list,
         }
 
     # ------------- IPackageController ---------------#
@@ -501,6 +505,8 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
     def update_config(self, config):
         # Add extension templates directory
         toolkit.add_template_directory(config, 'templates')
+        toolkit.add_public_directory(config, 'public')
+        toolkit.add_resource('fanstatic', 'ckanext-dcatapit')
 
     def update_config_schema(self, schema):        
         for field in dcatapit_schema.get_custom_config_schema(False):
@@ -519,7 +525,9 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
 
     def get_helpers(self):
         return {
-            'get_dcatapit_configuration_schema': helpers.get_dcatapit_configuration_schema
+            'get_dcatapit_configuration_schema': helpers.get_dcatapit_configuration_schema,
+            'json_load': helpers.json_load,
+            'json_dump': helpers.json_dump,
         }
 
 

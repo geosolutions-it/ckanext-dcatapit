@@ -99,8 +99,8 @@ def get_custom_package_schema():
 	    },
 	    {
 		    'name': 'alternate_identifier',
-		    'validator': ['ignore_missing', 'no_number'],
-		    'element': 'input',
+		    'validator': ['ignore_missing', 'no_number', 'dcatapit_alternate_identifier'],
+		    'element': 'alternate_identifier',
 		    'type': 'text',
 		    'label': _('Other Identifier'),
 		    'placeholder': _('other identifier'),
@@ -250,13 +250,14 @@ def get_custom_package_schema():
 	    },
 	    {
 		    'name': 'conforms_to',
-		    'validator': ['ignore_missing', 'no_number'],
-		    'element': 'input',
-		    'type': 'text',
+		    'validator': ['ignore_missing', 'dcatapit_conforms_to'],
+		    'element': 'conforms_to',
+		    'type': 'conforms_to',
 		    'label': _('Conforms To'),
 		    'placeholder': _('conforms to'),
 		    'is_required': False
 	    },
+
 	    {
 		    'name': 'rights_holder',
 		    'element': 'couple',
@@ -283,8 +284,9 @@ def get_custom_package_schema():
 	    },
 	    {
 		    'name': 'creator',
-		    'element': 'couple',
+		    'element': 'creator',
 		    'label': _('Creator'),
+		    'validator': ['ignore_missing', 'dcatapit_creator'],
 		    'is_required': False,
 		    'couples': [
 		    	{
