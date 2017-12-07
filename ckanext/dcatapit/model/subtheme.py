@@ -73,8 +73,11 @@ class Subtheme(_Base, DeclarativeBase):
     identifier = Column(types.Unicode, nullable=False)
     uri = Column(types.Unicode, nullable=False, unique=True)
     default_label = Column(types.Unicode, nullable=False)
+    parent_id = Column(types.Integer, ForeignKey('dcatapit_subtheme.id'), nullable=True)
+    depth = Column(types.Integer, default=0)
 
     themes = orm.relationship(Tag, secondary=ThemeToSubtheme.__table__)
+    parent = orm.relationship('Subtheme', lazy=True)
 
     @classmethod
     def q(cls):
@@ -93,8 +96,8 @@ class Subtheme(_Base, DeclarativeBase):
         return self.get_names_dict()[lang]
 
     @classmethod
-    def add_for_theme(cls, g, theme_ref, subtheme_ref):
-        theme=cls.normalize_theme(theme_ref)
+    def add_for_theme(cls, g, theme_ref, subtheme_ref, parent=None):
+        theme = cls.normalize_theme(theme_ref)
         existing = cls.q().filter_by(uri=str(subtheme_ref)).first()
         theme_tag = ThemeToSubtheme.get_tag(theme)
         
@@ -105,22 +108,36 @@ class Subtheme(_Base, DeclarativeBase):
         if existing:
             if not theme_tag in existing.themes:
                 existing.themes.append(theme_tag)
-                Session.flush()
-                Session.revision = revision
+            Session.flush()
+            Session.revision = revision
+            log.error("Subtheme %s already exists. Skipping", subtheme_ref)
+            print("Subtheme {} already exists".format(subtheme_ref))
             return existing
+
         labels = {}
         for l in g.objects(subtheme_ref, SKOS.prefLabel):
             labels[l.language] = unicode(l)
+        if not labels:
+            log.error("NO labels for %s. Skipping", subtheme_ref)
+            print("no lables for subtheme {}".format(subtheme_ref))
+            return
+        print("adding {}".format(subtheme_ref))
         version = g.value(subtheme_ref, OWL.versionInfo) or ''
         identifier = g.value(subtheme_ref, DCT.identifier) or ''
         default_label = labels[DEFAULT_LANG]
         inst = cls(version=str(version),
                    identifier=str(identifier),
                    uri=str(subtheme_ref),
-                   default_label=default_label)
+                   default_label=default_label,
+                   parent_id=parent.id if parent else None,
+                   depth=parent.depth + 1 if parent else 0)
         Session.add(inst)
         Session.flush()
         Session.revision = revision
+
+        if parent is None:
+            inst.parent_id = inst.id
+
         theme_m = ThemeToSubtheme(tag_id=theme_tag.id, subtheme_id=inst.id)
         Session.add(theme_m)
 
@@ -131,6 +148,10 @@ class Subtheme(_Base, DeclarativeBase):
             Session.add(l)
         Session.flush()
         Session.revision = revision
+        # handle children
+        for child in g.objects(subtheme_ref, SKOS.hasTopConcept):
+            cls.add_for_theme(g, theme_ref, child, inst)
+
         return inst
 
     @staticmethod
@@ -140,10 +161,12 @@ class Subtheme(_Base, DeclarativeBase):
 
     @classmethod
     def map_themes(cls, themes_g, eurovoc_g):
-        concept = URIRef('http://www.w3.org/2004/02/skos/core#Concept')
+        concept = SKOS.Concept
         for theme in themes_g.subjects(RDF.type, concept):
+            print("Theme", theme)
             sub_themes = themes_g.objects(theme, SKOS.narrowMatch)
             for sub_theme in sub_themes:
+                print('subtheme', sub_theme)
                 cls.add_for_theme(eurovoc_g, theme, sub_theme)
 
 

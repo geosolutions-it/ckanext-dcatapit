@@ -367,7 +367,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://publications.europa.eu/resource/authority/data-theme/INTR">
     <skos:narrowMatch rdf:resource="http://eurovoc.europa.eu/100285"/>
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concpet"/>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <skos:narrowMatch rdf:resource="http://eurovoc.europa.eu/100171"/>
     <skos:narrowMatch rdf:resource="http://eurovoc.europa.eu/100173"/>
     <skos:prefLabel xml:lang="it">Tematiche internazionali</skos:prefLabel>

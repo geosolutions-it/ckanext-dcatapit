@@ -4,6 +4,8 @@ import json
 import unittest
 import nose
 
+from rdflib import Graph
+
 from ckan.model import Session
 from ckan.plugins import toolkit
 
@@ -97,9 +99,22 @@ class SubthemeTestCase(unittest.TestCase):
 
     def test_subthemes(self):
         clear_subthemes()
+        g = Graph()
+        g.parse(self.map_f)
+
+        refs = list(g.objects(None, SKOS.narrowMatch))
+        self.assertTrue(len(refs)> 0)
+
         load_subthemes(self.map_f, self.voc_f)
         all_subthemes = Subtheme.q()
         self.assertTrue(all_subthemes.count()> 0)
+        for ref in refs:
+            try:
+                subtheme = Subtheme.q().filter_by(uri=str(ref)).one()
+                self.assertIsNotNone(subtheme)
+            except Exception, err:
+                self.assertIsNone(err, "No results for {}: {}".format(ref, err))
+
 
     def tearDown(self):
         Session.rollback()
