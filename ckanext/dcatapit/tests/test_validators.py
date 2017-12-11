@@ -1,6 +1,8 @@
+import os
 import json
 import nose
 import ckanext.dcatapit.validators as validators
+from ckanext.dcatapit.tests.utils import load_themes
 
 eq_ = nose.tools.eq_
 ok_ = nose.tools.ok_
@@ -148,6 +150,28 @@ def test_temporal_coverage():
                    )
 
     return _run_checks(test_values, validators.dcatapit_temporal_coverage)
+
+
+def test_subthemes():
+
+    load_themes()
+
+    test_values = ((None, False,),
+                   ('', False,),
+                   ('{AGRI}', True,),
+                   ('{AGRI,INVALID}', False,),
+                   ('SOME,INVALID,THEME', False,),
+                   (json.dumps({}), False,),
+                   (json.dumps([]), True,),
+                   (json.dumps([{'theme': 'AGRI'}]), True,),
+                   (json.dumps([{'theme': 'AGRI'},
+                                {'theme': 'AGRI'}]), False,),
+                   (json.dumps([{'theme': 'AGRI', 'subthemes': ['test', 'invalid']}]), False),
+                   (json.dumps([{'theme': 'AGRI', 'subthemes': ['http://eurovoc.europa.eu/100253',
+                                                               'http://eurovoc.europa.eu/100258']}]), True,)
+                  )
+
+    return _run_checks(test_values, validators.dcatapit_subthemes)
 
 def _run_checks(test_values, validator):
     for test_val, is_valid in test_values:

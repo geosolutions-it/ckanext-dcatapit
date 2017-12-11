@@ -7,6 +7,8 @@ from ckan.logic.validators import url_validator
 from ckan.plugins.toolkit import Invalid
 from datetime import datetime
 
+from ckanext.dcatapit.model. subtheme import Subtheme, ThemeToSubtheme
+
 log = logging.getLogger(__file__)
 
 
@@ -255,5 +257,68 @@ def dcatapit_temporal_coverage(value, context):
             tmp[k] = parsed
         if tmp['temporal_start'] > tmp['temporal_end']:
             raise Invalid(_("Temporal coverage start {} is after end {}").format(tmp['temporal_start'], tmp['temporal_end']))
+
+    return value
+
+def dcatapit_subthemes(value, context):
+    """
+    Expects [{'theme': THEME_CODE,
+              'subthemes': ['subtheme uri', 'subtheme uri']},
+             ..
+             ]
+    """
+    if not value:
+        raise Invalid(_("Theme data should not be empty"))
+    try:
+        data = json.loads(value)
+    except (TypeError, ValueError,):
+        # handle old '{THEME1,THEME2}' notation
+        if isinstance(value, (str, unicode,)):
+            _v = value.rstrip('}').lstrip('{').split(',')
+            data = [ {'theme': v, 'subthemes': []} for v in _v]
+        elif isinstance(value, (list, tuple,)):
+            data = [{'theme': v} for v in value]
+        else:
+            raise Invalid(_("Theme data is not valid, expected json, got {}".format(type(value))))
+    if not isinstance(data, list):
+        raise Invalid(_("Theme data should be a list, got {}".format(type(data))))
+
+    allowed_keys = {'theme': (str, unicode,),
+                    'subthemes': list}
+
+    allowed_keys_set = set(allowed_keys.keys())
+    check_with_db = context.get('dcatapit_subthemes_check_in_db') if context else True
+
+    for item in data:
+        if not isinstance(item, dict):
+            raise Invalid(_("Invalid theme item, should be a dict, got {}".format(type(item))))
+        keys_set = set(item.keys())
+        if keys_set - allowed_keys_set:
+            raise Invalid(_("Theme item contains invalid keys: {}".format(keys_set - allowed_keys_set)))
+
+        for k, v in item.items():
+            allowed_type = allowed_keys[k]
+            if not isinstance(v, allowed_type):
+                raise Invalid(_("Theme item {} value: {} should be {}, got {}".format(k, v, allowed_type, type(v))))
+            if k == 'subthemes':
+                for subtheme in v:
+                    if not isinstance(subtheme, (str, unicode,)):
+                        raise Invalid(_("Subtheme {} value should be string".format(subtheme)))
+        if not check_with_db:
+            continue
+        theme_name = item['theme']
+        subthemes = item.get('subthemes') or []
+        try:
+            slist = [s.uri for s in Subtheme.for_theme(theme_name)]
+        except ValueError:
+            raise Invalid(_("Invalid theme {}".format(theme_name)))
+         
+        for s in subthemes:
+            if s not in slist:
+                raise Invalid(_("Invalid subtheme: {}".format(s)))
+
+    reduced_themes = set([s['theme'] for s in data])
+    if len(data) != len(reduced_themes):
+        raise Invalid(_("There are duplicate themes. Expected {} items, got {}".format(len(data), len(reduced_themes))))
 
     return value

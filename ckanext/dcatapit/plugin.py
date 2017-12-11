@@ -219,6 +219,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'dcatapit_alternate_identifier': validators.dcatapit_alternate_identifier,
             'dcatapit_creator': validators.dcatapit_creator,
             'dcatapit_temporal_coverage': validators.dcatapit_temporal_coverage,
+            'dcatapit_subthemes': validators.dcatapit_subthemes,
         }
 
     # ------------- ITemplateHelpers ---------------#
