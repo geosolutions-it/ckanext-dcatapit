@@ -16,6 +16,7 @@ from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
 
 import ckanext.dcatapit.interfaces as interfaces
 import ckanext.dcatapit.helpers as helpers
+from ckanext.dcatapit.model.subtheme import Subtheme
 
 
 DCATAPIT = Namespace('http://dati.gov.it/onto/dcatapit#')
@@ -537,15 +538,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
         ### replace themes
         value = self._get_dict_value(dataset_dict, 'theme')
-        if value:
-            for theme in value.split(','):
-                self.g.remove((dataset_ref, DCAT.theme, URIRef(theme)))
-                theme = theme.replace('{','').replace('}','')
-                self.g.add((dataset_ref, DCAT.theme, URIRef(THEME_BASE_URI + theme)))
-                self._add_concept(THEME_CONCEPTS, theme)
-        else:
-                self.g.add((dataset_ref, DCAT.theme, URIRef(THEME_BASE_URI + DEFAULT_THEME_KEY)))
-                self._add_concept(THEME_CONCEPTS, DEFAULT_THEME_KEY)
+        self._add_themes(dataset_ref, value)
 
         ### replace languages
         value = self._get_dict_value(dataset_dict, 'language')
@@ -841,6 +834,51 @@ class ItalianDCATAPProfile(RDFProfile):
                    self.g.add((ref, pred, Literal(value, lang=lang)))
         else:
             log.warn("No mulitlang source data")
+
+    def _add_themes(self, dataset_ref, raw_value):
+        """
+        Create theme/subtheme
+        """
+        try:
+            themes = json.loads(raw_value)
+        except (TypeError, ValueError,):
+            if isinstance(raw_value, (str, unicode,)):
+                themes = [{'theme': r, 'subthemes': []} for r in raw_value.strip('{}').split(',')]
+            elif isinstance(raw_value, (list, tuple,)):
+                themes = raw_value
+            else:
+                themes = []
+
+        if themes:
+            for theme in themes:
+                theme_name = theme['theme']
+                subthemes = theme['subthemes']
+                theme_ref = URIRef(theme_name)
+                               
+                self.g.remove((dataset_ref, DCAT.theme, theme_ref))
+
+                self.g.add((dataset_ref, DCAT.theme, URIRef(THEME_BASE_URI + theme_name)))
+                self._add_concept(THEME_CONCEPTS, theme_name)
+                self._add_subthemes(dataset_ref, subthemes)
+        else:
+                self.g.add((dataset_ref, DCAT.theme, URIRef(THEME_BASE_URI + DEFAULT_THEME_KEY)))
+                self._add_concept(THEME_CONCEPTS, DEFAULT_THEME_KEY)
+
+
+    def _add_subthemes(self, ref, subthemes):
+        """
+        subthemes is a list of eurovoc hrefs.
+
+        """
+        for subtheme in subthemes:
+            sref = URIRef(subtheme)
+            sthm = Subtheme.get(subtheme)
+            labels = sthm.get_names_dict()
+            self.g.add((sref, RDF.type, SKOS.Concept))
+            for lang, label in labels.items():
+                self.g.add((sref, SKOS.prefLabel, Literal(label, lang=lang)))
+            self.g.add((ref, DCT.subject, sref))
+
 
     def _add_creators(self, dataset_dict, ref):
         """

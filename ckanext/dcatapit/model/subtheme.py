@@ -86,6 +86,10 @@ class Subtheme(_Base, DeclarativeBase):
     @classmethod
     def q(cls):
         return Session.query(cls)
+    
+    @classmethod
+    def get(cls, uri):
+        return cls.q().filter_by(uri=uri).one()
 
     def get_names(self):
         return [{'lang': n.lang, 'name': n.label} for n in self.names]
