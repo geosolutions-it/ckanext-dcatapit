@@ -105,7 +105,7 @@ dcatapit.templated_input = {
             var existing = $(elms).data(this.options.data_name) || {};
             $.merge(out, existing);
             var lang = this.lang;
-            var inputs = $('input', elms);
+            var inputs = $('input, select', elms);
             var that = this;
 
             inputs.each(function(idx, elm){
@@ -420,7 +420,7 @@ ckan.module('dcatapit-theme', function($){
             var that = this;
             elm.parents('form').submit(
                 function(){
-                        var inputs = $('input', elm);
+                        var inputs = $('select', elm);
                         inputs.attr('disabled', true);
                         $('input[name=theme]', elm).attr('disabled', false);
                         that.extract_values();
@@ -431,6 +431,10 @@ ckan.module('dcatapit-theme', function($){
         extract_from_each_element: function(idx, elm, out, lang){
                 var elm = $(elm);
                 var _elm_name = elm.attr('name');
+                // selec2 autogen
+                if (_elm_name == undefined){
+                    return;
+                }
                 var elm_name = _elm_name.slice(this.options.input_prefix.length);
                 out[elm_name] = elm.val();
         },
@@ -442,23 +446,35 @@ ckan.module('dcatapit-theme', function($){
                 var val = values[k];
                 var local_val = val;
                 var input_name = k //this.options.input_prefix + k;
-                ui.find('input[name=' + input_name + ']').val(local_val);
                 ui.attr('lang', this.lang);
             }
 
+            that.set_subthemes(ui);
             var ac = ckan.module.registry['autocomplete'];
-            var sel = ui.find('select.theme_select')
-            ui.attr('data-module', 'autocomplete');
-            ckan.module.createInstance(ac, sel[0]);
+            var sel = ui.find('select')
+            var sel_theme = ui.find('select.theme_select');
+            sel.attr('data-module', 'autocomplete');
 
-            sel.change(
-                    function(evt){ 
+            sel.each(function(idx, elm){
+                ckan.module.createInstance(ac, elm);
+            });
+
+            sel_theme.change(
+                    function(evt){
+                        that.clear_subthemes(ui);
                         that.set_subthemes(ui);
                         }
                     );
         },
+        clear_subthemes: function(elm){
+            var sel = $('select.subtheme_select', elm);
+            sel.select2('data', []);
+            sel.html('');
+        },
         set_subthemes: function(elm, selected){
             var sel = $('select.subtheme_select', elm);
+            var theme_sel = $('select.theme_select', elm);
+            var target_theme = theme_sel.val();
 
             var opts = dcatapit.subthemes[target_theme];
             if (opts!= undefined){
@@ -468,7 +484,7 @@ ckan.module('dcatapit-theme', function($){
                     var sel_op = $('<option value="'+opt['value'] + '">' + opt['name'] + '</option>')
 
                     sel.append(sel_op);
-                    if (selected == sel_op.value()){
+                    if (selected == sel_op.val()){
                         sel_op.prop('selected', true);
                         }
                     }
