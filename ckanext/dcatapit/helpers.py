@@ -142,6 +142,29 @@ def couple_to_html(field_couples, pkg_dict):
         return html_elements if len(html_elements) > 0 else []
     return []
 
+
+def couple_to_dict(field_couples, pkg_dict):
+    ret = []
+    if field_couples and pkg_dict:
+        for couple in field_couples:
+            couple_name = couple.get('name', None)
+
+            if couple_name in pkg_dict:
+                field_value = pkg_dict[couple_name]
+
+                couple_format = couple.get('format', None)
+                if couple_format:
+                    couple_type = couple.get('type', None)
+                    field_value = format(field_value, couple_format, couple_type)
+
+                couple_label = couple.get('label', None)
+                if field_value and couple_label:
+                    c = {'label': couple_label, 'value': field_value}
+                    ret.append(c)
+ 
+    return ret
+
+
 def format(value, _format='%d-%m-%Y', _type=None):
     # #################################################
     # TODO: manage here other formats if needed

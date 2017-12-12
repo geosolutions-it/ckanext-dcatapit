@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-12-05 19:18+0100\n"
+"POT-Creation-Date: 2017-12-12 14:03+0100\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ckanext/dcatapit/plugin.py:554
+#: ckanext/dcatapit/plugin.py:555
 msgid "Source catalogs"
 msgstr "Cataloghi di origine"
 
@@ -117,7 +117,8 @@ msgstr "Sottotema del dataset"
 
 #: ckanext/dcatapit/schema.py:141 ckanext/dcatapit/schema.py:270
 #: ckanext/dcatapit/schema.py:297
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:197
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:56
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:165
 msgid "Name"
 msgstr "Nome"
 
@@ -175,19 +176,19 @@ msgstr "es. italiano, tedesco, inglese"
 
 #: ckanext/dcatapit/schema.py:210
 msgid "Temporal Coverage"
-msgstr "Copertura temporale"
+msgstr "Estensione temporale"
 
 #: ckanext/dcatapit/schema.py:216
 msgid "Start Date"
-msgstr "Data inizio"
+msgstr "Data iniziale"
 
 #: ckanext/dcatapit/schema.py:220 ckanext/dcatapit/schema.py:228
 msgid "temporal coverage"
-msgstr "Copertura temporale"
+msgstr "Estensione temporale"
 
 #: ckanext/dcatapit/schema.py:224
 msgid "End Date"
-msgstr "Data fine"
+msgstr "Data finale"
 
 #: ckanext/dcatapit/schema.py:238
 msgid "Frequency"
@@ -379,9 +380,8 @@ msgid "Temporal coverage value should not be empty"
 msgstr ""
 
 #: ckanext/dcatapit/validators.py:237
-#, fuzzy
 msgid "Temporal coverage value is not valid"
-msgstr "Copertura temporale"
+msgstr "Estensione temporale non valida"
 
 #: ckanext/dcatapit/validators.py:240
 msgid "Temporal coverage values should be in a list, got {}"
@@ -409,31 +409,27 @@ msgstr "Campo personalizzato"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:119
 msgid "Remove creator"
-msgstr ""
+msgstr "Elimina autore"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:125
 msgid "Add new Creator"
-msgstr ""
+msgstr "Aggiungi autore"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:151
-#, fuzzy
 msgid "Remove temporal-coverage"
-msgstr "Copertura temporale"
+msgstr "Elimina estensione temporale"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:157
-#, fuzzy
 msgid "Add new Temporal Coverage"
-msgstr "Copertura temporale"
+msgstr "Aggiungi estensione temporale"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:169
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:205
-#, fuzzy
 msgid "Identifier"
 msgstr "Altro identificativo"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:170
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:180
-#, fuzzy
 msgid "identifier.."
 msgstr "Altro identificativo"
 
@@ -442,27 +438,23 @@ msgid "Agent name"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:175
-#, fuzzy
 msgid "name.."
 msgstr "Nome"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:179
-#, fuzzy
 msgid "Agent identifier"
-msgstr "Identificativo del dataset"
+msgstr "Identificativo dell'agente"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:183
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:235
 msgid "Remove"
-msgstr ""
+msgstr "Elimina"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:189
-#, fuzzy
 msgid "Add new identifier"
-msgstr "Identificativo del dataset"
+msgstr "Aggiungi altro identificativo del dataset"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:207
-#, fuzzy
 msgid "identifier"
 msgstr "Altro identificativo"
 
@@ -475,7 +467,7 @@ msgid "title"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:216
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:204
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:172
 msgid "Description"
 msgstr ""
 
@@ -485,7 +477,7 @@ msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:223
 msgid "Reference documentation"
-msgstr ""
+msgstr "Documentazione di riferimento"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:226
 msgid "reference documentation (url)"
@@ -493,27 +485,25 @@ msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:232
 msgid "Add new reference"
-msgstr ""
+msgstr "Aggiungi altro documento di riferimento"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:240
-#, fuzzy
 msgid "Add new conforms to"
-msgstr "Conforme a"
+msgstr "Aggiungi altra conformità a stardard"
 
 #: ckanext/dcatapit/templates/package/resource_read.html:9
-#, fuzzy
 msgid "Resource Metadata"
 msgstr "Metadati della Risorsa"
 
 #: ckanext/dcatapit/templates/package/resource_read.html:13
 #: ckanext/dcatapit/templates/package/resource_read.html:38
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:191
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:159
 msgid "Field"
 msgstr ""
 
 #: ckanext/dcatapit/templates/package/resource_read.html:14
 #: ckanext/dcatapit/templates/package/resource_read.html:39
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:192
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:160
 msgid "Value"
 msgstr ""
 
@@ -523,12 +513,10 @@ msgid "Format"
 msgstr ""
 
 #: ckanext/dcatapit/templates/package/resource_read.html:34
-#, fuzzy
 msgid "Additional Information"
 msgstr "Informazioni supplementari"
 
 #: ckanext/dcatapit/templates/package/resource_read.html:44
-#, fuzzy
 msgid "Last updated"
 msgstr "Ultima modifica"
 
@@ -547,40 +535,61 @@ msgid "Dataset Metadata"
 msgstr "Metadati del Dataset"
 
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:24
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:27
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:104
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:151
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:157
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:159
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:168
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:28
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:119
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:125
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:127
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:136
 msgid "N/D"
 msgstr "N/A"
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:39
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:40
 msgid "From"
-msgstr ""
+msgstr "Da"
 
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:42
 msgid "Until"
-msgstr ""
+msgstr "A"
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:58
-#, fuzzy
-msgid "Name:"
-msgstr "Nome"
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:71
+msgid "OthId Identifier"
+msgstr "Codice"
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:187
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:74
+msgid "OthId Organization"
+msgstr "Gestore del codice"
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:77
+msgid "OthId Organization ID"
+msgstr "Id del gestore"
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:93
+msgid "Std Identifier"
+msgstr "Standard"
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:94
+msgid "Std Title"
+msgstr "Titolo"
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:95
+msgid "Std Description"
+msgstr "Descrizione"
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:98
+msgid "Std Reference documentation"
+msgstr "Documentazione di riferimento"
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:155
 msgid "Source Catalog Info"
 msgstr "Catalogo d'origine"
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:212
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:180
 msgid "Homepage"
 msgstr ""
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:224
-#, fuzzy
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:192
 msgid "Last Updated"
-msgstr "Data di rilascio"
+msgstr "Ultimo aggiornamento"
 
 #: ckanext/dcatapit/templates/package/snippets/resource_form.html:13
 msgid "Last Modified"
@@ -597,4 +606,7 @@ msgstr "Dimensione del file"
 #: ckanext/dcatapit/templates/package/snippets/resource_form.html:15
 msgid "eg. 1024"
 msgstr "eg. 1024"
+
+#~ msgid "Organization ID"
+#~ msgstr "email dell'organizzazione"
 
