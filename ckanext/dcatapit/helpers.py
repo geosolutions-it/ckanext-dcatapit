@@ -191,7 +191,7 @@ def load_json_or_list(val):
 
 def get_dcatapit_subthemes(lang):
     """
-    Dump subthemes tree with association to themes
+    Dump subthemes tree with localized lables for all themes 
     """
     out = {}
     def _get_name(opt_val, depth):
@@ -202,4 +202,21 @@ def get_dcatapit_subthemes(lang):
         for opt, label in Subtheme.for_theme(theme, lang):
             theme_l.append({'name': _get_name(label, opt.depth),
                             'value': opt.uri})
+    return out
+
+
+def load_dcatapit_subthemes(value, lang):
+    """
+    Load json with subthemes and get localized subtheme names. Used in template
+    """
+    data = json.loads(value)
+    out = []
+    
+    for item in data:
+        outitem = {'theme': item['theme'], 'subthemes': []}
+        from_model = Subtheme.for_theme(item['theme'], lang)
+        for st, label in from_model:
+            if st.uri in item['subthemes']:
+                outitem['subthemes'].append(label)
+        out.append(outitem)
     return out

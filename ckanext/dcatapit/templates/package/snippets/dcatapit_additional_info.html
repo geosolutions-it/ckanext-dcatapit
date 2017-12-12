@@ -28,6 +28,22 @@
 				          	{% endif %}
 				          </td>
 					    </tr>
+                    {% elif field.name == 'theme' %}
+
+                        {% set themes = (h.load_dcatapit_subthemes(pkg_dict[field.name], h.lang()) or []) %}
+
+                        {% for theme in themes %}
+		  		        <tr>
+					      <th scope="row" class="dataset-label">{{ field.label }}</th>
+				          <td class="dataset-details">
+                            <span class="bold">{{ theme.theme }}</span>
+                            <br/>
+                            {% for subtheme in theme.subthemes %}
+                                <span>{{ subtheme }}</span><br/>
+                            {% endfor %}
+				          </td>
+					    </tr>
+                        {% endfor %}
 
                     {% elif field.element == 'temporal_coverage' %}
                         {% set temp_cov = (h.load_json_or_list(pkg_dict[field.name]) or []) %}

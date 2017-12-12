@@ -240,6 +240,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'get_resource_licenses_tree': helpers.get_resource_licenses_tree,
             'get_dcatapit_license': helpers.get_dcatapit_license,
             'load_json_or_list': helpers.load_json_or_list,
+            'load_dcatapit_subthemes': helpers.load_dcatapit_subthemes,
             'get_dcatapit_subthemes': helpers.get_dcatapit_subthemes,
         }
 

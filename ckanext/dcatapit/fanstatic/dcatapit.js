@@ -435,8 +435,19 @@ ckan.module('dcatapit-theme', function($){
                 if (_elm_name == undefined){
                     return;
                 }
+
                 var elm_name = _elm_name.slice(this.options.input_prefix.length);
-                out[elm_name] = elm.val();
+
+                if (elm_name == 'theme'){
+                    out['theme'] = elm.val();
+                } else {
+                    // 
+                    sublist = elm.select2('data');
+                    out['subthemes'] = [];
+                    $.each(sublist, function(idx, sel){
+                            out['subthemes'].push(sel['id']);
+                    });
+                }
         },
 
         sub_add_values: function(ui, values){
