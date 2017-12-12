@@ -22,15 +22,21 @@
 
                   {{ form.input(field.name, id='field-' + field.name, label=field.label, placeholder=field.placeholder, value=data[field.name], error=errors[field.name], classes=['control-full'], attrs=tag_attrs, is_required=field.is_required) }}
 
-            {% elif field.element == 'theme' %}
-            
+            {% elif field.name == 'theme' %}
+
                   {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
+                  {% set subthemes = h.get_dcatapit_subthemes(h.lang()) %}
+                   <script type="text/javascript">
+                    var dcatapit = window.dcatapit || {};
+                    dcatapit.subthemes = {{ h.json_dump(subthemes)|safe }};
+                   </script>
                   
                   {{ 
-                        dcatapit_form_macros.theme(
+                        dcatapit_form_macros.themes(
                               field.name,
                               id='field-' + field.name,
                               label=field.label,
+                              sublabel=field.sublabel,
                               value=data[field.name],
                               placeholder=field.placeholder,
                               error=errors[field.name],

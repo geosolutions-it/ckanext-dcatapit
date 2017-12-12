@@ -45,6 +45,10 @@ class ThemeToSubtheme(_Base, DeclarativeBase):
 
     vocab = None
 
+    @declared_attr
+    def __table_args__(cls):
+        return (Index('{}_tag_subtheme_idx'.format(cls.__tablename__),
+                      'subtheme_id', 'tag_id'),)
     @classmethod
     def get_vocabulary(cls):
         if cls.vocab is None:
@@ -184,13 +188,33 @@ class Subtheme(_Base, DeclarativeBase):
                 cls.add_for_theme(eurovoc_g, theme, sub_theme)
 
     @classmethod
-    def for_theme(cls, theme):
+    def for_theme(cls, theme, lang=None):
         tag = ThemeToSubtheme.get_tag(theme)
-        q = Session.query(cls).join(ThemeToSubtheme, 
-                                    and_(ThemeToSubtheme.tag_id == tag.id,
-                                    ThemeToSubtheme.subtheme_id == cls.id))\
-                              .order_by(cls.path)
+        if lang:
+            q = Session.query(cls, SubthemeLabel.label)\
+                       .join(SubthemeLabel,
+                             and_(SubthemeLabel.subtheme_id == cls.id,
+                                 SubthemeLabel.lang == lang))\
+                       .join(ThemeToSubtheme, 
+                            and_(ThemeToSubtheme.tag_id == tag.id,
+                                 ThemeToSubtheme.subtheme_id == cls.id))\
+                       .order_by(cls.path)
+
+        else:
+            q = Session.query(cls).join(ThemeToSubtheme, 
+                                        and_(ThemeToSubtheme.tag_id == tag.id,
+                                        ThemeToSubtheme.subtheme_id == cls.id))\
+                                  .order_by(cls.path)
         return q
+
+    @classmethod
+    def get_theme_names(cls):
+        q = Session.query(Tag.name)\
+                   .join(ThemeToSubtheme,
+                         ThemeToSubtheme.tag_id == Tag.id)\
+                   .order_by(Tag.name)
+        return [t[0] for t in q]
+
 
 class SubthemeLabel(_Base, DeclarativeBase):
     __tablename__ = 'dcatapit_subtheme_labels'
@@ -201,6 +225,10 @@ class SubthemeLabel(_Base, DeclarativeBase):
     label = Column(types.Unicode, nullable=False)
     subtheme = orm.relationship(Subtheme, backref="names")
 
+    @declared_attr
+    def __table_args__(cls):
+        return (Index('{}_label_subtheme_idx'.format(cls.__tablename__),
+                      'subtheme_id', 'lang'),)
 
 def clear_subthemes():
     Subtheme.q().delete()

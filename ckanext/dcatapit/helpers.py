@@ -7,6 +7,7 @@ import ckanext.dcatapit.schema as dcatapit_schema
 
 import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit.model.license import License
+from ckanext.dcatapit.model.subtheme import Subtheme
 
 import datetime
 from webhelpers.html import escape, HTML, literal, url_escape
@@ -178,7 +179,7 @@ def json_load(val):
 def json_dump(val):
     try:
         return json.dumps(val)
-    except (TypeError, ValueError,):
+    except (TypeError, ValueError,), err:
         pass
 
 def load_json_or_list(val):
@@ -187,3 +188,18 @@ def load_json_or_list(val):
     except (TypeError, ValueError,):
         if val:
             return [{'identifier': v} for v in val.split(',')]
+
+def get_dcatapit_subthemes(lang):
+    """
+    Dump subthemes tree with association to themes
+    """
+    out = {}
+    def _get_name(opt_val, depth):
+        return '{} {}'.format('-'*depth, opt_val)
+      
+    for theme in Subtheme.get_theme_names():
+        out[theme] = theme_l = []
+        for opt, label in Subtheme.for_theme(theme, lang):
+            theme_l.append({'name': _get_name(label, opt.depth),
+                            'value': opt.uri})
+    return out

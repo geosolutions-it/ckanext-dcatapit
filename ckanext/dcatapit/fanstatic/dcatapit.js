@@ -419,7 +419,7 @@ ckan.module('dcatapit-theme', function($){
                 function(){
                         var inputs = $('input', elm);
                         inputs.attr('disabled', true);
-                        $('input[name=temporal_coverage]', elm).attr('disabled', false);
+                        $('input[name=theme]', elm).attr('disabled', false);
                         that.extract_values();
                    }
                  )
@@ -433,6 +433,7 @@ ckan.module('dcatapit-theme', function($){
         },
 
         sub_add_values: function(ui, values){
+            var that = this;
 
             for (var k in values){
                 var val = values[k];
@@ -441,9 +442,36 @@ ckan.module('dcatapit-theme', function($){
                 ui.find('input[name=' + input_name + ']').val(local_val);
                 ui.attr('lang', this.lang);
             }
-        },
 
-    };
+            var ac = ckan.module.registry['autocomplete'];
+            var sel = ui.find('select.theme_select')
+            ui.attr('data-module', 'autocomplete');
+            ckan.module.createInstance(ac, sel[0]);
+
+            sel.change(
+                    function(evt){ 
+                        that.set_subthemes(ui);
+                        }
+                    );
+        },
+        set_subthemes: function(elm, selected){
+            var sel = $('select.subtheme_select', elm);
+
+            var opts = dcatapit.subthemes[target_theme];
+            if (opts!= undefined){
+                sel.html('');
+                for (var i=0; i< opts.length; i++){
+                    var opt = opts[i];
+                    var sel_op = $('<option value="'+opt['value'] + '">' + opt['name'] + '</option>')
+
+                    sel.append(sel_op);
+                    if (selected == sel_op.value()){
+                        sel_op.prop('selected', true);
+                        }
+                    }
+            }
+        }
+    }
     return $.extend({}, dcatapit.templated_input, theme);
  });
 
