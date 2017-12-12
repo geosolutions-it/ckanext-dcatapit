@@ -453,14 +453,10 @@ ckan.module('dcatapit-theme', function($){
         sub_add_values: function(ui, values){
             var that = this;
 
-            for (var k in values){
-                var val = values[k];
-                var local_val = val;
-                var input_name = k //this.options.input_prefix + k;
-                ui.attr('lang', this.lang);
-            }
+            var selected_theme = values['theme'];
+            $('select.theme_select', ui).val(selected_theme);
+            that.set_subthemes(ui, values);
 
-            that.set_subthemes(ui);
             var ac = ckan.module.registry['autocomplete'];
             var sel = ui.find('select')
             var sel_theme = ui.find('select.theme_select');
@@ -483,6 +479,11 @@ ckan.module('dcatapit-theme', function($){
             sel.html('');
         },
         set_subthemes: function(elm, selected){
+            if (selected !== undefined){
+                var selected_subthemes = selected['subthemes'];
+            } else {
+                var selected_subthemes = [];
+            }
             var sel = $('select.subtheme_select', elm);
             var theme_sel = $('select.theme_select', elm);
             var target_theme = theme_sel.val();
@@ -495,7 +496,7 @@ ckan.module('dcatapit-theme', function($){
                     var sel_op = $('<option value="'+opt['value'] + '">' + opt['name'] + '</option>')
 
                     sel.append(sel_op);
-                    if (selected == sel_op.val()){
+                    if ($.inArray(sel_op.val(), selected_subthemes)>-1){
                         sel_op.prop('selected', true);
                         }
                     }
