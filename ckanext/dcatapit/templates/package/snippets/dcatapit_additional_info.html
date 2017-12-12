@@ -56,7 +56,7 @@
 					      <th scope="row" class="dataset-label">{{ field.label }}</th>
 				          <td class="dataset-details">
                              <span class="bold">{% trans %}Name:{% endtrans %}</span>
-                             <span>{{ creator.creator_name }}</span>
+                             <span>{{ creator.creator_name[h.lang()] }}</span>
                             <br/>
                              <span class="bold">IPA/IVA</span>
                              <span>{{ creator.creator_identifier }}</span>
