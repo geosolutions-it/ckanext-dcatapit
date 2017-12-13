@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-12-05 19:18+0100\n"
+"POT-Creation-Date: 2017-12-12 14:03+0100\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ckanext/dcatapit/plugin.py:554
+#: ckanext/dcatapit/plugin.py:555
 #, fuzzy
 msgid "Source catalogs"
 msgstr ""
@@ -118,7 +118,8 @@ msgstr "Unterthema des Datensatzes"
 
 #: ckanext/dcatapit/schema.py:141 ckanext/dcatapit/schema.py:270
 #: ckanext/dcatapit/schema.py:297
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:197
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:56
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:165
 msgid "Name"
 msgstr "Name"
 
@@ -476,7 +477,7 @@ msgid "title"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:216
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:204
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:172
 msgid "Description"
 msgstr ""
 
@@ -508,13 +509,13 @@ msgstr ""
 
 #: ckanext/dcatapit/templates/package/resource_read.html:13
 #: ckanext/dcatapit/templates/package/resource_read.html:38
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:191
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:159
 msgid "Field"
 msgstr ""
 
 #: ckanext/dcatapit/templates/package/resource_read.html:14
 #: ckanext/dcatapit/templates/package/resource_read.html:39
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:192
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:160
 msgid "Value"
 msgstr ""
 
@@ -548,16 +549,15 @@ msgid "Dataset Metadata"
 msgstr "Standard-Metadaten"
 
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:24
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:27
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:104
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:151
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:157
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:159
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:168
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:28
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:119
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:125
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:127
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:136
 msgid "N/D"
 msgstr "N/V"
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:39
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:40
 msgid "From"
 msgstr ""
 
@@ -565,20 +565,47 @@ msgstr ""
 msgid "Until"
 msgstr ""
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:58
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:71
 #, fuzzy
-msgid "Name:"
-msgstr "Name"
+msgid "OthId Identifier"
+msgstr "anderen Bezeichner"
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:187
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:74
+#, fuzzy
+msgid "OthId Organization"
+msgstr "Organisation E-Mail"
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:77
+#, fuzzy
+msgid "OthId Organization ID"
+msgstr "Organisation E-Mail"
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:93
+#, fuzzy
+msgid "Std Identifier"
+msgstr "anderen Bezeichner"
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:94
+msgid "Std Title"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:95
+msgid "Std Description"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:98
+msgid "Std Reference documentation"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:155
 msgid "Source Catalog Info"
 msgstr ""
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:212
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:180
 msgid "Homepage"
 msgstr ""
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:224
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:192
 #, fuzzy
 msgid "Last Updated"
 msgstr ""
@@ -598,4 +625,7 @@ msgstr "Dateigröße"
 #: ckanext/dcatapit/templates/package/snippets/resource_form.html:15
 msgid "eg. 1024"
 msgstr "z.B. 1024"
+
+#~ msgid "Organization ID"
+#~ msgstr "Organisation E-Mail"
 

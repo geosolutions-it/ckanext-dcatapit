@@ -143,6 +143,7 @@ def test_temporal_coverage():
                    (json.dumps([{'temporal_start': 'abc', 'temporal_end': ''}]), False,),
                    (json.dumps([{'temporal_start': None}, 'fail']), False,),
                    (json.dumps([{'temporal_start': '2001-01-01', 'temporal_end': '2001-01-02'}]), True,),
+                   (json.dumps([{'temporal_start': '2001-01-01'}]), True,),
                    (json.dumps([{'temporal_start': '2001-01-01 00:00:01', 'temporal_end': '2001-01-02 00:01:02'}]), True,),
                    (json.dumps([{'temporal_start': '2001-01-01', 'temporal_end': '2001-01-02'},
                                 {'temporal_start': '2001-01-02', 'temporal_end': '2001-01-03'}]), True,),

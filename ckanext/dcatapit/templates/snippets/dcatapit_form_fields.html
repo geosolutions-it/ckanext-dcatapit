@@ -25,19 +25,20 @@
             {% elif field.name == 'theme' %}
 
                   {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
-                  {% set subthemes = h.get_dcatapit_subthemes(h.lang()) %}
+                  {% set all_subthemes = h.get_dcatapit_subthemes(h.lang()) %}
+                  {% set dataset_subthemes = h.json_dump(h.dump_dcatapit_subthemes(data[field.name])) %}
+
                    <script type="text/javascript">
                     var dcatapit = window.dcatapit || {};
-                    dcatapit.subthemes = {{ h.json_dump(subthemes)|safe }};
+                    dcatapit.subthemes = {{ h.json_dump(all_subthemes)|safe }};
                    </script>
-                  
                   {{ 
                         dcatapit_form_macros.themes(
                               field.name,
                               id='field-' + field.name,
                               label=field.label,
                               sublabel=field.sublabel,
-                              value=data[field.name],
+                              value=dataset_subthemes,
                               placeholder=field.placeholder,
                               error=errors[field.name],
                               options=options,

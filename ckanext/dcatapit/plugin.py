@@ -233,6 +233,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'list_to_string': helpers.list_to_string,
             'couple_to_html': helpers.couple_to_html,
             'couple_to_string': helpers.couple_to_string,
+            'couple_to_dict': helpers.couple_to_dict,
             'format': helpers.format,
             'validate_dateformat': helpers.validate_dateformat,
             'get_localized_field_value': helpers.get_localized_field_value,
@@ -242,6 +243,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'load_json_or_list': helpers.load_json_or_list,
             'load_dcatapit_subthemes': helpers.load_dcatapit_subthemes,
             'get_dcatapit_subthemes': helpers.get_dcatapit_subthemes,
+            'dump_dcatapit_subthemes': helpers.dump_dcatapit_subthemes,
         }
 
     # ------------- IPackageController ---------------#
