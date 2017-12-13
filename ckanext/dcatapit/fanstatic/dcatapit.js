@@ -405,7 +405,6 @@ ckan.module('dcatapit-temporal-coverage', function($){
     return $.extend({}, dcatapit.templated_input, temporal_coverage);
  });
 
-
 ckan.module('dcatapit-theme', function($){
     var theme = {
 
@@ -505,4 +504,3 @@ ckan.module('dcatapit-theme', function($){
     }
     return $.extend({}, dcatapit.templated_input, theme);
  });
-

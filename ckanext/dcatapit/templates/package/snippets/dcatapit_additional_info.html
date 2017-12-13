@@ -47,7 +47,6 @@
                 </tr>
                 {% endfor %}
 
-
             {% elif field.element == 'temporal_coverage' %}
                 {% set temp_cov = (h.load_json_or_list(pkg_dict[field.name]) or []) %}
 

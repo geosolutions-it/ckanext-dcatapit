@@ -227,6 +227,11 @@ def parse_date(val):
 
     raise Invalid(_("Invalid date input: {}").format(val))
 
+
+def parse_nullable_date(val):
+    return parse_date(val) if val else None
+
+
 def dcatapit_temporal_coverage(value, context):
     """
     Validates temporal coverage data
@@ -242,7 +247,7 @@ def dcatapit_temporal_coverage(value, context):
         raise Invalid(_("Temporal coverage values should be in a list, got {}").format(type(data)))
 
     allowed_keys = {'temporal_start': parse_date,
-                    'temporal_end': parse_date}
+                    'temporal_end': parse_nullable_date}
     allowed_keys_set = set(allowed_keys.keys())
 
     for elm in data:
@@ -251,16 +256,18 @@ def dcatapit_temporal_coverage(value, context):
         keys_set = set(elm.keys())
         if not (keys_set.issubset(allowed_keys_set) and allowed_keys_set.issuperset(keys_set)):
             raise Invalid(_("Temporal coverage item contains invalid keys: {}").format(keys_set - allowed_keys_set))
+
         tmp = {}
         for k, v in elm.items():
-            if not v and k == 'temporal_end':
-                continue
             parsed = allowed_keys[k](v)
-            tmp[k] = parsed
+            if parsed:
+               tmp[k] = parsed
+        
         if tmp.get('temporal_end') and tmp['temporal_start'] > tmp['temporal_end']:
             raise Invalid(_("Temporal coverage start {} is after end {}").format(tmp['temporal_start'], tmp['temporal_end']))
 
     return value
+
 
 def dcatapit_subthemes(value, context):
     """

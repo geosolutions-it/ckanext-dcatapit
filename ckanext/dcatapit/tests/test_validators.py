@@ -174,6 +174,7 @@ def test_subthemes():
 
     return _run_checks(test_values, validators.dcatapit_subthemes)
 
+
 def _run_checks(test_values, validator):
     for test_val, is_valid in test_values:
         passed = False

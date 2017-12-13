@@ -613,7 +613,6 @@ class ItalianDCATAPProfile(RDFProfile):
                     standard = URIRef(item['_ref'])
                 else:
                     standard = BNode()
-
                 self.g.add((dataset_ref, DCT.conformsTo, standard))
                 self.g.add((standard, RDF['type'], DCT.Standard))
                 self.g.add((standard, RDF['type'], DCATAPIT.Standard))

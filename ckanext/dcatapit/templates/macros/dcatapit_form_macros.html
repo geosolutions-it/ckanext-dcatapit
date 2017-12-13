@@ -124,7 +124,6 @@ Old implementation of the couple element (one element with comma separated value
 </div>
 {% endmacro %}
 
-
 {% macro creator(name, id, label, value, error, couples, lang) %}
     {% set labels = (couples[0].label, couples[1].label) %}
     {% set names = (couples[0].name, couples[1].name) %}
@@ -177,7 +176,7 @@ Old implementation of the couple element (one element with comma separated value
                 error=error,
                 types=types) %}
 
-                <span class="remove" data-remove-parent=".temporal-coverage"><i class="icon-minus" title="remove"></i>{% trans %}Remove temporal-coverage{% endtrans %}</span>
+                <span class="remove" data-remove-parent=".temporal-coverage"><i class="icon-minus" title="remove"></i>{% trans %}Remove temporal coverage{% endtrans %}</span>
     {% endcall %}
     </div>
 
@@ -272,7 +271,6 @@ Old implementation of the couple element (one element with comma separated value
 
     {% endcall %}
 {% endmacro %}
-
 
 {%- macro attributes(attrs={}) -%}
   {%- for key, value in attrs.items() -%}
