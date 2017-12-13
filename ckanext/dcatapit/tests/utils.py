@@ -19,11 +19,11 @@ def load_themes():
             self.filename = filename
             self.url = filename
             self.name = name
+    
 
     themes_loader.options = Opts(vocab_file_path, 'eu_themes')
-    themes_loader.initdb()
     themes_loader.load()
-
+    
     map_f = _get_path(MAPPING_FILE)
     voc_f = _get_path(EUROVOC_FILE)
     clear_subthemes()

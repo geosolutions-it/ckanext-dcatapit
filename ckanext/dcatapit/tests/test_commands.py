@@ -1,7 +1,7 @@
 
 import os
 import nose
-import unittests
+import unittest
 import ckanext.dcatapit.interfaces as interfaces
 
 from ckanext.dcatapit.commands.dcatapit import DCATAPITCommands
@@ -11,7 +11,7 @@ eq_ = nose.tools.eq_
 ok_ = nose.tools.ok_
 
 
-class TestDCATAPITCommand(unittests.TestCase):
+class TestDCATAPITCommand(unittest.TestCase):
 
     def test_vocabulary_command(self):
         load_themes()

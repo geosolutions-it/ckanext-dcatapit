@@ -5,6 +5,7 @@ import logging
 
 from sqlalchemy import types, Column, ForeignKey, Index, Table
 from sqlalchemy import orm, and_
+from sqlalchemy.exc import SQLAlchemyError as SAError
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 
 from rdflib.namespace import RDF, SKOS, OWL
@@ -89,7 +90,10 @@ class Subtheme(_Base, DeclarativeBase):
     
     @classmethod
     def get(cls, uri):
-        return cls.q().filter_by(uri=uri).one()
+        try:
+            return cls.q().filter_by(uri=uri).one()
+        except SAError:
+            return
 
     def get_names(self):
         return [{'lang': n.lang, 'name': n.label} for n in self.names]
@@ -212,6 +216,11 @@ class Subtheme(_Base, DeclarativeBase):
         return q
 
     @classmethod
+    def for_theme_values(cls, theme, lang=None):
+        q = cls.for_theme(theme, lang)
+        return [i.uri for i in q]
+
+    @classmethod
     def get_theme_names(cls):
         q = Session.query(Tag.name)\
                    .join(ThemeToSubtheme,
@@ -242,7 +251,8 @@ def clear_subthemes():
 def load_subthemes(themes, eurovoc):
     themes_g = Graph()
     eurovoc_g = Graph()
-
+    # reset vocabulary attached to mapping
+    ThemeToSubtheme.vocab = None
     themes_g.parse(themes)
     eurovoc_g.parse(eurovoc)
     Subtheme.map_themes(themes_g, eurovoc_g)

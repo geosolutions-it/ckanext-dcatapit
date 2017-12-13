@@ -290,11 +290,11 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         Insert `dcat_theme` into solr
         '''
         
-        extra_theme = dataset_dict.get("extras_theme" , None)
-        search_terms = [theme for theme in extra_theme.strip('{}').split(',') if theme] if extra_theme else []
+        extra_theme = dataset_dict.get("extras_theme" , None) or ''
+        themes =  helpers.dump_dcatapit_subthemes(extra_theme)
+        search_terms = [t['theme'] for t in themes]
         if search_terms:
             dataset_dict['dcat_theme'] = search_terms
-
         return dataset_dict
 
     def after_search(self, search_results, search_params):

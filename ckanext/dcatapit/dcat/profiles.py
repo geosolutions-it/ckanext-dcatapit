@@ -166,7 +166,6 @@ class ItalianDCATAPProfile(RDFProfile):
         # URI lists
         for predicate, key, base_uri in (
                 (DCT.language, 'language', LANG_BASE_URI),
-                (DCAT.theme, 'theme', THEME_BASE_URI),
                 ):
             self._remove_from_extra(dataset_dict, key)
             valueRefList = self._object_value_list(dataset_ref, predicate)
@@ -175,6 +174,8 @@ class ItalianDCATAPProfile(RDFProfile):
             if len(valueList) > 1:
                 value = '{'+value+'}'
             dataset_dict[key] = value
+
+        self._parse_themes(dataset_dict, dataset_ref)
 
         # Spatial
         spatial_tags = []
@@ -372,6 +373,29 @@ class ItalianDCATAPProfile(RDFProfile):
                 # add localized string
                 lang_dict = loc_dict.setdefault(key, {})
                 lang_dict[lang_mapping_xmllang_to_ckan.get(lang)] = value
+
+    def _parse_themes(self, dataset, ref):
+        self._remove_from_extra(dataset, 'theme')
+        themes = list(self.g.objects(ref, DCAT.theme))
+        subthemes = list(self.g.objects(ref, DCT.subject))
+        out = []
+        for t in themes:
+            theme_name = str(t).split('/')[-1]
+            try:
+                subthemes_for_theme = Subtheme.for_theme_values(theme_name)
+            except ValueError, err:
+                subthemes_for_theme = []
+
+            row = {'theme': theme_name,
+                   'subthemes': []}
+            for subtheme in subthemes:
+                s = str(subtheme)
+                if s in subthemes_for_theme:
+                    row['subthemes'].append(s)
+            out.append(row)
+
+        dataset['theme'] = json.dumps(out)
+
 
     def _remove_from_extra(self, dataset_dict, key):
 
@@ -872,6 +896,10 @@ class ItalianDCATAPProfile(RDFProfile):
         for subtheme in subthemes:
             sref = URIRef(subtheme)
             sthm = Subtheme.get(subtheme)
+            if not sthm:
+                print("No subtheme for {}".format(subtheme))
+                continue
+
             labels = sthm.get_names_dict()
             self.g.add((sref, RDF.type, SKOS.Concept))
             for lang, label in labels.items():
