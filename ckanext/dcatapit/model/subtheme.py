@@ -69,6 +69,10 @@ class ThemeToSubtheme(_Base, DeclarativeBase):
             raise ValueError("No tag for {}".format(name))
         return tag
 
+    @classmethod
+    def q(cls):
+        return Session.query(cls)
+
 
 class Subtheme(_Base, DeclarativeBase):
     __tablename__ = 'dcatapit_subtheme'
@@ -82,7 +86,7 @@ class Subtheme(_Base, DeclarativeBase):
     depth = Column(types.Integer, default=0)
     path = Column(types.Unicode, nullable=False, unique=True)
     themes = orm.relationship(Tag, secondary=ThemeToSubtheme.__table__)
-    parent = orm.relationship('Subtheme', lazy=True, uselist=False)
+    parent = orm.relationship('Subtheme', lazy=True, uselist=False, remote_side=[id])
 
     @classmethod
     def q(cls):
@@ -177,6 +181,7 @@ class Subtheme(_Base, DeclarativeBase):
         Session.flush()
         Session.revision = revision
         # handle children
+
         for child in g.objects(subtheme_ref, SKOS.hasTopConcept):
             cls.add_for_theme(g, theme_ref, child, inst)
 
@@ -206,13 +211,13 @@ class Subtheme(_Base, DeclarativeBase):
                        .join(ThemeToSubtheme, 
                             and_(ThemeToSubtheme.tag_id == tag.id,
                                  ThemeToSubtheme.subtheme_id == cls.id))\
-                       .order_by(cls.path)
+                       .order_by(cls.parent_id, cls.path)
 
         else:
             q = Session.query(cls).join(ThemeToSubtheme, 
                                         and_(ThemeToSubtheme.tag_id == tag.id,
                                         ThemeToSubtheme.subtheme_id == cls.id))\
-                                  .order_by(cls.path)
+                                  .order_by(cls.parent_id, cls.path)
         return q
 
     @classmethod
@@ -244,8 +249,9 @@ class SubthemeLabel(_Base, DeclarativeBase):
                       'subtheme_id', 'lang'),)
 
 def clear_subthemes():
-    Subtheme.q().delete()
     SubthemeLabel.q().delete()
+    ThemeToSubtheme.q().delete()
+    Subtheme.q().delete()
 
 
 def load_subthemes(themes, eurovoc):
