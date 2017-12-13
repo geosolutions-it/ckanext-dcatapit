@@ -247,13 +247,13 @@ def dcatapit_temporal_coverage(value, context):
         if not isinstance(elm, dict):
             raise Invalid(_("Invalid temporal coverage item, should be a dict, got {}").format(type(elm)))
         keys_set = set(elm.keys())
-        if keys_set != allowed_keys_set:
+        if not (keys_set.issubset(allowed_keys_set) and allowed_keys_set.issuperset(keys_set)):
             raise Invalid(_("Temporal coverage item contains invalid keys: {}").format(keys_set - allowed_keys_set))
         tmp = {}
         for k, v in elm.items():
             parsed = allowed_keys[k](v)
             tmp[k] = parsed
-        if tmp['temporal_start'] > tmp['temporal_end']:
+        if tmp.get('temporal_end') and tmp['temporal_start'] > tmp['temporal_end']:
             raise Invalid(_("Temporal coverage start {} is after end {}").format(tmp['temporal_start'], tmp['temporal_end']))
 
     return value
