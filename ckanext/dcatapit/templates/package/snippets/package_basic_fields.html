@@ -4,6 +4,9 @@
 
 {% block package_basic_fields_custom %}
 
+    {% resource 'ckanext-dcatapit/dcatapit.js' %}
+    {% resource 'ckanext-dcatapit/dcatapit.css' %}
+
 	{% snippet 'snippets/dcatapit_form_fields.html', data=data, errors=errors, schema_fields=pkg_fields %}
 
 {% endblock %}
