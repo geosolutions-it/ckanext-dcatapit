@@ -34,6 +34,7 @@ except ImportError:
 
 from ckanext.dcat.processors import RDFParser, RDFSerializer
 from ckanext.dcatapit.dcat.profiles import (DCATAPIT)
+from ckanext.dcatapit import  validators
 
 from ckanext.dcat.profiles import (DCAT, DCT, FOAF, OWL)
 
@@ -46,6 +47,7 @@ from ckanext.dcatapit.plugin import DCATAPITGroupMapper
 
 from ckanext.dcatapit.model.license import _get_graph, load_from_graph, License
 
+DEFAULT_LANG = config.get('ckan.locale_default', 'en')
 
 eq_ = nose.tools.eq_
 ok_ = nose.tools.ok_
@@ -100,17 +102,15 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         geographical_name = '{' + ','.join([str(x) for x in geographical_name]) + '}'
         eq_(geographical_name, '{ITA_BZO}')
 
-        eq_(dataset['publisher_name'], 'bolzano')
+        eq_(dataset['publisher_name'], 'bolzano it')
         eq_(dataset['publisher_identifier'], '234234234')
         eq_(dataset['creator_name'], 'test')
         eq_(dataset['creator_identifier'], '412946129')
         eq_(dataset['holder_name'], 'bolzano')
         eq_(dataset['holder_identifier'], '234234234')
 
-        alternate_identifier = dataset['alternate_identifier'].split(',') if ',' in dataset['alternate_identifier'] else [dataset['alternate_identifier']]
-        alternate_identifier.sort()
-        alternate_identifier = ','.join([str(x) for x in alternate_identifier])
-        eq_(alternate_identifier, 'ISBN,TEST')
+        alternate_identifiers = json.loads(dataset['alternate_identifier'])
+        eq_(set([ai['identifier'] for ai in alternate_identifiers]), set(['ISBN:123', 'TEST']))
 
         theme = dataset['theme'][1:-1].split(',') if ',' in dataset['theme'] else [dataset['theme']]
         theme.sort()
@@ -126,10 +126,9 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         
         eq_(dataset['is_version_of'], 'http://dcat.geo-solutions.it/dataset/energia-da-fonti-rinnovabili2')
 
-        conforms_to = dataset['conforms_to'].split(',') if ',' in dataset['conforms_to'] else [dataset['conforms_to']]
-        conforms_to.sort()
-        conforms_to = '{' + ','.join([str(x) for x in conforms_to]) + '}'
-        eq_(conforms_to, '{CONF1,CONF2,CONF3}')
+        conforms_to = json.loads(dataset['conforms_to'])
+        conforms_to_ids = set([c['identifier'] for c in conforms_to])
+        eq_(conforms_to_ids, set('CONF1,CONF2,CONF3'.split(',')))
 
         # Multilang values
         ok_(dataset['DCATAPIT_MULTILANG_BASE'])
@@ -151,6 +150,11 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         eq_(multilang_title['de'], u'Dcatapit Test-Dataset')
         eq_(multilang_title['it'], u'Dataset di test DCAT_AP-IT')
         eq_(multilang_title['en_GB'], u'DCAT_AP-IT test dataset')
+
+        multilang_pub_name = dataset['DCATAPIT_MULTILANG_BASE'].get('publisher_name', None)
+        ok_(multilang_pub_name)
+        eq_(multilang_pub_name['en_GB'], u'bolzano en')
+        eq_(multilang_pub_name['it'], u'bolzano it it')
 
 
     def test_groups_to_themes_mapping(self):
@@ -467,10 +471,198 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         assert new_res_gpl['license_type'] == dataset['resources'][1]['license_type']
 
 
+    def test_conforms_to(self):
+
+        conforms_to_in = [{'identifier': 'CONF1',
+                                       '_ref': 'http://conf01/abc',
+                                 'title': {'en': 'title', 'it': 'title'},
+                                 'referenceDocumentation': ['http://abc.efg/'],},
+                                {'identifier': 'CONF2',
+                                 'title': {'en': 'title', 'it': 'title'},
+                                 'description': {'en': 'descen', 'it': 'descit'},
+                                 'referenceDocumentation': ['http://abc.efg/'],},
+                                 ]
+        dataset = {
+            'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
+            'name': 'test-dataset',
+            'title': 'Dataset di test DCAT_AP-IT',
+            'notes': 'dcatapit dataset di test',
+            'metadata_created': '2015-06-26T15:21:09.034694',
+            'metadata_modified': '2015-06-26T15:21:09.075774',
+            'tags': [{'name': 'Tag 1'}, {'name': 'Tag 2'}],
+            'issued':'2016-11-29',
+            'modified':'2016-11-29',
+            'identifier':'ISBN',
+            'temporal_start':'2016-11-01',
+            'temporal_end':'2016-11-30',
+            'frequency':'UPDATE_CONT',
+            'publisher_name':'bolzano',
+            'publisher_identifier':'234234234',
+            'creator_name':'test',
+            'creator_identifier':'412946129',
+            'holder_name':'bolzano',
+            'holder_identifier':'234234234',
+            'alternate_identifier':'ISBN,TEST',
+            'theme':'{ECON,ENVI}',
+            'geographical_geonames_url':'http://www.geonames.org/3181913',
+            'language':'{DEU,ENG,ITA}',
+            'is_version_of':'http://dcat.geo-solutions.it/dataset/energia-da-fonti-rinnovabili2',
+            'conforms_to':json.dumps(conforms_to_in)
+        }
+
+        s = RDFSerializer()
+        p = RDFParser(profiles=['euro_dcat_ap', 'it_dcat_ap'])
+        
+        serialized = s.serialize_dataset(dataset)
+
+        p.parse(serialized)
+        datasets = list(p.datasets())
+        
+        assert len(datasets) == 1
+        d = datasets[0]
+
+        conforms_to = dict((d['identifier'], d) for d in conforms_to_in)
+        dataset_conforms_to = json.loads(d['conforms_to'])
+
+        assert len(dataset_conforms_to) == len(conforms_to_in), "got {}, should be {}".format(len(d['conforms_to']), len(conforms_to_in))
+        for conf in dataset_conforms_to:
+            check = conforms_to[conf['identifier']]
+            for k,v  in check.items():
+                assert conf[k] == v
+            for k, v in conf.items():
+                src_v = check.get(k)
+                # ref may be extracted from rdf, but it can be
+                # generated by serializer
+                if not src_v and k == '_ref':
+                    continue
+                # no value, may be missing key in source
+                elif not src_v:
+                    assert not check.get(k)
+                else:
+                    assert check[k] == v
+
+    def test_creators(self):
+
+        creators = [{'creator_name': {DEFAULT_LANG: 'abc', 'it': 'abc it'}, 'creator_identifier': "ABC"},
+                    {'creator_name': {DEFAULT_LANG: 'cde', 'it': 'cde it'}, 'creator_identifier': "CDE"},
+                    ]
+        dataset = {
+            'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
+            'name': 'test-dataset',
+            'title': 'Dataset di test DCAT_AP-IT',
+            'notes': 'dcatapit dataset di test',
+            'metadata_created': '2015-06-26T15:21:09.034694',
+            'metadata_modified': '2015-06-26T15:21:09.075774',
+            'tags': [{'name': 'Tag 1'}, {'name': 'Tag 2'}],
+            'issued':'2016-11-29',
+            'modified':'2016-11-29',
+            'identifier':'ISBN',
+            'temporal_start':'2016-11-01',
+            'temporal_end':'2016-11-30',
+            'frequency':'UPDATE_CONT',
+            'publisher_name':'bolzano',
+            'publisher_identifier':'234234234',
+            'creator_name':'test',
+            'creator_identifier':'412946129',
+            'holder_name':'bolzano',
+            'holder_identifier':'234234234',
+            'alternate_identifier':'ISBN,TEST',
+            'theme':'{ECON,ENVI}',
+            'geographical_geonames_url':'http://www.geonames.org/3181913',
+            'language':'{DEU,ENG,ITA}',
+            'is_version_of':'http://dcat.geo-solutions.it/dataset/energia-da-fonti-rinnovabili2',
+            'creator': json.dumps(creators)
+        }
+
+        s = RDFSerializer()
+        p = RDFParser(profiles=['euro_dcat_ap', 'it_dcat_ap'])
+        
+        serialized = s.serialize_dataset(dataset)
+
+        p.parse(serialized)
+        datasets = list(p.datasets())
+        
+        assert len(datasets) == 1
+        d = datasets[0]
+        creators.append({'creator_identifier': dataset['creator_identifier'],
+                              'creator_name': {DEFAULT_LANG: dataset['creator_name']}})
+
+        creators_dict = dict((v['creator_identifier'], v) for v in creators)
+
+        creators_in = json.loads(d['creator'])
+
+        for c in creators_in:
+            assert c['creator_identifier'] in creators_dict.keys(), "no {} key in {}".format(c['creator_identifier'],
+                                                                                             creators_dict.keys())
+            assert c['creator_name'] == creators_dict[c['creator_identifier']]['creator_name'],\
+                "{} vs {}".format(c['creator_name'], creators_dict[c['creator_identifier']]['creator_name'])
+        for c in creators_dict.keys():
+            assert c in [_c['creator_identifier'] for _c in creators_in]
+            cdata = creators_dict[c]
+            assert cdata in creators_in
 
 
+    def test_temporal_coverage(self):
 
+        temporal_coverage = [{'temporal_start': '2001-01-01T00:00:00', 'temporal_end': '2001-02-01T10:11:12'},
+                             {'temporal_start': '2001-01-01T00:00:00', 'temporal_end': '2001-02-01T10:11:12'},
+                            ]
+        dataset = {
+            'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
+            'name': 'test-dataset',
+            'title': 'Dataset di test DCAT_AP-IT',
+            'notes': 'dcatapit dataset di test',
+            'metadata_created': '2015-06-26T15:21:09.034694',
+            'metadata_modified': '2015-06-26T15:21:09.075774',
+            'tags': [{'name': 'Tag 1'}, {'name': 'Tag 2'}],
+            'issued':'2016-11-29',
+            'modified':'2016-11-29',
+            'identifier':'ISBN',
+            'temporal_start':'2016-11-01T00:00:00',
+            'temporal_end':'2016-11-30T00:00:00',
+            'temporal_coverage': json.dumps(temporal_coverage),
+            'frequency':'UPDATE_CONT',
+            'publisher_name':'bolzano',
+            'publisher_identifier':'234234234',
+            'creator_name':'test',
+            'creator_identifier':'412946129',
+            'holder_name':'bolzano',
+            'holder_identifier':'234234234',
+            'alternate_identifier':'ISBN,TEST',
+            'theme':'{ECON,ENVI}',
+            'geographical_geonames_url':'http://www.geonames.org/3181913',
+            'language':'{DEU,ENG,ITA}',
+            'is_version_of':'http://dcat.geo-solutions.it/dataset/energia-da-fonti-rinnovabili2',
+        }
 
+        s = RDFSerializer()
+        p = RDFParser(profiles=['euro_dcat_ap', 'it_dcat_ap'])
+        
+        serialized = s.serialize_dataset(dataset)
 
+        p.parse(serialized)
+        datasets = list(p.datasets())
+        
+        assert len(datasets) == 1
+        d = datasets[0]
 
+        temporal_coverage.append({'temporal_start': dataset['temporal_start'],
+                                  'temporal_end': dataset['temporal_end']})
 
+        try:
+            validators.dcatapit_temporal_coverage(d['temporal_coverage'], {})
+            # this should not raise exception
+            assert True
+        except validators.Invalid, err:
+            assert False, "Temporal coverage should be valid: {}".format(err)
+
+        temp_cov = json.loads(d['temporal_coverage'])
+
+        assert len(temp_cov) == len(temporal_coverage),\
+                "got {} items instead of {}".format(len(temp_cov),
+                                                    len(temporal_coverage))
+
+        set1 = set([tuple(d.items()) for d in temp_cov])
+        set2 = set([tuple(d.items()) for d in temporal_coverage])
+
+        assert set1 == set2, "Got different temporal coverage sets: \n{}\n vs\n {}".format(set1, set2)

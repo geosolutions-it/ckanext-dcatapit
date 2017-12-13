@@ -214,7 +214,11 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         return {
             'couple_validator': validators.couple_validator,
             'no_number': validators.no_number,
-            'dcatapit_id_unique': validators.dcatapit_id_unique
+            'dcatapit_id_unique': validators.dcatapit_id_unique,
+            'dcatapit_conforms_to': validators.dcatapit_conforms_to,
+            'dcatapit_alternate_identifier': validators.dcatapit_alternate_identifier,
+            'dcatapit_creator': validators.dcatapit_creator,
+            'dcatapit_temporal_coverage': validators.dcatapit_temporal_coverage,
         }
 
     # ------------- ITemplateHelpers ---------------#
@@ -228,12 +232,14 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'list_to_string': helpers.list_to_string,
             'couple_to_html': helpers.couple_to_html,
             'couple_to_string': helpers.couple_to_string,
+            'couple_to_dict': helpers.couple_to_dict,
             'format': helpers.format,
             'validate_dateformat': helpers.validate_dateformat,
             'get_localized_field_value': helpers.get_localized_field_value,
             'get_package_resource_dcatapit_format_list': helpers.get_package_resource_dcatapit_format_list,
             'get_resource_licenses_tree': helpers.get_resource_licenses_tree,
             'get_dcatapit_license': helpers.get_dcatapit_license,
+            'load_json_or_list': helpers.load_json_or_list,
         }
 
     # ------------- IPackageController ---------------#
@@ -242,7 +248,6 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         # During the harvest the get_lang() is not defined
         lang = interfaces.get_language()
         otype = pkg_dict.get('type')
-
         if lang and otype == 'dataset':
             for extra in pkg_dict.get('extras'):
                 for field in dcatapit_schema.get_custom_package_schema():
@@ -252,7 +257,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                         for couple in couples:
                             if extra.get('key') == couple.get('name', None) and couple.get('localized', False) == True:
                                 log.debug(':::::::::::::::Localizing custom schema field: %r', couple['name'])
-                                # Create the localized field record
+                                # Create the localized field recorcd
                                 self.create_loc_field(extra, lang, pkg_dict.get('id'))
                     else:
                         if extra.get('key') == field.get('name', None) and field.get('localized', False) == True:
@@ -501,6 +506,8 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
     def update_config(self, config):
         # Add extension templates directory
         toolkit.add_template_directory(config, 'templates')
+        toolkit.add_public_directory(config, 'public')
+        toolkit.add_resource('fanstatic', 'ckanext-dcatapit')
 
     def update_config_schema(self, schema):        
         for field in dcatapit_schema.get_custom_config_schema(False):
@@ -519,7 +526,9 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
 
     def get_helpers(self):
         return {
-            'get_dcatapit_configuration_schema': helpers.get_dcatapit_configuration_schema
+            'get_dcatapit_configuration_schema': helpers.get_dcatapit_configuration_schema,
+            'json_load': helpers.json_load,
+            'json_dump': helpers.json_dump,
         }
 
 
