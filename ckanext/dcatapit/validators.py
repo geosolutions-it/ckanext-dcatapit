@@ -251,6 +251,8 @@ def dcatapit_temporal_coverage(value, context):
             raise Invalid(_("Temporal coverage item contains invalid keys: {}").format(keys_set - allowed_keys_set))
         tmp = {}
         for k, v in elm.items():
+            if not v and k == 'temporal_end':
+                continue
             parsed = allowed_keys[k](v)
             tmp[k] = parsed
         if tmp.get('temporal_end') and tmp['temporal_start'] > tmp['temporal_end']:
