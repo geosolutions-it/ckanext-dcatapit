@@ -298,13 +298,21 @@ class ItalianDCATAPProfile(RDFProfile):
                 license_version = self._object_value(license, FOAF.versionInfo)
 
                 names = {}
+                prefname = None
                 for l in license_names:
-                    names[l.language] = str(l)
+                    if l.language:
+                        names[l.language] = str(l)
+                    else:
+                        prefname = str(l)
+                
                 license_type = interfaces.get_license_from_dcat(license_doc,
                                                                 dcat_license,
+                                                                prefname,
                                                                 **names)
+                
                 if license_version and str(license_version) != license_type.version:
                     log.warn("License version mismatch between %s and %s", license_versions, license_type.version)
+                    
                 resource_dict['license_type'] = license_type.uri
                 try:
                     license_name = names['it']
