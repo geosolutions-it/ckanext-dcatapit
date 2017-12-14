@@ -166,18 +166,18 @@ Old implementation of the couple element (one element with comma separated value
     {% call input_block(id, label, error, classes=[], extra_html='', is_required=False) %}
         <div class="alternate_identifier template">
             <div class="input-prepend">
-                <label for="alt_identifier" class="add-on">{% trans %}Identifier{% endtrans %}</label>
-                <input name="alt_identifier" type="text" value="" placeholder="{% trans %}identifier..{% endtrans %}"/>
+                <label for="alt_identifier" class="add-on">{% trans %}OthId Identifier{% endtrans %}</label>
+                <input name="alt_identifier" type="text" value="" placeholder="{% trans %}OthId dataset identifier{% endtrans %}"/>
             </div>
 
             <div class="input-prepend">
-               <label for="alt_agent_name" class="add-on">{% trans %}Agent name{% endtrans %}</label>
-               <input name="alt_agent_name" type="text" value="" placeholder="{% trans %}name..{% endtrans %}"/>
+               <label for="alt_agent_name" class="add-on">{% trans %}OthId Organization{% endtrans %}</label>
+               <input name="alt_agent_name" type="text" value="" placeholder="{% trans %}OthId organization name{% endtrans %}"/>
             </div>
        
             <div class="input-prepend">     
-                <label for="alt_agent_identifier" class="add-on">{% trans %}Agent identifier{% endtrans %}</label>
-                <input name="alt_agent_identifier" type="text" value="" placeholder="{% trans %}identifier..{% endtrans %}"/>
+                <label for="alt_agent_identifier" class="add-on">{% trans %}OthId Organization ID{% endtrans %}</label>
+                <input name="alt_agent_identifier" type="text" value="" placeholder="{% trans %}OthId organization identifier{% endtrans %}"/>
             </div>
             <br/>
             <span class="remove remove_alt_identifier"><i class="icon-minus"></i> {% trans %}Remove{% endtrans %}</span>
@@ -202,28 +202,28 @@ Old implementation of the couple element (one element with comma separated value
         <input type="hidden" name="conforms_to__ref" value=""/>
         
         <div class="input-prepend">
-            <label for="conforms_to_identifier" class="add-on">{% trans %}Identifier{% endtrans %}
+            <label for="conforms_to_identifier" class="add-on">{% trans %}Std Identifier{% endtrans %}
             </label>
-                <input type="text" name="conforms_to_identifier" type="text" value="" placeholder="{% trans %}identifier{% endtrans %}"/>
+                <input type="text" name="conforms_to_identifier" type="text" value="" placeholder="{% trans %}Std Identifier sample{% endtrans %}"/>
         </div>
         <div class="input-prepend">
-            <label for="conforms_to_title" class="add-on">{% trans %}Title{% endtrans %}
+            <label for="conforms_to_title" class="add-on">{% trans %}Std Title{% endtrans %}
             </label>
-                <input type="text" name="conforms_to_title" value="" type="text" placeholder="{% trans %}title{% endtrans %}"/>
+                <input type="text" name="conforms_to_title" value="" type="text" placeholder="{% trans %}Std Title sample{% endtrans %}"/>
         </div>
         
         <div class="input-prepend">
-            <label for="conforms_to_description" class="add-on">{% trans %}Description{% endtrans %}
+            <label for="conforms_to_description" class="add-on">{% trans %}Std Description{% endtrans %}
             </label>
-                <input type="text" name="conforms_to_description" value="" type="text" placeholder="{% trans %}description{% endtrans %}"/>
+                <input type="text" name="conforms_to_description" value="" type="text" placeholder="{% trans %}Std Description sample{% endtrans %}"/>
         </div>
         <div class="row-fluid">
                 <span class="span2"></span>
                 <span class="span10">
-                <label class="add-on">{% trans %}Reference documentation{% endtrans %}</label>
+                <label class="add-on">{% trans %}Std Reference documentation{% endtrans %}</label>
                 <div class="reference_documentation template">
                     
-                    <input type="text" name="conforms_to_referenceDocumentation" type="text"  placeholder="{% trans %}reference documentation (url){% endtrans %}"/>
+                    <input type="text" name="conforms_to_referenceDocumentation" type="text"  placeholder="{% trans %}Std Reference documentation sample{% endtrans %}"/>
                     <span class="remove remove_reference_documentation"><i class="icon-minus" title="remove"></i></span>
                 </div>
 
