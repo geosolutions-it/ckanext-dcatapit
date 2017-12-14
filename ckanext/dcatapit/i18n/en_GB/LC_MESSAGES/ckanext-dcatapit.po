@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-12-05 19:18+0100\n"
+"POT-Creation-Date: 2017-12-13 01:30+0100\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en_GB <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ckanext/dcatapit/plugin.py:554
+#: ckanext/dcatapit/plugin.py:555
 msgid "Source catalogs"
 msgstr ""
 
@@ -117,7 +117,8 @@ msgstr ""
 
 #: ckanext/dcatapit/schema.py:141 ckanext/dcatapit/schema.py:270
 #: ckanext/dcatapit/schema.py:297
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:197
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:56
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:158
 msgid "Name"
 msgstr ""
 
@@ -374,27 +375,27 @@ msgstr ""
 msgid "Invalid date input: {}"
 msgstr ""
 
-#: ckanext/dcatapit/validators.py:233
+#: ckanext/dcatapit/validators.py:238
 msgid "Temporal coverage value should not be empty"
 msgstr ""
 
-#: ckanext/dcatapit/validators.py:237
+#: ckanext/dcatapit/validators.py:242
 msgid "Temporal coverage value is not valid"
 msgstr ""
 
-#: ckanext/dcatapit/validators.py:240
+#: ckanext/dcatapit/validators.py:245
 msgid "Temporal coverage values should be in a list, got {}"
 msgstr ""
 
-#: ckanext/dcatapit/validators.py:248
+#: ckanext/dcatapit/validators.py:253
 msgid "Invalid temporal coverage item, should be a dict, got {}"
 msgstr ""
 
-#: ckanext/dcatapit/validators.py:251
+#: ckanext/dcatapit/validators.py:256
 msgid "Temporal coverage item contains invalid keys: {}"
 msgstr ""
 
-#: ckanext/dcatapit/validators.py:257
+#: ckanext/dcatapit/validators.py:265
 msgid "Temporal coverage start {} is after end {}"
 msgstr ""
 
@@ -423,25 +424,30 @@ msgid "Add new Temporal Coverage"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:169
-#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:205
-msgid "Identifier"
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:71
+msgid "OthId Identifier"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:170
-#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:180
-msgid "identifier.."
+msgid "OthId dataset identifier"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:174
-msgid "Agent name"
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:74
+msgid "OthId Organization"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:175
-msgid "name.."
+msgid "OthId organization name"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:179
-msgid "Agent identifier"
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:77
+msgid "OthId Organization ID"
+msgstr ""
+
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:180
+msgid "OthId organization identifier"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:183
@@ -453,33 +459,40 @@ msgstr ""
 msgid "Add new identifier"
 msgstr ""
 
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:205
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:93
+msgid "Std Identifier"
+msgstr ""
+
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:207
-msgid "identifier"
+msgid "Std Identifier sample"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:210
-msgid "Title"
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:94
+msgid "Std Title"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:212
-msgid "title"
+msgid "Std Title sample"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:216
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:204
-msgid "Description"
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:95
+msgid "Std Description"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:218
-msgid "description"
+msgid "Std Description sample"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:223
-msgid "Reference documentation"
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:97
+msgid "Std Reference documentation"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:226
-msgid "reference documentation (url)"
+msgid "Std Reference documentation sample"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:232
@@ -496,13 +509,13 @@ msgstr ""
 
 #: ckanext/dcatapit/templates/package/resource_read.html:13
 #: ckanext/dcatapit/templates/package/resource_read.html:38
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:191
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:152
 msgid "Field"
 msgstr ""
 
 #: ckanext/dcatapit/templates/package/resource_read.html:14
 #: ckanext/dcatapit/templates/package/resource_read.html:39
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:192
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:153
 msgid "Value"
 msgstr ""
 
@@ -534,16 +547,15 @@ msgid "Dataset Metadata"
 msgstr ""
 
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:24
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:27
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:104
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:151
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:157
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:159
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:168
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:28
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:117
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:123
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:125
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:134
 msgid "N/D"
 msgstr ""
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:39
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:40
 msgid "From"
 msgstr ""
 
@@ -551,19 +563,19 @@ msgstr ""
 msgid "Until"
 msgstr ""
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:58
-msgid "Name:"
-msgstr ""
-
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:187
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:148
 msgid "Source Catalog Info"
 msgstr ""
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:212
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:165
+msgid "Description"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:173
 msgid "Homepage"
 msgstr ""
 
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:224
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:185
 msgid "Last Updated"
 msgstr ""
 
@@ -582,4 +594,40 @@ msgstr ""
 #: ckanext/dcatapit/templates/package/snippets/resource_form.html:15
 msgid "eg. 1024"
 msgstr ""
+
+#~ msgid "Identifier"
+#~ msgstr ""
+
+#~ msgid "identifier.."
+#~ msgstr ""
+
+#~ msgid "Agent name"
+#~ msgstr ""
+
+#~ msgid "name.."
+#~ msgstr ""
+
+#~ msgid "Agent identifier"
+#~ msgstr ""
+
+#~ msgid "identifier"
+#~ msgstr ""
+
+#~ msgid "Title"
+#~ msgstr ""
+
+#~ msgid "title"
+#~ msgstr ""
+
+#~ msgid "description"
+#~ msgstr ""
+
+#~ msgid "Reference documentation"
+#~ msgstr ""
+
+#~ msgid "reference documentation (url)"
+#~ msgstr ""
+
+#~ msgid "Name:"
+#~ msgstr ""
 
