@@ -1,3 +1,4 @@
+import json
 import logging
 
 import ckan.lib.helpers as h
@@ -141,6 +142,29 @@ def couple_to_html(field_couples, pkg_dict):
         return html_elements if len(html_elements) > 0 else []
     return []
 
+
+def couple_to_dict(field_couples, pkg_dict):
+    ret = []
+    if field_couples and pkg_dict:
+        for couple in field_couples:
+            couple_name = couple.get('name', None)
+
+            if couple_name in pkg_dict:
+                field_value = pkg_dict[couple_name]
+
+                couple_format = couple.get('format', None)
+                if couple_format:
+                    couple_type = couple.get('type', None)
+                    field_value = format(field_value, couple_format, couple_type)
+
+                couple_label = couple.get('label', None)
+                if field_value and couple_label:
+                    c = {'label': couple_label, 'value': field_value}
+                    ret.append(c)
+ 
+    return ret
+
+
 def format(value, _format='%d-%m-%Y', _type=None):
     # #################################################
     # TODO: manage here other formats if needed
@@ -167,3 +191,22 @@ def validate_dateformat(date_string, date_format):
     except ValueError:
         log.debug(u'Incorrect date format {0} for date string {1}'.format(date_format, date_string))
         return None
+
+def json_load(val):
+    try:
+        return json.loads(val)
+    except (TypeError, ValueError,):
+        pass
+
+def json_dump(val):
+    try:
+        return json.dumps(val)
+    except (TypeError, ValueError,):
+        pass
+
+def load_json_or_list(val):
+    try:
+        return json.loads(val)
+    except (TypeError, ValueError,):
+        if val:
+            return [{'identifier': v} for v in val.split(',')]

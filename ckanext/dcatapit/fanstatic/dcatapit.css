@@ -1,0 +1,31 @@
+
+.template {
+    display: none!important;
+}
+
+.w200 {
+    max-width: 200px;
+}
+.add_new {
+    cursor: pointer;
+}
+
+.std-key {
+    font-weight: bold;
+}
+
+.std .row:even {
+    background: #f2f2f2
+}
+.conforms_to {
+}
+.bold {
+    font-weight: bold
+}
+.conforms_to .remove_conforms_to, .alternate_identifier .remove, .creator .remove, .temporal-coverage .remove {
+    float: right;
+    padding-right: 20px;
+    text-align: right;
+    cursor: pointer;
+    color: #e33;
+}
