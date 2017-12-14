@@ -103,7 +103,7 @@ dcatapit.templated_input = {
         extract_from_element: function(elms){
             var out = {};
             var existing = $(elms).data(this.options.data_name) || {};
-            $.merge(out, existing);
+            $.extend(out, existing);
             var lang = this.lang;
             var inputs = $('input', elms);
             var that = this;

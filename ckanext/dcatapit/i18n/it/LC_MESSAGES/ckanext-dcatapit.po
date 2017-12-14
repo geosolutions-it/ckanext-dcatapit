@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-12-13 01:30+0100\n"
+"POT-Creation-Date: 2017-12-14 13:19+0100\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -92,6 +92,8 @@ msgid "dataset identifier"
 msgstr "Identificativo del dataset"
 
 #: ckanext/dcatapit/schema.py:105
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:169
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:71
 msgid "Other Identifier"
 msgstr "Altro identificativo"
 
@@ -425,31 +427,31 @@ msgstr "Elimina estensione temporale"
 msgid "Add new Temporal Coverage"
 msgstr "Aggiungi estensione temporale"
 
-#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:169
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:71
-msgid "OthId Identifier"
-msgstr "Codice"
-
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:170
-msgid "OthId dataset identifier"
+#, fuzzy
+msgid "Other dataset identifier"
 msgstr "Altro id del dataset"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:174
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:74
-msgid "OthId Organization"
+#, fuzzy
+msgid "Other Organization"
 msgstr "Gestore del codice"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:175
-msgid "OthId organization name"
+#, fuzzy
+msgid "Other organization name"
 msgstr "es: Comune di Roma"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:179
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:77
-msgid "OthId Organization ID"
-msgstr "Id del gestore"
+#, fuzzy
+msgid "Other Organization ID"
+msgstr "es: Comune di Roma"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:180
-msgid "OthId organization identifier"
+#, fuzzy
+msgid "Other organization identifier"
 msgstr "es: c_h501"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:183

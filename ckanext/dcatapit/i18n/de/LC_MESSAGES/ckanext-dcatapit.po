@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-12-13 01:30+0100\n"
+"POT-Creation-Date: 2017-12-14 13:19+0100\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -93,6 +93,8 @@ msgid "dataset identifier"
 msgstr "dataset identifier"
 
 #: ckanext/dcatapit/schema.py:105
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:169
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:71
 msgid "Other Identifier"
 msgstr "Andere Bezeichnung"
 
@@ -427,37 +429,31 @@ msgstr "zeitliche Abdeckung"
 msgid "Add new Temporal Coverage"
 msgstr "zeitliche Abdeckung"
 
-#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:169
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:71
-#, fuzzy
-msgid "OthId Identifier"
-msgstr "anderen Bezeichner"
-
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:170
 #, fuzzy
-msgid "OthId dataset identifier"
+msgid "Other dataset identifier"
 msgstr "dataset identifier"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:174
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:74
 #, fuzzy
-msgid "OthId Organization"
+msgid "Other Organization"
 msgstr "Organisation E-Mail"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:175
 #, fuzzy
-msgid "OthId organization name"
+msgid "Other organization name"
 msgstr "Organisation E-Mail"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:179
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:77
 #, fuzzy
-msgid "OthId Organization ID"
+msgid "Other Organization ID"
 msgstr "Organisation E-Mail"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:180
 #, fuzzy
-msgid "OthId organization identifier"
+msgid "Other organization identifier"
 msgstr "Organisation Website-URL"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:183
@@ -612,37 +608,4 @@ msgstr "Dateigröße"
 #: ckanext/dcatapit/templates/package/snippets/resource_form.html:15
 msgid "eg. 1024"
 msgstr "z.B. 1024"
-
-#~ msgid "Identifier"
-#~ msgstr "anderen Bezeichner"
-
-#~ msgid "identifier.."
-#~ msgstr "anderen Bezeichner"
-
-#~ msgid "Agent name"
-#~ msgstr ""
-
-#~ msgid "name.."
-#~ msgstr "Name"
-
-#~ msgid "Agent identifier"
-#~ msgstr "dataset identifier"
-
-#~ msgid "identifier"
-#~ msgstr "anderen Bezeichner"
-
-#~ msgid "Title"
-#~ msgstr ""
-
-#~ msgid "title"
-#~ msgstr ""
-
-#~ msgid "description"
-#~ msgstr ""
-
-#~ msgid "Reference documentation"
-#~ msgstr ""
-
-#~ msgid "reference documentation (url)"
-#~ msgstr ""
 
