@@ -83,7 +83,15 @@ def get_custom_organization_schema():
 		    'label': _('Site URL'),
 		    'placeholder': _('organization site url'),
 		    'is_required': False
-	    }
+	    },
+        {
+            'name': 'identifier',
+            'label': _('IPA/IVA'),
+            'validator': ['ignore_missing'],
+            'type': 'text',
+            'is_required': False,
+            'placeholder': _('rights holder of the dataset')
+        }
 	]
 
 def get_custom_package_schema():
@@ -263,7 +271,8 @@ def get_custom_package_schema():
 		    'name': 'rights_holder',
 		    'element': 'couple',
 		    'label': _('Rights Holder'),
-		    'is_required': True,
+		    'is_required': False,
+            'ignore': True,
 		    'couples': [
 		    	{
 		    		'name': 'holder_name',
