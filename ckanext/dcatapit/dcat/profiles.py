@@ -292,7 +292,7 @@ class ItalianDCATAPProfile(RDFProfile):
             license = self._object(distribution, DCT.license)
             if license:
 
-                license_doc = str(license)
+                license_doc = unicode(license)
                 dcat_license = self._object_value(distribution, DCT.type)
                 license_names = self.g.objects(license, FOAF.name) # may be either the title or the id
                 license_version = self._object_value(license, FOAF.versionInfo)
@@ -301,16 +301,15 @@ class ItalianDCATAPProfile(RDFProfile):
                 prefname = None
                 for l in license_names:
                     if l.language:
-                        names[l.language] = str(l)
+                        names[l.language] = unicode(l)
                     else:
-                        prefname = str(l)
+                        prefname = unicode(l)
                 
                 license_type = interfaces.get_license_from_dcat(license_doc,
                                                                 dcat_license,
                                                                 prefname,
                                                                 **names)
-                
-                if license_version and str(license_version) != license_type.version:
+                if license_version and unicode(license_version) != license_type.version:
                     log.warn("License version mismatch between %s and %s", license_versions, license_type.version)
                     
                 resource_dict['license_type'] = license_type.uri
@@ -326,7 +325,7 @@ class ItalianDCATAPProfile(RDFProfile):
                             license_name = license_type.default_name
 
                     
-                licenses.append((str(license), license_name))
+                licenses.append((unicode(license), license_name))
             else:
                 log.warn('No license found for resource "%s"::"%s"',
                          dataset_dict.get('title', '---'),
@@ -465,19 +464,19 @@ class ItalianDCATAPProfile(RDFProfile):
         return out
 
     def _conforms_to(self, conforms_id):
-        ref_docs = [ str(val) for val in self.g.objects(conforms_id, DCATAPIT.referenceDocumentation)]
+        ref_docs = [ unicode(val) for val in self.g.objects(conforms_id, DCATAPIT.referenceDocumentation)]
 
-        out = {'_ref': str(conforms_id),
-               'identifier': str(self.g.value(conforms_id, DCT.identifier)),
+        out = {'_ref': unicode(conforms_id),
+               'identifier': unicode(self.g.value(conforms_id, DCT.identifier)),
                'title': {},
                'description': {},
                'referenceDocumentation': ref_docs}
 
         for t in self.g.objects(conforms_id, DCT.title):
-            out['title'][t.language] = str(t)
+            out['title'][t.language] = unicode(t)
 
         for t in self.g.objects(conforms_id, DCT.description):
-            out['description'][t.language] = str(t)
+            out['description'][t.language] = unicode(t)
 
         return out
 
@@ -488,7 +487,7 @@ class ItalianDCATAPProfile(RDFProfile):
         if not identifier:
             return out
 
-        out['identifier'] = str(identifier)
+        out['identifier'] = unicode(identifier)
 
         predicate, basekey = DCT.creator, 'creator'
         agent_dict, agent_loc_dict = self._parse_agent(alt_id, predicate, basekey)
@@ -510,9 +509,9 @@ class ItalianDCATAPProfile(RDFProfile):
             creator_name = {}
             for obj in self.g.objects(cref, FOAF.name):
                 if obj.language:
-                    creator_name[str(obj.language)] = str(obj)
+                    creator_name[unicode(obj.language)] = unicode(obj)
                 else:
-                    creator_name[DEFAULT_LANG] = str(obj)
+                    creator_name[DEFAULT_LANG] = unicode(obj)
             creator['creator_name'] = creator_name
             out.append(creator) 
         return out
