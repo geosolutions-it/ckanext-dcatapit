@@ -173,7 +173,6 @@ def dcatapit_alternate_identifier(value, context):
 
     allowed_keys = ['identifier', 'agent']
     agent_allowed_keys = ['agent_identifier', 'agent_name']
-
     for elm in data:
         if not isinstance(elm, dict):
             raise Invalid(_("Each alternate_identifier element should be a dict"))
