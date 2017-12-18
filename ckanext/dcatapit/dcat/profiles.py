@@ -226,6 +226,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
         creators = self._parse_creators(dataset_ref)
 
+
         # use data from old method to populate new format
         from_old = {}
         if dataset_dict.get('creator_name'):
@@ -758,9 +759,10 @@ class ItalianDCATAPProfile(RDFProfile):
             g.add((poc, VCARD.hasURL, Literal(org_dict.get('site'))))
 
 
-        ### Rights holder : Agent
+        ### Rights holder : Agent,
+        ### holder_ref keeps graph reference to holder subject
+        ### holder_use_dataset is a flag if holder info is taken from dataset (or organization)
         holder_ref, holder_use_dataset = self._add_right_holder(dataset_dict, org_dict, dataset_ref)
-
 
         ### Multilingual
         # Add localized entries in dataset
