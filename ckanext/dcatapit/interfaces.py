@@ -194,7 +194,7 @@ def get_for_group_or_organization(pkg_id):
 
         # TODO: if no multilang, return the dataset in a single language in the same format of the multilang data
         return None
-    records = GroupMultilang.get_for_group(pkg_id)
+    records = GroupMultilang.get_for_group_id(pkg_id)
     return _multilang_to_dict(records)
 
 

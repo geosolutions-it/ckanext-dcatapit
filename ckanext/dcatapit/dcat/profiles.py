@@ -724,22 +724,25 @@ class ItalianDCATAPProfile(RDFProfile):
         if euro_poc:
             g.remove((dataset_ref, DCAT.contactPoint, euro_poc))
 
-        org_id = dataset_dict.get('organization',{}).get('id')
+        org_id = dataset_dict.get('owner_org')
 
         # get orga info
         org_show = logic.get_action('organization_show')
 
-        try:
-            org_dict = org_show({}, 
-            	{'id': org_id,
-            	'include_datasets': False,
-            	'include_tags': False,
-            	'include_users': False,
-            	'include_groups': False,
-            	'include_extras': True,
-            	'include_followers': False})
-        except Exception, e:
-            org_dict = {}
+        org_dict = {}
+        if org_id:
+            try:
+                org_dict = org_show({'ignore_auth': True},
+                                    {'id': org_id,
+                                     'include_datasets': False,
+                                     'include_tags': False,
+                                     'include_users': False,
+                                     'include_groups': False,
+                                     'include_extras': True,
+                                     'include_followers': False}
+                                    )
+            except Exception, err:
+                log.warning("Cannot get org for %s: %s", org_id, err, exc_info=err)
 
         org_uri = organization_uri(org_dict)
 
@@ -875,6 +878,7 @@ class ItalianDCATAPProfile(RDFProfile):
             use_dataset = False
             agent_name = org_dict.get('name')
             agent_id = org_dict.get('identifier')
+
             if agent_id and agent_name:
                 agent_data = (agent_name, agent_id,)
                 holder_ref = self._add_agent(org_dict,
@@ -1095,7 +1099,3 @@ def guess_format(resource_dict):
        log.info('Mapping not found for format %s', f)
 
     return ret
-
-
-
-

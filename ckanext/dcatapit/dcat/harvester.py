@@ -161,4 +161,3 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
         self._user_name = user['name']
 
         return self._user_name
-
