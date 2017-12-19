@@ -345,7 +345,11 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         return self._update_pkg_rights_holder(pkg_dict)
 
     def _update_pkg_rights_holder(self, pkg_dict):
+        if pkg_dict.get('type') != 'dataset':
+            return pkg_dict
         if not (pkg_dict.get('holder_identifier') and pkg_dict.get('holder_name')):
+            if not pkg_dict.get('owner_org'):
+                return pkg_dict
             get_org = toolkit.get_action('organization_show')
             ctx = {'ignore_auth': True}
             ctx.update(dict((k, False) for k in ('include_tags', 'include_users', 'include_groups', 'include_extras', 'include_followers',)))
