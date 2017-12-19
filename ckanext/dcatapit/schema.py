@@ -88,6 +88,7 @@ def get_custom_organization_schema():
             'name': 'identifier',
             'label': _('IPA/IVA'),
             'validator': ['ignore_missing'],
+            'element': 'input',
             'type': 'text',
             'is_required': False,
             'placeholder': _('rights holder of the dataset')
@@ -273,7 +274,7 @@ def get_custom_package_schema():
 		    'label': _('Rights Holder'),
 		    'is_required': False,
             #'ignore': True,
-            'readonly': True,
+            'read_only': True,
 		    'couples': [
 		    	{
 		    		'name': 'holder_name',

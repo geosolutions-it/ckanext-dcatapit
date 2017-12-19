@@ -55,7 +55,7 @@ Old implementation of the couple element (one element with comma separated value
 ------------------------------------------------------------------------------- #}
 
 
-{% macro couple(name, labels=(), names=(), id="", label="", values=(), placeholders=(), error="", types="", classes=[], attrs={}, is_required=false, key_values=()) %}
+{% macro couple(name, labels=(), names=(), id="", label="", values=(), placeholders=(), error="", types="", classes=[], attrs={}, is_required=false, key_values=(), read_only=False) %}
   {%- set classes = (classes|list) -%}
   {%- set label_id = (id) ~ "-key" -%}
   {%- set extra_html = caller() if caller -%}
@@ -67,6 +67,9 @@ Old implementation of the couple element (one element with comma separated value
       <input id="{{ names[0] }}-value" 
              type="{{ types[0] }}" 
              name="{{ names[0] }}" 
+             {% if read_only %}
+             readonly
+             {% endif %}
              value="{{ values[0] | empty_and_escape }}" 
              placeholder="{{ placeholders[0] }}" />
 
@@ -74,6 +77,9 @@ Old implementation of the couple element (one element with comma separated value
       <input id="{{ names[1] }}-value" 
              type="{{ types[1] }}" 
              name="{{ names[1] }}" 
+             {% if read_only %}
+             readonly
+             {% endif %}
              value="{{ values[1] | empty_and_escape }}" 
              placeholder="{{ placeholders[1] }}" />
     </div>
