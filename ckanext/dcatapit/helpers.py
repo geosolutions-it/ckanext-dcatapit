@@ -22,6 +22,14 @@ dateformats = [
     "%Y-%m-%dT%H:%M:%S"
 ]
 
+DEFAULT_CTX = {'ignore_auth': True}
+DEFAULT_ORG_CTX = DEFAULT_CTX.copy()
+DEFAULT_ORG_CTX.update(dict((k, False) for k in ('include_tags',
+                                                 'include_users',
+                                                 'include_groups',
+                                                 'include_extras',
+                                                 'include_followers',)))
+
 def get_dcatapit_package_schema():
     log.debug('Retrieving DCAT-AP_IT package schema fields...')
     return dcatapit_schema.get_custom_package_schema()

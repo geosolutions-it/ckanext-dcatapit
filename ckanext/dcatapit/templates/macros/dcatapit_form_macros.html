@@ -80,12 +80,12 @@ Old implementation of the couple element (one element with comma separated value
   {% endcall %}
 {% endmacro %}
 
-{% macro theme(name, id='', label='', value='', placeholder='', type='text', error="", options=(), classes=[], attrs={}, is_required=false) %}
+{% macro autocomplete(name, id='', label='', value='', placeholder='', type='text', error="", options=(), classes=[], attrs={}, is_required=false, multiple=True) %}
   {%- set extra_html = caller() if caller -%}
 
   {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
 
-      <select id="{{name}}-hidden" placeholder="{{ placeholder }}" multiple name="{{ name }}" {{ attributes(attrs) }} data-module="autocomplete">
+      <select id="{{name}}-hidden" placeholder="{{ placeholder }}" {% if multiple %}multiple{% endif %} name="{{ name }}" {{ attributes(attrs) }} data-module="autocomplete">
         {% for option in options %}
           <option value="{{ option.value }}"{% if value and option.value in value %} selected {% endif %}>{{ option.text or option.value }}</option>
         {% endfor %}

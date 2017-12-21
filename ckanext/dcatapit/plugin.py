@@ -12,6 +12,7 @@ import ckanext.dcatapit.helpers as helpers
 import ckanext.dcatapit.interfaces as interfaces
 from   ckanext.dcatapit.dcat.harvester import map_nonconformant_groups
 from   ckanext.dcatapit.mapping import populate_theme_groups
+from   ckanext.dcatapit.helpers import DEFAULT_ORG_CTX
 
 from ckan.model.package import Package
 from ckan.model import Session, repo
@@ -291,7 +292,16 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         if search_terms:
             dataset_dict['dcat_theme'] = search_terms
 
+        org_id = dataset_dict['owner_org']
+        organization_show = plugins.toolkit.get_action('organization_show')
+        org = organization_show(DEFAULT_ORG_CTX, {'id': org_id})
+        if org.get('region'):
+            dataset_dict['organization_region'] = org['region']
         return dataset_dict
+
+    def before_search(self, search_params):
+        
+        return search_params
 
     def after_search(self, search_results, search_params):
         ## ##################################################################### 
@@ -553,5 +563,9 @@ class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
     # IFacets
     def dataset_facets(self, facets_dict, package_type):
         facets_dict['source_catalog_title'] = plugins.toolkit._("Source catalogs")
+        facets_dict['organization_region'] = plugins.toolkit._("Organization region")
         return facets_dict
 
+    def organization_facets(self, facets_dict, organization_type, package_type):
+        facets_dict['region'] = plugins.toolkit._("Region")
+        return facets_dict

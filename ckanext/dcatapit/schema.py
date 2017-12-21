@@ -83,7 +83,19 @@ def get_custom_organization_schema():
 		    'label': _('Site URL'),
 		    'placeholder': _('organization site url'),
 		    'is_required': False
-	    }
+	    },
+	    {
+		    'name': 'region',
+		    'validator': ['not_empty'],
+		    'element': 'region',
+		    'type': 'vocabulary',
+		    'vocabulary_name': 'regions',
+		    'label': _('Region'),
+            'multiple': False,
+		    'placeholder': _('region name'),
+		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=regions&incomplete=?',
+		    'is_required': False
+	    },
 	]
 
 def get_custom_package_schema():
