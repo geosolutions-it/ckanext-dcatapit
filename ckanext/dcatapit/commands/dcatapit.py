@@ -34,17 +34,19 @@ class DCATAPITCommands(CkanCommand):
     '''  A command for working with vocabularies
     Usage::
      # Loading a vocabulary
-     paster --plugin=ckanext-dcatapit vocabulary load --url URL --name NAME --config=PATH_TO_INI_FILE
-     paster --plugin=ckanext-dcatapit vocabulary load --filename FILE --name NAME --config=PATH_TO_INI_FILE
+     paster --plugin=ckanext-dcatapit vocabulary load --url URL --name NAME --config=PATH_TO_INI_FILE [--format=FORMAT]
+     paster --plugin=ckanext-dcatapit vocabulary load --filename FILE --name NAME --config=PATH_TO_INI_FILE [--format=FORMAT]
      Where:
        URL  is the url to a SKOS document
        FILE is the local path to a SKOS document
+       FORMAT is rdflib format name (xml, turtle etc)
        NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies, regions, licenses)
        Where the corresponding rdf are:
           languages   -> http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf
           eu_themes   -> http://publications.europa.eu/mdr/resource/authority/data-theme/skos/data-theme-skos.rdf
           places      -> http://publications.europa.eu/mdr/resource/authority/place/skos/places-skos.rdf
           frequencies -> http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf
+          regions     -> https://github.com/italia/daf-ontologie-vocabolari-controllati/blob/master/VocabolariControllati/ClassificazioneTerritorio/Istat-Classificazione-08-Territorio.rdf?raw=true
           filetype -> http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf
        PATH_TO_INI_FILE is the path to the Ckan configuration file
     '''
@@ -264,7 +266,6 @@ def do_load(vocab_name, url=None, filename=None, format=None):
         for tag in concepts:
             log.info(u"Adding tag {0} to vocabulary '{1}'".format(tag, vocab_name))
             print(u"Adding tag {0} to vocabulary '{1}'".format(tag, vocab_name))
-
             data = {'name': tag, 'vocabulary_id': vocab['id']}
             toolkit.get_action('tag_create')(context, data)
 
