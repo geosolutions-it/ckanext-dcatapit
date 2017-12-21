@@ -300,7 +300,20 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         return dataset_dict
 
     def before_search(self, search_params):
-        
+        fq_all = [] 
+        # remove organization_region from query, and readd to fq_all
+        if isinstance(search_params['fq'], (str,unicode,)):
+            fq = search_params['fq'].split(' ')
+        else:
+            fq = search_params['fq']
+        new_fq = []
+
+        # fix fq elements, they should be prepended with + sign
+        for f in fq:
+            if not f.startswith(('+','-',)): 
+                f = u'+{}'.format(f)
+            new_fq.append(f)
+        search_params['fq'] = ' '.join(new_fq)
         return search_params
 
     def after_search(self, search_results, search_params):
