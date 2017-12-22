@@ -256,18 +256,8 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         package_dict['extras'].append({'key': 'creator_name', 'value': agent_name})
         package_dict['extras'].append({'key': 'creator_identifier', 'value': agent_code or default_agent_code})
 
-        # End of processing, return the modified package
-        return package_dict
 
-    def import_stage(self, harvest_object):
-        return super(DCATAPITCSWHarvester, self).import_stage(harvest_object)
-
-
-
-
-    def get_package_dict(self, iso_values, harvest_object):
-        pkg_dict = super(CSWHarvester, self).get_package_dict(iso_values, harvest_object)
-
+        #  -- license handling -- #
         license_id = pkg_dict.get('license_id')
         license_url = None
         license = None
@@ -291,5 +281,9 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
         return pkg_dict
 
-            
 
+        # End of processing, return the modified package
+        return package_dict
+
+    def import_stage(self, harvest_object):
+        return super(DCATAPITCSWHarvester, self).import_stage(harvest_object)
