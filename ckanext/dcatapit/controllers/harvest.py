@@ -21,9 +21,7 @@ class HarvesterController(BaseController):
             context = {'model':model,
                        'user':c.user}
             harvest_sources = p.toolkit.get_action('harvest_source_list')(context, {})
-            print(harvest_sources)
             c.harvest_sources = harvest_sources
-
 
             return render('harvest/sources_list.html')
 
