@@ -258,11 +258,11 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
 
         #  -- license handling -- #
-        license_id = pkg_dict.get('license_id')
+        license_id = package_dict.get('license_id')
         license_url = None
         license = None
         access_constraints = None
-        for ex in pkg_dict['extras']:
+        for ex in package_dict['extras']:
             if ex['key'] == 'license_url':
                 license_url = ex['value']
             elif ex['key'] == 'license':
@@ -276,10 +276,10 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         else:
             l, default = License.find_by_token(access_constraints, license, license_id, license_url)
         
-        for res in pkg_dict['resources']:
+        for res in package_dict['resources']:
             res['license_type'] = l.uri
 
-        return pkg_dict
+        return package_dict
 
 
         # End of processing, return the modified package
