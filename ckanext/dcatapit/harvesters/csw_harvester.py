@@ -284,6 +284,3 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
         # End of processing, return the modified package
         return package_dict
-
-    def import_stage(self, harvest_object):
-        return super(DCATAPITCSWHarvester, self).import_stage(harvest_object)
