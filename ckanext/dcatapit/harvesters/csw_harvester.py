@@ -279,8 +279,5 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         for res in package_dict['resources']:
             res['license_type'] = l.uri
 
-        return package_dict
-
-
         # End of processing, return the modified package
         return package_dict
