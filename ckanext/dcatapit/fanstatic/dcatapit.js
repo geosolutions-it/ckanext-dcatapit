@@ -103,7 +103,7 @@ dcatapit.templated_input = {
         extract_from_element: function(elms){
             var out = {};
             var existing = $(elms).data(this.options.data_name) || {};
-            $.merge(out, existing);
+            $.extend(out, existing);
             var lang = this.lang;
             var inputs = $('input', elms);
             var that = this;
@@ -252,7 +252,7 @@ ckan.module('dcatapit-alternate-identifier', function($){
 
                 if (elm_name.startsWith('agent_')){
                     if ($.inArray(elm_name, this.localized)> -1){
-                        if (!$.isPlainObject(out[elm_name])){
+                        if (!$.isPlainObject(agent[elm_name])){
                             agent[elm_name] = {};
                         }
                         var elval = elm.val();

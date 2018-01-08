@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-12-13 01:30+0100\n"
+"POT-Creation-Date: 2017-12-14 13:19+0100\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en_GB <LL@li.org>\n"
@@ -92,6 +92,8 @@ msgid "dataset identifier"
 msgstr ""
 
 #: ckanext/dcatapit/schema.py:105
+#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:169
+#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:71
 msgid "Other Identifier"
 msgstr ""
 
@@ -423,31 +425,26 @@ msgstr ""
 msgid "Add new Temporal Coverage"
 msgstr ""
 
-#: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:169
-#: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:71
-msgid "OthId Identifier"
-msgstr ""
-
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:170
-msgid "OthId dataset identifier"
+msgid "Other dataset identifier"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:174
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:74
-msgid "OthId Organization"
+msgid "Other Organization"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:175
-msgid "OthId organization name"
+msgid "Other organization name"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:179
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:77
-msgid "OthId Organization ID"
+msgid "Other Organization ID"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:180
-msgid "OthId organization identifier"
+msgid "Other organization identifier"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:183
@@ -594,40 +591,4 @@ msgstr ""
 #: ckanext/dcatapit/templates/package/snippets/resource_form.html:15
 msgid "eg. 1024"
 msgstr ""
-
-#~ msgid "Identifier"
-#~ msgstr ""
-
-#~ msgid "identifier.."
-#~ msgstr ""
-
-#~ msgid "Agent name"
-#~ msgstr ""
-
-#~ msgid "name.."
-#~ msgstr ""
-
-#~ msgid "Agent identifier"
-#~ msgstr ""
-
-#~ msgid "identifier"
-#~ msgstr ""
-
-#~ msgid "Title"
-#~ msgstr ""
-
-#~ msgid "title"
-#~ msgstr ""
-
-#~ msgid "description"
-#~ msgstr ""
-
-#~ msgid "Reference documentation"
-#~ msgstr ""
-
-#~ msgid "reference documentation (url)"
-#~ msgstr ""
-
-#~ msgid "Name:"
-#~ msgstr ""
 

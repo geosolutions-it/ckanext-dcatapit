@@ -62,7 +62,7 @@ def test_conforms_to():
                                  'referenceDocumentation': ['http://abc.efg/']}]), True),
                    (json.dumps([{'identifier': 'abc',
                                  'title': {'en': ''},
-                                 'referenceDocumentation': ['http://abc.efg/']}]), False),
+                                 'referenceDocumentation': ['http://abc.efg/']}]), True),
 
                    (json.dumps([{'identifier': 'abc',
                                  'title': {'en': 'title', 'it': 'title'},
@@ -158,4 +158,4 @@ def _run_checks(test_values, validator):
             passed = True
         except validators.Invalid, err:
             pass
-        assert passed == is_valid, 'failed for {}: {}'.format(test_val, err or 'no validation error')
+        assert passed == is_valid, 'failed for {}: {}'.format(test_val, err or 'expected error, but got no validation error')
