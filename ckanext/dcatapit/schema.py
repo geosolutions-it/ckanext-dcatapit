@@ -222,7 +222,7 @@ def get_custom_package_schema():
             'label': _('GeoNames URL'),
             'placeholder': _('http://www.geonames.org/3175395'),
             'is_required': False,
-            'help': _(u""""Questa proprietà si riferisce ai riferimenti spaziali dell’area geografica """
+            'help': _(u"""Questa proprietà si riferisce ai riferimenti spaziali dell’area geografica """
                       u"""di pertinenza del dataset ed utilizza una URI (Uniform Resource Identifier). """
                       u"""L’URI da inserire si ottiene sul sito http://www.geonames.org/"""
                       u"""Nel caso di dataset che interessano contemporaneamente più comuni, utilizzare """
@@ -367,7 +367,7 @@ def get_custom_package_schema():
                     'placeholder': _('creator of the dataset')
                 }
             ],
-            'help': _(u""""Questa proprietà si riferisce a una o più entità (organizzazione) """
+            'help': _(u"""Questa proprietà si riferisce a una o più entità (organizzazione) """
                       u"""che hanno materialmente creato il dataset. Se l'editore non l’ha prodotto, """
                       u"""si può indicare l’organizzazione (o pubblica amministrazione) che ha materialmente """
                       u"""prodotto il dataset come creatore. Si raccomanda di evitare l’inserimento di nomi di """
