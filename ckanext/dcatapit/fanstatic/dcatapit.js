@@ -405,4 +405,15 @@ ckan.module('dcatapit-temporal-coverage', function($){
     return $.extend({}, dcatapit.templated_input, temporal_coverage);
  });
 
+ckan.module('dcatapit-help', function($){
+    var help = {
+        initialize: function(){
+            $.proxyAll(this, /_on/);
+            $(this.el.find('i')).tooltip();
+        }
+    }
+
+    return $.extend({}, help);
+
+ });
 

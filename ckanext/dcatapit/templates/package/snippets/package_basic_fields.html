@@ -4,9 +4,12 @@
 
 {% block package_basic_fields_custom %}
 
+    {% resource 'vendor/jquery.ui.widget.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.position.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.tooltip.js' %}
+
     {% resource 'ckanext-dcatapit/dcatapit.js' %}
     {% resource 'ckanext-dcatapit/dcatapit.css' %}
-
 	{% snippet 'snippets/dcatapit_form_fields.html', data=data, errors=errors, schema_fields=pkg_fields %}
 
 {% endblock %}

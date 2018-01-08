@@ -1,33 +1,56 @@
 
 {% import 'macros/form.html' as form %}
 
-{% import 'macros/dcatapit_form_macros.html' as dcatapit_form_macros %}
+{% import 'macros/dcatapit_form_macros.html' as dform %}
 
 {% for field in schema_fields %}
       {% if not field.ignore and not field.ignore_from_edit %}
 
             {% if field.element == 'input' %}
 
-                  {{ form.input(field.name, label=field.label, id='field-' + field.name, placeholder=field.placeholder, type=field.type, value=data[field.name], error=errors[field.name], classes=['control-medium'], is_required=field.is_required) }}
+                  {{ dform.input(field.name,
+                                 label=field.label,
+                                 id='field-' + field.name,
+                                 placeholder=field.placeholder,
+                                 type=field.type,
+                                 value=data[field.name],
+                                 error=errors[field.name],
+                                 classes=['control-medium'],
+                                 is_required=field.is_required,
+                                 help=field.help) }}
 
             {% elif field.element == 'select' %}
             
                   {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
 
-                  {{ form.select(field.name, label=field.label, options=options, selected=data[field.name], error=errors[field.name]) }}
+                  {{ dform.select(field.name,
+                                  label=field.label,
+                                  options=options,
+                                  selected=data[field.name],
+                                  error=errors[field.name],
+                                  help=field.help) }}
 
             {% elif field.element == 'multiselect' %}
 
                   {% set tag_attrs = {'data-module': 'autocomplete', 'data-module-tags': '', 'data-module-source': field.data_module_source} %}
 
-                  {{ form.input(field.name, id='field-' + field.name, label=field.label, placeholder=field.placeholder, value=data[field.name], error=errors[field.name], classes=['control-full'], attrs=tag_attrs, is_required=field.is_required) }}
+                  {{ dform.input(field.name,
+                                 id='field-' + field.name,
+                                 label=field.label,
+                                 placeholder=field.placeholder,
+                                 value=data[field.name],
+                                 error=errors[field.name],
+                                 classes=['control-full'],
+                                 attrs=tag_attrs,
+                                 is_required=field.is_required,
+                                 help=field.help) }}
 
             {% elif field.element == 'theme' %}
             
                   {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
                   
                   {{ 
-                        dcatapit_form_macros.theme(
+                        dform.theme(
                               field.name,
                               id='field-' + field.name,
                               label=field.label,
@@ -37,7 +60,8 @@
                               options=options,
                               type=field.type,
                               classes=['control-full'],
-                              is_required=field.is_required)
+                              is_required=field.is_required,
+                              help=field.help)
                   }}
 
             {% elif field.element == 'couple' %}
@@ -46,7 +70,7 @@
                   {% set couple_values = data[field.name].split(',') if data[field.name] else ['', ''] %}
 
                   {{ 
-                        dcatapit_form_macros.couple(
+                        dform.couple(
                               field.name,
                               labels=(field.couples[0].label, field.couples[1].label),
                               names=(field.couples[0].name, field.couples[1].name),
@@ -55,12 +79,13 @@
                               values=(couple_values[0], couple_values[1], False),
                               error=errors[field.couples[0].name] or errors[field.couples[1].name],
                               type=field.type,
-                              is_required=field.is_required)
+                              is_required=field.is_required,
+                              help=field.help)
                   }}
                   ------------------------------------------------------------------------------- #}
 
                   {{ 
-                        dcatapit_form_macros.couple(
+                        dform.couple(
                               field.name,
                               labels=(field.couples[0].label, field.couples[1].label),
                               names=(field.couples[0].name, field.couples[1].name),
@@ -69,62 +94,76 @@
                               values=(data[field.couples[0].name], data[field.couples[1].name], False),
                               error=errors[field.couples[0].name] or errors[field.couples[1].name],
                               types=(field.couples[0].type, field.couples[1].type),
-                              is_required=field.is_required)
+                              is_required=field.is_required,
+                              help=field.help)
                   }}
 
             {% elif field.element == 'textarea' %}
 
-                  {{ form.textarea(field.name, label=field.label, id='field-' + field.name, placeholder=field.placeholder, value=data[field.name], error=errors[field.name], classes=['control-full']) }}
+                  {{ dform.textarea(field.name,
+                                    label=field.label,
+                                    id='field-' + field.name,
+                                    placeholder=field.placeholder,
+                                    value=data[field.name],
+                                    error=errors[field.name],
+                                    classes=['control-full'],
+                                    help=field.help) }}
 
             {% elif field.element == 'conforms_to' %}
                 
-                {{ dcatapit_form_macros.conforms_to(field.name,
-                                                    label=field.label,
-                                                    id='field-'+field.name,
-                                                    placeholder=field.placeholder,
-                                                    value=data[field.name],
-                                                    error=errors[field.name],
-                                                    lang=h.lang(),
-                                                    classes=[]) }}
+                {{ dform.conforms_to(field.name,
+                                     label=field.label,
+                                     id='field-'+field.name,
+                                     placeholder=field.placeholder,
+                                     value=data[field.name],
+                                     error=errors[field.name],
+                                     lang=h.lang(),
+                                     help=field.help,
+                                     classes=[]) }}
             {% elif field.element == 'licenses_tree' %}
 
                 {% set licenses = h.get_resource_licenses_tree(data[field.name], lang=h.lang()) %}
 
-                    {{ dcatapit_form_macros.select(field.name,
+                    {{ dform.select(field.name,
                                    label=field.label,
                                    id='field-' + field.name,
                                    options=licenses,
                                    selected=data[field.name],
-                                   error=errors[field.name]) }}
+                                   error=errors[field.name],
+                                   help=field.help) }}
 
             {% elif field.element == 'alternate_identifier' %}
 
-                    {{ dcatapit_form_macros.alternate_identifier(field.name,
-                                                                 label=field.label,
-                                                                 id='field-'+field.name,
-                                                                 value=data[field.name],
-                                                                 error=errors[field.name],
-                                                                 lang=h.lang()) }}
+                    {{ dform.alternate_identifier(field.name,
+                                                  label=field.label,
+                                                  id='field-'+field.name,
+                                                  value=data[field.name],
+                                                  error=errors[field.name],
+                                                  lang=h.lang(),
+                                                  help=field.help
+                                                  ) }}
 
             {% elif field.element == 'creator' %}
 
-                    {{ dcatapit_form_macros.creator(name=field.name,
+                    {{ dform.creator(name=field.name,
+                                          label=field.label,
+                                          id='field-'+field.name,
+                                          value=data[field.name],
+                                          error=errors[field.name],
+                                          couples=field._couples,
+                                          lang=h.lang(),
+                                          help=field.help) }}
+
+            {% elif field.element == 'temporal_coverage' %}
+
+                    {{ dform.temporal_coverage(name=field.name,
                                                     label=field.label,
                                                     id='field-'+field.name,
                                                     value=data[field.name],
                                                     error=errors[field.name],
                                                     couples=field._couples,
-                                                    lang=h.lang()) }}
-
-            {% elif field.element == 'temporal_coverage' %}
-
-                    {{ dcatapit_form_macros.temporal_coverage(name=field.name,
-                                                               label=field.label,
-                                                               id='field-'+field.name,
-                                                               value=data[field.name],
-                                                               error=errors[field.name],
-                                                               couples=field._couples,
-                                                               lang=h.lang()) }}
+                                                    lang=h.lang(),
+                                                    help=field.help) }}
 
             {% endif %}
 
