@@ -137,22 +137,22 @@ Old implementation of the couple element (one element with comma separated value
     {% set values = ['', ''] %}
 
     <div class="temporal-coverage-wrap">
-    <div class="temporal-coverage template control-custom">
-    {% call  couple(name,
-                labels=labels,
-                names=names,
-                id="",
-                label=label,
-                values=values,
-                placeholders=placeholders,
-                error=error,
-                types=types) %}
+        <div class="temporal-coverage template control-custom">
+        {% call  couple(name,
+                    labels=labels,
+                    names=names,
+                    id="",
+                    label=label,
+                    values=values,
+                    placeholders=placeholders,
+                    error=error,
+                    types=types) %}
 
-                <span class="remove" data-remove-parent=".temporal-coverage">
-                    <i class="icon-minus" title="remove"></i>
-                    {% trans %}Remove temporal-coverage{% endtrans %} 
-                </span>
-    {% endcall %}
+                    <span class="remove" data-remove-parent=".temporal-coverage">
+                        <i class="icon-minus" title="remove"></i>
+                        {% trans %}Remove temporal-coverage{% endtrans %} 
+                    </span>
+        {% endcall %}
     </div>
         <div class="temporal-coverage_container add_new_container" data-add-with=".add_new_temporal-coverage" data-add-template=".temporal-coverage.template"></div>
 
