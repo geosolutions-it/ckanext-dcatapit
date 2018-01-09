@@ -212,8 +212,11 @@ class TestDCATAPITProfileParsing(BaseParseTest):
             'name': 'test-rdf-dcat-source',
             'url': mock_url,
             'source_type': 'dcat_rdf',
+            'created': datetime.now(),
+            'metadata_created': datetime.now(),
         }
-        default_ctx = {'defer_commit': True}
+        default_ctx = {'ignore_auth': True,
+                       'defer_commit': False}
         harvest_source = helpers.call_action('harvest_source_create',
                                        default_ctx, **source_dict)
 
@@ -293,7 +296,9 @@ class TestDCATAPITProfileParsing(BaseParseTest):
                                       context={'user': user_name},
                                       name='existing-group')
 
-        context = {'user': 'dummy', 'defer_commit': True}
+        context = {'user': 'dummy',
+                   'ignore_auth': True,
+                   'defer_commit': False}
         package_schema = schema.default_create_package_schema()
         context['schema'] = package_schema
         _p = {'frequency': 'manual',
@@ -309,6 +314,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
               'modified': datetime.now(),
               'publisher_identifier': 'dummy',
               'metadata_created' : datetime.now(),
+              'metadata_modified': datetime.now(),
               'guid': unicode(uuid.uuid4),
               'identifier': 'dummy'}
         
@@ -319,8 +325,8 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         p = Package.get(package_data['id'])
 
         # no groups should be assigned at this point (no map applied)
-        assert {'theme': ['non-mappable', 'thememap1']} == p.extras, (_p['extras'], 'vs', p.extras,)
-        assert [] == p.get_groups()
+        assert {'theme': ['non-mappable', 'thememap1']} == p.extras, '{} vs {}'.format(_p['extras'], p.extras)
+        assert [] == p.get_groups(group_type='group'), 'should be {}, got {}'.format([], p.get_groups(group_type='group'))
 
         package_data = call_action('package_show', context=context, id=package_data['id'])
 
@@ -338,7 +344,9 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         p = Package.get(package_data['id'])
         context['package'] = p 
 
-        package_data = call_action('package_update', context=context, **package_dict)
+        package_data = call_action('package_update',
+                                   context=context,
+                                   **package_dict)
         
         meta.Session.flush()
         meta.Session.revision = repo.new_revision()
