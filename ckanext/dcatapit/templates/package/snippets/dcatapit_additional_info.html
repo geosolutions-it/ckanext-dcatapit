@@ -68,13 +68,13 @@
             <tr>
                 <th scope="row" class="dataset-label">{{ field.label }}</th>
                 <td class="dataset-details">
-                    <span style="font-weight:bold">{{_('Other Identifier')}}: </span><span>{{ alt_id.identifier }}</span><br/>
+                    <span style="font-weight:bold">{{_('OthId Identifier')}}: </span><span>{{ alt_id.identifier }}</span><br/>
 
                         {% if alt_id.agent %}
-                    <span style="font-weight:bold">{{_('Other Organization')}}: </span><span>{{ alt_id.agent.agent_name[lang] }}</span>
+                    <span style="font-weight:bold">{{_('OthId Organization')}}: </span><span>{{ alt_id.agent.agent_name[lang] }}</span>
                             {% if alt_id.agent.agent_identifier %}
                     <br/>
-                    <span style="font-weight:bold">{{_('Other Organization ID')}}: </span><span>{{ alt_id.agent.agent_identifier }}</span><br/>
+                    <span style="font-weight:bold">{{_('OthId Organization ID')}}: </span><span>{{ alt_id.agent.agent_identifier }}</span><br/>
                             {% endif %}
                         {% endif %}
                 </td>
