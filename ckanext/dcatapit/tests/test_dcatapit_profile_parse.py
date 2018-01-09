@@ -348,8 +348,8 @@ class TestDCATAPITProfileParsing(BaseParseTest):
                                    context=context,
                                    **package_dict)
         
-        meta.Session.flush()
-        meta.Session.revision = repo.new_revision()
+        #meta.Session.flush()
+        #meta.Session.revision = repo.new_revision()
 
         # check - only existing group should be assigned
         p = Package.get(package_data['id'])
