@@ -353,7 +353,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
         # check - only existing group should be assigned
         p = Package.get(package_data['id'])
-        groups = [g.name for g in p.get_groups() if not g.is_organization]
+        groups = [g.name for g in p.get_groups(group_type='group')]
         assert expected_groups_existing == groups, (expected_groups_existing, 'vs', groups,)
 
         config[DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS] = 'true'
@@ -368,7 +368,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
         # recheck - this time, new groups should appear
         p = Package.get(package_data['id'])
-        groups = [g.name for g in p.get_groups() if not g.is_organization]
+        groups = [g.name for g in p.get_groups(group_type='group')]
 
         assert len(expected_groups_new) == len(groups), (expected_groups_new, 'vs', groups,)
         assert set(expected_groups_new) == set(groups), (expected_groups_new, 'vs', groups,)
@@ -381,7 +381,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
         # recheck - there should be no duplicates
         p = Package.get(package_data['id'])
-        groups = [g.name for g in p.get_groups() if not g.is_organization]
+        groups = [g.name for g in p.get_groups(group_type='group')]
 
         assert len(expected_groups_multi) == len(groups), (expected_groups_multi, 'vs', groups,)
         assert set(expected_groups_multi) == set(groups), (expected_groups_multi, 'vs', groups,)
@@ -393,7 +393,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
         # recheck - there still should be no duplicates
         p = Package.get(package_data['id'])
-        groups = [g.name for g in p.get_groups() if not g.is_organization]
+        groups = [g.name for g in p.get_groups(group_type='group')]
 
         assert len(expected_groups_multi) == len(groups), (expected_groups_multi, 'vs', groups,)
         assert set(expected_groups_multi) == set(groups), (expected_groups_multi, 'vs', groups,)
