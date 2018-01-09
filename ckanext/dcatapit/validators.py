@@ -149,7 +149,6 @@ def dcatapit_conforms_to(value, context):
 
             if prop_name == 'referenceDocumentation':
                 if prop_val:
-
                     # keep unique values
                     processed = set([])
                     for ref_doc in prop_val:
