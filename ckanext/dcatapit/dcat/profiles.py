@@ -274,6 +274,10 @@ class ItalianDCATAPProfile(RDFProfile):
                 log.warn("Distribution not found in dataset %s", resource_uri)
                 continue
 
+            # fix the CKAN resource's url set by the dcat extension
+            resource_dict['url'] = (self._object_value(distribution, DCAT.downloadURL) or
+                                    self._object_value(distribution, DCAT.accessURL))
+
             # URI 0..1
             for predicate, key, base_uri in (
                     (DCT['format'], 'format', FORMAT_BASE_URI), # Format

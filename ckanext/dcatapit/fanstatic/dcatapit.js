@@ -31,6 +31,9 @@ dcatapit.templated_input = {
 
         },
 
+        sub_set_error: function(){
+
+        },
 
         /** install onclick handlers for main templates
         */
@@ -95,11 +98,15 @@ dcatapit.templated_input = {
 
             for (var i=0; i< values.length; i++){
                 var value = values[i];
-                this.add_row(template, tmpl_container, value);
+                var elm = this.add_row(template, tmpl_container, value);
+                this.set_error(elm);
 
             }
         },
 
+        set_error: function(elm){
+            this.sub_set_error(elm);
+        },
         extract_from_element: function(elms){
             var out = {};
             var existing = $(elms).data(this.options.data_name) || {};
@@ -403,6 +410,12 @@ ckan.module('dcatapit-temporal-coverage', function($){
                 ui.attr('lang', this.lang);
             }
         },
+        sub_set_error: function(elm){
+            if (typeof this.options.error == 'string' && this.options.error.length> 1){
+
+                $('.control-group', elm).addClass('error');
+            }
+        }
 
     };
     return $.extend({}, dcatapit.templated_input, temporal_coverage);
