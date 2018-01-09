@@ -5,10 +5,19 @@ from ckan.common import _, ungettext
 
 from ckan.logic.validators import url_validator
 from ckan.plugins.toolkit import Invalid
+import ckan.plugins.toolkit as toolkit
 from datetime import datetime
+from ckan.lib.i18n import get_locales
 
 log = logging.getLogger(__file__)
 
+try:
+    from ckan.common import config
+except ImportError:
+    from pylons import config
+
+DEFAULT_LANG = config.get('ckan.locale_default', 'en')
+available_locales = get_locales()
 
 def is_blank (string):
     return not (string and string.strip())
@@ -43,6 +52,23 @@ def dcatapit_id_unique(value, context):
             raise Invalid(_('Another package exists with the same identifier'))
 
     return value
+
+def _populate_multilang_dict(prop_val):
+    """
+    This will ensure all handled locales are populated
+    Get default lang value,
+    populate other languagesif needed
+    """
+    default_value = prop_val.get(DEFAULT_LANG)
+    if default_value is None:
+        try:
+            default_value = [p for p in prop_val.values() if p][0]
+        except IndexError:
+            default_value = ''
+
+    for l in available_locales:
+        if not prop_val.get(l):
+            prop_val[l] = default_value
 
 def dcatapit_conforms_to(value, context):
     """
@@ -92,10 +118,9 @@ def dcatapit_conforms_to(value, context):
                 prop_val = None
             if prop_val is None:
                 continue
-
             if not isinstance(prop_val, allowed_types):
                 raise Invalid(_("conforms_to property {} is not valid type").format(prop_name))
-
+           
             # {lang -> value} mapping
             if allowed_types == dict:
                 for k, v in prop_val.items():
@@ -103,8 +128,9 @@ def dcatapit_conforms_to(value, context):
                         raise Invalid(_("conforms_to property {} should have {} key as string").format(prop_name, k))
                     if not isinstance(v, (str, unicode,)):
                         raise Invalid(_("conforms_to property {} should have {} value as string").format(prop_name, k))
-                    if not v:
+                    if v is None:
                         raise Invalid(_("conforms_to property {} for {} lang should not be empty").format(prop_name, k))
+                _populate_multilang_dict(prop_val)
 
         if prop_name == 'referenceDocumentation':
             if prop_val:
@@ -116,7 +142,7 @@ def dcatapit_conforms_to(value, context):
                     url_validator('ref_doc', {'ref_doc': ref_doc}, errors, {'model': None, 'session': None} )
                     if errors['ref_doc']:
                         raise Invalid(errors['ref_doc'])
-    return value
+    return json.dumps(data)
 
 
 def dcatapit_alternate_identifier(value, context):
@@ -147,7 +173,6 @@ def dcatapit_alternate_identifier(value, context):
 
     allowed_keys = ['identifier', 'agent']
     agent_allowed_keys = ['agent_identifier', 'agent_name']
-
     for elm in data:
         if not isinstance(elm, dict):
             raise Invalid(_("Each alternate_identifier element should be a dict"))
@@ -167,11 +192,13 @@ def dcatapit_alternate_identifier(value, context):
             if k == 'agent_name':
                 if not isinstance(v, dict):
                     raise Invalid(_("alternate_identifier agent name should be a dict"))
+                _populate_multilang_dict(v)
+
             else:
                 if not isinstance(v, (str,unicode,)):
                     raise Invalid(_("alternate_identifier agent {} key should be string").format(k))
 
-    return value
+    return json.dumps(data)
 
 
 def dcatapit_creator(value, context):
@@ -204,10 +231,11 @@ def dcatapit_creator(value, context):
             if k in localized_keys:
                 if not isinstance(val, dict):
                     raise Invalid(_("Creator {} value should be dict, got {} instead").format(k, type(val)))
+                _populate_multilang_dict(val)
             else:
                 if not isinstance(val, (str, unicode,)):
                     raise Invalid(_("Creator {} value should be string, got {} instead").format(k, type(val)))
-    return value
+    return json.dumps(data)
 
 
 DATE_FORMATS = ['%Y-%m-%d',
@@ -264,4 +292,4 @@ def dcatapit_temporal_coverage(value, context):
         if tmp.get('temporal_end') and tmp['temporal_start'] > tmp['temporal_end']:
             raise Invalid(_("Temporal coverage start {} is after end {}").format(tmp['temporal_start'], tmp['temporal_end']))
 
-    return value
+    return json.dumps(data)
