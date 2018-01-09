@@ -466,11 +466,12 @@ class ItalianDCATAPProfile(RDFProfile):
     def _conforms_to(self, conforms_id):
         ref_docs = [ unicode(val) for val in self.g.objects(conforms_id, DCATAPIT.referenceDocumentation)]
 
-        out = {'_ref': unicode(conforms_id),
-               'identifier': unicode(self.g.value(conforms_id, DCT.identifier)),
+        out = {'identifier': unicode(self.g.value(conforms_id, DCT.identifier)),
                'title': {},
                'description': {},
                'referenceDocumentation': ref_docs}
+        if isinstance(conforms_id, (URIRef, Literal,)):
+            out['uri'] = unicode(conforms_id)
 
         for t in self.g.objects(conforms_id, DCT.title):
             out['title'][t.language] = unicode(t)
@@ -623,8 +624,8 @@ class ItalianDCATAPProfile(RDFProfile):
 
             for item in conforms_to:
 
-                if item.get('_ref'):
-                    standard = URIRef(item['_ref'])
+                if item.get('uri'):
+                    standard = URIRef(item['uri'])
                 else:
                     standard = BNode()
 

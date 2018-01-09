@@ -89,29 +89,41 @@ def dcatapit_conforms_to(value, context):
     except (TypeError, ValueError,):
         try:
             old_data = value.split(',')
-            return json.dumps([{'identifier': v, 'title': {}, 'description': {}, 'referenceDocumentation': []} for v in old_data])
+            return json.dumps([{'identifier': v, 
+                                'title': {}, 
+                                'description': {}, 
+                                'referenceDocumentation': []} for v in old_data])
         except (AttributeError, TypeError, ValueError,):
             raise Invalid(_("Invalid payload for conforms_to"))
     if not isinstance(data, list):
         raise Invalid(_("List expected for conforms_to values"))
 
-    allowed_keys = ['_ref', 'identifier', 'title', 'description', 'referenceDocumentation']
+    allowed_keys = ['uri', 'identifier', 'title', 'description', 'referenceDocumentation']
 
+    new_data = []
     for elm in data:
+        new_elm = {}
         if not isinstance(elm, dict):
             raise Invalid(_("Each conforms_to element should be a dict"))
+
+        # rewrite _ref to uri for older data
+        _ref = elm.pop('_ref', None)
+        if _ref and not elm.get('uri'):
+            elm['uri'] = _ref
+            
         for k in elm.keys():
             if k not in allowed_keys:
                 raise Invalid(_("Unexpected {} key in conforms_to value").format(k))
         if not isinstance(elm.get('identifier'), (str, unicode,)):
             raise Invalid(_("conforms_to element should contain identifier"))
 
-        for prop_name, allowed_types in (('_ref', (str, unicode,),),
+        for prop_name, allowed_types in (('uri', (str, unicode,),),
+                                         ('identifier', (str, unicode,)),
                                          ('title', dict,),
                                          ('description', dict,),
                                          ('referenceDocumentation', list,),
                                          ):
-            # those are not obligatory
+            # those are not obligatory fields
             try:
                 prop_val = elm[prop_name]
             except KeyError:
@@ -132,17 +144,30 @@ def dcatapit_conforms_to(value, context):
                         raise Invalid(_("conforms_to property {} for {} lang should not be empty").format(prop_name, k))
                 _populate_multilang_dict(prop_val)
 
-        if prop_name == 'referenceDocumentation':
-            if prop_val:
-                for ref_doc in prop_val:
-                    if not isinstance(ref_doc, (str, unicode,)):
-                        raise Invalid(_("conforms_to property referenceDocumentation should contain urls"))
-                    errors = {'ref_doc': []}
+            if prop_name == 'uri' and prop_val == '':
+                continue
 
-                    url_validator('ref_doc', {'ref_doc': ref_doc}, errors, {'model': None, 'session': None} )
-                    if errors['ref_doc']:
-                        raise Invalid(errors['ref_doc'])
-    return json.dumps(data)
+            if prop_name == 'referenceDocumentation':
+                if prop_val:
+
+                    # keep unique values
+                    processed = set([])
+                    for ref_doc in prop_val:
+                        if not isinstance(ref_doc, (str, unicode,)):
+                            raise Invalid(_("conforms_to property referenceDocumentation should contain urls"))
+                        errors = {'ref_doc': []}
+
+                        url_validator('ref_doc',
+                                      {'ref_doc': ref_doc},
+                                      errors, 
+                                      {'model': None, 'session': None})
+                        if errors['ref_doc']:
+                            raise Invalid(errors['ref_doc'])
+                        processed.add(ref_doc)
+                    prop_val = list(processed)
+            new_elm[prop_name] = prop_val
+        new_data.append(new_elm)
+    return json.dumps(new_data)
 
 
 def dcatapit_alternate_identifier(value, context):

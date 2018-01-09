@@ -213,7 +213,10 @@ ckan.module('dcatapit-conforms-to', function($){
                     }
                     var elval = elm.val();
                     if (elval !== ""){
-                        out[elm_name].push(elval);
+                        // there can be older entries for this
+                        if ($.inArray(elval, out[elm_name]) < 0){
+                            out[elm_name].push(elval);
+                        }
                     }
                 }
         }
