@@ -109,7 +109,7 @@ Old implementation of the couple element (one element with comma separated value
                 labels=labels,
                 names=names,
                 id="",
-                label="",
+                label=label,
                 values=values,
                 placeholders=placeholders,
                 error=error,
@@ -142,9 +142,10 @@ Old implementation of the couple element (one element with comma separated value
                     labels=labels,
                     names=names,
                     id="",
-                    label="",
+                    label=label,
                     values=values,
                     placeholders=placeholders,
+                    error=error,
                     types=types) %}
 
                     <span class="remove" data-remove-parent=".temporal-coverage">
@@ -152,8 +153,7 @@ Old implementation of the couple element (one element with comma separated value
                         {% trans %}Remove temporal-coverage{% endtrans %} 
                     </span>
         {% endcall %}
-        </div>
-
+    </div>
         <div class="temporal-coverage_container add_new_container" data-add-with=".add_new_temporal-coverage" data-add-template=".temporal-coverage.template"></div>
 
         <span class="add_new_temporal-coverage add_new {% if error and error is iterable %}error{% endif %}"><i class="icon-plus"></i> {% trans %}Add new Temporal Coverage{% endtrans %}</span>
