@@ -69,9 +69,11 @@ def dcatapit_conforms_to(value, context):
     if not isinstance(data, list):
         raise Invalid(_("List expected for conforms_to values"))
 
-    allowed_keys = ['_ref', 'identifier', 'title', 'description', 'referenceDocumentation']
+    allowed_keys = ['uri', 'identifier', 'title', 'description', 'referenceDocumentation']
 
+    new_data = []
     for elm in data:
+        new_elm = {}
         if not isinstance(elm, dict):
             raise Invalid(_("Each conforms_to element should be a dict"))
         for k in elm.keys():
@@ -80,7 +82,7 @@ def dcatapit_conforms_to(value, context):
         if not isinstance(elm.get('identifier'), (str, unicode,)):
             raise Invalid(_("conforms_to element should contain identifier"))
 
-        for prop_name, allowed_types in (('_ref', (str, unicode,),),
+        for prop_name, allowed_types in (('uri', (str, unicode,),),
                                          ('title', dict,),
                                          ('description', dict,),
                                          ('referenceDocumentation', list,),
@@ -106,17 +108,22 @@ def dcatapit_conforms_to(value, context):
                     if not v:
                         raise Invalid(_("conforms_to property {} for {} lang should not be empty").format(prop_name, k))
 
-        if prop_name == 'referenceDocumentation':
-            if prop_val:
-                for ref_doc in prop_val:
-                    if not isinstance(ref_doc, (str, unicode,)):
-                        raise Invalid(_("conforms_to property referenceDocumentation should contain urls"))
-                    errors = {'ref_doc': []}
+            if prop_name == 'uri' and prop_val == '':
+                continue
 
-                    url_validator('ref_doc', {'ref_doc': ref_doc}, errors, {'model': None, 'session': None} )
-                    if errors['ref_doc']:
-                        raise Invalid(errors['ref_doc'])
-    return value
+            if prop_name == 'referenceDocumentation':
+                if prop_val:
+                    for ref_doc in prop_val:
+                        if not isinstance(ref_doc, (str, unicode,)):
+                            raise Invalid(_("conforms_to property referenceDocumentation should contain urls"))
+                        errors = {'ref_doc': []}
+
+                        url_validator('ref_doc', {'ref_doc': ref_doc}, errors, {'model': None, 'session': None} )
+                        if errors['ref_doc']:
+                            raise Invalid(errors['ref_doc'])
+            new_elm[prop_name] = prop_val
+        new_data.append(new_elm)
+    return json.dumps(new_data)
 
 
 def dcatapit_alternate_identifier(value, context):
