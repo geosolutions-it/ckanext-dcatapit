@@ -8,3 +8,4 @@ except ImportError:
 
 from dcatapit_model import *
 from license import *
+from subtheme import *
