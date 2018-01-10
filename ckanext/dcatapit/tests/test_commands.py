@@ -14,6 +14,7 @@ class BaseOptions(object):
     def __init__(self, options):
         self.url = options.get("url", None)
         self.name = options.get("name", None)
+        self.format = options.get("format", None)
         self.filename = options.get("filename", None)
 
 class BaseCommandTest(object):
@@ -34,7 +35,8 @@ class TestDCATAPITCommand(BaseCommandTest):
 
         options = BaseOptions({
             'url': vocab_file_path,
-            'name': 'eu_themes'
+            'name': 'eu_themes',
+
         })
 
         setattr(dcatapit_commands, 'options', options)

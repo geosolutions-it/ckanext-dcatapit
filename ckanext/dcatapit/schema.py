@@ -86,7 +86,7 @@ def get_custom_organization_schema():
 	    },
 	    {
 		    'name': 'region',
-		    'validator': ['not_empty'],
+		    'validator': ['ignore_missing', 'not_empty'],
 		    'element': 'region',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'regions',

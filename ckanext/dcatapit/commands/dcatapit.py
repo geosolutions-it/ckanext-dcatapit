@@ -87,8 +87,8 @@ class DCATAPITCommands(CkanCommand):
                                help='Path to a file')
         self.parser.add_option('--url', dest='url', default=None,
                                help='URL to a resource')
-        self.parser.add_option('--format', dest='format', default=None,
-                                help="Use specific graph format (xml, turtle..)")
+        self.parser.add_option('--format', dest='format', default='xml',
+                                help="Use specific graph format (xml, turtle..), default: xml")
         self.parser.add_option('--name', dest='name', default=None,
                                help='Name of the vocabulary to work with')
 
@@ -117,8 +117,10 @@ class DCATAPITCommands(CkanCommand):
         ##
         # Checking command given options
         ##
+
         url = self.options.url
         filename = self.options.filename
+        format = self.options.format
 
         if not url and not filename:
             print "ERROR: No URL or FILENAME provided and one is required"
@@ -142,11 +144,10 @@ class DCATAPITCommands(CkanCommand):
             load_licenses_from_graph(filename, url)
             Session.commit()
             return
+        do_load(vocab_name, url=url, filename=filename, format=format)
 
-        do_load(vocab_name, url=url, filename=filename, format=self.options.format)
 
-
-def do_load_regions(g):
+def do_load_regions(g, vocab_name):
     concepts = []
     pref_labels = []
     for reg in g.subjects(None, URIRef('http://dati.gov.it/onto/clvapit#Region')):
@@ -163,7 +164,7 @@ def do_load_regions(g):
     return pref_labels, concepts
 
 
-def do_load_vocab(g):
+def do_load_vocab(g, vocab_name):
     concepts = []
     pref_labels = []
 
@@ -241,7 +242,7 @@ def do_load(vocab_name, url=None, filename=None, format=None):
     else:
         vocab_load = do_load_vocab
 
-    pref_labels, concepts = vocab_load(g)
+    pref_labels, concepts = vocab_load(g, vocab_name)
     ##
     # Creating the Tag Vocabulary using the given name
     ##
