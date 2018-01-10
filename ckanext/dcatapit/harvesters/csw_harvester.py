@@ -256,23 +256,13 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         package_dict['extras'].append({'key': 'creator_name', 'value': agent_name})
         package_dict['extras'].append({'key': 'creator_identifier', 'value': agent_code or default_agent_code})
 
-        # End of processing, return the modified package
-        return package_dict
 
-    def import_stage(self, harvest_object):
-        return super(DCATAPITCSWHarvester, self).import_stage(harvest_object)
-
-
-
-
-    def get_package_dict(self, iso_values, harvest_object):
-        pkg_dict = super(CSWHarvester, self).get_package_dict(iso_values, harvest_object)
-
-        license_id = pkg_dict.get('license_id')
+        #  -- license handling -- #
+        license_id = package_dict.get('license_id')
         license_url = None
         license = None
         access_constraints = None
-        for ex in pkg_dict['extras']:
+        for ex in package_dict['extras']:
             if ex['key'] == 'license_url':
                 license_url = ex['value']
             elif ex['key'] == 'license':
@@ -286,10 +276,8 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         else:
             l, default = License.find_by_token(access_constraints, license, license_id, license_url)
         
-        for res in pkg_dict['resources']:
+        for res in package_dict['resources']:
             res['license_type'] = l.uri
 
-        return pkg_dict
-
-            
-
+        # End of processing, return the modified package
+        return package_dict

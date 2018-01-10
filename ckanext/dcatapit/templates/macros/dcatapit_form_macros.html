@@ -109,7 +109,7 @@ Old implementation of the couple element (one element with comma separated value
                 labels=labels,
                 names=names,
                 id="",
-                label="",
+                label=label,
                 values=values,
                 placeholders=placeholders,
                 error=error,
@@ -137,26 +137,35 @@ Old implementation of the couple element (one element with comma separated value
     {% set values = ['', ''] %}
 
     <div class="temporal-coverage-wrap">
-    <div class="temporal-coverage template control-custom">
-    {% call  couple(name,
-                labels=labels,
-                names=names,
-                id="",
-                label="",
-                values=values,
-                placeholders=placeholders,
-                error=error,
-                types=types) %}
+        <div class="temporal-coverage template control-custom">
+        {% call  couple(name,
+                    labels=labels,
+                    names=names,
+                    id="",
+                    label=label,
+                    values=values,
+                    placeholders=placeholders,
+                    types=types) %}
 
-                <span class="remove" data-remove-parent=".temporal-coverage"><i class="icon-minus" title="remove"></i>{% trans %}Remove temporal-coverage{% endtrans %}</span>
-    {% endcall %}
+                    <span class="remove" data-remove-parent=".temporal-coverage">
+                        <i class="icon-minus" title="remove"></i>
+                        {% trans %}Remove temporal-coverage{% endtrans %} 
+                    </span>
+        {% endcall %}
     </div>
+        <div class="temporal-coverage_container add_new_container" data-add-with=".add_new_temporal-coverage" data-add-template=".temporal-coverage.template"></div>
 
-    <div class="temporal-coverage_container add_new_container" data-add-with=".add_new_temporal-coverage" data-add-template=".temporal-coverage.template"></div>
+        <span class="add_new_temporal-coverage add_new {% if error and error is iterable %}error{% endif %}"><i class="icon-plus"></i> {% trans %}Add new Temporal Coverage{% endtrans %}</span>
 
-            <span class="add_new_temporal-coverage add_new"><i class="icon-plus"></i> {% trans %}Add new Temporal Coverage{% endtrans %}</span>
-
-    <input type="hidden" name="temporal_coverage" value="{{ value or dict()| safe}}" data-module="dcatapit-temporal-coverage" data-module-template=".temporal-coverage" data-module-container=".temporal-coverage_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="temporal-coverage" />
+        <input type="hidden" name="temporal_coverage" value="{{ value or dict()| safe}}" data-module="dcatapit-temporal-coverage" data-module-template=".temporal-coverage" data-module-container=".temporal-coverage_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="temporal-coverage" data-module-error="{{ error|join(',') }}" />
+    
+        {% if error and error is iterable %}
+        <div class="errors">
+            {% for err in error %}
+            <span class="error-item">{{ err }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 {% endmacro %}
 
@@ -199,7 +208,7 @@ Old implementation of the couple element (one element with comma separated value
 
     <div class="conforms_to template">
         
-        <input type="hidden" name="conforms_to__ref" value=""/>
+        <input type="hidden" name="conforms_to_uri" value=""/>
         
         <div class="input-prepend">
             <label for="conforms_to_identifier" class="add-on">{% trans %}Std Identifier{% endtrans %}
