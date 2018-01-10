@@ -9,7 +9,17 @@
 .add_new {
     cursor: pointer;
 }
+.temporal-coverage-wrap .add_new {
+    margin-left: 130px;
+}
 
+.temporal-coverage-wrap .add_new.error {
+    color: #c6898b;
+}
+
+.temporal-coverage-wrap {
+    margin-bottom: 4px;
+}
 .std-key {
     font-weight: bold;
 }
@@ -28,4 +38,15 @@
     text-align: right;
     cursor: pointer;
     color: #e33;
+}
+
+.errors .error-item {
+    display: block;
+    background-color: #c6898b;
+    color: #fff;
+    padding: 4px;
+    margin-left: 130px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
 }

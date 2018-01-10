@@ -108,8 +108,13 @@
                 <th scope="row" class="dataset-label">{{ field.label }}</th>
                 <td class="dataset-details">
                     <span style="font-weight:bold">{{_('Std Identifier')}}: </span><span>{{ std.identifier }}</span><br/>
+
+                        {% if std.get('title') %}
                     <span style="font-weight:bold">{{_('Std Title')}}: </span><span>{{ std.title[lang] }}</span><br/>
+                        {% endif %}
+                        {% if std.get('description') %}
                     <span style="font-weight:bold">{{_('Std Description')}}: </span><span>{{ std.description[lang] }}</span><br/>
+                        {% endif %}
                         {% for ref in std['referenceDocumentation'] %}
                     <span style="font-weight:bold">{{_('Std Reference documentation')}}: </span><span><a href="{{ ref }}">{{ ref }}</a></span><br/>
                         {% endfor %}										

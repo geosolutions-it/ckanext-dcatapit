@@ -31,6 +31,9 @@ dcatapit.templated_input = {
 
         },
 
+        sub_set_error: function(){
+
+        },
 
         /** install onclick handlers for main templates
         */
@@ -95,15 +98,19 @@ dcatapit.templated_input = {
 
             for (var i=0; i< values.length; i++){
                 var value = values[i];
-                this.add_row(template, tmpl_container, value);
+                var elm = this.add_row(template, tmpl_container, value);
+                this.set_error(elm);
 
             }
         },
 
+        set_error: function(elm){
+            this.sub_set_error(elm);
+        },
         extract_from_element: function(elms){
             var out = {};
             var existing = $(elms).data(this.options.data_name) || {};
-            $.merge(out, existing);
+            $.extend(out, existing);
             var lang = this.lang;
             var inputs = $('input, select', elms);
             var that = this;
@@ -213,7 +220,10 @@ ckan.module('dcatapit-conforms-to', function($){
                     }
                     var elval = elm.val();
                     if (elval !== ""){
-                        out[elm_name].push(elval);
+                        // there can be older entries for this
+                        if ($.inArray(elval, out[elm_name]) < 0){
+                            out[elm_name].push(elval);
+                        }
                     }
                 }
         }
@@ -252,7 +262,7 @@ ckan.module('dcatapit-alternate-identifier', function($){
 
                 if (elm_name.startsWith('agent_')){
                     if ($.inArray(elm_name, this.localized)> -1){
-                        if (!$.isPlainObject(out[elm_name])){
+                        if (!$.isPlainObject(agent[elm_name])){
                             agent[elm_name] = {};
                         }
                         var elval = elm.val();
@@ -400,6 +410,12 @@ ckan.module('dcatapit-temporal-coverage', function($){
                 ui.attr('lang', this.lang);
             }
         },
+        sub_set_error: function(elm){
+            if (typeof this.options.error == 'string' && this.options.error.length> 1){
+
+                $('.control-group', elm).addClass('error');
+            }
+        }
 
     };
     return $.extend({}, dcatapit.templated_input, temporal_coverage);

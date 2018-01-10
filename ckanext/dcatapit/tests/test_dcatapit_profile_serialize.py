@@ -50,7 +50,7 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
     def test_graph_from_dataset(self):
 
         conforms_to_in = [{'identifier': 'CONF1',
-                                       '_ref': 'conf01',
+                                       'uri': 'conf01',
                                  'title': {'en': 'title', 'it': 'title'},
                                  'referenceDocumentation': ['http://abc.efg/'],},
                                 {'identifier': 'CONF2',
@@ -176,8 +176,8 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             
             assert isinstance(check, dict)
 
-            if check.get('_ref'):
-                assert check['_ref'] == str(conf_id)
+            if check.get('uri'):
+                assert check['uri'] == str(conf_id)
             assert len(titles), "missing titles"
             
             assert (len(descs)> 0) == bool(check.get('description')), "missing descriptions"
