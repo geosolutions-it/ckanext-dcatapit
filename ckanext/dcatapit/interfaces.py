@@ -297,7 +297,7 @@ def get_license_from_dcat(license_doc, license_type, prefname, **license_names):
     
     l = None
     for lang, name in license_names.items():
-        l = License.get_by_lang(lang, _name)
+        l = License.get_by_lang(lang, name)
         if l:
             break
     if not l:

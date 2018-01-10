@@ -1,4 +1,5 @@
 import logging
+import json
 
 from ckan import logic
 from ckan import lib
@@ -13,6 +14,7 @@ import ckanext.dcatapit.interfaces as interfaces
 from   ckanext.dcatapit.dcat.harvester import map_nonconformant_groups
 from   ckanext.dcatapit.mapping import populate_theme_groups
 from   ckanext.dcatapit.helpers import DEFAULT_ORG_CTX
+from   ckanext.dcatapit.model.license import License
 
 from ckan.model.package import Package
 from ckan.model import Session, repo
@@ -297,11 +299,41 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         if search_terms:
             dataset_dict['dcat_theme'] = search_terms
 
+        search_subthemes = []
+        for t in themes:
+            search_subthemes.extend(t['subthemes'])
+
+        if search_terms:
+            dataset_dict['dcat_theme'] = search_terms
+        if search_subthemes:
+            dataset_dict['dcat_subtheme'] = search_subthemes
+
+        ddict = json.loads(dataset_dict['data_dict'])
+        resources = ddict.get('resources') or []
+        _licenses = list(set([r.get('license_type') for r in resources if r.get('license_type')]))
+
+        licenses = []
+        for l in _licenses:
+            lic = License.get(l)
+            for loclic in lic.get_names():
+                lname = loclic['name']
+                lang = loclic['lang']
+                if lname:
+                    dataset_dict['resource_license_{}'.format(lang)] = lname
+
+        dataset_dict['resource_license'] = _licenses
+
         org_id = dataset_dict['owner_org']
         organization_show = plugins.toolkit.get_action('organization_show')
         org = organization_show(DEFAULT_ORG_CTX, {'id': org_id})
         if org.get('region'):
-            dataset_dict['organization_region'] = org['region']
+
+            # multilang!
+            region_base = org['region']
+            tags = interfaces.get_all_localized_tag_labels(region_base)
+            for lang, region in tags.items():
+                dataset_dict['organization_region_{}'.format(lang)] = region
+
         return dataset_dict
 
     def before_search(self, search_params):
@@ -580,8 +612,12 @@ class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
 
     # IFacets
     def dataset_facets(self, facets_dict, package_type):
+        lang = interfaces.get_language() or validators.DEFAULT_LANG
         facets_dict['source_catalog_title'] = plugins.toolkit._("Source catalogs")
-        facets_dict['organization_region'] = plugins.toolkit._("Organization region")
+        facets_dict['organization_region_{}'.format(lang)] = plugins.toolkit._("Organization region")
+        facets_dict['resource_license_{}'.format(lang)] = plugins.toolkit._("Resources license")
+        facets_dict['dcat_subthemes_{}'.format(lang)] = plugins.toolkit._("Subthemes")
+
         return facets_dict
 
     def organization_facets(self, facets_dict, organization_type, package_type):

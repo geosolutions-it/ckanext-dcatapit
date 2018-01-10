@@ -118,6 +118,7 @@ The ckanext-dcatapit RDF harvester also harvests localized fields in multiple la
 11. Update the Solr schema.xml file used by CKAN introducing the following element:
 
         <field name="dcat_theme" type="string" indexed="true" stored="false" multiValued="true"/>
+        <field name="dcat_subtheme" type="string" indexed="true" stored="false" multiValued="true"/>
         
 11. Restart Solr.
 

@@ -299,7 +299,7 @@ class ItalianDCATAPProfile(RDFProfile):
             if license:
 
                 license_doc = unicode(license)
-                dcat_license = self._object_value(distribution, DCT.type)
+                dcat_license = self._object_value(license, DCT.type)
                 license_names = self.g.objects(license, FOAF.name) # may be either the title or the id
                 license_version = self._object_value(license, FOAF.versionInfo)
 
