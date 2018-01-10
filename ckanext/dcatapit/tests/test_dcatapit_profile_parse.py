@@ -280,7 +280,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         if not user:
             user = call_action('user_create',
                                name='dummy',
-                               password='dummy',
+                               password='dummydummy',
                                email='dummy@dummy.com')
             user_name = user['name']
         else:
