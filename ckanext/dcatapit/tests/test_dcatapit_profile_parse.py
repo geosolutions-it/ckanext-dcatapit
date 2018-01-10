@@ -44,6 +44,7 @@ from ckanext.dcatapit.harvesters.ckanharvester import CKANMappingHarvester
 from ckanext.harvest.model import HarvestObject
 
 from ckanext.dcatapit.plugin import DCATAPITGroupMapper
+from ckanext.dcatapit.tests.utils import load_themes
 
 from ckanext.dcatapit.model.license import _get_graph, load_from_graph, License
 
@@ -109,13 +110,15 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         eq_(dataset['holder_name'], 'bolzano')
         eq_(dataset['holder_identifier'], '234234234')
 
-        alternate_identifiers = json.loads(dataset['alternate_identifier'])
-        eq_(set([ai['identifier'] for ai in alternate_identifiers]), set(['ISBN:123', 'TEST']))
+        alternate_identifier = set([i['identifier'] for i in json.loads(dataset['alternate_identifier'])])
+        eq_(alternate_identifier, set(['ISBN:123', 'TEST']))
 
-        theme = dataset['theme'][1:-1].split(',') if ',' in dataset['theme'] else [dataset['theme']]
-        theme.sort()
-        theme = '{' + ','.join([str(x) for x in theme]) + '}'
-        eq_(theme, '{ECON,ENVI}')
+        theme = dataset['theme']
+        theme = json.loads(dataset['theme'])
+        allowed_themes = ('ECON', 'ENVI',)
+        assert theme, 'got {}'.format(dataset['theme'])
+        for t in theme:
+            assert t.get('theme') in allowed_themes, "themes {} not in {}".format(theme, allowed_themes)
 
         eq_(dataset['geographical_geonames_url'], 'http://www.geonames.org/3181913')
 
@@ -608,6 +611,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
     def test_temporal_coverage(self):
 
+        load_themes()
         temporal_coverage = [{'temporal_start': '2001-01-01T00:00:00', 'temporal_end': '2001-02-01T10:11:12'},
                              {'temporal_start': '2001-01-01T00:00:00', 'temporal_end': '2001-02-01T10:11:12'},
                             ]
@@ -670,3 +674,57 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         set2 = set([tuple(d.items()) for d in temporal_coverage])
 
         assert set1 == set2, "Got different temporal coverage sets: \n{}\n vs\n {}".format(set1, set2)
+
+
+
+    def test_subthemes(self):
+
+        load_themes()
+
+        subthemes = [{'theme': 'AGRI', 'subthemes': ['http://eurovoc.europa.eu/100253',
+                                                     'http://eurovoc.europa.eu/100258']},
+                     {'theme': 'ENVI', 'subthemes': []}]
+
+        dataset = {
+            'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
+            'name': 'test-dataset',
+            'title': 'Dataset di test DCAT_AP-IT',
+            'notes': 'dcatapit dataset di test',
+            'metadata_created': '2015-06-26T15:21:09.034694',
+            'metadata_modified': '2015-06-26T15:21:09.075774',
+            'tags': [{'name': 'Tag 1'}, {'name': 'Tag 2'}],
+            'issued':'2016-11-29',
+            'modified':'2016-11-29',
+            'frequency':'UPDATE_CONT',
+            'publisher_name':'bolzano',
+            'publisher_identifier':'234234234',
+            'creator_name':'test',
+            'creator_identifier':'412946129',
+            'holder_name':'bolzano',
+            'holder_identifier':'234234234',
+            'alternate_identifier':'ISBN,TEST',
+            'theme': json.dumps(subthemes),
+        }
+
+        s = RDFSerializer()
+        p = RDFParser(profiles=['euro_dcat_ap', 'it_dcat_ap'])
+        
+        serialized = s.serialize_dataset(dataset)
+
+        p.parse(serialized)
+        datasets = list(p.datasets())
+        
+        assert len(datasets) == 1
+        d = datasets[0]
+        themes = json.loads(dataset['theme'])
+        assert(len(themes) == len(subthemes) == 2)
+        for t in themes:
+            if t['theme'] == 'ENVI':
+                assert t['subthemes'] == []
+            elif t['theme'] == 'AGRI':
+                assert set(t['subthemes']) == set(subthemes[0]['subthemes'])
+            else:
+                assert False, "Unknown theme: {}".format(t)
+
+
+

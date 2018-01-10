@@ -1,4 +1,5 @@
-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import logging
 import re
@@ -9,6 +10,9 @@ import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit.model.license import (
     load_from_graph as load_licenses_from_graph,
     clear_licenses)
+
+from ckanext.dcatapit.model.subtheme import (
+    load_subthemes, clear_subthemes)
 from ckan.model.meta import Session
 
 from pylons import config
@@ -26,6 +30,7 @@ FREQUENCIES_THEME_NAME = 'frequencies'
 FILETYPE_THEME_NAME = 'filetype'
 LICENSES_NAME = 'licenses'
 REGIONS_NAME = 'regions'
+SUBTHEME_NAME = 'subthemes'
 
 log = logging.getLogger(__name__)
 
@@ -40,7 +45,7 @@ class DCATAPITCommands(CkanCommand):
        URL  is the url to a SKOS document
        FILE is the local path to a SKOS document
        FORMAT is rdflib format name (xml, turtle etc)
-       NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies, regions, licenses)
+       NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies, regions, licenses, subthemes)
        Where the corresponding rdf are:
           languages   -> http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf
           eu_themes   -> http://publications.europa.eu/mdr/resource/authority/data-theme/skos/data-theme-skos.rdf
@@ -49,6 +54,10 @@ class DCATAPITCommands(CkanCommand):
           regions     -> https://github.com/italia/daf-ontologie-vocabolari-controllati/blob/master/VocabolariControllati/ClassificazioneTerritorio/Istat-Classificazione-08-Territorio.rdf?raw=true
           filetype -> http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf
        PATH_TO_INI_FILE is the path to the Ckan configuration file
+
+     If you use subthemes, additional argument is required, path to EUROVOC rdf file:
+
+     paster --plugin=ckanext-dcatapit vocabulary load --filename EUROVOC_TO_THEMES_MAPPING_FILE --name subthemes --config=PATH_TO_INI_FILE  PATH_TO_EUROVOC
     '''
 
     summary = __doc__.split('\n')[0]
@@ -78,7 +87,8 @@ class DCATAPITCommands(CkanCommand):
                                         FREQUENCIES_THEME_NAME,
                                         FILETYPE_THEME_NAME,
                                         REGIONS_NAME,
-                                        LICENSES_NAME,)
+                                        LICENSES_NAME,
+                                        SUBTHEME_NAME)
 
     def __init__(self, name):
         super(DCATAPITCommands, self).__init__(name)
@@ -96,7 +106,12 @@ class DCATAPITCommands(CkanCommand):
         '''
         Parse command line arguments and call appropriate method.
         '''
-        cmd = self.args[0]
+        try:
+            cmd = self.args[0]
+        except IndexError:
+            print "ERROR: missing command"
+            print self.usage
+            return
         self._load_config()
 
         if cmd == 'load':
@@ -109,9 +124,11 @@ class DCATAPITCommands(CkanCommand):
             return
 
     def initdb(self):
-        from ckanext.dcatapit.model import setup as db_setup, setup_license_models
+        from ckanext.dcatapit.model import setup as db_setup, setup_license_models, setup_subtheme_models
+
         db_setup()
         setup_license_models()
+        setup_subtheme_models()
 
     def load(self):
         ##
@@ -144,6 +161,20 @@ class DCATAPITCommands(CkanCommand):
             load_licenses_from_graph(filename, url)
             Session.commit()
             return
+
+        if vocab_name == SUBTHEME_NAME:
+            clear_subthemes()
+            theme_map = self.options.filename
+            try:
+                eurovoc = self.args[-1]
+            except IndexError:
+                print "ERROR: Missing eurovoc file"
+                print self.usage
+                return
+            load_subthemes(theme_map, eurovoc)
+            Session.commit()
+            return
+            
         do_load(vocab_name, url=url, filename=filename, format=format)
 
 
@@ -206,7 +237,6 @@ def do_load_vocab(g, vocab_name):
 
     return pref_labels, concepts
 
-            
 
 def do_load(vocab_name, url=None, filename=None, format=None):
 

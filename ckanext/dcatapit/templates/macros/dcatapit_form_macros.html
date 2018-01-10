@@ -80,9 +80,9 @@ Old implementation of the couple element (one element with comma separated value
   {% endcall %}
 {% endmacro %}
 
+
 {% macro autocomplete(name, id='', label='', value='', placeholder='', type='text', error="", options=(), classes=[], attrs={}, is_required=false, multiple=True) %}
   {%- set extra_html = caller() if caller -%}
-
   {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
 
       <select id="{{name}}-hidden" placeholder="{{ placeholder }}" {% if multiple %}multiple{% endif %} name="{{ name }}" {{ attributes(attrs) }} data-module="autocomplete">
@@ -90,11 +90,52 @@ Old implementation of the couple element (one element with comma separated value
           <option value="{{ option.value }}"{% if value and option.value in value %} selected {% endif %}>{{ option.text or option.value }}</option>
         {% endfor %}
       </select>
-
   {% endcall %}
-
 {% endmacro %}
 
+
+{% macro theme(name, id='', label='', value='', placeholder='', type='text', error="", options=(), classes=[], attrs={}, is_required=false, multiple=True, use_autocomplete=True) %}
+  {%- set extra_html = caller() if caller -%}
+  {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
+
+      <select class="theme_select" placeholder="{{ placeholder }}" name="{{ name }}" {{ attributes(attrs) }} {% if multiple %}multiple{% endif %} {% if use_autocomplete %}data-module="autocomplete"{% endif %}>
+        {% for option in options %}
+          <option value="{{ option.value }}"{% if value and option.value in value %} selected {% endif %}>{{ option.text or option.value }}</option>
+        {% endfor %}
+      </select>
+  {% endcall %}
+{% endmacro %}
+
+
+{% macro subtheme(name, theme_class='', id='', label='', placeholder='', options='', classes=[]) %}
+    {% set id = id or 'subtheme_'+id %}
+    {%- set extra_html = caller() if caller -%}
+
+    {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
+    <select id="{{id}}" multiple class="subtheme_select" name="subthemes" placeholder="{{ placeholder }}" data-module="dcatapit-subtheme" data-module-theme=".theme .{{ theme_class }}">
+    </select>
+    {% endcall %}
+{% endmacro %}
+
+
+{% macro themes(name, id='', label='', value='', placeholder='', error='', options=(), classes=[], attrs={}, type='', sublabel='', is_required=False) %}
+<div class="theme-wrap">
+    <div class="template theme">
+        
+        {% call theme(name, id=id, label=label, placeholder=placeholder, error=error, options=options, classes=classes, attrs=attrs, multiple=False, use_autocomplete=False) %}
+        {% endcall %}
+
+        {% call subtheme(name, label=sublabel, placeholder=subplaceholder, options=suboptions, classes=classes) %}
+        {% endcall %}
+
+    <span class="remove remove_theme" data-remove-parent=".theme"><i class="icon-minus" title="remove"></i> {% trans %}Remove theme{% endtrans %}</span>
+    </div>
+
+    <div class="theme_container add_new_container" data-add-with=".add_new_theme" data-add-template=".theme.template"></div>
+    <span class="add_new_theme add_new"><i class="icon-plus"></i> {% trans %}Add new Theme{% endtrans %}</span>
+    <input type="hidden" name="theme" value="{{ value or list()| safe}}" data-module="dcatapit-theme" data-module-template=".theme" data-module-container=".theme_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="theme" />
+</div>
+{% endmacro %}
 
 {% macro creator(name, id, label, value, error, couples, lang) %}
     {% set labels = (couples[0].label, couples[1].label) %}
@@ -252,7 +293,6 @@ Old implementation of the couple element (one element with comma separated value
 
     {% endcall %}
 {% endmacro %}
-
 
 {%- macro attributes(attrs={}) -%}
   {%- for key, value in attrs.items() -%}

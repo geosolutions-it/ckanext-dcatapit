@@ -71,6 +71,11 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
         temporal_coverage = [{'temporal_start': '2001-01-01', 'temporal_end': '2001-02-01 10:11:12'},
                              {'temporal_start': '2001-01-01', 'temporal_end': '2001-02-01 11:12:13'},
                             ]
+
+        subthemes = [{'theme': 'AGRI', 'subthemes': ['http://eurovoc.europa.eu/100253',
+                                                     'http://eurovoc.europa.eu/100258']},
+                     {'theme': 'ENVI', 'subthemes': []}]
+
         dataset = {
             'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
             'name': 'test-dataset',
@@ -93,12 +98,15 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             'holder_identifier':'234234234',
             'alternate_identifier':json.dumps(alternate_identifiers),
             'temporal_coverage': json.dumps(temporal_coverage),
-            'theme':'ECON',
+            #'theme':'ECON',
             'geographical_geonames_url':'http://www.geonames.org/3181913',
             'language':'{DEU,ENG,ITA}',
             'is_version_of':'http://dcat.geo-solutions.it/dataset/energia-da-fonti-rinnovabili2',
             'conforms_to':json.dumps(conforms_to_in),
             'creator': json.dumps(creators),
+            'theme': json.dumps(subthemes),
+
+
         }
         
         pkg_id = dataset['id']

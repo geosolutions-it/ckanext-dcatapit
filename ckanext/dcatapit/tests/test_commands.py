@@ -1,9 +1,11 @@
 
 import os
 import nose
+import unittest
 import ckanext.dcatapit.interfaces as interfaces
 
 from ckanext.dcatapit.commands.dcatapit import DCATAPITCommands
+from ckanext.dcatapit.tests.utils import load_themes
 
 eq_ = nose.tools.eq_
 ok_ = nose.tools.ok_

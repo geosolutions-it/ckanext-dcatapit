@@ -220,6 +220,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'dcatapit_alternate_identifier': validators.dcatapit_alternate_identifier,
             'dcatapit_creator': validators.dcatapit_creator,
             'dcatapit_temporal_coverage': validators.dcatapit_temporal_coverage,
+            'dcatapit_subthemes': validators.dcatapit_subthemes,
         }
 
     # ------------- ITemplateHelpers ---------------#
@@ -241,6 +242,9 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'get_resource_licenses_tree': helpers.get_resource_licenses_tree,
             'get_dcatapit_license': helpers.get_dcatapit_license,
             'load_json_or_list': helpers.load_json_or_list,
+            'load_dcatapit_subthemes': helpers.load_dcatapit_subthemes,
+            'get_dcatapit_subthemes': helpers.get_dcatapit_subthemes,
+            'dump_dcatapit_subthemes': helpers.dump_dcatapit_subthemes,
         }
 
     # ------------- IPackageController ---------------#
@@ -287,8 +291,9 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         Insert `dcat_theme` into solr
         '''
         
-        extra_theme = dataset_dict.get("extras_theme" , None)
-        search_terms = [theme for theme in extra_theme.strip('{}').split(',') if theme] if extra_theme else []
+        extra_theme = dataset_dict.get("extras_theme" , None) or ''
+        themes =  helpers.dump_dcatapit_subthemes(extra_theme)
+        search_terms = [t['theme'] for t in themes]
         if search_terms:
             dataset_dict['dcat_theme'] = search_terms
 
