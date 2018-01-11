@@ -8,7 +8,7 @@ from ckan.model import Session
 from pylons.i18n.translation import get_lang
 
 from ckan.plugins.interfaces import Interface
-from ckanext.dcatapit.model import DCATAPITTagVocabulary, License
+from ckanext.dcatapit.model import DCATAPITTagVocabulary, License, Subtheme, SubthemeLabel
 
 log = logging.getLogger(__name__)
 
@@ -307,3 +307,14 @@ def get_license_from_dcat(license_doc, license_type, prefname, **license_names):
     if not l:
         l = default
     return l
+
+def get_localized_subthemes(subthemes):
+    q = Subtheme.get_localized(*subthemes)
+    out = {}
+    for item in q:
+        lang, label = item # .lang, item.label
+        try:
+            out[lang].append(label)
+        except KeyError:
+            out[lang] = [label]
+    return out

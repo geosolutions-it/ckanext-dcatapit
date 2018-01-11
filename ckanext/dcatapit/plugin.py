@@ -307,7 +307,9 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             dataset_dict['dcat_theme'] = search_terms
         if search_subthemes:
             dataset_dict['dcat_subtheme'] = search_subthemes
-
+            localized_subthemes = interfaces.get_localized_subthemes(search_subthemes)
+            for lang, subthemes in localized_subthemes.items():
+                dataset_dict['dcat_subtheme_{}'.format(lang)] = subthemes
         ddict = json.loads(dataset_dict['data_dict'])
         resources = ddict.get('resources') or []
         _licenses = list(set([r.get('license_type') for r in resources if r.get('license_type')]))
@@ -338,19 +340,14 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
     def before_search(self, search_params):
         fq_all = [] 
-        # remove organization_region from query, and readd to fq_all
+       
         if isinstance(search_params['fq'], (str,unicode,)):
-            fq = search_params['fq'].split(' ')
+            fq = [search_params['fq']]
         else:
             fq = search_params['fq']
-        new_fq = []
-
-        # fix fq elements, they should be prepended with + sign
-        for f in fq:
-            if not f.startswith(('+','-',)): 
-                f = u'+{}'.format(f)
-            new_fq.append(f)
-        search_params['fq'] = ' '.join(new_fq)
+        if fq and fq[0] and not fq[0].startswith(('+', '-')):
+            fq[0] = u'+{}'.format(fq[0])
+        search_params['fq'] = ' '.join(fq)
         return search_params
 
     def after_search(self, search_results, search_params):
@@ -616,7 +613,7 @@ class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
         facets_dict['source_catalog_title'] = plugins.toolkit._("Source catalogs")
         facets_dict['organization_region_{}'.format(lang)] = plugins.toolkit._("Organization region")
         facets_dict['resource_license_{}'.format(lang)] = plugins.toolkit._("Resources license")
-        facets_dict['dcat_subthemes_{}'.format(lang)] = plugins.toolkit._("Subthemes")
+        facets_dict['dcat_subtheme_{}'.format(lang)] = plugins.toolkit._("Subthemes")
 
         return facets_dict
 

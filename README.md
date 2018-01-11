@@ -119,6 +119,9 @@ The ckanext-dcatapit RDF harvester also harvests localized fields in multiple la
 
         <field name="dcat_theme" type="string" indexed="true" stored="false" multiValued="true"/>
         <field name="dcat_subtheme" type="string" indexed="true" stored="false" multiValued="true"/>
+        <field name="dcat_subtheme_*" type="string" indexed="true" stored="false" multiValued="true"/>
+        <field name="organization_region_*" type="string" indexed="true" stored="false" multiValued="true"/>
+        <field name="resource_license_*" type="string" indexed="true" stored="false" multiValued="true"/>
         
 11. Restart Solr.
 
