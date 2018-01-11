@@ -15,13 +15,14 @@ themes_loader = DCATAPITCommands('eu_themes')
 def load_themes():
     vocab_file_path = _get_path('data-theme-skos.rdf', 'vocabularies')
     class Opts(object):
-        def __init__(self, filename, name):
+        def __init__(self, filename, name, format):
             self.filename = filename
             self.url = filename
             self.name = name
+            self.format = format
     
 
-    themes_loader.options = Opts(vocab_file_path, 'eu_themes')
+    themes_loader.options = Opts(vocab_file_path, 'eu_themes', None)
     themes_loader.load()
     
     map_f = _get_path(MAPPING_FILE)

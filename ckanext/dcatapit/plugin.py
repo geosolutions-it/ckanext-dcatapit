@@ -301,7 +301,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
         search_subthemes = []
         for t in themes:
-            search_subthemes.extend(t['subthemes'])
+            search_subthemes.extend(t.get('subthemes') or [])
 
         if search_terms:
             dataset_dict['dcat_theme'] = search_terms
