@@ -249,7 +249,7 @@ def do_load(vocab_name, url=None, filename=None, format=None):
     ##
     # Loading the RDF vocabulary
     ##
-    print "Loading graph ..."
+    print "Loading graph ... for", vocab_name
 
     g = Graph()
     for prefix, namespace in namespaces.iteritems():

@@ -327,7 +327,10 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
         org_id = dataset_dict['owner_org']
         organization_show = plugins.toolkit.get_action('organization_show')
-        org = organization_show(DEFAULT_ORG_CTX, {'id': org_id})
+        if org_id:
+            org = organization_show(DEFAULT_ORG_CTX, {'id': org_id})
+        else:
+            org = {}
         if org.get('region'):
 
             # multilang!

@@ -5,7 +5,7 @@ import unittest
 import ckanext.dcatapit.interfaces as interfaces
 
 from ckanext.dcatapit.commands.dcatapit import DCATAPITCommands
-from ckanext.dcatapit.tests.utils import load_themes
+from ckanext.dcatapit.tests.utils import load_themes, themes_loader
 
 eq_ = nose.tools.eq_
 ok_ = nose.tools.ok_
@@ -31,14 +31,13 @@ class BaseCommandTest(object):
 class TestDCATAPITCommand(BaseCommandTest):
 
     def test_vocabulary_command(self):
-        dcatapit_commands = DCATAPITCommands('eu_themes')
+        dcatapit_commands = themes_loader
 
         vocab_file_path = self._get_file_contents('data-theme-skos.rdf')
 
         options = BaseOptions({
-            'url': vocab_file_path,
+            'filename': vocab_file_path,
             'name': 'eu_themes',
-
         })
 
         setattr(dcatapit_commands, 'options', options)
