@@ -1,5 +1,5 @@
 sudo: required
-dist: trusty
+group: deprecated-2017Q4
 language: python
 python:
     - "2.7"
@@ -15,7 +15,6 @@ addons:
   apt:
     packages:
     - postgresql-9.6-postgis-2.3
-    - libpq-dev-9.6
 services:
     - redis-server
     - postgresql
