@@ -46,6 +46,8 @@ sudo sed -i -e 's-</fields>-<field name="dcat_subtheme" type="string" indexed="t
 sudo sed -i -e 's-</fields>-<field name="dcat_subtheme_*" type="string" indexed="true" stored="false" multiValued="true"/></fields>-g' /etc/solr/conf/schema.xml
 sudo sed -i -e 's-</fields>-<field name="organization_region_*" type="string" indexed="true" stored="false" multiValued="true"/></fields>-g' /etc/solr/conf/schema.xml
 sudo sed -i -e 's-</fields>-<field name="resource_license_*" type="string" indexed="true" stored="false" multiValued="true"/></fields>-g' /etc/solr/conf/schema.xml
+grep '<field name=' /etc/solr/conf/schema.xml
+
 sudo service jetty restart
 
 echo
