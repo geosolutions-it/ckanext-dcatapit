@@ -1,9 +1,12 @@
 #!/bin/bash
 set -e
+set -x
 
 echo "This is travis-build.bash..."
 
 echo "Installing the packages that CKAN requires..."
+
+sudo rm -f /etc/apt/sources.list.d/mongodb-3.2.list
 sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ main restricted'
 sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ universe'
 sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ multiverse'
