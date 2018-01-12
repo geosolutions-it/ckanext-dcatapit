@@ -1,9 +1,12 @@
 #!/bin/bash
 set -e
+set -x
 
 echo "This is travis-build.bash..."
 
 echo "Installing the packages that CKAN requires..."
+
+sudo rm -f /etc/apt/sources.list.d/mongodb-3.2.list
 sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ main restricted'
 sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ universe'
 sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ multiverse'
@@ -12,7 +15,7 @@ sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/ universe'
 sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/ multiverse'
 sudo apt-get -qq --fix-missing update
 sudo apt-get install solr-jetty libcommons-fileupload-java
-sudo rm -f /etc/apt/sources.list.d/mongodb-3.2.list
+
 
 # PostGIS 2.1 already installed on Travis
 
