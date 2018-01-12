@@ -22,7 +22,7 @@
                 <th class="span5">{{ _("URL") }}</th>
                 <th class="span1">{{ _("# Datasets") }}</th>
                 <th class="span2">{{ _("Last harvest run") }}</th>
-                <th class="span2">{{ _("Next scheduled harvest run")}}</th>
+                <th class="span2">{{ _("Update frequency") }}</th>
             </tr>
         </thead>
 
@@ -32,8 +32,8 @@
                 <td class="bold"><a href="{{ h.url_for('harvest_admin', id=hs['id']) }}">{{ hs.title }}</a></td>
                 <td>{{ hs.url }}</td>
                 <td> {% if hs.get('status', {}).get('overall_statistics') %}{{ hs.status.overall_statistics.added|default('0') }}{% else %}0{% endif %} </td>
-                <td>{{ hs.status.last_harvest_request }}</td>
-                <td>{{ hs.status.next_harvest }} </td>
+                <td>{{ h.render_datetime(hs.status.last_harvest_request, '%Y-%m-%d %H:%M')}}</td>
+                <td>{{ hs.frequency }} </td>
             </tr>
         {% endfor %}
         </tbody>
