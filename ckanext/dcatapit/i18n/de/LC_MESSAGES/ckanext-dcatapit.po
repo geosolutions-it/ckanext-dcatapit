@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-12-14 09:26+0100\n"
+"POT-Creation-Date: 2017-12-14 16:46+0100\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -423,9 +423,8 @@ msgid "URL"
 msgstr ""
 
 #: ckanext/dcatapit/templates/harvest/sources_list.html:23
-#, fuzzy
-msgid "Datasets"
-msgstr "Herausgeber des Datensatzes"
+msgid "# Datasets"
+msgstr "#"
 
 #: ckanext/dcatapit/templates/harvest/sources_list.html:24
 msgid "Last harvest run"
