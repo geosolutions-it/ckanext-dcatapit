@@ -91,5 +91,3 @@ class DCATAPITTagVocabulary(DomainObject):
 
 
 meta.mapper(DCATAPITTagVocabulary, dcatapit_vocabulary_table)
-
-
