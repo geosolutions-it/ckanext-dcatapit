@@ -92,18 +92,16 @@ class License(_Base, DeclarativeBase):
             inst = cls.q().filter_by(id=int(id_or_uri)).first()
         except ValueError:
             pass
-        if inst:
-            return inst
-        inst = cls.q().filter_by(uri=id_or_uri).order_by(License.rank_order).first()
-        if inst:
-            return inst
-        inst = cls.q().filter_by(document_uri=id_or_uri).first()
-        if inst:
-            return inst
-        inst = cls.q().filter_by(default_name=id_or_uri).first()
-        if inst:
-            return inst
-        return cls.q().filter_by(license_type=id_or_uri).first()
+        if not inst:
+            inst = cls.q().filter_by(uri=id_or_uri).order_by(License.rank_order).first()
+        if not inst:
+            inst = cls.q().filter_by(document_uri=id_or_uri).first()
+        if not inst:
+            inst = cls.q().filter_by(default_name=id_or_uri).first()
+        if not inst:
+            inst = cls.q().filter_by(license_type=id_or_uri).first()
+        
+        return inst
 
     def __str__(self):
         return "License({}/version {}: {}{})".format(self.license_type, self.version, self.default_name, ' [doc: {}]'.format(self.document_uri) if self.document_uri else '')
