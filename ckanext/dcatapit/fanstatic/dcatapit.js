@@ -447,6 +447,7 @@ ckan.module('geonames', function($){
                 this.load_for(this.store.val());
             }
             this.geonames = el.jeoCityAutoComplete({'country': limit_to,
+                                                    'lang': this.options.geonamesLanguage,
                                                     'callback': function(data){return that.on_names(data)}});
         },
 
