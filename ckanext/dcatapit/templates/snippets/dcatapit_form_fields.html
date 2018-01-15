@@ -127,7 +127,7 @@
                                                                lang=h.lang()) }}
 
             {% elif field.element == 'geonames' %}
-                   {% set config = h.dump_json(h.get_geonames_config()) %}
+                   {% set config = h.get_geonames_config() %}
 
                    {{ dcatapit_form_macros.geonames(name=field.name,
                                                     label=field.label,

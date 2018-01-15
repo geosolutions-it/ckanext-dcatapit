@@ -425,13 +425,55 @@ ckan.module('dcatapit-temporal-coverage', function($){
 ckan.module('geonames', function($){
     var geonames = {
         initialize: function(){
-            var username = this.options.geonames-username;
-            var limit_to = $.parseJSON(this.options.geonames-limit-to|| []);
+            $.proxyAll(this, /_on/);
+            var username = this.options.geonamesUsername;
+            var limit_to = $.parseJSON(this.options.geonamesLimitTo|| []);
             var el = $(this.el);
             jeoquery.defaultData.userName = username;
-            el.jeoCityAutoComplete({'country': limit_to});
+            if (this.options.geonamesLanguage !== undefined && this.options.geonamesLanguage !== false){
+                jeoquery.defaultData.defaultLanguage = this.options.geonamesLanguage;
+            }
+            var that = this;
+            // where to store geonames url (hidden input)
+            
+            this.store = $(this.options.geonamesStore);
+            // where to display geonames url (span)
+            this.display = $(this.options.geonamesDisplay);
+            
+            this.enable();
+            var init_val = this.store.val();
+            if (init_val){
+                this.store.html('loading..');
+                this.load_for(this.store.val());
+            }
+            this.geonames = el.jeoCityAutoComplete({'country': limit_to,
+                                                    'callback': function(data){return that.on_names(data)}});
+        },
+
+        enable: function(){
+            this.store.attr('type', 'hidden');
+            this.display.removeClass('hidden');
+            $(this.el).attr('readonly', false);
 
         },
+
+        load_for: function(value){
+            var that = this;
+            var geonameId = value.split('/')[3];
+            var gn = jeoquery.getGeoNames('get',
+                                          {'geonameId': geonameId},
+                                          function(details){ return that.on_names(details, true)});
+        },
+        
+        on_names: function(details, is_init){
+            var url = 'https://geonames.org/' + details.geonameId;
+            this.store.val(url);
+            this.display.html(url);
+            if (is_init == true){
+                $(this.el).val(details.name + ',' + details.adminName1 + ', '+ details.countryName);
+            }
+        }
+
     };
     return $.extend({}, geonames);
  });
