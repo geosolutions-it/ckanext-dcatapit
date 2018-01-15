@@ -296,8 +296,8 @@ class ItalianDCATAPProfile(RDFProfile):
             license = self._object(distribution, DCT.license)
             if license:
 
-                license_doc = unicode(license)
-                dcat_license = self._object_value(distribution, DCT.type)
+                license_uri = unicode(license)
+                license_dct = self._object_value(license, DCT.type)
                 license_names = self.g.objects(license, FOAF.name) # may be either the title or the id
                 license_version = self._object_value(license, FOAF.versionInfo)
 
@@ -309,8 +309,8 @@ class ItalianDCATAPProfile(RDFProfile):
                     else:
                         prefname = unicode(l)
                 
-                license_type = interfaces.get_license_from_dcat(license_doc,
-                                                                dcat_license,
+                license_type = interfaces.get_license_from_dcat(license_uri,
+                                                                license_dct,
                                                                 prefname,
                                                                 **names)
                 if license_version and unicode(license_version) != license_type.version:
@@ -323,13 +323,11 @@ class ItalianDCATAPProfile(RDFProfile):
                     try:
                         license_name = names['en']
                     except KeyError:
-                        if names:
-                            license_name = names.values()[0]
-                        else:
-                            license_name = license_type.default_name
-
+                        license_name = names.values()[0] if names else license_type.default_name
                     
-                licenses.append((unicode(license), license_name))
+                log.info("Setting lincense %s %s %s", license_type.uri, license_name, license_type.document_uri)
+                    
+                licenses.append((license_type.uri, license_name, license_type.document_uri))
             else:
                 log.warn('No license found for resource "%s"::"%s"',
                          dataset_dict.get('title', '---'),
@@ -355,13 +353,15 @@ class ItalianDCATAPProfile(RDFProfile):
         # postprocess licenses
         # license_ids = {id for url,id in licenses}  # does not work in python 2.6
         license_ids = set()
-        for url,id in licenses:
+        for lic_uri, id, doc_uri in licenses:
            license_ids.add(id)
 
-        if license_ids:
-            if len(license_ids) > 1:
-                log.warn('More than one license found for dataset "%s"', dataset_dict.get('title', '---'))
-            dataset_dict['license_id'] = license_ids.pop() # take a random one
+        if len(license_ids) == 1:
+            dataset_dict['license_id'] = license_ids.pop()
+            # TODO Map to internally defined licenses
+        else:            
+            log.warn('%d licenses found for dataset "%s"', len(license_ids), dataset_dict.get('title', '---'))
+            dataset_dict['license_id'] = 'notspecified'
 
         return dataset_dict
 

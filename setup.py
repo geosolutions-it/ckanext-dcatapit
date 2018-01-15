@@ -87,6 +87,7 @@ setup(
         dcatapit_ckan_harvester=ckanext.dcatapit.harvesters.ckanharvester:CKANMappingHarvester
         dcatapit_theme_group_mapper=ckanext.dcatapit.plugin:DCATAPITGroupMapper
         dcatapit_subcatalog_facets=ckanext.dcatapit.plugin:DCATAPITFacetsPlugin
+        dcatapit_harvest_list=ckanext.dcatapit.plugin:DCATAPITHarvestListPlugin
 
         [ckan.rdf.profiles]
         it_dcat_ap=ckanext.dcatapit.dcat.profiles:ItalianDCATAPProfile

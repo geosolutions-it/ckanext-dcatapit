@@ -556,3 +556,11 @@ class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
         facets_dict['source_catalog_title'] = plugins.toolkit._("Source catalogs")
         return facets_dict
 
+class DCATAPITHarvestListPlugin(plugins.SingletonPlugin):
+    plugins.implements(plugins.IRoutes, inherit=True)
+
+    def before_map(self, map):
+        controller = 'ckanext.dcatapit.controllers.harvest:HarvesterController'
+        map.connect('harvest_list', '/harvest/list', controller=controller, action='list')
+        return map
+
