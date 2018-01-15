@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 1.1.0a0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-12-14 09:26+0100\n"
+"POT-Creation-Date: 2017-12-14 17:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -421,7 +421,7 @@ msgid "URL"
 msgstr ""
 
 #: ckanext/dcatapit/templates/harvest/sources_list.html:23
-msgid "Datasets"
+msgid "# Datasets"
 msgstr ""
 
 #: ckanext/dcatapit/templates/harvest/sources_list.html:24
@@ -429,7 +429,7 @@ msgid "Last harvest run"
 msgstr ""
 
 #: ckanext/dcatapit/templates/harvest/sources_list.html:25
-msgid "Next scheduled harvest run"
+msgid "Update frequency"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:5
@@ -459,29 +459,29 @@ msgstr ""
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:178
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:71
 msgid "OthId Identifier"
-msgstr "Code"
+msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:179
 msgid "OthId dataset identifier"
-msgstr "Other dataset code"
+msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:183
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:74
 msgid "OthId Organization"
-msgstr "Agency name"
+msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:184
 msgid "OthId organization name"
-msgstr "e.g. ISBN"
+msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:188
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:77
 msgid "OthId Organization ID"
-msgstr "Agency id"
+msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:189
 msgid "OthId organization identifier"
-msgstr "e.g. 978-88-89637"
+msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:192
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:244

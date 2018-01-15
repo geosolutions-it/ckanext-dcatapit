@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-12-14 16:46+0100\n"
+"POT-Creation-Date: 2017-12-14 17:02+0100\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -431,8 +431,9 @@ msgid "Last harvest run"
 msgstr ""
 
 #: ckanext/dcatapit/templates/harvest/sources_list.html:25
-msgid "Next scheduled harvest run"
-msgstr ""
+#, fuzzy
+msgid "Update frequency"
+msgstr "Frequenz"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:5
 msgid "This field is required"
@@ -645,4 +646,7 @@ msgstr "Dateigröße"
 #: ckanext/dcatapit/templates/package/snippets/resource_form.html:15
 msgid "eg. 1024"
 msgstr "z.B. 1024"
+
+#~ msgid "Next scheduled harvest run"
+#~ msgstr ""
 
