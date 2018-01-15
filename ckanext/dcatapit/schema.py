@@ -91,7 +91,7 @@ def get_custom_organization_schema():
             'element': 'input',
             'type': 'text',
             'is_required': False,
-            'placeholder': _('rights holder of the dataset')
+            'placeholder': _('organization IPA/IVA code')
         }
 	]
 
