@@ -117,26 +117,15 @@ def get_custom_package_schema():
 	    },
 	    {
 		    'name': 'theme',
-		    'validator': ['not_empty'],
+		    'validator': ['not_empty', 'dcatapit_subthemes'],
 		    'element': 'theme',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'eu_themes',
 		    'label': _('Dataset Themes'),
+            'sublabel': _("Subthemes"),
 		    'placeholder': _('eg. education, agriculture, energy'),
 		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eu_themes&incomplete=?',
 		    'is_required': True
-	    },
-	    {
-		    'name': 'sub_theme',
-		    'ignore': True,
-		    'validator': ['ignore_missing'],
-		    'element': 'theme',
-		    'type': 'vocabulary',
-		    'vocabulary_name': 'eurovoc',
-		    'label': _('Sub Theme'),
-		    'placeholder': _('sub theme of the dataset'),
-			'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eurovoc&incomplete=?',
-		    'is_required': False
 	    },
 	    {
 		    'name': 'publisher',
