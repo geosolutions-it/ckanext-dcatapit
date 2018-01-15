@@ -431,7 +431,7 @@ ckan.module('geonames', function($){
             var el = $(this.el);
             jeoquery.defaultData.userName = username;
             if (this.options.geonamesLanguage !== undefined && this.options.geonamesLanguage !== false){
-                jeoquery.defaultData.defaultLanguage = this.options.geonamesLanguage;
+                jeoquery.defaultLanguage = this.options.geonamesLanguage;
             }
             var that = this;
             // where to store geonames url (hidden input)
