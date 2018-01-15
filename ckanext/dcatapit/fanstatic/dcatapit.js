@@ -422,3 +422,17 @@ ckan.module('dcatapit-temporal-coverage', function($){
  });
 
 
+ckan.module('geonames', function($){
+    var geonames = {
+        initialize: function(){
+            var username = this.options.geonames-username;
+            var limit_to = $.parseJSON(this.options.geonames-limit-to|| []);
+            var el = $(this.el);
+            jeoquery.defaultData.userName = username;
+            el.jeoCityAutoComplete({'country': limit_to});
+
+        },
+    };
+    return $.extend({}, geonames);
+ });
+

@@ -253,6 +253,15 @@ Old implementation of the couple element (one element with comma separated value
     {% endcall %}
 {% endmacro %}
 
+{% macro geonames(name, label, id, value, error, lang, username, limit_to, classes=[], attrs={}) %}
+
+    {% call input_block(id or name, label or name, error, classes, is_required=False) %}
+      <select id="{{name}}-hidden" placeholder="{{ placeholder }}" multiple name="{{ name }}" {{ attributes(attrs) }} data-module="geonames" data-module-geonames-username="{{ username }}" data-module-geonames-limit-to="{{ limit_to|safe }}">
+      </select>
+    {% endcall %}
+
+{% endmacro %}
+
 
 {%- macro attributes(attrs={}) -%}
   {%- for key, value in attrs.items() -%}

@@ -187,8 +187,8 @@ def get_custom_package_schema():
 	    {
 		    'name': 'geographical_geonames_url',
 		    'validator': ['ignore_missing'],
-		    'element': 'input',
-		    'type': 'url',
+		    'element': 'geonames',
+		    'type': 'geonames',
 		    'label': _('GeoNames URL'),
 		    'placeholder': _('http://www.geonames.org/3175395'),
 		    'is_required': False,

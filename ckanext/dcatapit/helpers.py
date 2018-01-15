@@ -7,6 +7,7 @@ import ckanext.dcatapit.schema as dcatapit_schema
 
 import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit.model.license import License
+from ckan.lib.base import config
 
 import datetime
 from webhelpers.html import escape, HTML, literal, url_escape
@@ -21,6 +22,10 @@ dateformats = [
     "%d-%m-%Y %H:%M:%S",
     "%Y-%m-%dT%H:%M:%S"
 ]
+
+# config param names
+GEONAMES_USERNAME = 'geonames.username'
+GEONAMES_LIMIT_TO = 'geonames.limits.countries'
 
 def get_dcatapit_package_schema():
     log.debug('Retrieving DCAT-AP_IT package schema fields...')
@@ -210,3 +215,15 @@ def load_json_or_list(val):
     except (TypeError, ValueError,):
         if val:
             return [{'identifier': v} for v in val.split(',')]
+
+def get_geonames_config():
+    out = {}
+    uname = config.get(GEONAMES_USERNAME)
+    limit_to = config.get(GEONAMES_LIMIT_TO)
+    if uname:
+        out['username'] = uname
+    if limit_to:
+        if isinstance(limit_to, (str,unicode,)):
+            limit_to = [limit_to]
+        out['limit_to'] = limit_to
+    return out
