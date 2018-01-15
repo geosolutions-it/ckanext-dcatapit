@@ -1,6 +1,8 @@
 import json
 import logging
 
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+from ckan.model import GroupExtra, Session
 import ckan.lib.helpers as h
 import ckan.plugins.toolkit as toolkit
 import ckanext.dcatapit.schema as dcatapit_schema
@@ -210,3 +212,26 @@ def load_json_or_list(val):
     except (TypeError, ValueError,):
         if val:
             return [{'identifier': v} for v in val.split(',')]
+
+
+def get_organization_by_identifier(context, identifier):
+    """
+    quick'n'dirty way to get organization by rights holder's identifer
+    from dcat rdf.
+    """
+    try:
+        ge = Session.query(GroupExtra).filter_by(key='identifier',
+                                            value=identifier,
+                                            state='active')\
+                                 .one()
+    except MultipleResultsFound:
+        raise
+    except NoResultFound:
+        ge = None
+    if ge:
+        # safety check
+        assert ge.group_id is not None
+        ctx = context.copy()
+        ctx.update(dict((k, False) for k in ('include_tags', 'include_users', 'include_groups', 'include_extras', 'include_followers',)))
+
+        return toolkit.get_action('organization_show')(context=ctx, data_dict={'id': ge.group_id})
