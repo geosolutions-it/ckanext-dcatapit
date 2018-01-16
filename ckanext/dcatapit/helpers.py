@@ -1,12 +1,15 @@
 import json
 import logging
 
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+from ckan.model import GroupExtra, Session
 import ckan.lib.helpers as h
 import ckan.plugins.toolkit as toolkit
 import ckanext.dcatapit.schema as dcatapit_schema
 
 import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit.model.license import License
+from ckanext.dcatapit.model.subtheme import Subtheme
 
 import datetime
 from webhelpers.html import escape, HTML, literal, url_escape
@@ -201,7 +204,7 @@ def json_load(val):
 def json_dump(val):
     try:
         return json.dumps(val)
-    except (TypeError, ValueError,):
+    except (TypeError, ValueError,), err:
         pass
 
 def load_json_or_list(val):
@@ -210,3 +213,73 @@ def load_json_or_list(val):
     except (TypeError, ValueError,):
         if val:
             return [{'identifier': v} for v in val.split(',')]
+
+
+def get_organization_by_identifier(context, identifier):
+    """
+    quick'n'dirty way to get organization by rights holder's identifer
+    from dcat rdf.
+    """
+    try:
+        ge = Session.query(GroupExtra).filter_by(key='identifier',
+                                            value=identifier,
+                                            state='active')\
+                                 .one()
+    except MultipleResultsFound:
+        raise
+    except NoResultFound:
+        ge = None
+    if ge:
+        # safety check
+        assert ge.group_id is not None
+        ctx = context.copy()
+        ctx.update(dict((k, False) for k in ('include_tags', 'include_users', 'include_groups', 'include_extras', 'include_followers',)))
+
+        return toolkit.get_action('organization_show')(context=ctx, data_dict={'id': ge.group_id})
+
+def get_dcatapit_subthemes(lang):
+    """
+    Dump subthemes tree with localized lables for all themes 
+    """
+    out = {}
+    def _get_name(opt_val, depth):
+        return u'{} {}'.format('-'*depth, opt_val)
+      
+    for theme in Subtheme.get_theme_names():
+        out[theme] = theme_l = []
+        for opt, label in Subtheme.for_theme(theme, lang):
+            theme_l.append({'name': _get_name(label, opt.depth),
+                            'value': opt.uri})
+    return out
+
+
+def dump_dcatapit_subthemes(value):
+    """
+    Dump subthemes from dataset dict, handle old format as well
+    """
+    out = []
+    data = []
+    try:
+        data = json.loads(value)
+    except (ValueError, TypeError):
+        if isinstance(value, (str, unicode,)):
+            data = [{'theme': s, 'subthemes': []} for s in value.strip('{}').split(',')]
+    out.extend(data)
+    return out
+
+def load_dcatapit_subthemes(value, lang):
+    """
+    Load json with subthemes and get localized subtheme names. Used in template
+    """
+    data = dump_dcatapit_subthemes(value)
+    out = []
+    
+    for item in data:
+        outitem = {'theme': item['theme'], 'subthemes': []}
+        from_model = Subtheme.for_theme(item['theme'], lang)
+        for st, label in from_model:
+            if st.uri in item['subthemes']:
+                outitem['subthemes'].append(label)
+        out.append(outitem)
+    return out
+

@@ -1,4 +1,5 @@
-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import logging
 import re
@@ -8,6 +9,9 @@ import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit.model.license import (
     load_from_graph as load_licenses_from_graph,
     clear_licenses)
+
+from ckanext.dcatapit.model.subtheme import (
+    load_subthemes, clear_subthemes)
 from ckan.model.meta import Session
 
 from pylons import config
@@ -23,6 +27,7 @@ LOCATIONS_THEME_NAME = 'places'
 FREQUENCIES_THEME_NAME = 'frequencies'
 FILETYPE_THEME_NAME = 'filetype'
 LICENSES_NAME = 'licenses'
+SUBTHEME_NAME = 'subthemes'
 
 log = logging.getLogger(__name__)
 
@@ -32,11 +37,11 @@ class DCATAPITCommands(CkanCommand):
     Usage::
      # Loading a vocabulary
      paster --plugin=ckanext-dcatapit vocabulary load --url URL --name NAME --config=PATH_TO_INI_FILE
-     paster --plugin=ckanext-dcatapit vocabulary load --filename FILE --name NAME --config=PATH_TO_INI_FILE
+     paster --plugin=ckanext-dcatapit vocabulary load --filename FILE --name NAME --config=PATH_TO_INI_FILE 
      Where:
        URL  is the url to a SKOS document
        FILE is the local path to a SKOS document
-       NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies, licenses)
+       NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies, licenses, subthemes)
        Where the corresponding rdf are:
           languages   -> http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf
           eu_themes   -> http://publications.europa.eu/mdr/resource/authority/data-theme/skos/data-theme-skos.rdf
@@ -44,6 +49,10 @@ class DCATAPITCommands(CkanCommand):
           frequencies -> http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf
           filetype -> http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf
        PATH_TO_INI_FILE is the path to the Ckan configuration file
+
+     If you use subthemes, additional argument is required, path to EUROVOC rdf file:
+
+     paster --plugin=ckanext-dcatapit vocabulary load --filename EUROVOC_TO_THEMES_MAPPING_FILE --name subthemes --config=PATH_TO_INI_FILE  PATH_TO_EUROVOC
     '''
 
     summary = __doc__.split('\n')[0]
@@ -67,7 +76,7 @@ class DCATAPITCommands(CkanCommand):
         'es': 'SPA'
     }
 
-    _controlled_vocabularies_allowed = [EUROPEAN_THEME_NAME, LOCATIONS_THEME_NAME, LANGUAGE_THEME_NAME, FREQUENCIES_THEME_NAME, FILETYPE_THEME_NAME, LICENSES_NAME]
+    _controlled_vocabularies_allowed = [EUROPEAN_THEME_NAME, LOCATIONS_THEME_NAME, LANGUAGE_THEME_NAME, FREQUENCIES_THEME_NAME, FILETYPE_THEME_NAME, LICENSES_NAME, SUBTHEME_NAME]
 
     def __init__(self, name):
         super(DCATAPITCommands, self).__init__(name)
@@ -83,7 +92,12 @@ class DCATAPITCommands(CkanCommand):
         '''
         Parse command line arguments and call appropriate method.
         '''
-        cmd = self.args[0]
+        try:
+            cmd = self.args[0]
+        except IndexError:
+            print "ERROR: missing command"
+            print self.usage
+            return
         self._load_config()
 
         if cmd == 'load':
@@ -96,9 +110,11 @@ class DCATAPITCommands(CkanCommand):
             return
 
     def initdb(self):
-        from ckanext.dcatapit.model import setup as db_setup, setup_license_models
+        from ckanext.dcatapit.model import setup as db_setup, setup_license_models, setup_subtheme_models
+
         db_setup()
         setup_license_models()
+        setup_subtheme_models()
 
     def load(self):
         ##
@@ -130,6 +146,19 @@ class DCATAPITCommands(CkanCommand):
             Session.commit()
             return
 
+        if vocab_name == SUBTHEME_NAME:
+            clear_subthemes()
+            theme_map = self.options.filename
+            try:
+                eurovoc = self.args[-1]
+            except IndexError:
+                print "ERROR: Missing eurovoc file"
+                print self.usage
+                return
+            load_subthemes(theme_map, eurovoc)
+            Session.commit()
+            return
+            
         do_load(vocab_name, url=url, filename=filename)
 
 
