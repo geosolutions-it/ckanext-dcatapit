@@ -199,8 +199,14 @@ def _clean_groups(package):
     """
     Clears package's groups
     """
+
+    if isinstance(package, dict):
+        package_id = package['id']
+    else:
+        package_id = package.id
+
     Session.query(Member).filter(Member.table_name == 'package',
-                                 Member.table_id == package.id,
+                                 Member.table_id == package_id,
                                  Member.capacity != 'admin')\
                          .update({'state':'deleted'})
 
@@ -262,7 +268,10 @@ def populate_theme_groups(instance, clean_existing=False):
             if isinstance(_t, list):
                 themes.extend(_t)
             else:
-                themes.extend([theme for theme in _t.strip('{}').split(',') if theme])
+                tval = json.loads(_t)
+                for tv in tval:
+                    themes.append(tv['theme'])
+                #themes.extend([theme for theme in _t.strip('{}').split(',') if theme])
 
     #themes = instance.extras.get('theme')
     if not themes:
