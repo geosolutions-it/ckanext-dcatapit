@@ -1,9 +1,12 @@
 #!/bin/bash
 set -e
+set -x
 
 echo "This is travis-build.bash..."
 
 echo "Installing the packages that CKAN requires..."
+
+sudo rm -f /etc/apt/sources.list.d/mongodb-3.2.list
 sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ main restricted'
 sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ universe'
 sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ multiverse'
@@ -13,26 +16,21 @@ sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/ multiverse'
 sudo apt-get -qq --fix-missing update
 sudo apt-get install solr-jetty libcommons-fileupload-java
 
-# PostGIS 2.1 already installed on Travis
 
-##lxml patching no longer required, since travis provides 2.9.1
-#echo "Patching lxml..."
-#wget ftp://xmlsoft.org/libxml2/libxml2-2.9.0.tar.gz
-#tar zxf libxml2-2.9.0.tar.gz
-#cd libxml2-2.9.0/
-#./configure --quiet --libdir=/usr/lib/x86_64-linux-gnu
-#make --silent
-#sudo make --silent install
-#xmllint --version
-#cd -
+# PostGIS 2.1 already installed on Travis
 
 echo "Installing CKAN and its Python dependencies..."
 git clone https://github.com/ckan/ckan
 cd ckan
-if [ $CKANVERSION != 'master' ]
+if [ $CKANVERSION == 'master' ]
 then
-    git checkout release-v$CKANVERSION-latest
+    echo "CKAN version: master"
+else
+    CKAN_TAG=$(git tag | grep ^ckan-$CKANVERSION | sort --version-sort | tail -n 1)
+    git checkout $CKAN_TAG
+    echo "CKAN version: ${CKAN_TAG#ckan-}"
 fi
+
 python setup.py develop
 
 pip install -r requirements.txt --allow-all-external
@@ -43,6 +41,7 @@ echo
 echo "Setting up Solr..."
 printf "NO_START=0\nJETTY_HOST=127.0.0.1\nJETTY_PORT=8983\nJAVA_HOME=$JAVA_HOME" | sudo tee /etc/default/jetty
 sudo cp ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
+sudo sed -i -e 's-</fields>-<field name="dcat_theme" type="string" indexed="true" stored="false" multiValued="true"/></fields>-g' /etc/solr/conf/schema.xml
 sudo service jetty restart
 
 echo

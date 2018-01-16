@@ -1,4 +1,3 @@
-
 .size-8 {
     font-size: 8pt!important;
 }
@@ -26,7 +25,17 @@
 .add_new {
     cursor: pointer;
 }
+.temporal-coverage-wrap .add_new {
+    margin-left: 130px;
+}
 
+.temporal-coverage-wrap .add_new.error {
+    color: #c6898b;
+}
+
+.temporal-coverage-wrap {
+    margin-bottom: 4px;
+}
 .std-key {
     font-weight: bold;
 }
@@ -37,9 +46,9 @@
 .conforms_to {
 }
 .bold {
-    font-weight: bold
+    font-weight: bold;
 }
-.conforms_to .remove_conforms_to, .alternate_identifier .remove, .creator .remove, .temporal-coverage .remove {
+.conforms_to .remove_conforms_to, .alternate_identifier .remove, .creator .remove, .temporal-coverage .remove, .theme .remove {
     float: right;
     padding-right: 20px;
     text-align: right;
@@ -101,4 +110,14 @@
 }
 body .ui-tooltip {
     border-width: 2px;
+}
+.errors .error-item {
+    display: block;
+    background-color: #c6898b;
+    color: #fff;
+    padding: 4px;
+    margin-left: 130px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
 }

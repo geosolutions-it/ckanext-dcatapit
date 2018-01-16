@@ -1,6 +1,8 @@
+import os
 import json
 import nose
 import ckanext.dcatapit.validators as validators
+from ckanext.dcatapit.tests.utils import load_themes
 
 eq_ = nose.tools.eq_
 ok_ = nose.tools.ok_
@@ -62,7 +64,7 @@ def test_conforms_to():
                                  'referenceDocumentation': ['http://abc.efg/']}]), True),
                    (json.dumps([{'identifier': 'abc',
                                  'title': {'en': ''},
-                                 'referenceDocumentation': ['http://abc.efg/']}]), False),
+                                 'referenceDocumentation': ['http://abc.efg/']}]), True),
 
                    (json.dumps([{'identifier': 'abc',
                                  'title': {'en': 'title', 'it': 'title'},
@@ -141,6 +143,7 @@ def test_temporal_coverage():
                    (json.dumps([{'temporal_start': 'abc', 'temporal_end': ''}]), False,),
                    (json.dumps([{'temporal_start': None}, 'fail']), False,),
                    (json.dumps([{'temporal_start': '2001-01-01', 'temporal_end': '2001-01-02'}]), True,),
+                   (json.dumps([{'temporal_start': '2001-01-01'}]), True,),
                    (json.dumps([{'temporal_start': '2001-01-01 00:00:01', 'temporal_end': '2001-01-02 00:01:02'}]), True,),
                    (json.dumps([{'temporal_start': '2001-01-01', 'temporal_end': '2001-01-02'},
                                 {'temporal_start': '2001-01-02', 'temporal_end': '2001-01-03'}]), True,),
@@ -148,6 +151,29 @@ def test_temporal_coverage():
                    )
 
     return _run_checks(test_values, validators.dcatapit_temporal_coverage)
+
+
+def test_subthemes():
+
+    load_themes()
+
+    test_values = ((None, False,),
+                   ('', False,),
+                   ('{AGRI}', True,),
+                   ('{AGRI,INVALID}', False,),
+                   ('SOME,INVALID,THEME', False,),
+                   (json.dumps({}), False,),
+                   (json.dumps([]), True,),
+                   (json.dumps([{'theme': 'AGRI'}]), True,),
+                   (json.dumps([{'theme': 'AGRI'},
+                                {'theme': 'AGRI'}]), False,),
+                   (json.dumps([{'theme': 'AGRI', 'subthemes': ['test', 'invalid']}]), False),
+                   (json.dumps([{'theme': 'AGRI', 'subthemes': ['http://eurovoc.europa.eu/100253',
+                                                               'http://eurovoc.europa.eu/100258']}]), True,)
+                  )
+
+    return _run_checks(test_values, validators.dcatapit_subthemes)
+
 
 def _run_checks(test_values, validator):
     for test_val, is_valid in test_values:
@@ -158,4 +184,4 @@ def _run_checks(test_values, validator):
             passed = True
         except validators.Invalid, err:
             pass
-        assert passed == is_valid, 'failed for {}: {}'.format(test_val, err or 'no validation error')
+        assert passed == is_valid, 'failed for {}: {}'.format(test_val, err or 'expected error, but got no validation error')

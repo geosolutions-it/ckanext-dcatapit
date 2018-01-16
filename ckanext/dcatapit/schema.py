@@ -87,6 +87,15 @@ def get_custom_organization_schema():
             'label': _('Site URL'),
             'placeholder': _('organization site url'),
             'is_required': False
+        },
+        {
+            'name': 'identifier',
+            'label': _('IPA/IVA'),
+            'validator': ['ignore_missing'],
+            'element': 'input',
+            'type': 'text',
+            'is_required': False,
+            'placeholder': _('organization IPA/IVA code')
         }
     ]
 
@@ -133,18 +142,6 @@ def get_custom_package_schema():
             'help': _(u"""Assegnare al dataset uno o più temi che descrivano l'ambito in cui si colloca, """
                       u"""scegliendo tra quelli proposti nel menù a tendina. I temi proposti sono quelli """
                       u"""definiti nel vocabolario Europeo sui Temi per i cataloghi che contengono dataset.""")
-        },
-        {
-            'name': 'sub_theme',
-            'ignore': True,
-            'validator': ['ignore_missing'],
-            'element': 'theme',
-            'type': 'vocabulary',
-            'vocabulary_name': 'eurovoc',
-            'label': _('Sub Theme'),
-            'placeholder': _('sub theme of the dataset'),
-            'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eurovoc&incomplete=?',
-            'is_required': False
         },
         {
             'name': 'publisher',
@@ -265,8 +262,38 @@ def get_custom_package_schema():
                     'placeholder': _('temporal coverage')
                 }
             ],
+
             'help': _(u"""Inserire, se pertinente, la data di inizio e di fine del periodo """
                       u"""a cui si riferiscono i dati del dataset.""")
+        },
+
+        {
+            'name': 'rights_holder',
+            'element': 'couple',
+            'label': _('Rights Holder'),
+            'is_required': True,
+            'couples': [
+                {
+                    'name': 'holder_name',
+                    'label': _('Name'),
+                    'validator': ['not_empty'],
+                    'type': 'text',
+                    'placeholder': _('rights holder of the dataset'),
+                    'localized': True
+
+                },
+                {
+                    'name': 'holder_identifier',
+                    'label': _('IPA/IVA'),
+                    'validator': ['not_empty'],
+                    'type': 'text',
+                    'placeholder': _('rights holder of the dataset')
+                }
+            ],
+            'help': _(u"""E' l’organizzazione (o pubblica amministrazione) che detiene la titolarità dei dati ed """
+                      u"""è quindi responsabile della gestione complessiva del dataset. Si raccomanda di evitare """
+                      u"""l’inserimento di nomi di singole persone. Vanno inseriti il nome e il codice """
+                      u"""identificativo dell’organizzazione.""")
         },
         {
             'name': 'frequency',
@@ -313,39 +340,10 @@ def get_custom_package_schema():
                       u"""normativi (e.g., Decreto legislativo n.82/2005 - Codice dell’Amministrazione Digitale).""")
         },
 
-        {
-            'name': 'rights_holder',
-            'element': 'couple',
-            'label': _('Rights Holder'),
-            'is_required': True,
-            'couples': [
-                {
-                    'name': 'holder_name',
-                    'label': _('Name'),
-                    'validator': ['not_empty'],
-                    'type': 'text',
-                    'placeholder': _('rights holder of the dataset'),
-                    'localized': True
-
-                },
-                {
-                    'name': 'holder_identifier',
-                    'label': _('IPA/IVA'),
-                    'validator': ['not_empty'],
-                    'type': 'text',
-                    'placeholder': _('rights holder of the dataset')
-                }
-            ],
-            'help': _(u"""E' l’organizzazione (o pubblica amministrazione) che detiene la titolarità dei dati ed """
-                      u"""è quindi responsabile della gestione complessiva del dataset. Si raccomanda di evitare """
-                      u"""l’inserimento di nomi di singole persone. Vanno inseriti il nome e il codice """
-                      u"""identificativo dell’organizzazione.""")
-        },
-        
-        {
-            'name': 'creator',
-            'element': 'creator',
-            'label': _('Creator'),
+	    {
+		    'name': 'creator',
+		    'element': 'creator',
+		    'label': _('Creator'),
             'type': 'creator',
             'placeholder': '-',
             'validator': ['ignore_missing', 'dcatapit_creator'],
@@ -376,6 +374,7 @@ def get_custom_package_schema():
                       u""" proprietà. Vanno inseriti il nome dell'organizzazione e il suo codice identificativo.""")
         }
     ]
+
 
     for plugin in PluginImplementations(interfaces.ICustomSchema):
         extra_schema = plugin.get_custom_schema()
