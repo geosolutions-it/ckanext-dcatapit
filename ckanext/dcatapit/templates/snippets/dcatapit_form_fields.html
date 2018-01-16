@@ -48,7 +48,6 @@
                   }}
 
             {% elif field.element == 'theme' %}
-                  {{ field.vocabulary_name }}
                   {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
                   {{ 
                         dcatapit_form_macros.theme(
