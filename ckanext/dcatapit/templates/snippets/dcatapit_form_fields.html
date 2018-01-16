@@ -47,6 +47,22 @@
                               is_required=field.is_required)
                   }}
 
+            {% elif field.element == 'theme' %}
+                  {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
+                  {{ 
+                        dcatapit_form_macros.theme(
+                              field.name,
+                              id='field-' + field.name,
+                              label=field.label,
+                              value=data[field.name],
+                              placeholder=field.placeholder,
+                              error=errors[field.name],
+                              options=options,
+                              type=field.type,
+                              classes=['control-full'],
+                              is_required=field.is_required)
+                  }}
+
             {% elif field.element == 'couple' %}
 
                   {# -------------------------------------------------------------------------------
