@@ -282,4 +282,3 @@ def load_dcatapit_subthemes(value, lang):
                 outitem['subthemes'].append(label)
         out.append(outitem)
     return out
-
