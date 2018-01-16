@@ -218,7 +218,7 @@ def get_dcatapit_subthemes(lang):
     """
     out = {}
     def _get_name(opt_val, depth):
-        return '{} {}'.format('-'*depth, opt_val)
+        return u'{} {}'.format('-'*depth, opt_val)
       
     for theme in Subtheme.get_theme_names():
         out[theme] = theme_l = []
