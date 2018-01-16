@@ -130,7 +130,7 @@ def get_custom_package_schema():
 	    {
 		    'name': 'theme',
 		    'validator': ['not_empty', 'dcatapit_subthemes'],
-		    'element': 'theme',
+		    'element': 'themes',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'eu_themes',
 		    'label': _('Dataset Themes'),
