@@ -65,7 +65,6 @@
                               is_required=field.is_required)
                   }}
                   ------------------------------------------------------------------------------- #}
-
                   {{ 
                         dcatapit_form_macros.couple(
                               field.name,
@@ -73,6 +72,7 @@
                               names=(field.couples[0].name, field.couples[1].name),
                               id='field-range-' + field.name, 
                               label=field.label,
+                              read_only=(field.read_only or False),
                               values=(data[field.couples[0].name], data[field.couples[1].name], False),
                               error=errors[field.couples[0].name] or errors[field.couples[1].name],
                               types=(field.couples[0].type, field.couples[1].type),

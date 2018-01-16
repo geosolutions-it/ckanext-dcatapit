@@ -1,0 +1,100 @@
+{# {% extends "source/admin_base.html" %} #}
+{% extends "page.html" %}
+
+
+{% set controller = 'ckanext.dcatapit.controllers.harvest:HarvesterController' %}
+
+{% block subtitle %}{{ _('Harvest Sources')}} - {{ super() }}{% endblock %}
+
+{% block secondary %}{% endblock %}
+{% block primary %}
+<div class="module-content">
+
+  <h1 class="results">{{ _('Harvest Sources') }}</h1>
+
+  {% if c.harvest_sources|length == 0 %}
+    <p class="empty">{{ _('No sources yet') }}</p>
+  {% else %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="span2">{{ _("Title") }}</th>
+                <th class="span5">{{ _("URL") }}</th>
+                <th class="span1">{{ _("# Datasets") }}</th>
+                <th class="span2">{{ _("Last harvest run") }}</th>
+                <th class="span2">{{ _("Update frequency") }}</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for hs in c.harvest_sources %}
+            <tr>
+                <td class="bold"><a href="{{ h.url_for('harvest_admin', id=hs['id']) }}">{{ hs.title }}</a></td>
+                <td>{{ hs.url }}</td>
+                <td> {% if hs.get('status', {}).get('overall_statistics') %}{{ hs.status.overall_statistics.added|default('0') }}{% else %}0{% endif %} </td>
+                <td>{{ h.render_datetime(hs.status.last_harvest_request, '%Y-%m-%d %H:%M')}}</td>
+                <td>{{ hs.frequency }} </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    {% endif %}
+    {# tmp
+    <ul class="dataset-list unstyled">
+      {% for job in c.jobs %}
+        <li class="dataset-item">
+          <div class="dataset-content">
+            <h3 class="dataset-heading">
+              <a href="{{ h.url_for(controller=controller, action='show_job', source=source.name, id=job.id) }}">
+                {{ _('Job: ') }} {{ job.id }}
+              </a>
+              {% if job.status != 'Finished' %}
+                <span class="label">{{ job.status }}</span>
+              {% endif %}
+            </h3>
+            <p>
+              {{ _('Started:') }}
+              <span class="automatic-local-datetime" data-datetime="{{ h.render_datetime(job.gather_started, date_format='%Y-%m-%dT%H:%M:%S%z') }}">
+                {{ h.render_datetime(job.gather_started, with_hours=True) or _('Not yet') }}
+              </span>
+              &mdash;
+              {{ _('Finished:') }}
+              <span class="automatic-local-datetime" data-datetime="{{ h.render_datetime(job.finished, date_format='%Y-%m-%dT%H:%M:%S%z') }}">
+                {{ h.render_datetime(job.finished, with_hours=True) or _('Not yet') }}
+              </span>
+            </p>
+          </div>
+          {% if job.status == 'Finished' %}
+            <ul class="dataset-resources unstyled">
+              {% if 'errored' in job.stats and job.stats['errored'] > 0 %}
+                <li>
+                  <span class="label label-important">
+                    {{ job.stats['errored'] }} {{ _('errors') }}
+                  </span>
+                </li>
+              {% endif %}
+              {% for action in ['added', 'updated', 'deleted'] %}
+                <li>
+                  <span class="label" data-diff="{{ action }}" title="{{ _(action) }}">
+                    {% if action in job.stats and job.stats[action] > 0 %}
+                      {{ job.stats[action] }}
+                    {% else %}
+                      0
+                    {% endif %}
+                    {{ _(action) }}
+                  </span>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+       {% endfor %}
+    </ul>
+  {% endif %}
+  #}
+
+</div>
+{% endblock %}
+  

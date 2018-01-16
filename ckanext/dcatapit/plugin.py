@@ -339,6 +339,29 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     def create_loc_field(self, extra, lang, pkg_id): 
         interfaces.save_extra_package_multilang({'id': pkg_id, 'text': extra.get('value'), 'field': extra.get('key')}, lang, 'extra')
 
+    def before_view(self, pkg_dict):
+        return self._update_pkg_rights_holder(pkg_dict)
+
+    def after_show(self, context, pkg_dict):
+        return self._update_pkg_rights_holder(pkg_dict)
+
+    def before_index(self, pkg_dict):
+        return self._update_pkg_rights_holder(pkg_dict)
+
+    def _update_pkg_rights_holder(self, pkg_dict):
+        if pkg_dict.get('type') != 'dataset':
+            return pkg_dict
+        if not (pkg_dict.get('holder_identifier') and pkg_dict.get('holder_name')):
+            if not pkg_dict.get('owner_org'):
+                return pkg_dict
+            get_org = toolkit.get_action('organization_show')
+            ctx = {'ignore_auth': True}
+            ctx.update(dict((k, False) for k in ('include_tags', 'include_users', 'include_groups', 'include_extras', 'include_followers',)))
+                   
+            org = get_org(ctx, {'id': pkg_dict['owner_org']})
+            pkg_dict['holder_name'] = org['name']
+            pkg_dict['holder_identifier'] = org.get('identifier')
+        return pkg_dict
 
 class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupForm):
 
@@ -558,4 +581,12 @@ class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
     def dataset_facets(self, facets_dict, package_type):
         facets_dict['source_catalog_title'] = plugins.toolkit._("Source catalogs")
         return facets_dict
+
+class DCATAPITHarvestListPlugin(plugins.SingletonPlugin):
+    plugins.implements(plugins.IRoutes, inherit=True)
+
+    def before_map(self, map):
+        controller = 'ckanext.dcatapit.controllers.harvest:HarvesterController'
+        map.connect('harvest_list', '/harvest/list', controller=controller, action='list')
+        return map
 
