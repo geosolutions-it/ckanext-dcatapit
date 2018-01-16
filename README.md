@@ -98,6 +98,8 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
       The plugin will accept both json and ini file. The use of the file at
           https://www.dati.gov.it/datigov/taxonomy/synonyms/topics.json
       is strongly recommended.
+
+   * `dcatapit_harvest_list`: adds the page `/harvest/list`, which provides a summary of the status of all the catalog harvesters.
  
 7. In order to enable also the RDF harvester add ``dcatapit_harvester`` to the ``ckan.plugins`` setting in your CKAN. 
 The ckanext-dcatapit RDF harvester also harvests localized fields in multiple languages, but to do that requires the ckanext-multilang installed.

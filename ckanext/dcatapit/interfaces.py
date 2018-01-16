@@ -179,6 +179,25 @@ def get_for_package(pkg_id):
     records = PackageMultilang.get_for_package(pkg_id)
     return _multilang_to_dict(records)
 
+def get_for_group_or_organization(pkg_id):
+    '''
+    Returns all the localized fields of group (or organization), in a dict of dicts, i.e.:
+        {FIELDNAME:{LANG:label,...},...}
+
+    Returns None if multilang extension not loaded.
+    '''
+
+    try:
+        from ckanext.multilang.model import GroupMultilang
+    except ImportError:
+        log.warn('DCAT-AP_IT: multilang extension not available.')
+
+        # TODO: if no multilang, return the dataset in a single language in the same format of the multilang data
+        return None
+    records = GroupMultilang.get_for_group_id(pkg_id)
+    return _multilang_to_dict(records)
+
+
 def get_for_resource(res_id):
     '''
     Returns all the localized fields of a dataset's resources, in a dict of dicts, i.e.:
@@ -289,26 +308,27 @@ def get_license_for_dcat(license_type):
     names = l.get_names()
     return l.license_type, l.default_name, l.document_uri, l.version, l.uri, names
 
-def get_license_from_dcat(license_doc, license_type, prefname, **license_names):
-
-    default = License.get(License.DEFAULT_LICENSE)
-    if license_doc == default.license_type:
-        return default.uri
+def get_license_from_dcat(license_uri, license_dct, prefname, **license_names):
+    # First try dcatapit info
+    l = License.get(license_uri)
     
-    l = None
-    for lang, name in license_names.items():
-        l = License.get_by_lang(lang, name)
-        if l:
-            break
+    if not l and prefname:
+        l = License.get(prefname)
+
     if not l:
-        l = License.get(license_doc)
-    if not l:
-        l = License.get(license_type)
-    if not l:
-        l = default
-    return l
+        for lang, name in license_names.items():
+            l = License.get_by_lang(lang, name)
+            if l:
+                break
+    if not l and license_dct:
+        # try and use DCT licence URI (usually level 2 in DCATAPIT voc)
+        l = License.get(license_dct)
+
+    return l or License.get(License.DEFAULT_LICENSE)
+
 
 def get_localized_subthemes(subthemes):
+
     q = Subtheme.get_localized(*subthemes)
     out = {}
     for item in q:
