@@ -222,13 +222,14 @@ def load_json_or_list(val):
         if val:
             return [{'identifier': v} for v in val.split(',')]
 
+
 def get_dcatapit_subthemes(lang):
     """
     Dump subthemes tree with localized lables for all themes 
     """
     out = {}
     def _get_name(opt_val, depth):
-        return '{} {}'.format('-'*depth, opt_val)
+        return u'{} {}'.format('-'*depth, opt_val)
       
     for theme in Subtheme.get_theme_names():
         out[theme] = theme_l = []
@@ -286,6 +287,6 @@ def get_organization_by_identifier(context, identifier):
         # safety check
         assert ge.group_id is not None
         ctx = context.copy()
-        ctx.update(dict((k, False) for k in ('include_tags', 'include_users', 'include_groups', 'include_extras', 'include_followers',)))
+        ctx.update(DEFAULT_ORG_CTX)
 
         return toolkit.get_action('organization_show')(context=ctx, data_dict={'id': ge.group_id})

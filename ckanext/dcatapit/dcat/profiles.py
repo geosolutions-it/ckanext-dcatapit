@@ -228,7 +228,6 @@ class ItalianDCATAPProfile(RDFProfile):
 
         creators = self._parse_creators(dataset_ref)
 
-
         # use data from old method to populate new format
         from_old = {}
         if dataset_dict.get('creator_name'):
@@ -645,11 +644,8 @@ class ItalianDCATAPProfile(RDFProfile):
                 conforms_to = []
 
             for item in conforms_to:
-
-                if item.get('uri'):
-                    standard = URIRef(item['uri'])
-                else:
-                    standard = BNode()
+                standard = URIRef(item['uri']) if item.get('uri') else BNode()
+                
                 self.g.add((dataset_ref, DCT.conformsTo, standard))
                 self.g.add((standard, RDF['type'], DCT.Standard))
                 self.g.add((standard, RDF['type'], DCATAPIT.Standard))
@@ -661,7 +657,6 @@ class ItalianDCATAPProfile(RDFProfile):
 
                 for lang, val in (item.get('description') or {}).items():
                     self.g.add((standard, DCT.description, Literal(val, lang=lang)))
-
 
                 for reference_document in (item.get('referenceDocumentation') or []):
                     self.g.add((standard, DCATAPIT.referenceDocumentation, URIRef(reference_document)))
@@ -883,6 +878,33 @@ class ItalianDCATAPProfile(RDFProfile):
         else:
             log.warn("No mulitlang source data")
 
+    def _add_right_holder(self, dataset_dict, org_dict, ref):
+        basekey = 'holder'
+        agent_name = self._get_dict_value(dataset_dict, basekey + '_name', None)
+        agent_id = self._get_dict_value(dataset_dict, basekey + '_identifier', None)
+        holder_ref = None
+        if agent_id and agent_name:
+            use_dataset = True
+            holder_ref = self._add_agent(dataset_dict,
+                                         ref,
+                                         'holder',
+                                         DCT.rightsHolder,
+                                         use_default_lang=True)
+        else:
+            use_dataset = False
+            agent_name = org_dict.get('name')
+            agent_id = org_dict.get('identifier')
+
+            if agent_id and agent_name:
+                agent_data = (agent_name, agent_id,)
+                holder_ref = self._add_agent(org_dict,
+                                             ref,
+                                             'organization',
+                                             DCT.rightsHolder,
+                                             use_default_lang=True,
+                                             agent_data=agent_data)
+        return holder_ref, use_dataset
+
     def _add_themes(self, dataset_ref, raw_value):
         """
         Create theme/subtheme
@@ -930,33 +952,6 @@ class ItalianDCATAPProfile(RDFProfile):
             for lang, label in labels.items():
                 self.g.add((sref, SKOS.prefLabel, Literal(label, lang=lang)))
             self.g.add((ref, DCT.subject, sref))
-
-    def _add_right_holder(self, dataset_dict, org_dict, ref):
-        basekey = 'holder'
-        agent_name = self._get_dict_value(dataset_dict, basekey + '_name', None)
-        agent_id = self._get_dict_value(dataset_dict, basekey + '_identifier', None)
-        holder_ref = None
-        if agent_id and agent_name:
-            use_dataset = True
-            holder_ref = self._add_agent(dataset_dict,
-                                         ref,
-                                         'holder',
-                                         DCT.rightsHolder,
-                                         use_default_lang=True)
-        else:
-            use_dataset = False
-            agent_name = org_dict.get('name')
-            agent_id = org_dict.get('identifier')
-
-            if agent_id and agent_name:
-                agent_data = (agent_name, agent_id,)
-                holder_ref = self._add_agent(org_dict,
-                                             ref,
-                                             'organization',
-                                             DCT.rightsHolder,
-                                             use_default_lang=True,
-                                             agent_data=agent_data)
-        return holder_ref, use_dataset
 
     def _add_creators(self, dataset_dict, ref):
         """
