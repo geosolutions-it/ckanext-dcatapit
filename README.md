@@ -58,15 +58,13 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
 
 4. Activate your CKAN virtual environment, for example:
 
-     `. /usr/lib/ckan/default/bin/activate`
+        . /usr/lib/ckan/default/bin/activate
      
 5. Go into your CKAN path for extension (like /usr/lib/ckan/default/src):
 
-    `git clone https://github.com/geosolutions-it/ckanext-dcatapit.git`
-    
-    `cd ckanext-dcatapit`
-    
-    `pip install -e .`
+        git clone https://github.com/geosolutions-it/ckanext-dcatapit.git    
+        cd ckanext-dcatapit    
+        pip install -e .
 
 6. Add the required plugins to the ``ckan.plugins`` setting in your CKAN config file 
   (by default the config file is located at ``/etc/ckan/default/production.ini``).
@@ -108,14 +106,15 @@ The ckanext-dcatapit RDF harvester also harvests localized fields in multiple la
 
 9. Enable the dcatapit profile adding the following configuration property in the ``production.ini`` file:
 
-    `ckanext.dcat.rdf.profiles = euro_dcat_ap it_dcat_ap`
+       ckanext.dcat.rdf.profiles = euro_dcat_ap it_dcat_ap
 
 10. Configure the CKAN base URI as reported in the [dcat documentation](https://github.com/ckan/ckanext-dcat/blob/master/README.md#uris):
-    `ckanext.dcat.base_uri = YOUR_BASE_URI`
+
+        ckanext.dcat.base_uri = YOUR_BASE_URI
 
 11. Initialize the CKAN DB with the mandatory table needed for localized vocabulary voices:
 
-    `paster --plugin=ckanext-dcatapit vocabulary initdb --config=/etc/ckan/default/production.ini`
+        paster --plugin=ckanext-dcatapit vocabulary initdb --config=/etc/ckan/default/production.ini
 
 11. Update the Solr schema.xml file used by CKAN introducing the following element:
 
@@ -129,37 +128,34 @@ The ckanext-dcatapit RDF harvester also harvests localized fields in multiple la
      
 13. The EU controlled vocabularies must be populated before start using the dcatapit plugin. Execute in sequence these commands:
 
-    `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf --name languages --config=/etc/ckan/default/production.ini`
+        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf --name languages --config=/etc/ckan/default/production.ini
     
-    `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/data-theme/skos/data-theme-skos.rdf --name eu_themes --config=/etc/ckan/default/production.ini`
+        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/data-theme/skos/data-theme-skos.rdf --name eu_themes --config=/etc/ckan/default/production.ini
     
-    `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/place/skos/places-skos.rdf --name places --config=/etc/ckan/default/production.ini`
+        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/place/skos/places-skos.rdf --name places --config=/etc/ckan/default/production.ini
     
-    `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf --name frequencies --config=/etc/ckan/default/production.ini`
+        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf --name frequencies --config=/etc/ckan/default/production.ini
     
-    `paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf  --name filetype --config=/etc/ckan/default/production.ini`
+        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf  --name filetype --config=/etc/ckan/default/production.ini
 
 13. DCATAPIT themes and subthemes vocabularues must be popolated:
 
-    `paster --plugin=ckanext-dcatapit vocabulary load --filename EUROVOC_TO_THEMES_MAPPING_FILE --name subthemes --config=PATH_TO_INI_FILE  PATH_TO_EUROVOC`
+        paster --plugin=ckanext-dcatapit vocabulary load --filename EUROVOC_TO_THEMES_MAPPING_FILE --name subthemes --config=PATH_TO_INI_FILE  PATH_TO_EUROVOC
     
     Sample `eurovoc.rdf` and `eurovoc_mapping.rdf` can be found in the examples directory.
     You may want to download more recent files.
     
  14. DCATAPIT license tree. Download [license mapping file](https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/Licenze/Licenze.rdf). Alternatively you can use ``examples/licenses.rdf``, but mind that it may be outdated. Import `license.rdf` it with command:
 
-    `paster --plugin=ckanext-dcatapit vocabulary load --filename path/to/license.rdf --name licenses --config=/etc/ckan/default/production.ini`
+         paster --plugin=ckanext-dcatapit vocabulary load --filename path/to/license.rdf --name licenses --config=/etc/ckan/default/production.ini
 
 ## Development Installation
 
 To install `ckanext-dcatapit` for development, activate your CKAN virtualenv and do:
 
     git clone https://github.com/geosolutions-it/ckanext-dcatapit.git
-    
     cd ckanext-dcatapit
-    
     python setup.py develop
-
     pip install -r dev-requirements.txt
     
 ## Running the Tests
@@ -168,17 +164,17 @@ To prepare the environment for running tests, follow instructions reported [here
 Then initialize the test database:
 
     cd /usr/lib/ckan/default/src/ckan
-	paster db init -c test-core.ini
+    paster db init -c test-core.ini
 
 Finally to run tests, do:
 
     cd /usr/lib/ckan/default/src/ckanext-dcatapit
-    
     . /usr/lib/ckan/default/bin/activate
     
     nosetests --ckan --nologcapture --with-pylons=test.ini --with-coverage --cover-package=ckanext.dcatapit --cover-inclusive --cover-erase --cover-tests ckanext/dcatapit
 
 ## DCAT_AP-IT CSW Harvester
+
 The ckanext-dcatapit extension provides also a CSW harvester built on the **ckanext-spatial** extension, and inherits all of its functionalities. With this harvester you can harvest dcatapit dataset fields from the ISO metadata. The CSW harvester uses a default configuration usefull for populating mandatory fields into the source metadata, this json configuration can be customized into the harvest source form (please see the default one [here](https://github.com/geosolutions-it/ckanext-dcatapit/blob/master/ckanext/dcatapit/harvesters/csw_harvester.py#L54)). Below an example of the available configuration properties (for any configuration property not specified, the default one will be used):
 
     {
@@ -343,11 +339,11 @@ To create a new translation proceed as follow:
 
 1. Extract new messages from your extension updating the pot file
 
-     `python setup.py extract_messages`
+       python setup.py extract_messages
      
 2.  Create a translation file for your language (a po file) using the existing pot file in this plugin
 
-     `python setup.py init_catalog --locale YOUR_LANGUAGE`
+        python setup.py init_catalog --locale YOUR_LANGUAGE
 
      Replace YOUR_LANGUAGE with the two-letter ISO language code (e.g. es, de).
      
@@ -355,7 +351,7 @@ To create a new translation proceed as follow:
 
 4. Once the translation files (po) have been updated, either manually or via Transifex, compile them by running:
 
-     `python setup.py compile_catalog --locale YOUR_LANGUAGE`
+       python setup.py compile_catalog --locale YOUR_LANGUAGE
      
 ### Updating an existing translation
 
@@ -363,15 +359,15 @@ In order to update the existing translations proceed as follow:
 
 1. Extract new messages from your extension updating the pot file
 
-     `python setup.py extract_messages`
+       python setup.py extract_messages
      
 2. Update the strings in your po file, while preserving your po edits, by doing:
 
-     `python setup.py update_catalog --locale YOUR-LANGUAGE`
+       python setup.py update_catalog --locale YOUR-LANGUAGE
 
 3. Once the translation files (po) have been updated adding the new translations needed, compile them by running:
 
-     `python setup.py compile_catalog --locale YOUR_LANGUAGE`
+       python setup.py compile_catalog --locale YOUR_LANGUAGE
 
 ## Contributing
 
