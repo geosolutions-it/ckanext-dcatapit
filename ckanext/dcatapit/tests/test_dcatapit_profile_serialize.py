@@ -15,6 +15,7 @@ try:
 except ImportError:
     from ckan.new_tests import helpers, factories
 
+from ckan.plugins import toolkit
 from ckan.model import Session, repo
 from ckanext.dcat import utils
 from ckanext.dcat.processors import RDFSerializer
@@ -47,6 +48,12 @@ class BaseSerializeTest(object):
 
 class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
 
+    def _get_user(self):
+        user = toolkit.get_action('get_site_user')(
+            {'ignore_auth': True, 'defer_commit': True},
+            {})
+        return user
+
     def test_graph_from_dataset(self):
 
         conforms_to_in = [{'identifier': 'CONF1',
@@ -71,6 +78,11 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
         temporal_coverage = [{'temporal_start': '2001-01-01', 'temporal_end': '2001-02-01 10:11:12'},
                              {'temporal_start': '2001-01-01', 'temporal_end': '2001-02-01 11:12:13'},
                             ]
+
+        subthemes = [{'theme': 'AGRI', 'subthemes': ['http://eurovoc.europa.eu/100253',
+                                                     'http://eurovoc.europa.eu/100258']},
+                     {'theme': 'ENVI', 'subthemes': []}]
+
         dataset = {
             'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
             'name': 'test-dataset',
@@ -93,12 +105,15 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             'holder_identifier':'234234234',
             'alternate_identifier':json.dumps(alternate_identifiers),
             'temporal_coverage': json.dumps(temporal_coverage),
-            'theme':'ECON',
+            #'theme':'ECON',
             'geographical_geonames_url':'http://www.geonames.org/3181913',
             'language':'{DEU,ENG,ITA}',
             'is_version_of':'http://dcat.geo-solutions.it/dataset/energia-da-fonti-rinnovabili2',
             'conforms_to':json.dumps(conforms_to_in),
             'creator': json.dumps(creators),
+            'theme': json.dumps(subthemes),
+
+
         }
         
         pkg_id = dataset['id']
@@ -271,3 +286,79 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
                 if holder_name.language:
                     assert str(holder_name.language) in holder_names, "no {} in {}".format(holder_name.language, holder_names)
                     assert holder_names[str(holder_name.language)] == str(holder_name), "{} vs {}".format(holder_name, holder_names)
+
+
+    def test_holder(self):
+        org = {'name': 'org-test',
+               'title': 'Test org',
+               'identifier': "abc"}
+        
+        pkg1 = {
+            'id': '2b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
+            'name': 'test-dataset-1',
+            'title': 'Dataset di test DCAT_AP-IT',
+            'notes': 'dcatapit dataset di test',
+            'metadata_created': '2015-06-26T15:21:09.034694',
+            'metadata_modified': '2015-06-26T15:21:09.075774',
+            'modified':'2016-11-29',
+            'identifier':'ISBNabc',
+            'frequency':'UPDATE_CONT',
+            'publisher_name':'bolzano',
+            'publisher_identifier':'234234234',
+            'creator_name':'test',
+            'creator_identifier':'412946129',
+            'holder_name':'bolzano',
+            'holder_identifier':'234234234',
+            'theme':'{ECON,ENVI}',
+            'language':'{DEU,ENG,ITA}',
+        }
+        
+        pkg2 = {
+            'id': 'eb6fe9ca-dc77-4cec-92a4-55c6624a5b00',
+            'name': 'test-dataset-2',
+            'title': 'Dataset di test DCAT_AP-IT 2',
+            'notes': 'dcatapit dataset di test',
+            'metadata_created': '2015-06-26T15:21:09.034694',
+            'metadata_modified': '2015-06-26T15:21:09.075774',
+            'modified':'2016-11-29',
+            'identifier':'ISBNcde',
+            'frequency':'UPDATE_CONT',
+            'publisher_name':'bolzano',
+            'publisher_identifier':'234234234',
+            'creator_name':'test',
+            'creator_identifier':'412946129',
+            'theme':'{ECON,ENVI}',
+            'language':'{DEU,ENG,ITA}',
+            'owner_org': org['name'],
+        }
+
+        packages = [pkg1, pkg2]
+        ctx = {'ignore_auth': True,
+               'user': self._get_user()['name']}
+
+        org_dict = helpers.call_action('organization_create', context=ctx, **org)
+        for pkg in packages:
+            helpers.call_action('package_create', context=ctx, **pkg)
+
+        for pkg in packages:
+            s = RDFSerializer()
+            g = s.g
+            dataset_ref = s.graph_from_dataset(pkg)
+            has_identifier = False
+            rights_holders = list(g.objects(dataset_ref, DCT.rightsHolder))
+
+            assert len(rights_holders), "There should be one rights holder for\n {}:\n {}".format(pkg, 
+                                                                                                  s.serialize_dataset(pkg))
+            for holder_ref in rights_holders:
+                _holder_names = list(g.objects(holder_ref, FOAF.name))
+                _holder_ids = list((str(ob) for ob in g.objects(holder_ref, DCT.identifier)))
+
+                assert len(_holder_names) == 1
+                assert len(_holder_ids) == 1
+                
+                test_id = pkg.get('holder_identifier') or org_dict['identifier']
+                has_identifier = _holder_ids[0] == test_id
+                assert has_identifier, "No identifier in {} (expected {}) for\n {}\n{}".format(_holder_ids,
+                                                                                           test_id,
+                                                                                           pkg,
+                                                                                           s.serialize_dataset(pkg))

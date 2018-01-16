@@ -179,6 +179,25 @@ def get_for_package(pkg_id):
     records = PackageMultilang.get_for_package(pkg_id)
     return _multilang_to_dict(records)
 
+def get_for_group_or_organization(pkg_id):
+    '''
+    Returns all the localized fields of group (or organization), in a dict of dicts, i.e.:
+        {FIELDNAME:{LANG:label,...},...}
+
+    Returns None if multilang extension not loaded.
+    '''
+
+    try:
+        from ckanext.multilang.model import GroupMultilang
+    except ImportError:
+        log.warn('DCAT-AP_IT: multilang extension not available.')
+
+        # TODO: if no multilang, return the dataset in a single language in the same format of the multilang data
+        return None
+    records = GroupMultilang.get_for_group_id(pkg_id)
+    return _multilang_to_dict(records)
+
+
 def get_for_resource(res_id):
     '''
     Returns all the localized fields of a dataset's resources, in a dict of dicts, i.e.:

@@ -30,9 +30,9 @@
 .conforms_to {
 }
 .bold {
-    font-weight: bold
+    font-weight: bold;
 }
-.conforms_to .remove_conforms_to, .alternate_identifier .remove, .creator .remove, .temporal-coverage .remove {
+.conforms_to .remove_conforms_to, .alternate_identifier .remove, .creator .remove, .temporal-coverage .remove, .theme .remove {
     float: right;
     padding-right: 20px;
     text-align: right;
