@@ -112,7 +112,7 @@ Old implementation of the couple element (one element with comma separated value
 {% endmacro %}
 
 
-{% macro theme(name, id='', label='', value='', placeholder='', type='text', error="", options=(), classes=[], attrs={}, is_required=false, multiple=True, use_autocomplete=True) %}
+{% macro vocabulary(name, id='', label='', value='', placeholder='', type='text', error="", options=(), classes=[], attrs={}, is_required=false, multiple=True, use_autocomplete=True) %}
   {%- set extra_html = caller() if caller -%}
   {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
 
@@ -140,7 +140,7 @@ Old implementation of the couple element (one element with comma separated value
 <div class="theme-wrap">
     <div class="template theme">
         
-        {% call theme(name, id=id, label=label, placeholder=placeholder, error=error, options=options, classes=classes, attrs=attrs, multiple=False, use_autocomplete=False) %}
+        {% call vocabulary(name, id=id, label=label, placeholder=placeholder, error=error, options=options, classes=classes, attrs=attrs, multiple=False, use_autocomplete=False) %}
         {% endcall %}
 
         {% call subtheme(name, label=sublabel, placeholder=subplaceholder, options=suboptions, classes=classes) %}

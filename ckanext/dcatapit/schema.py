@@ -185,7 +185,7 @@ def get_custom_package_schema():
 	    {
 		    'name': 'geographical_name',
 		    'validator': ['ignore_missing'],
-		    'element': 'theme',
+		    'element': 'vocabulary',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'places',
 		    'label': _('Geographical Name'),
@@ -206,7 +206,7 @@ def get_custom_package_schema():
 	    {
 		    'name': 'language',
 		    'validator': ['ignore_missing'],
-		    'element': 'theme',
+		    'element': 'vocabulary',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'languages',
 		    'label': _('Dataset Languages'),
