@@ -953,7 +953,6 @@ class ItalianDCATAPProfile(RDFProfile):
                 self.g.add((sref, SKOS.prefLabel, Literal(label, lang=lang)))
             self.g.add((ref, DCT.subject, sref))
 
-            
     def _add_creators(self, dataset_dict, ref):
         """
         new style creators. creator field is serialized json, with pairs of name/identifier
