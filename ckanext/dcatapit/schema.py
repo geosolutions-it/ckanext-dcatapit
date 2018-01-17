@@ -84,6 +84,18 @@ def get_custom_organization_schema():
 		    'placeholder': _('organization site url'),
 		    'is_required': False
 	    },
+	    {
+		    'name': 'region',
+		    'validator': ['ignore_missing', 'not_empty'],
+		    'element': 'region',
+		    'type': 'vocabulary',
+		    'vocabulary_name': 'regions',
+		    'label': _('Region'),
+            'multiple': False,
+		    'placeholder': _('region name'),
+		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=regions&incomplete=?',
+		    'is_required': False
+	    },
         {
             'name': 'identifier',
             'label': _('IPA/IVA'),
