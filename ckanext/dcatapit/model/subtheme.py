@@ -4,7 +4,7 @@
 import logging
 
 from sqlalchemy import types, Column, ForeignKey, Index, Table
-from sqlalchemy import orm, and_
+from sqlalchemy import orm, and_, or_
 from sqlalchemy.exc import SQLAlchemyError as SAError
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 
@@ -233,6 +233,13 @@ class Subtheme(_Base, DeclarativeBase):
                    .order_by(Tag.name)
         return [t[0] for t in q]
 
+    @classmethod
+    def get_localized(cls, *subthemes):
+        q = Session.query(SubthemeLabel.lang, SubthemeLabel.label)\
+                   .join(cls, cls.id == SubthemeLabel.subtheme_id)\
+                   .filter(or_(cls.uri.in_(subthemes),
+                               cls.default_label.in_(subthemes)))
+        return q
 
 class SubthemeLabel(_Base, DeclarativeBase):
     __tablename__ = 'dcatapit_subtheme_labels'
@@ -247,6 +254,7 @@ class SubthemeLabel(_Base, DeclarativeBase):
     def __table_args__(cls):
         return (Index('{}_label_subtheme_idx'.format(cls.__tablename__),
                       'subtheme_id', 'lang'),)
+
 
 def clear_subthemes():
     SubthemeLabel.q().delete()

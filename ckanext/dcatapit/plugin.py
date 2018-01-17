@@ -1,4 +1,5 @@
 import logging
+import json
 
 from ckan import logic
 from ckan import lib
@@ -12,6 +13,8 @@ import ckanext.dcatapit.helpers as helpers
 import ckanext.dcatapit.interfaces as interfaces
 from   ckanext.dcatapit.dcat.harvester import map_nonconformant_groups
 from   ckanext.dcatapit.mapping import populate_theme_groups
+from   ckanext.dcatapit.helpers import DEFAULT_ORG_CTX
+from   ckanext.dcatapit.model.license import License
 
 from ckan.model.package import Package
 from ckan.model import Session, repo
@@ -295,7 +298,60 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         search_terms = [t['theme'] for t in themes]
         if search_terms:
             dataset_dict['dcat_theme'] = search_terms
+
+        search_subthemes = []
+        for t in themes:
+            search_subthemes.extend(t.get('subthemes') or [])
+
+        if search_terms:
+            dataset_dict['dcat_theme'] = search_terms
+        if search_subthemes:
+            dataset_dict['dcat_subtheme'] = search_subthemes
+            localized_subthemes = interfaces.get_localized_subthemes(search_subthemes)
+            for lang, subthemes in localized_subthemes.items():
+                dataset_dict['dcat_subtheme_{}'.format(lang)] = subthemes
+        ddict = json.loads(dataset_dict['data_dict'])
+        resources = ddict.get('resources') or []
+        _licenses = list(set([r.get('license_type') for r in resources if r.get('license_type')]))
+
+        licenses = []
+        for l in _licenses:
+            lic = License.get(l)
+            for loclic in lic.get_names():
+                lname = loclic['name']
+                lang = loclic['lang']
+                if lname:
+                    dataset_dict['resource_license_{}'.format(lang)] = lname
+
+        dataset_dict['resource_license'] = _licenses
+
+        org_id = dataset_dict['owner_org']
+        organization_show = plugins.toolkit.get_action('organization_show')
+        if org_id:
+            org = organization_show(DEFAULT_ORG_CTX, {'id': org_id})
+        else:
+            org = {}
+        if org.get('region'):
+
+            # multilang!
+            region_base = org['region']
+            tags = interfaces.get_all_localized_tag_labels(region_base)
+            for lang, region in tags.items():
+                dataset_dict['organization_region_{}'.format(lang)] = region
+
         return dataset_dict
+
+    def before_search(self, search_params):
+        fq_all = [] 
+       
+        if isinstance(search_params['fq'], (str,unicode,)):
+            fq = [search_params['fq']]
+        else:
+            fq = search_params['fq']
+        if fq and fq[0] and not fq[0].startswith(('+', '-')):
+            fq[0] = u'+{}'.format(fq[0])
+        search_params['fq'] = ' '.join(fq)
+        return search_params
 
     def after_search(self, search_results, search_params):
         ## ##################################################################### 
@@ -579,7 +635,16 @@ class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
 
     # IFacets
     def dataset_facets(self, facets_dict, package_type):
+        lang = interfaces.get_language() or validators.DEFAULT_LANG
         facets_dict['source_catalog_title'] = plugins.toolkit._("Source catalogs")
+        facets_dict['organization_region_{}'.format(lang)] = plugins.toolkit._("Organization region")
+        facets_dict['resource_license_{}'.format(lang)] = plugins.toolkit._("Resources license")
+        facets_dict['dcat_subtheme_{}'.format(lang)] = plugins.toolkit._("Subthemes")
+
+        return facets_dict
+
+    def organization_facets(self, facets_dict, organization_type, package_type):
+        facets_dict['region'] = plugins.toolkit._("Region")
         return facets_dict
 
 class DCATAPITHarvestListPlugin(plugins.SingletonPlugin):
@@ -589,4 +654,3 @@ class DCATAPITHarvestListPlugin(plugins.SingletonPlugin):
         controller = 'ckanext.dcatapit.controllers.harvest:HarvesterController'
         map.connect('harvest_list', '/harvest/list', controller=controller, action='list')
         return map
-
