@@ -653,10 +653,10 @@ class ItalianDCATAPProfile(RDFProfile):
                 self.g.add((standard, DCT.identifier, Literal(item['identifier'])))
 
                 for lang, val in (item.get('title') or {}).items():
-                    self.g.add((standard, DCT.title, Literal(val, lang=lang)))
+                    self.g.add((standard, DCT.title, Literal(val, lang=lang_mapping_ckan_to_voc.get(lang, lang))))
 
                 for lang, val in (item.get('description') or {}).items():
-                    self.g.add((standard, DCT.description, Literal(val, lang=lang)))
+                    self.g.add((standard, DCT.description, Literal(val, lang=lang_mapping_ckan_to_voc.get(lang, lang))))
 
                 for reference_document in (item.get('referenceDocumentation') or []):
                     self.g.add((standard, DCATAPIT.referenceDocumentation, URIRef(reference_document)))
@@ -1013,7 +1013,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
         if isinstance(agent_name, dict):
             for lang, aname in agent_name.items():
-                self.g.add((agent, FOAF.name, Literal(aname, lang=lang)))
+                self.g.add((agent, FOAF.name, Literal(aname, lang=lang_mapping_ckan_to_voc.get(lang, lang))))
         else:
             if use_default_lang:
                 self.g.add((agent, FOAF.name, Literal(agent_name, lang=DEFAULT_LANG)))
