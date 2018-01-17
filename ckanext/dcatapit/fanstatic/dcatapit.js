@@ -520,3 +520,66 @@ ckan.module('dcatapit-theme', function($){
     }
     return $.extend({}, dcatapit.templated_input, theme);
  });
+
+
+ckan.module('dcatapit-edit-form', function($){
+    var edit_form = {
+        initialize: function(){
+            this.el = $(this.el);
+            $.proxyAll(this, /_on/);
+            this.settings = this.load_settings(this.options.settingsContainer);
+            this.container = $(this.options.formContainer);
+            this.init_tabs(this.settings, this.container);
+        },
+
+        load_settings: function(container){
+            var serialized_settings = $(container).html();
+            try {
+                var val = $.parseJSON(serialized_settings);
+            } catch (SyntaxError){
+                var val = {'tabs': []};
+            }
+            return val;
+        },
+
+        init_tabs: function(settings, container){
+            var that = this;
+
+            // where tabs are added
+            var tabs_list = $('<div class="tabs"><ol id="form-tabs"></ol></div>');
+            // where form fields are moved
+            var tabs_container = $('<div class="forms-container"></div>');
+
+            container.append(tabs_list);
+            container.append(tabs_container);
+
+            $.each(settings['tabs'], function(idx, elm){
+                that.add_tab(tabs_list,
+                             tabs_container,
+                             elm['id'],
+                             elm['name'],
+                             elm['fields']);
+            });
+
+            container.tabs();
+        },
+
+        add_tab: function(tabs_container, container, tab_id, name, fields){
+            var tab = $('<li><a href="#' + tab_id + '-tab-container">'+ name +'</a></li>');
+            var form_p = $('<div id="'+ tab_id+'-tab-container"></div>');
+            var that = this;
+            tabs_container.append(tab);
+            container.append(form_p);
+
+            $.each(fields, function(idx, elm){
+                var field = $('[name="' + elm['name'] +'"]');
+                // customized parent lookup
+                var parent_name  = elm['parent'] || 'div.control-group';
+                var field_container = field.parents(parent_name);
+                form_p.append(field_container);
+            });
+        }
+    }
+
+    return $.extend({}, edit_form);
+ });

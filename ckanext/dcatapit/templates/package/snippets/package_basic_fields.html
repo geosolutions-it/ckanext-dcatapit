@@ -4,9 +4,39 @@
 
 {% block package_basic_fields_custom %}
 
+    {% resource 'ckanext-dcatapit/jquery.ui.core.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.widget.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.tabs.js' %}
+
     {% resource 'ckanext-dcatapit/dcatapit.js' %}
     {% resource 'ckanext-dcatapit/dcatapit.css' %}
 
+    <div id="dcatapit-edit-form-settings" class="hidden">{{ h.json_dump({'tabs': [
+    {'id': 'information',
+    'name': _('Information'),
+    'fields': [{'name': 'title'},
+               {'name': 'description'}
+               {'name': 'identifier'},
+               {'name': 'alternate_identifier'},
+               {'name': 'language'},
+               {'name': 'is_version_of'},
+              ]},
+    {'id': 'classification',
+     'name': _('Classification'),
+     'fields': [
+               {'name': 'theme', 'parent': '.theme-wrap'},
+               {'name': 'publisher_name'},
+               {'name': 'issued'},
+               {'name': 'modified'},
+               {'name': 'geographical_name'},
+               {'name': 'geographical_geonames_url'},
+               
+               ],
+    }]}) }}
+    </div>
+
+    <div class="dcatapit-form" data-module="dcatapit-edit-form" data-module-settings-container="#dcatapit-edit-form-settings" data-module-form-container="#dataset-edit">
 	{% snippet 'snippets/dcatapit_form_fields.html', data=data, errors=errors, schema_fields=pkg_fields %}
 
+    </div>
 {% endblock %}
