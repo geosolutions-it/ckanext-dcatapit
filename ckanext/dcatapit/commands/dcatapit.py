@@ -3,6 +3,7 @@
 
 import logging
 import re
+import traceback
 
 import ckan.plugins.toolkit as toolkit
 from ckan.lib.munge import munge_tag
@@ -191,7 +192,9 @@ def do_load_regions(g, vocab_name):
                      'lang': n.language,
                      'localized_text': n.value}
             pref_labels.append(label)
-            
+
+    log.info('Loaded %d regions', len(concepts))
+    print('Loaded %d regions' % len(concepts))
     return pref_labels, concepts
 
 
@@ -265,6 +268,8 @@ def do_load(vocab_name, url=None, filename=None, format=None):
         g.parse(**fargs)
     except Exception,e:
         log.error("ERROR: Problem occurred while retrieving the document %r with params %s", e, fargs)
+        print("ERROR: Problem occurred while retrieving the document %r with params %s", fargs)
+        traceback.print_exc(e)
         return
 
     if vocab_name == REGIONS_NAME:

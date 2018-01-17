@@ -142,6 +142,9 @@ The ckanext-dcatapit RDF harvester also harvests localized fields in multiple la
         paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf --name frequencies --config=/etc/ckan/default/production.ini
     
         paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf  --name filetype --config=/etc/ckan/default/production.ini
+        
+        curl https://raw.githubhttps://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/ClassificazioneTerritorio/Istat-Classificazione-08-Territorio.rdf > Istat-Classificazione-08-Territorio.rdf
+        paster --plugin=ckanext-dcatapit vocabulary load --filename Istat-Classificazione-08-Territorio.rdf --name regions --config=/etc/ckan/default/production.ini
 
 13. DCATAPIT themes and subthemes vocabularues must be popolated:
 
