@@ -15,6 +15,10 @@ DCATAPIT_THEMES_MAP = 'ckanext.dcatapit.nonconformant_themes_mapping.file'
 DCATAPIT_THEMES_MAP_SECTION = 'terms_theme_mapping'
 
 
+def _decode_list(value):
+    return value.strip('{}').split(',')
+
+
 def _encode_list(items):
     if items and len(items)> 1:
         return '{{{}}}'.format(','.join(items))
@@ -266,7 +270,10 @@ def populate_theme_groups(instance, clean_existing=False):
             if isinstance(_t, list):
                 themes.extend(_t)
             else:
-                tval = json.loads(_t)
+                try:
+                    tval = json.loads(_t)
+                except Exception:
+                    tval = [{'theme': t, 'subthemes': []} for t in _decode_list(_t)]
                 for tv in tval:
                     themes.append(tv['theme'])
 
