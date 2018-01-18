@@ -930,6 +930,8 @@ class ItalianDCATAPProfile(RDFProfile):
             else:
                 themes = []
 
+        # ckanext-dcat will leave bad values from serialized themes
+        self.g.remove((dataset_ref, DCAT.theme, None))
         if themes:
             for theme in themes:
                 theme_name = theme['theme']
