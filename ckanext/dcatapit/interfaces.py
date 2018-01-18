@@ -327,6 +327,12 @@ def get_license_from_dcat(license_uri, license_dct, prefname, **license_names):
     return l or License.get(License.DEFAULT_LICENSE)
 
 
+def get_localized_subtheme(subtheme, lang):
+    localized = Subtheme.get_any(subtheme)
+    if not localized:
+        return
+    return localized.get_name(lang)
+
 def get_localized_subthemes(subthemes):
 
     q = Subtheme.get_localized(*subthemes)

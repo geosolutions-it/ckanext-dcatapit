@@ -99,6 +99,16 @@ class Subtheme(_Base, DeclarativeBase):
         except SAError:
             return
 
+    @classmethod
+    def get_any(cls, value):
+        q = cls.q()
+        try:
+            return q.filter(or_(cls.uri==value,
+                                cls.identifier==value,
+                                cls.default_label==value)).one()
+        except SAError:
+            return
+
     def get_names(self):
         return [{'lang': n.lang, 'name': n.label} for n in self.names]
 

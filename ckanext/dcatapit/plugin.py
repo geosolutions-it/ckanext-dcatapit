@@ -247,6 +247,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'load_dcatapit_subthemes': helpers.load_dcatapit_subthemes,
             'get_dcatapit_subthemes': helpers.get_dcatapit_subthemes,
             'dump_dcatapit_subthemes': helpers.dump_dcatapit_subthemes,
+            'get_localized_subtheme': helpers.get_localized_subtheme,
         }
 
     # ------------- IPackageController ---------------#
