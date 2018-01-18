@@ -340,6 +340,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             for lang, region in tags.items():
                 dataset_dict['organization_region_{}'.format(lang)] = region
 
+        self._update_pkg_rights_holder(dataset_dict, org=org)
         return dataset_dict
 
     def before_search(self, search_params):
@@ -402,20 +403,16 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     def after_show(self, context, pkg_dict):
         return self._update_pkg_rights_holder(pkg_dict)
 
-    def before_index(self, pkg_dict):
-        return self._update_pkg_rights_holder(pkg_dict)
-
-    def _update_pkg_rights_holder(self, pkg_dict):
+    def _update_pkg_rights_holder(self, pkg_dict, org=None):
         if pkg_dict.get('type') != 'dataset':
             return pkg_dict
         if not (pkg_dict.get('holder_identifier') and pkg_dict.get('holder_name')):
             if not pkg_dict.get('owner_org'):
                 return pkg_dict
-            get_org = toolkit.get_action('organization_show')
-            ctx = {'ignore_auth': True}
-            ctx.update(dict((k, False) for k in ('include_tags', 'include_users', 'include_groups', 'include_extras', 'include_followers',)))
-                   
-            org = get_org(ctx, {'id': pkg_dict['owner_org']})
+            if org is None:
+                get_org = toolkit.get_action('organization_show')
+                ctx = DEFAULT_ORG_CTX
+                org = get_org(ctx, {'id': pkg_dict['owner_org']})
             pkg_dict['holder_name'] = org['name']
             pkg_dict['holder_identifier'] = org.get('identifier')
         return pkg_dict
