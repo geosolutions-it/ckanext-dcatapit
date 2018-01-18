@@ -536,7 +536,8 @@ ckan.module('dcatapit-edit-form', function($){
             var serialized_settings = $(container).html();
             try {
                 var val = $.parseJSON(serialized_settings);
-            } catch (SyntaxError){
+            } catch (err){
+                console.log('cannot parse', serialized_settings, err);
                 var val = {'tabs': []};
             }
             return val;
@@ -546,7 +547,7 @@ ckan.module('dcatapit-edit-form', function($){
             var that = this;
 
             // where tabs are added
-            var tabs_list = $('<div class="tabs"><ol id="form-tabs"></ol></div>');
+            var tabs_list = $('<ul id="form-tabs"></ul>');
             // where form fields are moved
             var tabs_container = $('<div class="forms-container"></div>');
 
@@ -554,14 +555,22 @@ ckan.module('dcatapit-edit-form', function($){
             container.append(tabs_container);
 
             $.each(settings['tabs'], function(idx, elm){
-                that.add_tab(tabs_list,
-                             tabs_container,
-                             elm['id'],
-                             elm['name'],
-                             elm['fields']);
+                var this_tab = that.add_tab(tabs_list,
+                                            tabs_container,
+                                            elm['id'],
+                                            elm['name'],
+                                            elm['fields']);
+                if (elm['use_extra']||false){
+                    that.collect_extras(this_tab);
+                }
             });
 
             container.tabs();
+        },
+
+        collect_extras: function(to_tab){
+            var tabs = to_tab['tab'];
+            var form = to_tab['form'];
         },
 
         add_tab: function(tabs_container, container, tab_id, name, fields){
@@ -572,12 +581,19 @@ ckan.module('dcatapit-edit-form', function($){
             container.append(form_p);
 
             $.each(fields, function(idx, elm){
-                var field = $('[name="' + elm['name'] +'"]');
+                if (elm['selector'] !== undefined){
+                    var field = $(elm['selector']);
+                } else {
+                    var field = $('[name="' + elm['name'] +'"]');
+                }
                 // customized parent lookup
                 var parent_name  = elm['parent'] || 'div.control-group';
                 var field_container = field.parents(parent_name);
-                form_p.append(field_container);
+                if  (field_container.length > 0){
+                    form_p.append(field_container);
+                }
             });
+            return {'tab': tab, 'form': form_p}
         }
     }
 

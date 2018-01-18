@@ -15,7 +15,9 @@
     {'id': 'information',
     'name': _('Information'),
     'fields': [{'name': 'title'},
-               {'name': 'description'}
+               {'name': 'name'},
+               {'name': None, 'selector': 'slug-preview-value', 'parent': '.slug-preview'},
+               {'name': 'description'},
                {'name': 'identifier'},
                {'name': 'alternate_identifier'},
                {'name': 'language'},
@@ -25,14 +27,45 @@
      'name': _('Classification'),
      'fields': [
                {'name': 'theme', 'parent': '.theme-wrap'},
+               {'name': 'tag'},
+                ]},
+    {'id': 'organization',
+     'name': _('Organizations'),
+     'fields': [
+               {'name': 'owner_org'},
                {'name': 'publisher_name'},
-               {'name': 'issued'},
-               {'name': 'modified'},
-               {'name': 'geographical_name'},
-               {'name': 'geographical_geonames_url'},
-               
-               ],
-    }]}) }}
+               {'name': 'creator'},
+               ],},
+    {'id': 'temporal',
+     'name': _('Temporal'),
+     'fields': [
+                {'name': 'issued'},
+                {'name': 'modified'},
+                {'name': 'frequency'},
+                {'name': 'released'},
+                {'name': 'temporal_coverage'},
+               ]},
+    {'id': 'spatial',
+     'name': _('Spatial'),
+     'fields': [
+                {'name': 'geographical_name'},
+                {'name': 'geographical_geonames_url'},
+               ]},
+    {'id': 'standards',
+     'name': _('Standards'),
+     'fields': [ 
+                {'name': 'conforms_to'} 
+               ]},
+    {'id': 'related',
+     'name': _('Related databases'),
+     'fields': [
+                {'name': 'is_version_of'}
+              ]},
+    {'id': 'extra',
+     'name': _('Extra'),
+     'fields': [],
+     'use_extra': true},
+    ]}) }}
     </div>
 
     <div class="dcatapit-form" data-module="dcatapit-edit-form" data-module-settings-container="#dcatapit-edit-form-settings" data-module-form-container="#dataset-edit">
