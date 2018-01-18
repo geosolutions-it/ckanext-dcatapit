@@ -222,6 +222,8 @@ def load_json_or_list(val):
         if val:
             return [{'identifier': v} for v in val.split(',')]
 
+def get_localized_subtheme(subtheme_id, lang):
+    return interfaces.get_localized_subtheme(subtheme_id, lang) or subtheme_id
 
 def get_dcatapit_subthemes(lang):
     """
