@@ -54,7 +54,7 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
 
     def _handle_rights_holder(self, dataset_dict, temp_dict, job):
         try:
-            config = json.loads(job.source.config)
+            config = json.loads(job.source.config) if job.source.config else {}
         except (TypeError, ValueError,), err:
             log.warning("Cannot parse job config to get rights holder: %s", err, exc_info=err)
             config = {}

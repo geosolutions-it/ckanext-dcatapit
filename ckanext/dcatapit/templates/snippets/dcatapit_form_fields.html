@@ -43,7 +43,8 @@
                                  is_required=field.is_required,
                                  help=field.help) }}
 
-            {% elif field.name == 'theme' %}
+
+            {% elif field.element == 'themes' %}
 
                   {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
                   {% set all_subthemes = h.get_dcatapit_subthemes(h.lang()) %}
@@ -69,10 +70,11 @@
                               help=field.help)
                   }}
 
-            {% elif field.element == 'theme' %}
+            {% elif field.element == 'vocabulary' or field.element == 'region' %}
+
                   {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
                   {{ 
-                        dcatapit_form_macros.theme(
+                        dcatapit_form_macros.vocabulary(
                               field.name,
                               id='field-' + field.name,
                               label=field.label,
