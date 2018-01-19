@@ -547,12 +547,12 @@ ckan.module('dcatapit-edit-form', function($){
             var that = this;
 
             // where tabs are added
-            var tabs_list = $('<ul id="form-tabs"></ul>');
+            var tabs_list = $('<ul id="form-tabs" class="unstyled nav nav-simple"></ul>');
             // where form fields are moved
             var tabs_container = $('<div class="forms-container"></div>');
 
             container.append(tabs_list);
-            container.append(tabs_container);
+            container.prepend(tabs_container);
 
             $.each(settings['tabs'], function(idx, elm){
                 var this_tab = that.add_tab(tabs_list,
@@ -561,20 +561,37 @@ ckan.module('dcatapit-edit-form', function($){
                                             elm['name'],
                                             elm['fields']);
                 if (elm['use_extra']||false){
-                    that.collect_extras(this_tab);
+                    that.collect_extras(this_tab, elm);
                 }
             });
-
+            // initiate tabs
             container.tabs();
+            // move tabs controls to secondary content
+            $('#tabs-container').append(tabs_list);
+            
+
         },
 
-        collect_extras: function(to_tab){
+        collect_extras: function(to_tab, config){
             var tabs = to_tab['tab'];
             var form = to_tab['form'];
+            var parent_name  = config['parent'] || 'div.control-group';
+            var extras = [];
+
+            var extras_in = $('[name^="extras__"]');
+            $.each(extras_in, function(idx, elm){
+                var parent_elm = $(elm).parents(parent_name);
+                if (parent_elm.length>0 && $.inArray(parent_elm[0], extras) < 0){
+                    extras.push(parent_elm[0]);
+                }
+            });
+            $.each(extras, function(idx, elm){
+                form.append(elm);
+            });
         },
 
         add_tab: function(tabs_container, container, tab_id, name, fields){
-            var tab = $('<li><a href="#' + tab_id + '-tab-container">'+ name +'</a></li>');
+            var tab = $('<li class="nav-item"><a href="#' + tab_id + '-tab-container"><span>'+ name +'</span></a></li>');
             var form_p = $('<div id="'+ tab_id+'-tab-container"></div>');
             var that = this;
             tabs_container.append(tab);

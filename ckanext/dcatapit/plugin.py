@@ -419,6 +419,10 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             pkg_dict['holder_identifier'] = org.get('identifier')
         return pkg_dict
 
+    def edit_template(self):
+        return 'package/dcatapit_edit.html'
+
+
 class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupForm):
 
     # IConfigurer
