@@ -565,12 +565,59 @@ ckan.module('dcatapit-edit-form', function($){
                 }
             });
             // initiate tabs
-            container.tabs();
+            container.tabs({'activate': function(evt, ui){
+                                                        $(ui.newTab).addClass('hovered');
+                                                        $(ui.oldTab).removeClass('hovered');
+                                                        }});
+
+            $(tabs_list.find('li a')[0]).click();
             // move tabs controls to secondary content
             $('#tabs-container').append(tabs_list);
-            
+            this.build_nav(tabs_list.find('li'), tabs_container.find('.ui-tabs-panel'));
+        },
+
+        build_nav: function(tabs, panels){
+            var that = this;
+            $.each(tabs, function(idx, elm){
+                var next = null;
+                var prev = null;
+                var current = $(elm);
+                if (idx == 0){
+                    if (tabs.length > 1){
+                        next = $(tabs[idx+1]);
+                    }
+                } else if (idx < tabs.length) {
+                    next = $(tabs[idx+1]);
+                    prev = $(tabs[idx-1]);
+
+                } else {
+                    prev = $(tabs[idx-1]);
+                }
+                var panel = $(panels[idx]);
+                that.add_nav(prev, next, panel);
+            });
 
         },
+
+        add_nav: function(prev_tab, next_tab, panel){
+            var nav = $('<div class="nav"></div>');
+            if (prev_tab !== null){
+                var title = prev_tab.find('a span').html();
+                var prev = $('<span class="left"><a title="prev: '+ title +'" href="#">'+ title +'</a></span>');
+                nav.append(prev);
+                prev.find('a').click(function(){ prev_tab.find('a').click()});
+            }
+            if (next_tab !== null){
+                var title = next_tab.find('a span').html();
+                if (title !== undefined){
+                    var next = $('<span class="right"><a title="next: '+ title +'" href="#">'+ title +'</a></span>');
+                    nav.append(next);
+                    next.find('a').click(function(){ next_tab.find('a').click()});
+                }
+            }
+            panel.append(nav);
+        },
+
 
         collect_extras: function(to_tab, config){
             var tabs = to_tab['tab'];
