@@ -422,6 +422,9 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     def edit_template(self):
         return 'package/dcatapit_edit.html'
 
+    def new_template(self):
+        return 'package/dcatapit_new.html'
+
 
 class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupForm):
 

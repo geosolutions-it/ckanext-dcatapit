@@ -581,11 +581,12 @@ ckan.module('dcatapit-edit-form', function($){
                                                         $(ui.oldTab).removeClass('hovered');
                                                         }});
 
-            $(tabs_list.find('li a')[0]).click();
+            $(tabs_list.find('li')[0]).addClass('hovered').find('a').click();
             // move tabs controls to secondary content
             $('#tabs-container').append(tabs_list);
             this.build_nav(tabs_list.find('li'), tabs_container.find('.ui-tabs-panel'));
             this.handle_errors(tabs_list.find('li'), tabs_container.find('.ui-tabs-panel'), container);
+            container.prepend($('ol.stages'));
         },
 
         handle_errors: function(tabs, panels, main_c){
@@ -632,14 +633,14 @@ ckan.module('dcatapit-edit-form', function($){
             var nav = $('<div class="form-nav"></div>');
             if (prev_tab !== null){
                 var title = prev_tab.find('a span').html();
-                var prev = $('<span class="prev-item form-nav-item"><a title="prev: '+ title +'" href="#">'+ title +'</a></span>');
+                var prev = $('<span class="prev-item form-nav-item btn btn-small"><a title="prev: '+ title +'" href="#">'+ title +'</a></span>');
                 nav.append(prev);
                 prev.find('a').click(function(){ prev_tab.find('a').click()});
             }
             if (next_tab !== null){
                 var title = next_tab.find('a span').html();
                 if (title !== undefined){
-                    var next = $('<span class="next-item form-nav-item"><a title="next: '+ title +'" href="#">'+ title +'</a></span>');
+                    var next = $('<span class="next-item form-nav-item btn btn-small"><a title="next: '+ title +'" href="#">'+ title +'</a></span>');
                     nav.append(next);
                     next.find('a').click(function(){ next_tab.find('a').click()});
                 }
