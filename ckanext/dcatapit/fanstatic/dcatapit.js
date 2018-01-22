@@ -525,11 +525,22 @@ ckan.module('dcatapit-theme', function($){
 ckan.module('dcatapit-edit-form', function($){
     var edit_form = {
         initialize: function(){
+            if (this.has_errors()){
+                console.log('form with errors');
+            }
             this.el = $(this.el);
             $.proxyAll(this, /_on/);
             this.settings = this.load_settings(this.options.settingsContainer);
             this.container = $(this.options.formContainer);
             this.init_tabs(this.settings, this.container);
+        },
+
+        get_errors: function(){
+            return $('.error-explanation.alert');
+        },
+        has_errors: function(){
+            var err = this.get_errors();
+            return err.length > 0;
         },
 
         load_settings: function(container){
@@ -551,7 +562,7 @@ ckan.module('dcatapit-edit-form', function($){
             // where form fields are moved
             var tabs_container = $('<div class="forms-container"></div>');
 
-            container.append(tabs_list);
+            container.prepend(tabs_list);
             container.prepend(tabs_container);
 
             $.each(settings['tabs'], function(idx, elm){
@@ -574,6 +585,24 @@ ckan.module('dcatapit-edit-form', function($){
             // move tabs controls to secondary content
             $('#tabs-container').append(tabs_list);
             this.build_nav(tabs_list.find('li'), tabs_container.find('.ui-tabs-panel'));
+            this.handle_errors(tabs_list.find('li'), tabs_container.find('.ui-tabs-panel'), container);
+        },
+
+        handle_errors: function(tabs, panels, main_c){
+            var err = this.get_errors();
+            if (err.length > 0){
+                main_c.prepend(err);
+            }
+            $.each(panels, function(idx, panel){
+                var got_errors = $(panel).find('.error-block').length > 0;
+                if (got_errors){
+                    $(tabs[idx]).addClass('with-error');
+                }
+
+            });;
+
+
+        
         },
 
         build_nav: function(tabs, panels){
@@ -600,17 +629,17 @@ ckan.module('dcatapit-edit-form', function($){
         },
 
         add_nav: function(prev_tab, next_tab, panel){
-            var nav = $('<div class="nav"></div>');
+            var nav = $('<div class="form-nav"></div>');
             if (prev_tab !== null){
                 var title = prev_tab.find('a span').html();
-                var prev = $('<span class="left"><a title="prev: '+ title +'" href="#">'+ title +'</a></span>');
+                var prev = $('<span class="prev-item form-nav-item"><a title="prev: '+ title +'" href="#">'+ title +'</a></span>');
                 nav.append(prev);
                 prev.find('a').click(function(){ prev_tab.find('a').click()});
             }
             if (next_tab !== null){
                 var title = next_tab.find('a span').html();
                 if (title !== undefined){
-                    var next = $('<span class="right"><a title="next: '+ title +'" href="#">'+ title +'</a></span>');
+                    var next = $('<span class="next-item form-nav-item"><a title="next: '+ title +'" href="#">'+ title +'</a></span>');
                     nav.append(next);
                     next.find('a').click(function(){ next_tab.find('a').click()});
                 }
@@ -618,11 +647,10 @@ ckan.module('dcatapit-edit-form', function($){
             panel.append(nav);
         },
 
-
         collect_extras: function(to_tab, config){
             var tabs = to_tab['tab'];
             var form = to_tab['form'];
-            var parent_name  = config['parent'] || 'div.control-group';
+            var parent_name  = config['parent'] || '.control-group';
             var extras = [];
 
             var extras_in = $('[name^="extras__"]');
@@ -651,7 +679,7 @@ ckan.module('dcatapit-edit-form', function($){
                     var field = $('[name="' + elm['name'] +'"]');
                 }
                 // customized parent lookup
-                var parent_name  = elm['parent'] || 'div.control-group';
+                var parent_name  = elm['parent'] || '.control-group';
                 var field_container = field.parents(parent_name);
                 if  (field_container.length > 0){
                     form_p.append(field_container);

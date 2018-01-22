@@ -127,8 +127,8 @@ ul.ui-tabs-nav {
 	padding: .2em;
 }
 .ui-tabs .ui-tabs-nav {
-	margin: 0;
-	padding: .2em .2em 0;
+	/* margin: 0; */
+	/* padding: .2em .2em 0; */
 	float:  left;
 	width:  160px;
 }
@@ -167,11 +167,38 @@ ul.ui-tabs-nav {
 }
 
 
+.form-nav {
+    padding: 6pt;
+}
 
-.left {
+.form-nav-item {
+    display: inline-block;
+    margin: 2pt;
+    background-color: #eeeeee;
+    border: solid 1px #fff;
+}
+
+.form-nav-item:hover {
+    border: solid 1px #000;
+}
+
+.form-nav-item a {
+    text-decoration: none;
+    display: inline-block;
+    line-height: 20px;
+    padding: 4pt;
+    color: #444;
+}
+
+.prev-item {
     float: left;
 }
 
-.right {
+.next-item {
     float: right;
+}
+
+.with-error a {
+    color: #b55457;
+
 }
