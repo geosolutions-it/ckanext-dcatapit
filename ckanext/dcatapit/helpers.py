@@ -233,8 +233,6 @@ def get_geonames_config():
     if uname:
         out['username'] = uname
     if limit_to:
-        if isinstance(limit_to, (str,unicode,)):
-            limit_to = [limit_to]
         out['limit_to'] = limit_to
     return out
 

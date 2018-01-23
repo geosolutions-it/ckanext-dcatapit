@@ -36,7 +36,7 @@ var jeoquery = (function ($) {
         $.ajax({
             url: my.geoNamesProtocol + '://' + my.geoNamesApiServer + '/' + method + 'JSON',
             dataType: 'jsonp',
-            data: $.extend({}, my.defaultData, data),
+            data: $.param($.extend({}, my.defaultData, data), true),
             success: function(data) {
               deferred.resolve(data);
               if (!!callback) callback(data);
