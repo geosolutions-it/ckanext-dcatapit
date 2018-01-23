@@ -437,7 +437,7 @@ ckan.module('geonames', function($){
             
             this.store = $(this.options.geonamesStore);
             // where to display geonames url (span)
-            this.display = $(this.options.geonamesDisplay);
+            // this.display = $(this.options.geonamesDisplay);
             
             this.enable();
             var init_val = this.store.val();
@@ -451,24 +451,64 @@ ckan.module('geonames', function($){
         },
 
         enable: function(){
-            this.store.attr('type', 'hidden');
-            this.display.removeClass('hidden');
+            var that = this;
+            // this.store.attr('type', 'hidden');
+            //this.display.removeClass('hidden');
             $(this.el).attr('readonly', false);
+            this.store.change(function(evt){
+                                that.on_url_change(evt)});
 
         },
 
         load_for: function(value){
             var that = this;
-            var geonameId = value.split('/')[3];
+            var url = this.normalize_url(value);
+            if (url == null){
+                return;
+            }
+            var geonameId = url.split('/')[3];
+            this.el.attr('readonly', true);
             var gn = jeoquery.getGeoNames('get',
                                           {'geonameId': geonameId},
-                                          function(details){ return that.on_names(details, true)});
+                                          function(details){ 
+                                                    that.el.attr('readonly', false);
+                                                    return that.on_names(details, true)
+                                                    });
         },
         
+        normalize_url: function(val){
+            if (val == undefined || $.trim(val) == ""){
+                return null;
+            }
+            var id = null;
+            if (val.startsWith('http://geonames.org/') || val.startsWith('https://geonames.org/')){
+                id = val.split('/')[3];
+            } else if (val.startsWith('geonames.org/')){
+                id = val.split('/')[1];
+            } else {
+                id = val;
+            }
+            if ($.isNumeric(id)){
+                return 'http://geonames.org/' + Number.parseInt(id);
+            }
+            return null;
+        },
+
+        on_url_change: function(evt){
+            var val = $(evt.delegateTarget).val() || "";
+            var url = this.normalize_url(val);
+            if (url == null){
+                return;
+            }
+            this.load_for(url, true);
+        },
         on_names: function(details, is_init){
+            if (details.geonameId == undefined){
+                return;
+            }
             var url = 'https://geonames.org/' + details.geonameId;
             this.store.val(url);
-            this.display.html(url);
+            //this.display.html(url);
             if (is_init == true){
                 $(this.el).val(details.name + ',' + details.adminName1 + ', '+ details.countryName);
             }
