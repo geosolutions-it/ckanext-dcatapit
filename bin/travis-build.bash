@@ -1,4 +1,3 @@
-#!/bin/bash
 set -e
 set -x
 
@@ -6,6 +5,7 @@ echo "This is travis-build.bash..."
 
 echo "Installing the packages that CKAN requires..."
 
+# remove faulty mongodb repo, we don't use it anyway
 sudo rm -f /etc/apt/sources.list.d/mongodb-3.2.list
 sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ main restricted'
 sudo add-apt-repository --remove 'http://us-central1.gce.archive.ubuntu.com/ubuntu/ universe'
@@ -15,6 +15,7 @@ sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/ universe'
 sudo add-apt-repository 'http://archive.ubuntu.com/ubuntu/ multiverse'
 sudo apt-get -qq --fix-missing update
 sudo apt-get install solr-jetty libcommons-fileupload-java
+
 
 # PostGIS 2.1 already installed on Travis
 
@@ -40,7 +41,13 @@ echo
 echo "Setting up Solr..."
 printf "NO_START=0\nJETTY_HOST=127.0.0.1\nJETTY_PORT=8983\nJAVA_HOME=$JAVA_HOME" | sudo tee /etc/default/jetty
 sudo cp ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
-sudo sed -i -e 's-</fields>-<field name="dcat_theme" type="string" indexed="true" stored="false" multiValued="true"/></fields>-g' /etc/solr/conf/schema.xml
+sudo sed -i -e 's-</fields>-<field name="dcat_theme" type="string" indexed="true" stored="false" multiValued="true"/>\n</fields>-g' /etc/solr/conf/schema.xml
+sudo sed -i -e 's-</fields>-<field name="dcat_subtheme" type="string" indexed="true" stored="false" multiValued="true"/>\n</fields>-g' /etc/solr/conf/schema.xml
+sudo sed -i -e 's-</fields>-<field name="dcat_subtheme_*" type="string" indexed="true" stored="false" multiValued="true"/>\n</fields>-g' /etc/solr/conf/schema.xml
+sudo sed -i -e 's-</fields>-<field name="organization_region_*" type="string" indexed="true" stored="false" multiValued="false"/>\n</fields>-g' /etc/solr/conf/schema.xml
+sudo sed -i -e 's-</fields>-<field name="resource_license_*" type="string" indexed="true" stored="false" multiValued="true"/>\n</fields>-g' /etc/solr/conf/schema.xml
+sudo sed -i -e 's-</fields>-<field name="resource_license" type="string" indexed="true" stored="false" multiValued="true"/>\n</fields>-g' /etc/solr/conf/schema.xml
+
 sudo service jetty restart
 
 echo

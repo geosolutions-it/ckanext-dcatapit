@@ -357,6 +357,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         # check - only existing group should be assigned
         p = Package.get(package_data['id'])
         groups = [g.name for g in p.get_groups(group_type='group')]
+
         assert expected_groups_existing == groups, (expected_groups_existing, 'vs', groups,)
 
         config[DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS] = 'true'
@@ -733,6 +734,3 @@ class TestDCATAPITProfileParsing(BaseParseTest):
                 assert set(t['subthemes']) == set(subthemes[0]['subthemes'])
             else:
                 assert False, "Unknown theme: {}".format(t)
-
-
-

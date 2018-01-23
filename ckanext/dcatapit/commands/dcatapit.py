@@ -3,8 +3,10 @@
 
 import logging
 import re
+import traceback
 
 import ckan.plugins.toolkit as toolkit
+from ckan.lib.munge import munge_tag
 import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit.model.license import (
     load_from_graph as load_licenses_from_graph,
@@ -18,6 +20,7 @@ from pylons import config
 from ckan.lib.cli import CkanCommand
 
 from rdflib import Graph
+from rdflib.term import URIRef
 from rdflib.namespace import SKOS, DC
 from ckanext.dcat.profiles import namespaces
 
@@ -27,6 +30,7 @@ LOCATIONS_THEME_NAME = 'places'
 FREQUENCIES_THEME_NAME = 'frequencies'
 FILETYPE_THEME_NAME = 'filetype'
 LICENSES_NAME = 'licenses'
+REGIONS_NAME = 'regions'
 SUBTHEME_NAME = 'subthemes'
 
 log = logging.getLogger(__name__)
@@ -36,17 +40,19 @@ class DCATAPITCommands(CkanCommand):
     '''  A command for working with vocabularies
     Usage::
      # Loading a vocabulary
-     paster --plugin=ckanext-dcatapit vocabulary load --url URL --name NAME --config=PATH_TO_INI_FILE
-     paster --plugin=ckanext-dcatapit vocabulary load --filename FILE --name NAME --config=PATH_TO_INI_FILE 
+     paster --plugin=ckanext-dcatapit vocabulary load --url URL --name NAME --config=PATH_TO_INI_FILE [--format=FORMAT]
+     paster --plugin=ckanext-dcatapit vocabulary load --filename FILE --name NAME --config=PATH_TO_INI_FILE [--format=FORMAT]
      Where:
        URL  is the url to a SKOS document
        FILE is the local path to a SKOS document
-       NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies, licenses, subthemes)
+       FORMAT is rdflib format name (xml, turtle etc)
+       NAME is the short-name of the vocabulary (only allowed languages, eu_themes, places, frequencies, regions, licenses, subthemes)
        Where the corresponding rdf are:
           languages   -> http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf
           eu_themes   -> http://publications.europa.eu/mdr/resource/authority/data-theme/skos/data-theme-skos.rdf
           places      -> http://publications.europa.eu/mdr/resource/authority/place/skos/places-skos.rdf
           frequencies -> http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf
+          regions     -> https://github.com/italia/daf-ontologie-vocabolari-controllati/blob/master/VocabolariControllati/ClassificazioneTerritorio/Istat-Classificazione-08-Territorio.rdf?raw=true
           filetype -> http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf
        PATH_TO_INI_FILE is the path to the Ckan configuration file
 
@@ -76,7 +82,14 @@ class DCATAPITCommands(CkanCommand):
         'es': 'SPA'
     }
 
-    _controlled_vocabularies_allowed = [EUROPEAN_THEME_NAME, LOCATIONS_THEME_NAME, LANGUAGE_THEME_NAME, FREQUENCIES_THEME_NAME, FILETYPE_THEME_NAME, LICENSES_NAME, SUBTHEME_NAME]
+    _controlled_vocabularies_allowed = (EUROPEAN_THEME_NAME,
+                                        LOCATIONS_THEME_NAME,
+                                        LANGUAGE_THEME_NAME,
+                                        FREQUENCIES_THEME_NAME,
+                                        FILETYPE_THEME_NAME,
+                                        REGIONS_NAME,
+                                        LICENSES_NAME,
+                                        SUBTHEME_NAME)
 
     def __init__(self, name):
         super(DCATAPITCommands, self).__init__(name)
@@ -85,6 +98,8 @@ class DCATAPITCommands(CkanCommand):
                                help='Path to a file')
         self.parser.add_option('--url', dest='url', default=None,
                                help='URL to a resource')
+        self.parser.add_option('--format', dest='format', default='xml',
+                                help="Use specific graph format (xml, turtle..), default: xml")
         self.parser.add_option('--name', dest='name', default=None,
                                help='Name of the vocabulary to work with')
 
@@ -120,8 +135,10 @@ class DCATAPITCommands(CkanCommand):
         ##
         # Checking command given options
         ##
+
         url = self.options.url
         filename = self.options.filename
+        format = self.options.format
 
         if not url and not filename:
             print "ERROR: No URL or FILENAME provided and one is required"
@@ -159,35 +176,29 @@ class DCATAPITCommands(CkanCommand):
             Session.commit()
             return
             
-        do_load(vocab_name, url=url, filename=filename)
+        do_load(vocab_name, url=url, filename=filename, format=format)
 
 
-def do_load(vocab_name, url=None, filename=None):
+def do_load_regions(g, vocab_name):
+    concepts = []
+    pref_labels = []
+    for reg in g.subjects(None, URIRef('http://dati.gov.it/onto/clvapit#Region')):
+        names = list(g.objects(reg, URIRef('http://dati.gov.it/onto/clvapit#name')))
+        identifier = munge_tag(unicode(reg).split('/')[-1])
 
-    if vocab_name == LANGUAGE_THEME_NAME:
-        ckan_offered_languages = config.get('ckan.locales_offered', 'it').split(' ')
-        for offered_language in ckan_offered_languages:
-            if offered_language not in DCATAPITCommands._ckan_language_theme_mapping:
-                print "INFO: '{0}' CKAN locale is not mapped in this plugin and will be skipped during the import stage (vocabulary name '{1}')".format(offered_language, vocab_name)
+        concepts.append(identifier)
+        for n in names:
+            label = {'name': identifier,
+                     'lang': n.language,
+                     'localized_text': n.value}
+            pref_labels.append(label)
 
-    ##
-    # Loading the RDF vocabulary
-    ##
-    print "Loading graph ..."
+    log.info('Loaded %d regions', len(concepts))
+    print('Loaded %d regions' % len(concepts))
+    return pref_labels, concepts
 
-    g = Graph()
-    for prefix, namespace in namespaces.iteritems():
-        g.bind(prefix, namespace)
 
-    try:
-        if url:
-            g.parse(location=url)
-        else:
-            g.parse(source=filename)
-    except Exception,e:
-        log.error("ERROR: Problem occurred while retrieving the document %r", e)
-        return
-
+def do_load_vocab(g, vocab_name):
     concepts = []
     pref_labels = []
 
@@ -227,6 +238,46 @@ def do_load(vocab_name, url=None, filename=None):
 
         print 'Loaded concept: URI[{0}] ID[{1}] languages[{2}]'.format(about, identifier, len(langs))
 
+    return pref_labels, concepts
+
+
+def do_load(vocab_name, url=None, filename=None, format=None):
+
+    if vocab_name == LANGUAGE_THEME_NAME:
+        ckan_offered_languages = config.get('ckan.locales_offered', 'it').split(' ')
+        for offered_language in ckan_offered_languages:
+            if offered_language not in DCATAPITCommands._ckan_language_theme_mapping:
+                print "INFO: '{0}' CKAN locale is not mapped in this plugin and will be skipped during the import stage (vocabulary name '{1}')".format(offered_language, vocab_name)
+
+    ##
+    # Loading the RDF vocabulary
+    ##
+    print "Loading graph ... for", vocab_name
+
+    g = Graph()
+    for prefix, namespace in namespaces.iteritems():
+        g.bind(prefix, namespace)
+    fargs = {}
+    if url:
+        fargs['url'] = url
+    elif filename:
+        fargs['source'] = filename
+    if format:
+        fargs['format'] = format
+    try:
+        g.parse(**fargs)
+    except Exception,e:
+        log.error("ERROR: Problem occurred while retrieving the document %r with params %s", e, fargs)
+        print("ERROR: Problem occurred while retrieving the document %r with params %s", fargs)
+        traceback.print_exc(e)
+        return
+
+    if vocab_name == REGIONS_NAME:
+        vocab_load = do_load_regions
+    else:
+        vocab_load = do_load_vocab
+
+    pref_labels, concepts = vocab_load(g, vocab_name)
     ##
     # Creating the Tag Vocabulary using the given name
     ##
@@ -249,9 +300,8 @@ def do_load(vocab_name, url=None, filename=None):
         vocab = toolkit.get_action('vocabulary_create')(context, data)
 
         for tag in concepts:
-            log.info("Adding tag {0} to vocabulary '{1}'".format(tag, vocab_name))
-            print("Adding tag {0} to vocabulary '{1}'".format(tag, vocab_name))
-
+            log.info(u"Adding tag {0} to vocabulary '{1}'".format(tag, vocab_name))
+            print(u"Adding tag {0} to vocabulary '{1}'".format(tag, vocab_name))
             data = {'name': tag, 'vocabulary_id': vocab['id']}
             toolkit.get_action('tag_create')(context, data)
 

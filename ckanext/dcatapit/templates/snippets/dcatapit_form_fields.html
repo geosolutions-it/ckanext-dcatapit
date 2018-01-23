@@ -8,7 +8,7 @@
 
             {% if field.element == 'input' %}
 
-                  {{ form.input(field.name, label=field.label, id='field-' + field.name, placeholder=field.placeholder, type=field.type, value=data[field.name], error=errors[field.name], classes=['control-medium'], is_required=field.is_required) }}
+                  {{ form.input(field.name, label=field.label, id='field-' + field.name, placeholder=field.placeholder, type=field.type, value=data[field.name] or '', error=errors[field.name], classes=['control-medium'], is_required=field.is_required) }}
 
             {% elif field.element == 'select' %}
             
@@ -22,7 +22,28 @@
 
                   {{ form.input(field.name, id='field-' + field.name, label=field.label, placeholder=field.placeholder, value=data[field.name], error=errors[field.name], classes=['control-full'], attrs=tag_attrs, is_required=field.is_required) }}
 
-            {% elif field.name == 'theme' %}
+            {% elif field.element == 'region' %}
+            
+                  {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
+                  
+                  {{ 
+                        dcatapit_form_macros.autocomplete(
+                              field.name,
+                              id='field-' + field.name,
+                              label=field.label,
+                              value=data[field.name],
+                              placeholder=field.placeholder,
+                              error=errors[field.name],
+                              options=options,
+                              type=field.type,
+                              classes=['control-full'],
+                              multiple=False,
+                              is_required=field.is_required)
+                  }}
+
+
+
+            {% elif field.element == 'themes' %}
 
                   {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
                   {% set all_subthemes = h.get_dcatapit_subthemes(h.lang()) %}
@@ -39,6 +60,22 @@
                               label=field.label,
                               sublabel=field.sublabel,
                               value=dataset_subthemes,
+                              placeholder=field.placeholder,
+                              error=errors[field.name],
+                              options=options,
+                              type=field.type,
+                              classes=['control-full'],
+                              is_required=field.is_required)
+                  }}
+
+            {% elif field.element == 'vocabulary' %}
+                  {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
+                  {{ 
+                        dcatapit_form_macros.vocabulary(
+                              field.name,
+                              id='field-' + field.name,
+                              label=field.label,
+                              value=data[field.name],
                               placeholder=field.placeholder,
                               error=errors[field.name],
                               options=options,

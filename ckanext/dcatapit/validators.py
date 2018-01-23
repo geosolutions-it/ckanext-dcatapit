@@ -338,7 +338,7 @@ def dcatapit_subthemes(value, context):
             _v = value.rstrip('}').lstrip('{').split(',')
             data = [ {'theme': v, 'subthemes': []} for v in _v]
         elif isinstance(value, (list, tuple,)):
-            data = [{'theme': v} for v in value]
+            data = [{'theme': v, 'subthemes': []} for v in value]
         else:
             raise Invalid(_("Theme data is not valid, expected json, got {}".format(type(value))))
     if not isinstance(data, list):

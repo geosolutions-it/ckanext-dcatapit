@@ -29,6 +29,13 @@ dateformats = [
 # config param names
 GEONAMES_USERNAME = 'geonames.username'
 GEONAMES_LIMIT_TO = 'geonames.limits.countries'
+DEFAULT_CTX = {'ignore_auth': True}
+DEFAULT_ORG_CTX = DEFAULT_CTX.copy()
+DEFAULT_ORG_CTX.update(dict((k, False) for k in ('include_tags',
+                                                 'include_users',
+                                                 'include_groups',
+                                                 'include_extras',
+                                                 'include_followers',)))
 
 def get_dcatapit_package_schema():
     log.debug('Retrieving DCAT-AP_IT package schema fields...')
@@ -231,28 +238,6 @@ def get_geonames_config():
         out['limit_to'] = limit_to
     return out
 
-def get_organization_by_identifier(context, identifier):
-    """
-    quick'n'dirty way to get organization by rights holder's identifer
-    from dcat rdf.
-    """
-    try:
-        ge = Session.query(GroupExtra).filter_by(key='identifier',
-                                            value=identifier,
-                                            state='active')\
-                                 .one()
-    except MultipleResultsFound:
-        raise
-    except NoResultFound:
-        ge = None
-    if ge:
-        # safety check
-        assert ge.group_id is not None
-        ctx = context.copy()
-        ctx.update(dict((k, False) for k in ('include_tags', 'include_users', 'include_groups', 'include_extras', 'include_followers',)))
-
-        return toolkit.get_action('organization_show')(context=ctx, data_dict={'id': ge.group_id})
-
 def get_dcatapit_subthemes(lang):
     """
     Dump subthemes tree with localized lables for all themes 
@@ -298,3 +283,25 @@ def load_dcatapit_subthemes(value, lang):
                 outitem['subthemes'].append(label)
         out.append(outitem)
     return out
+
+def get_organization_by_identifier(context, identifier):
+    """
+    quick'n'dirty way to get organization by rights holder's identifer
+    from dcat rdf.
+    """
+    try:
+        ge = Session.query(GroupExtra).filter_by(key='identifier',
+                                            value=identifier,
+                                            state='active')\
+                                 .one()
+    except MultipleResultsFound:
+        raise
+    except NoResultFound:
+        ge = None
+    if ge:
+        # safety check
+        assert ge.group_id is not None
+        ctx = context.copy()
+        ctx.update(DEFAULT_ORG_CTX)
+
+        return toolkit.get_action('organization_show')(context=ctx, data_dict={'id': ge.group_id})

@@ -84,6 +84,18 @@ def get_custom_organization_schema():
 		    'placeholder': _('organization site url'),
 		    'is_required': False
 	    },
+	    {
+		    'name': 'region',
+		    'validator': ['ignore_missing', 'not_empty'],
+		    'element': 'region',
+		    'type': 'vocabulary',
+		    'vocabulary_name': 'regions',
+		    'label': _('Region'),
+            'multiple': False,
+		    'placeholder': _('region name'),
+		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=regions&incomplete=?',
+		    'is_required': False
+	    },
         {
             'name': 'identifier',
             'label': _('IPA/IVA'),
@@ -118,7 +130,7 @@ def get_custom_package_schema():
 	    {
 		    'name': 'theme',
 		    'validator': ['not_empty', 'dcatapit_subthemes'],
-		    'element': 'theme',
+		    'element': 'themes',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'eu_themes',
 		    'label': _('Dataset Themes'),
@@ -173,7 +185,7 @@ def get_custom_package_schema():
 	    {
 		    'name': 'geographical_name',
 		    'validator': ['ignore_missing'],
-		    'element': 'theme',
+		    'element': 'vocabulary',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'places',
 		    'label': _('Geographical Name'),
@@ -194,7 +206,7 @@ def get_custom_package_schema():
 	    {
 		    'name': 'language',
 		    'validator': ['ignore_missing'],
-		    'element': 'theme',
+		    'element': 'vocabulary',
 		    'type': 'vocabulary',
 		    'vocabulary_name': 'languages',
 		    'label': _('Dataset Languages'),
