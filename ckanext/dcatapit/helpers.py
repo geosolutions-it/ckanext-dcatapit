@@ -263,7 +263,9 @@ def load_dcatapit_subthemes(value, lang):
     out = []
     
     for item in data:
-        outitem = {'theme': item['theme'], 'subthemes': []}
+        localized_theme = interfaces.get_localized_tag_name(item['theme'], lang=lang)
+        outitem = {'theme': localized_theme,
+                   'subthemes': []}
         from_model = Subtheme.for_theme(item['theme'], lang)
         for st, label in from_model:
             if st.uri in item['subthemes']:
