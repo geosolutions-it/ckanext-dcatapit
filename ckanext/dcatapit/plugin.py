@@ -637,8 +637,8 @@ class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
     def dataset_facets(self, facets_dict, package_type):
         lang = interfaces.get_language() or validators.DEFAULT_LANG
         facets_dict['source_catalog_title'] = plugins.toolkit._("Source catalogs")
-        facets_dict['organization_region_{}'.format(lang)] = plugins.toolkit._("Organization region")
-        facets_dict['resource_license_{}'.format(lang)] = plugins.toolkit._("Resources license")
+        facets_dict['organization_region_{}'.format(lang)] = plugins.toolkit._("Organization regions")
+        facets_dict['resource_license_{}'.format(lang)] = plugins.toolkit._("Resources licenses")
         facets_dict['dcat_subtheme_{}'.format(lang)] = plugins.toolkit._("Subthemes")
 
         return facets_dict
