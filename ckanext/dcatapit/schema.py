@@ -213,7 +213,7 @@ def get_custom_package_schema():
             'label': _('GeoNames URL'),
             'placeholder': _('http://www.geonames.org/3175395'),
             'is_required': False,
-            'help': _('package_geographical_geonames_url')
+            'help': _('package_geographical_geonames_url_help')
         },
         {
             'name': 'language',
@@ -279,7 +279,7 @@ def get_custom_package_schema():
                     'placeholder': _('rights holder of the dataset')
                 }
             ],
-            'help': _('package_rights_holder_name')
+            'help': _('package_rights_holder_name_help')
         },
         {
             'name': 'frequency',

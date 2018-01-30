@@ -93,7 +93,8 @@ msgid "dataset identifier"
 msgstr "Identificativo del dataset"
 
 #: ckanext/dcatapit/schema.py:104
-msgid ""
+msgid "package_identifier_help"
+msgstr ""
 "E’ un codice identificativo univoco che si deve assegnare al dataset.Si "
 "genera associando il codice IPA dell’organizzazione ad un codice "
 "identificativo unico (UUID) generato sul sito "
@@ -101,7 +102,6 @@ msgid ""
 " aperto, un codice alfanumerico unico e irripetibile. E’ pertanto "
 "sufficiente aprire il sito e copiare il codice che compare in alto. "
 "Riportare il codice ottenuto nella forma IPA:UUID."
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:116
 msgid "Other Identifier"
@@ -112,11 +112,11 @@ msgid "other identifier"
 msgstr "Altro identificativo"
 
 #: ckanext/dcatapit/schema.py:119
-msgid ""
+msgid "package_alternate_identifier_help"
+msgstr ""
 "Specificare, se utile, uno o più identificativi secondari per il dataset."
 " Per esempio, un identificativo disponibile nel sistema da cui il dato è "
 "estratto."
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:129
 msgid "Dataset Themes"
@@ -127,12 +127,12 @@ msgid "eg. education, agriculture, energy"
 msgstr "es. educazione, agricoltura, energia"
 
 #: ckanext/dcatapit/schema.py:133
-msgid ""
+msgid "package_theme_help"
+msgstr ""
 "Assegnare al dataset uno o più temi che descrivano l'ambito in cui si "
 "colloca, scegliendo tra quelli proposti nel menù a tendina. I temi "
 "proposti sono quelli definiti nel vocabolario Europeo sui Temi per i "
 "cataloghi che contengono dataset."
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:144
 msgid "Sub Theme"
@@ -158,14 +158,14 @@ msgid "publisher identifier"
 msgstr "identificativo dell'editore"
 
 #: ckanext/dcatapit/schema.py:171
-msgid ""
+msgid "package_publisher_help"
+msgstr ""
 "L’organizzazione (o pubblica amministrazione) che rende disponibile il "
 "dataset, pubblicandolo. Vanno indicati sia il nome che il codice "
 "identificativo dell'organizzazione. Non inserire nomi di singole persone."
 " Nel caso della Provincia autonoma di Trento andrà indicato il codice IPA"
 " della PAT associato al codice dell’ufficio/servizio/dipartimento che "
 "rende disponibile il dataset."
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:182
 msgid "Release Date"
@@ -176,10 +176,10 @@ msgid "release date"
 msgstr "Data di rilascio"
 
 #: ckanext/dcatapit/schema.py:186
-msgid ""
+msgid "package_issued_help"
+msgstr ""
 "E' la data in cui il dataset è reso disponibile la prima volta. Si "
 "sceglie dal calendario che viene proposto."
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:194
 msgid "Modification Date"
@@ -190,12 +190,12 @@ msgid "modification date"
 msgstr "Data di modifica"
 
 #: ckanext/dcatapit/schema.py:198
-msgid ""
+msgid "package_modified_help"
+msgstr ""
 "E' la data dell'ultima modifica o dell'ultimo aggiornamento del dataset. "
 "Si sceglie dal calendario che viene proposto. In caso di aggiornamento "
 "continuo/quotidiano o comunque molto frequente inserire la data di ultima"
 " modifica sostanziale del dataset."
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:209
 msgid "Geographical Name"
@@ -210,10 +210,10 @@ msgid "Organizational Unit Responsible Competence Area"
 msgstr "Area di competenza dell'unità organizzativa preposta"
 
 #: ckanext/dcatapit/schema.py:214
-msgid ""
+msgid "package_geographical_name_help"
+msgstr ""
 "E' l'area geografica coperta dal dataset; scegliere tra quelle proposte, "
 "che fanno riferimento al \"tabella europea dei luoghi\" (table of places)"
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:222
 msgid "GeoNames URL"
@@ -224,14 +224,14 @@ msgid "http://www.geonames.org/3175395"
 msgstr "http://www.geonames.org/3175395"
 
 #: ckanext/dcatapit/schema.py:225
-msgid ""
+msgid "package_geographical_geonames_url_help"
+msgstr ""
 "Questa proprietà si riferisce ai riferimenti spaziali dell’area "
 "geografica di pertinenza del dataset ed utilizza una URI (Uniform "
 "Resource Identifier). L’URI da inserire si ottiene sul sito "
 "http://www.geonames.org/Nel caso di dataset che interessano "
 "contemporaneamente più comuni, utilizzare l'area \"\"Provincia di "
 "Trento\"\"."
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:237
 msgid "Dataset Languages"
@@ -242,10 +242,10 @@ msgid "eg. italian, german, english"
 msgstr "es. italiano, tedesco, inglese"
 
 #: ckanext/dcatapit/schema.py:241
-msgid ""
+msgid "package_language_help"
+msgstr ""
 "Indicare una o più lingue utilizzate nel dataset, scegliendo tra quelle "
 "proposte nel menù a tendina (italiano, tedesco, inglese)."
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:247
 msgid "Temporal Coverage"
@@ -264,10 +264,10 @@ msgid "End Date"
 msgstr "Data finale"
 
 #: ckanext/dcatapit/schema.py:268
-msgid ""
+msgid "package_temporal_coverage_help"
+msgstr ""
 "Inserire, se pertinente, la data di inizio e di fine del periodo a cui si"
 " riferiscono i dati del dataset."
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:277
 msgid "Frequency"
@@ -278,11 +278,11 @@ msgid "accrual periodicity"
 msgstr "frequenza di aggiornamento"
 
 #: ckanext/dcatapit/schema.py:281
-msgid ""
+msgid "package_frequency_help"
+msgstr ""
 "Frequenza temporale con cui il dataset viene aggiornato; scegliere tra "
 "quelle proposte che fanno riferimento al vocabolario Europeo sulle "
 "frequenze"
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:289
 msgid "Version Of"
@@ -293,7 +293,8 @@ msgid "is version of a related dataset URI"
 msgstr "è una versione del datase con URI"
 
 #: ckanext/dcatapit/schema.py:292
-msgid ""
+msgid "package_is_version_of_help"
+msgstr ""
 "Questa proprietà si può utilizzare se il dataset è un adattamento o una "
 "nuova versione di un dataset già pubblicato e descritto. Per esempio, se "
 "si vuole inserire una nuova versione 2.0 di un dataset già presente nel "
@@ -304,7 +305,6 @@ msgid ""
 "rispetto a precedenti versioni (e.g., nuovi elementi inclusi, adattamenti"
 " significativi di alcuni elementi, ecc). Perr fare riferimento al dataset"
 " di riferimento, inserire l'identificativo del dataset stesso."
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:307
 msgid "Conforms To"
@@ -315,13 +315,13 @@ msgid "conforms to"
 msgstr "Conforme a"
 
 #: ckanext/dcatapit/schema.py:310
-msgid ""
+msgid "package_conforms_to_help"
+msgstr ""
 "Questa proprietà si riferisce a una regola implementativa o altra "
 "specifica a cui il dataset è conforme. Si possono specificare uno o più "
 "standard, sia tecnici (anche de-facto) come per esempio DCAT, ISO/IEC "
 "25012, CSW, ecc., sia riferimenti normativi (e.g., Decreto legislativo "
 "n.82/2005 - Codice dell’Amministrazione Digitale)."
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:94
 msgid "organization IPA/IVA code"
@@ -463,13 +463,13 @@ msgid "rights holder of the dataset"
 msgstr "Titolare del dataset"
 
 #: ckanext/dcatapit/schema.py:339
-msgid ""
+msgid "package_rights_holder_name_help"
+msgstr ""
 "E' l’organizzazione (o pubblica amministrazione) che detiene la "
 "titolarità dei dati ed è quindi responsabile della gestione complessiva "
 "del dataset. Si raccomanda di evitare l’inserimento di nomi di singole "
 "persone. Vanno inseriti il nome e il codice identificativo "
 "dell’organizzazione."
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:348
 msgid "Creator"
@@ -480,7 +480,8 @@ msgid "creator of the dataset"
 msgstr "autore del dataset"
 
 #: ckanext/dcatapit/schema.py:370
-msgid ""
+msgid "package_creator_help"
+msgstr ""
 "Questa proprietà si riferisce a una o più entità (organizzazione) che "
 "hanno materialmente creato il dataset. Se l'editore non l’ha prodotto, si"
 " può indicare l’organizzazione (o pubblica amministrazione) che ha "
@@ -489,7 +490,6 @@ msgid ""
 "creatore del dataset coincidano, allora si può omettere questa  "
 "proprietà. Vanno inseriti il nome dell'organizzazione e il suo codice "
 "identificativo."
-msgstr ""
 
 #: ckanext/dcatapit/schema.py:398
 msgid "Distribution Format"
