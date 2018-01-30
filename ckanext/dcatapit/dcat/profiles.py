@@ -4,13 +4,14 @@ import ast
 import logging
 import datetime
 
-from pylons import config
+from ckan.lib.base import config
 
 from rdflib.namespace import Namespace, RDF, SKOS
 from rdflib import URIRef, BNode, Literal
 
 import ckan.logic as logic
 
+from ckan.lib.i18n import get_locales
 from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF, ADMS, OWL, SCHEMA
 from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
 
@@ -46,6 +47,7 @@ DEFAULT_LANG = config.get('ckan.locale_default', 'en')
 
 LOCALISED_DICT_NAME_BASE = 'DCATAPIT_MULTILANG_BASE'
 LOCALISED_DICT_NAME_RESOURCES = 'DCATAPIT_MULTILANG_RESOURCES'
+OFFERED_LANGS = get_locales()
 
 lang_mapping_ckan_to_voc = {
     'it': 'ITA',
@@ -64,6 +66,9 @@ lang_mapping_xmllang_to_ckan = {
 
 lang_mapping_ckan_to_xmllang = {
     'en_GB' : 'en' ,
+    'uk_UA': 'ua',
+    'en_AU': 'en',
+    'es_AR': 'es',
 } 
 
 format_mapping = {
@@ -657,10 +662,12 @@ class ItalianDCATAPProfile(RDFProfile):
                 self.g.add((standard, DCT.identifier, Literal(item['identifier'])))
 
                 for lang, val in (item.get('title') or {}).items():
-                    self.g.add((standard, DCT.title, Literal(val, lang=lang_mapping_ckan_to_xmllang.get(lang, lang))))
+                    if lang in OFFERED_LANGS:
+                        self.g.add((standard, DCT.title, Literal(val, lang=lang_mapping_ckan_to_xmllang.get(lang, lang))))
 
                 for lang, val in (item.get('description') or {}).items():
-                    self.g.add((standard, DCT.description, Literal(val, lang=lang_mapping_ckan_to_xmllang.get(lang, lang))))
+                    if lang in OFFERED_LANGS:
+                        self.g.add((standard, DCT.description, Literal(val, lang=lang_mapping_ckan_to_xmllang.get(lang, lang))))
 
                 for reference_document in (item.get('referenceDocumentation') or []):
                     self.g.add((standard, DCATAPIT.referenceDocumentation, URIRef(reference_document)))
@@ -923,6 +930,8 @@ class ItalianDCATAPProfile(RDFProfile):
             else:
                 themes = []
 
+        # ckanext-dcat will leave bad values from serialized themes
+        self.g.remove((dataset_ref, DCAT.theme, None))
         if themes:
             for theme in themes:
                 theme_name = theme['theme']
@@ -954,7 +963,8 @@ class ItalianDCATAPProfile(RDFProfile):
             labels = sthm.get_names_dict()
             self.g.add((sref, RDF.type, SKOS.Concept))
             for lang, label in labels.items():
-                self.g.add((sref, SKOS.prefLabel, Literal(label, lang=lang)))
+                if lang in OFFERED_LANGS:
+                    self.g.add((sref, SKOS.prefLabel, Literal(label, lang=lang)))
             self.g.add((ref, DCT.subject, sref))
 
     def _add_creators(self, dataset_dict, ref):
@@ -1017,7 +1027,8 @@ class ItalianDCATAPProfile(RDFProfile):
 
         if isinstance(agent_name, dict):
             for lang, aname in agent_name.items():
-                self.g.add((agent, FOAF.name, Literal(aname, lang=lang_mapping_ckan_to_xmllang.get(lang, lang))))
+                if lang in OFFERED_LANGS:
+                    self.g.add((agent, FOAF.name, Literal(aname, lang=lang_mapping_ckan_to_xmllang.get(lang, lang))))
         else:
             if use_default_lang:
                 self.g.add((agent, FOAF.name, Literal(agent_name, lang=DEFAULT_LANG)))
