@@ -1,3 +1,19 @@
+.size-8 {
+    font-size: 8pt!important;
+}
+
+.size-10 {
+    font-size: 10pt!important;
+}
+
+.size-12 {
+    font-size: 12pt!important;
+}
+
+.size-14 {
+    font-size: 14pt!important;
+}
+
 
 .template {
     display: none!important;
@@ -40,6 +56,61 @@
     color: #e33;
 }
 
+.inline-block {
+    display: inline-block;
+    margin-left:  5pt;
+    /* float:  right; */
+    margin-right:  5pt;
+    color: #aaaaaa;
+}
+
+/* Component containers
+
+----------------------------------*/
+.ui-widget {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 1em;
+}
+.ui-widget .ui-widget {
+    font-size: 1em;
+}
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 1em;
+}
+.ui-widget-content {
+    border: 1px solid #dddddd;
+    background: #ffffff;
+    color: #333333;
+}
+.ui-widget-content a {
+    color: #333333;
+}
+.ui-widget-header {
+    border: 1px solid #dddddd;
+    background: #e9e9e9;
+    color: #333333;
+    font-weight: bold;
+}
+.ui-widget-header a {
+    color: #333333;
+}
+
+
+.ui-tooltip {
+    padding: 8px;
+    position: absolute;
+    z-index: 9999;
+    max-width: 300px;
+    -webkit-box-shadow: 0 0 5px #aaa;
+    box-shadow: 0 0 5px #aaa;
+}
+body .ui-tooltip {
+    border-width: 2px;
+}
 .errors .error-item {
     display: block;
     background-color: #c6898b;
