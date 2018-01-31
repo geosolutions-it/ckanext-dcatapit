@@ -276,8 +276,6 @@ def populate_theme_groups(instance, clean_existing=False):
                     tval = [{'theme': t, 'subthemes': []} for t in _decode_list(_t)]
                 for tv in tval:
                     themes.append(tv['theme'])
-
-    #themes = instance.extras.get('theme')
     if not themes:
         log.debug("no theme from %s", instance)
         return instance

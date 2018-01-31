@@ -9,6 +9,7 @@ import ckanext.dcatapit.schema as dcatapit_schema
 
 import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit.model.license import License
+from ckan.lib.base import config
 from ckanext.dcatapit.model.subtheme import Subtheme
 
 import datetime
@@ -25,6 +26,9 @@ dateformats = [
     "%Y-%m-%dT%H:%M:%S"
 ]
 
+# config param names
+GEONAMES_USERNAME = 'geonames.username'
+GEONAMES_LIMIT_TO = 'geonames.limits.countries'
 DEFAULT_CTX = {'ignore_auth': True}
 DEFAULT_ORG_CTX = DEFAULT_CTX.copy()
 DEFAULT_ORG_CTX.update(dict((k, False) for k in ('include_tags',
@@ -222,8 +226,21 @@ def load_json_or_list(val):
         if val:
             return [{'identifier': v} for v in val.split(',')]
 
+
+def get_geonames_config():
+    out = {}
+    uname = config.get(GEONAMES_USERNAME)
+    limit_to = config.get(GEONAMES_LIMIT_TO)
+    if uname:
+        out['username'] = uname
+    if limit_to:
+        out['limit_to'] = limit_to
+    return out
+
+  
 def get_localized_subtheme(subtheme_id, lang):
     return interfaces.get_localized_subtheme(subtheme_id, lang) or subtheme_id
+
 
 def get_dcatapit_subthemes(lang):
     """

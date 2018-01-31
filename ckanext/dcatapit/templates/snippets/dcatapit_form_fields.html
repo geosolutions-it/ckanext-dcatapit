@@ -74,7 +74,7 @@
 
                   {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
                   {{ 
-                        dcatapit_form_macros.vocabulary(
+                        dform.vocabulary(
                               field.name,
                               id='field-' + field.name,
                               label=field.label,
@@ -187,6 +187,19 @@
                                                     couples=field._couples,
                                                     lang=h.lang(),
                                                     help=field.help) }}
+
+            {% elif field.element == 'geonames' %}
+                   {% set config = h.get_geonames_config() %}
+
+                   {{ dform.geonames(name=field.name,
+                                                    label=field.label,
+                                                    id='field-'+field.name,
+                                                    value=data[field.name],
+                                                    error=errors[field.name],
+                                                    lang=h.lang(),
+                                                    username=config.username,
+                                                    limit_to=config.limit_to) }}
+
 
             {% endif %}
 

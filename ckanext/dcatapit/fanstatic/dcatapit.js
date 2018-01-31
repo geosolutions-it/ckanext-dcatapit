@@ -138,7 +138,6 @@ dcatapit.templated_input = {
 
 /** 
  Handles conforms to data edition.
-
 */
 ckan.module('dcatapit-conforms-to', function($){
     var conforms_to = {
@@ -421,6 +420,111 @@ ckan.module('dcatapit-temporal-coverage', function($){
     return $.extend({}, dcatapit.templated_input, temporal_coverage);
  });
 
+
+ckan.module('geonames', function($){
+    var geonames = {
+        initialize: function(){
+            $.proxyAll(this, /_on/);
+            var username = this.options.geonamesUsername;
+            try { 
+                var limit_to = this.options.geonamesLimitTo.split(' ');
+            }
+            catch (err){
+                var limit_to = [];
+            }
+            var el = $(this.el);
+            jeoquery.defaultData.userName = username;
+            jeoquery.defaultData.country = limit_to;
+            if (this.options.geonamesLanguage !== undefined && this.options.geonamesLanguage !== false){
+                jeoquery.defaultLanguage = this.options.geonamesLanguage;
+            }
+            var that = this;
+            // where to store geonames url (hidden input)
+            
+            this.store = $(this.options.geonamesStore);
+            // where to display geonames url (span)
+            // this.display = $(this.options.geonamesDisplay);
+            
+            this.enable();
+            var init_val = this.store.val();
+            if (init_val){
+                this.store.html('loading..');
+                this.load_for(this.store.val());
+            }
+            this.geonames = el.jeoCityAutoComplete({'country': limit_to,
+                                                    'lang': this.options.geonamesLanguage,
+                                                    'callback': function(data){return that.on_names(data)}});
+        },
+
+        enable: function(){
+            var that = this;
+            // this.store.attr('type', 'hidden');
+            //this.display.removeClass('hidden');
+            $(this.el).attr('readonly', false);
+            this.store.change(function(evt){
+                                that.on_url_change(evt)});
+
+        },
+
+        load_for: function(value){
+            var that = this;
+            var url = this.normalize_url(value);
+            if (url == null){
+                return;
+            }
+            var geonameId = url.split('/')[3];
+            this.el.attr('readonly', true);
+            var gn = jeoquery.getGeoNames('get',
+                                          {'geonameId': geonameId},
+                                          function(details){ 
+                                                    that.el.attr('readonly', false);
+                                                    return that.on_names(details, true)
+                                                    });
+        },
+        
+        normalize_url: function(val){
+            if (val == undefined || $.trim(val) == ""){
+                return null;
+            }
+            var id = null;
+            if (val.startsWith('http://geonames.org/') || val.startsWith('https://geonames.org/')){
+                id = val.split('/')[3];
+            } else if (val.startsWith('geonames.org/')){
+                id = val.split('/')[1];
+            } else {
+                id = val;
+            }
+            if ($.isNumeric(id)){
+                return 'http://geonames.org/' + Number.parseInt(id);
+            }
+            return null;
+        },
+
+        on_url_change: function(evt){
+            var val = $(evt.delegateTarget).val() || "";
+            var url = this.normalize_url(val);
+            if (url == null){
+                return;
+            }
+            this.load_for(url, true);
+        },
+        on_names: function(details, is_init){
+            if (details.geonameId == undefined){
+                return;
+            }
+            var url = 'https://geonames.org/' + details.geonameId;
+            this.store.val(url);
+            //this.display.html(url);
+            if (is_init == true){
+                $(this.el).val(details.name + ',' + details.adminName1 + ', '+ details.countryName);
+            }
+        }
+
+    };
+    return $.extend({}, geonames);
+ });
+
+
 ckan.module('dcatapit-help', function($){
     var help = {
         initialize: function(){
@@ -432,9 +536,10 @@ ckan.module('dcatapit-help', function($){
     return $.extend({}, help);
 
  });
+
+
 ckan.module('dcatapit-theme', function($){
     var theme = {
-
         sub_initialize: function(){
             this.add_form_handlers($(this.el.parent()));
             this.localized = [];

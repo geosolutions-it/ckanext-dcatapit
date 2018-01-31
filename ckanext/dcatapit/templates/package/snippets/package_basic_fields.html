@@ -4,9 +4,14 @@
 
 {% block package_basic_fields_custom %}
 
+    {% resource 'vendor/jquery.ui.core.js' %}
     {% resource 'vendor/jquery.ui.widget.js' %}
+
     {% resource 'ckanext-dcatapit/jquery.ui.position.js' %}
-    {% resource 'ckanext-dcatapit/jquery.ui.tooltip.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.menu.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.autocomplete.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.tooltip.js' %}                   
+    {% resource 'ckanext-dcatapit/jeoquery.js' %}
 
     {% resource 'ckanext-dcatapit/dcatapit.js' %}
     {% resource 'ckanext-dcatapit/dcatapit.css' %}

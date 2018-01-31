@@ -137,7 +137,7 @@ def get_custom_package_schema():
         {
             'name': 'theme',
             'validator': ['not_empty'],
-            'element': 'theme',
+            'element': 'themes',
             'type': 'vocabulary',
             'vocabulary_name': 'eu_themes',
             'label': _('Dataset Themes'),
@@ -195,7 +195,7 @@ def get_custom_package_schema():
         {
             'name': 'geographical_name',
             'validator': ['ignore_missing'],
-            'element': 'theme',
+            'element': 'vocabulary',
             'type': 'vocabulary',
             'vocabulary_name': 'places',
             'label': _('Geographical Name'),
@@ -208,8 +208,8 @@ def get_custom_package_schema():
         {
             'name': 'geographical_geonames_url',
             'validator': ['ignore_missing'],
-            'element': 'input',
-            'type': 'url',
+            'element': 'geonames',
+            'type': 'geonames',
             'label': _('GeoNames URL'),
             'placeholder': _('http://www.geonames.org/3175395'),
             'is_required': False,
@@ -218,7 +218,7 @@ def get_custom_package_schema():
         {
             'name': 'language',
             'validator': ['ignore_missing'],
-            'element': 'theme',
+            'element': 'vocabulary',
             'type': 'vocabulary',
             'vocabulary_name': 'languages',
             'label': _('Dataset Languages'),
