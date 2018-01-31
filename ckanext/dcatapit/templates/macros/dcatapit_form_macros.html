@@ -139,7 +139,7 @@ Old implementation of the couple element (one element with comma separated value
 {% endmacro %}
 
 
-{% macro themes(name, id='', label='', value='', placeholder='', error='', options=(), classes=[], attrs={}, type='', sublabel='', is_required=False) %}
+{% macro themes(name, id='', label='', value='', placeholder='', error='', options=(), classes=[], attrs={}, type='', sublabel='', is_required=False, help=None) %}
 <div class="theme-wrap">
     <div class="template theme">
         
@@ -153,8 +153,11 @@ Old implementation of the couple element (one element with comma separated value
     </div>
 
     <div class="theme_container add_new_container" data-add-with=".add_new_theme" data-add-template=".theme.template"></div>
+
     <span class="add_new_theme add_new"><i class="icon-plus"></i> {% trans %}Add new Theme{% endtrans %}</span>
     <input type="hidden" name="theme" value="{{ value or list()| safe}}" data-module="dcatapit-theme" data-module-template=".theme" data-module-container=".theme_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="theme" />
+
+    {{ help_block(help) }}
 </div>
 {% endmacro %}
 
