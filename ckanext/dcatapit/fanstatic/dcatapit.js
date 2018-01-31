@@ -426,7 +426,12 @@ ckan.module('geonames', function($){
         initialize: function(){
             $.proxyAll(this, /_on/);
             var username = this.options.geonamesUsername;
-            var limit_to = this.options.geonamesLimitTo.split(' ');
+            try { 
+                var limit_to = this.options.geonamesLimitTo.split(' ');
+            }
+            catch (err){
+                var limit_to = [];
+            }
             var el = $(this.el);
             jeoquery.defaultData.userName = username;
             jeoquery.defaultData.country = limit_to;
