@@ -2,11 +2,12 @@
   <h3>{{ _('Dataset Metadata') }}</h3>
 
     {% resource 'ckanext-dcatapit/dcatapit.css' %}
-
+    
   <table class="table table-striped table-bordered table-condensed">
     <tbody>
     {% block dcatapit_additional_info %}
       {% set schema_fields = h.get_dcatapit_package_schema() %}
+      {% set lang = h.lang() %}
 
       {% for field in schema_fields %}
         {% if not field.ignore and not field.ignore_from_info %}
@@ -31,8 +32,7 @@
             </tr>
 
             {% elif field.name == 'theme' %}
-
-                {% set themes = (h.load_dcatapit_subthemes(pkg_dict[field.name], h.lang()) or []) %}
+                {% set themes = (h.load_dcatapit_subthemes(pkg_dict[field.name], lang) or []) %}
 
                 {% for theme in themes %}
                 <tr>
@@ -41,7 +41,7 @@
                     <span class="bold">{{ theme.theme }}</span>
                     <br/>
                     {% for subtheme in theme.subthemes %}
-                        <span>{{ subtheme }}</span><br/>
+                        <span>{{ h.get_localized_subtheme(subtheme, lang) }}</span><br/>
                     {% endfor %}
                   </td>
                 </tr>
@@ -70,7 +70,7 @@
             <tr>
                 <th scope="row" class="dataset-label">{{ _(field.label) }}</th>
                 <td class="dataset-details">
-                    <span class="bold">{{_('Name')}}: </span><span>{{ creator.creator_name[h.lang()] }}</span>
+                    <span class="bold">{{_('Name')}}: </span><span>{{ creator.creator_name[lang] }}</span>
                     <br/>
                     <span class="bold">IPA/IVA: </span><span>{{ creator.creator_identifier }}</span>
                 </td>
@@ -79,7 +79,6 @@
 
             {% elif field.element == 'alternate_identifier' %}
                 {% set alt_identifiers = (h.load_json_or_list(pkg_dict[field.name]) or []) %}
-                {% set lang = h.lang() %}
 
                     {% for alt_id in alt_identifiers %}
             <tr>
@@ -100,7 +99,6 @@
 
             {% elif field.element == 'conforms_to' %}
                 {% set conforms_to = h.load_json_or_list(pkg_dict[field.name]) %}
-                {% set lang = h.lang() %}
 
                 {% if conforms_to %}
                     {% for std in conforms_to %}

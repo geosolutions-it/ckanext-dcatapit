@@ -262,9 +262,10 @@ def persist_tag_multilang(name, lang, localized_text, vocab_name):
             DCATAPITTagVocabulary.persist({'id': existing_tag.id, 'name': name, 'text': localized_text}, lang)
             log.info('::::::::: OBJECT TAG PERSISTED SUCCESSFULLY :::::::::')
 
-def get_localized_tag_name(tag_name=None, fallback_lang=None):
+def get_localized_tag_name(tag_name=None, fallback_lang=None, lang=None):
     if tag_name:
-        lang = get_language()
+        if lang is None:
+            lang = get_language()
 
         localized_tag_name = DCATAPITTagVocabulary.by_name(tag_name, lang)
 
@@ -326,6 +327,12 @@ def get_license_from_dcat(license_uri, license_dct, prefname, **license_names):
 
     return l or License.get(License.DEFAULT_LICENSE)
 
+
+def get_localized_subtheme(subtheme, lang):
+    localized = Subtheme.get_any(subtheme)
+    if not localized:
+        return
+    return localized.get_name(lang)
 
 def get_localized_subthemes(subthemes):
 

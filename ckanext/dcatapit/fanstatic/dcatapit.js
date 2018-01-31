@@ -138,7 +138,6 @@ dcatapit.templated_input = {
 
 /** 
  Handles conforms to data edition.
-
 */
 ckan.module('dcatapit-conforms-to', function($){
     var conforms_to = {
@@ -421,6 +420,7 @@ ckan.module('dcatapit-temporal-coverage', function($){
     return $.extend({}, dcatapit.templated_input, temporal_coverage);
  });
 
+
 ckan.module('geonames', function($){
     var geonames = {
         initialize: function(){
@@ -517,6 +517,19 @@ ckan.module('geonames', function($){
 
     };
     return $.extend({}, geonames);
+ });
+
+
+ckan.module('dcatapit-help', function($){
+    var help = {
+        initialize: function(){
+            $.proxyAll(this, /_on/);
+            $(this.el.find('i')).tooltip();
+        }
+    }
+
+    return $.extend({}, help);
+
  });
 
 
