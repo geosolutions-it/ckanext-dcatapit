@@ -99,10 +99,10 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
 
    * `dcatapit_harvest_list`: adds the page `/harvest/list`, which provides a summary of the status of all the catalog harvesters.
  
-7. In order to enable also the RDF harvester add ``dcatapit_harvester`` to the ``ckan.plugins`` setting in your CKAN. 
-The ckanext-dcatapit RDF harvester also harvests localized fields in multiple languages, but to do that requires the ckanext-multilang installed.
+   * `dcatapit_harvester`: enables the RDF harvester.
+     The `ckanext-dcatapit` RDF harvester also harvests localized fields in multiple languages, but to do that requires the ckanext-multilang installed.
 
-8. In order to enable also the CSW harvester add ``dcatapit_csw_harvester`` to the ``ckan.plugins`` setting in your CKAN.
+   * `dcatapit_csw_harvester`: enhances the CSW harvester to be able to import some more fields related to DCAT.
 
 9. Enable the dcatapit profile adding the following configuration property in the ``production.ini`` file:
 
@@ -111,6 +111,15 @@ The ckanext-dcatapit RDF harvester also harvests localized fields in multiple la
 10. Configure the CKAN base URI as reported in the [dcat documentation](https://github.com/ckan/ckanext-dcat/blob/master/README.md#uris):
 
         ckanext.dcat.base_uri = YOUR_BASE_URI
+
+11. Configure the geonames integration:
+    
+    * Create a geonames account (if you don't have one) at http://www.geonames.org/login ;
+    * Enable the web services at http://www.geonames.org/manageaccount ;
+    * Edit your CKAN config file (e.g. at ``/etc/ckan/default/production.ini``) and add the properties:
+
+      * `geonames.username`: (mandatory) the username you registered in geonames;
+      * `geonames.limits.countries`: (optional) limits the results to the requested country; use the ISO-3166 code (e.g. "IT" for Italy).
 
 11. Initialize the CKAN DB with the mandatory table needed for localized vocabulary voices:
 
