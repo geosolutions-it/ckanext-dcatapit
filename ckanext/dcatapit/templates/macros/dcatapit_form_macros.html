@@ -1,5 +1,15 @@
 {% import 'macros/form.html' as form %}
 
+{% macro input(name, id='', label='', value='', placeholder='', type='text', error="", classes=[], attrs={}, is_required=false, help='') %}
+  {%- set extra_html = caller() if caller -%}
+
+  {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
+    <input id="{{ id or name }}" type="{{ type }}" name="{{ name }}" value="{{ value | empty_and_escape }}" placeholder="{{ placeholder }}" {{ attributes(attrs) }} />
+    {{ help_block(help) }}
+    
+  {% endcall %}
+{% endmacro %}
+
 {% macro input_block(for, label="", error="", classes=[], control_classes=[], extra_html="", is_required=false) %}
   <div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
     <label class="control-label" for="{{ for }}">{% if is_required %}<span title="{{ _("This field is required") }}" class="control-required">*</span> {% endif %}{{ label or _('Custom') }}</label>
@@ -15,7 +25,7 @@
 {# -------------------------------------------------------------------------------
 Old implementation of the couple element (one element with comma separated values)
 
-{% macro couple(name, labels=(), names=(), id="", label="", values=(), placeholders=(), error="", type="", classes=[], attrs={}, is_required=false, key_values=()) %}
+{% macro couple(name, labels=(), names=(), id="", label="", values=(), placeholders=(), error="", type="", classes=[], attrs={}, is_required=false, key_values=(), help='') %}
   {%- set classes = (classes|list) -%}
   {%- set label_id = (id) ~ "-key" -%}
   {%- set extra_html = caller() if caller -%}
@@ -50,12 +60,14 @@ Old implementation of the couple element (one element with comma separated value
                 $('#{{name}}-hidden').val('')
               } " />
     </div>
+
+    {{ help_block(help) }}
   {% endcall %}
 {% endmacro %}
 ------------------------------------------------------------------------------- #}
 
 
-{% macro couple(name, labels=(), names=(), id="", label="", values=(), placeholders=(), error="", types="", classes=[], attrs={}, is_required=false, key_values=(), read_only=False) %}
+{% macro couple(name, labels=(), names=(), id="", label="", values=(), placeholders=(), error="", types="", classes=[], attrs={}, is_required=false, key_values=(), help='', read_only=False) %}
   {%- set classes = (classes|list) -%}
   {%- set label_id = (id) ~ "-key" -%}
   {%- set extra_html = caller() if caller -%}
@@ -94,22 +106,11 @@ Old implementation of the couple element (one element with comma separated value
              placeholder="{{ placeholders[1] }}" />
 
     </div>
-      {% endif %}
+    {% endif %}
+    {{ help_block(help) }}
   {% endcall %}
 {% endmacro %}
 
-
-{% macro autocomplete(name, id='', label='', value='', placeholder='', type='text', error="", options=(), classes=[], attrs={}, is_required=false, multiple=True) %}
-  {%- set extra_html = caller() if caller -%}
-  {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
-
-      <select id="{{name}}-hidden" placeholder="{{ placeholder }}" {% if multiple %}multiple{% endif %} name="{{ name }}" {{ attributes(attrs) }} data-module="autocomplete">
-        {% for option in options %}
-          <option value="{{ option.value }}"{% if value and option.value in value %} selected {% endif %}>{{ option.text or option.value }}</option>
-        {% endfor %}
-      </select>
-  {% endcall %}
-{% endmacro %}
 
 
 {% macro vocabulary(name, id='', label='', value='', placeholder='', type='text', error="", options=(), classes=[], attrs={}, is_required=false, multiple=True, use_autocomplete=True) %}
@@ -121,6 +122,8 @@ Old implementation of the couple element (one element with comma separated value
           <option value="{{ option.value }}"{% if value and option.value in value %} selected {% endif %}>{{ option.text or option.value }}</option>
         {% endfor %}
       </select>
+    {{ help_block(help) }}
+
   {% endcall %}
 {% endmacro %}
 
@@ -136,7 +139,7 @@ Old implementation of the couple element (one element with comma separated value
 {% endmacro %}
 
 
-{% macro themes(name, id='', label='', value='', placeholder='', error='', options=(), classes=[], attrs={}, type='', sublabel='', is_required=False) %}
+{% macro themes(name, id='', label='', value='', placeholder='', error='', options=(), classes=[], attrs={}, type='', sublabel='', is_required=False, help=None) %}
 <div class="theme-wrap">
     <div class="template theme">
         
@@ -150,12 +153,15 @@ Old implementation of the couple element (one element with comma separated value
     </div>
 
     <div class="theme_container add_new_container" data-add-with=".add_new_theme" data-add-template=".theme.template"></div>
+
     <span class="add_new_theme add_new"><i class="icon-plus"></i> {% trans %}Add new Theme{% endtrans %}</span>
     <input type="hidden" name="theme" value="{{ value or list()| safe}}" data-module="dcatapit-theme" data-module-template=".theme" data-module-container=".theme_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="theme" />
+
+    {{ help_block(help) }}
 </div>
 {% endmacro %}
 
-{% macro creator(name, id, label, value, error, couples, lang) %}
+{% macro creator(name, id, label, value, error, couples, lang, help='') %}
     {% set labels = (couples[0].label, couples[1].label) %}
     {% set names = (couples[0].name, couples[1].name) %}
     {% set placeholders = (couples[0].placeholder, couples[1].placeholder) %}
@@ -184,11 +190,13 @@ Old implementation of the couple element (one element with comma separated value
             <span class="add_new_creator add_new"><i class="icon-plus"></i> {% trans %}Add new Creator{% endtrans %}</span>
 
     <input type="hidden" name="creator" value="{{ value or dict()| safe}}" data-module="dcatapit-creator" data-module-template=".creator" data-module-container=".creator_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="creator" />
+
+    {{ help_block(help) }}
     </div>
 {% endmacro %}
 
 
-{% macro temporal_coverage(name, id, label, value, error, couples, lang) %}
+{% macro temporal_coverage(name, id, label, value, error, couples, lang, help='') %}
     {% set labels = (couples[0].label, couples[1].label) %}
     {% set names = (couples[0].name, couples[1].name) %}
     {% set placeholders = (couples[0].placeholder, couples[1].placeholder) %}
@@ -214,7 +222,11 @@ Old implementation of the couple element (one element with comma separated value
     </div>
         <div class="temporal-coverage_container add_new_container" data-add-with=".add_new_temporal-coverage" data-add-template=".temporal-coverage.template"></div>
 
-        <span class="add_new_temporal-coverage add_new {% if error and error is iterable %}error{% endif %}"><i class="icon-plus"></i> {% trans %}Add new Temporal Coverage{% endtrans %}</span>
+    <div class="temporal-coverage_container add_new_container" data-add-with=".add_new_temporal-coverage" data-add-template=".temporal-coverage.template"></div>
+
+           <span class="add_new_temporal-coverage add_new {% if error and error is iterable %}error{% endif %}"><i class="icon-plus"></i> {% trans %}Add new Temporal Coverage{% endtrans %}</span>
+
+            {{ help_block(help) }}
 
         <input type="hidden" name="temporal_coverage" value="{{ value or dict()| safe}}" data-module="dcatapit-temporal-coverage" data-module-template=".temporal-coverage" data-module-container=".temporal-coverage_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="temporal-coverage" data-module-error="{{ error|join(',') }}" />
     
@@ -226,10 +238,12 @@ Old implementation of the couple element (one element with comma separated value
         </div>
         {% endif %}
     </div>
+
+
 {% endmacro %}
 
 
-{% macro alternate_identifier(name, id='', label='', value='', error='', lang='') %}
+{% macro alternate_identifier(name, id='', label='', value='', error='', lang='', help='') %}
 
     {% call input_block(id, label, error, classes=[], extra_html='', is_required=False) %}
         <div class="alternate_identifier template">
@@ -256,13 +270,17 @@ Old implementation of the couple element (one element with comma separated value
         
         <span class="add_new_alternate_identifier add_new"><i class="icon-plus"></i> {% trans %}Add new identifier{% endtrans %}</span>
 
+    {{ help_block(help) }}
+
         <input type="hidden" name="alternate_identifier" value="{{ value or dict()| safe}}" data-module="dcatapit-alternate-identifier" data-module-template=".alternate_identifier" data-module-container=".alternate_identifier_container" data-module-lang="{{ lang }}" data-module-input_prefix="alt_" data-module-data_name="alternate-identifier" />
+
+
 
     {% endcall %}
 
 {% endmacro %}
 
-{% macro conforms_to(name, id='', label='', value='', error='', classes=[], placeholder='', lang='') %}
+{% macro conforms_to(name, id='', label='', value='', error='', classes=[], placeholder='', lang='', help='') %}
     {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
 
     <div class="conforms_to template">
@@ -307,9 +325,29 @@ Old implementation of the couple element (one element with comma separated value
 
     <span class="add_new_conforms_to add_new"><i class="icon-plus"></i> {% trans %}Add new conforms to{% endtrans %}</span>
 
+    {{ help_block(help) }}
+
     <input type="hidden" name="conforms_to" value="{{ value or dict()| safe}}" data-module="dcatapit-conforms-to" data-module-template=".conforms_to" data-module-container=".conforms_to_container" data-module-lang="{{ lang }}" data-module-input_prefix="conforms_to_" data-module-data_name="conforms-to" />
 
     {% endcall %}
+{% endmacro %}
+
+{% macro geonames(name, label, id, value, error, lang, username, limit_to, classes=[], attrs={}) %}
+
+    {% call input_block(id or name, label or name, error, classes, is_required=False) %}
+      {# actual value, not visible if js enabled #}
+      <input type="text" id="{{ name }}-store" name="{{ name }}" value="{{ value }}"/>
+
+      <input type="text" id="{{name}}-view" placeholder="{{ placeholder }}" name="{{ name }}-view" {{ attributes(attrs) }}
+            readonly
+            data-module="geonames"
+            data-module-geonames-username="{{ username }}"
+            data-module-geonames-limit-to="{{ limit_to }}"
+            data-module-geonames-display="#{{ name }}-display"
+            data-module-geonames-language="{{ lang }}"
+            data-module-geonames-store="#{{ name }}-store"/>
+    {% endcall %}
+
 {% endmacro %}
 
 {%- macro attributes(attrs={}) -%}
@@ -323,7 +361,7 @@ Old implementation of the couple element (one element with comma separated value
 
     options can have additional `depth` value, which will be used to indent `option.text`
 #}
-{% macro select(name, id='', label='', options='', selected='', error='', classes=[], attrs={}, is_required=false) %}
+{% macro select(name, id='', label='', options='', selected='', error='', classes=[], attrs={}, is_required=false, help='') %}
   {% set classes = (classes|list) %}
   {% do classes.append('control-select') %}
 
@@ -334,5 +372,30 @@ Old implementation of the couple element (one element with comma separated value
         <option value="{{ option.value }}"{% if option.value == selected %} selected{% endif %}>{{ option.depth_str|safe }}{{ option.text or option.value }}</option>
       {% endfor %}
     </select>
+    
+    {{ help_block(help) }}
   {% endcall %}
+{% endmacro %}
+
+
+
+{% macro textarea(name, id='', label='', value='', placeholder='', error="", classes=[], attrs={}, is_required=false, rows=5, cols=20, help='') %}
+  {% set classes = (classes|list) %}
+  {% do classes.append('control-full') %}
+
+  {%- set extra_html = caller() if caller -%}
+  {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
+    <textarea id="{{ id or name }}" name="{{ name }}" cols="{{ cols }}" rows="{{ rows }}" placeholder="{{ placeholder }}" {{ attributes(attrs) }}>{{ value | empty_and_escape }}</textarea>
+    {{ help_block(help) }}
+  {% endcall %}
+{% endmacro %}
+
+
+{# renders information block #}
+{% macro help_block(content) %}
+    {% if content %}
+    <span class="inline-block" data-module="dcatapit-help">
+      <i class="icon-info-sign size-12" title="{{ content }}"></i>
+    </span>
+    {% endif %}
 {% endmacro %}

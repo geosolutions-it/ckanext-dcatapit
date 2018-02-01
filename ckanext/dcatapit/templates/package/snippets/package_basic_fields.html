@@ -4,12 +4,6 @@
 
 {% block package_basic_fields_custom %}
 
-    {% resource 'ckanext-dcatapit/jquery.ui.core.js' %}
-    {% resource 'ckanext-dcatapit/jquery.ui.widget.js' %}
-    {% resource 'ckanext-dcatapit/jquery.ui.tabs.js' %}
-
-    {% resource 'ckanext-dcatapit/dcatapit.js' %}
-    {% resource 'ckanext-dcatapit/dcatapit.css' %}
 
     <div id="dcatapit-edit-form-settings" class="hidden">{{ h.json_dump({'tabs': [
     {'id': 'information',
@@ -76,6 +70,19 @@
      'use_extra': true},
     ]}) }}
     </div>
+    
+    {% resource 'ckanext-dcatapit/jquery.ui.core.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.widget.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.position.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.menu.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.autocomplete.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.tabs.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.tooltip.js' %}
+    {% resource 'ckanext-dcatapit/jeoquery.js' %}
+
+    {% resource 'ckanext-dcatapit/dcatapit.js' %}
+    {% resource 'ckanext-dcatapit/dcatapit.css' %}
+	{% snippet 'snippets/dcatapit_form_fields.html', data=data, errors=errors, schema_fields=pkg_fields %}
 
     <div class="dcatapit-form" data-module="dcatapit-edit-form" data-module-settings-container="#dcatapit-edit-form-settings" data-module-form-container="#dataset-edit">
 	{% snippet 'snippets/dcatapit_form_fields.html', data=data, errors=errors, schema_fields=pkg_fields %}
