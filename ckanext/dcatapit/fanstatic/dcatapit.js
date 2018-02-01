@@ -585,7 +585,7 @@ ckan.module('dcatapit-theme', function($){
             var that = this;
 
             var selected_theme = values['theme'];
-            $('select.theme_select', ui).attr('value', selected_theme);
+            $('select.theme_select', ui).val(selected_theme);
             that.set_subthemes(ui, values);
 
             var ac = ckan.module.registry['autocomplete'];
@@ -627,7 +627,7 @@ ckan.module('dcatapit-theme', function($){
                     var sel_op = $('<option value="'+opt['value'] + '">' + opt['name'] + '</option>')
 
                     sel.append(sel_op);
-                    if ($.inArray(sel_op.val(), selected_subthemes)>-1){
+                    if ($.inArray(opt['value'], selected_subthemes)>-1){
                         sel_op.prop('selected', true);
                         }
                     }
