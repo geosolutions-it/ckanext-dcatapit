@@ -252,7 +252,7 @@ ul.ui-tabs-nav {
 .ui-state-active a,
 .ui-state-active a:link,
 .ui-state-active a:visited {
-	color: #ffffff;
+	color: #333;
 	text-decoration: none;
 }
 
@@ -452,6 +452,12 @@ ul.ui-tabs-nav {
 .ui-helper-hidden {
 	display: none;
 }
+
+.hidden {
+    display: none;
+
+}
+
 .ui-helper-hidden-accessible {
 	border: 0;
 	clip: rect(0 0 0 0);

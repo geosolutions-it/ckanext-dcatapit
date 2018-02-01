@@ -678,8 +678,8 @@ ckan.module('dcatapit-edit-form', function($){
             // where form fields are moved
             var tabs_container = $('<div class="forms-container"></div>');
 
-            container.prepend(tabs_list);
             container.prepend(tabs_container);
+            container.prepend(tabs_list);
 
             $.each(settings['tabs'], function(idx, elm){
                 var this_tab = that.add_tab(tabs_list,
@@ -695,6 +695,8 @@ ckan.module('dcatapit-edit-form', function($){
             container.tabs({'activate': function(evt, ui){
                                                         $(ui.newTab).addClass('hovered');
                                                         $(ui.oldTab).removeClass('hovered');
+                                                        return true;
+                                                        
                                                         }});
 
             $(tabs_list.find('li')[0]).addClass('hovered').find('a').click();
@@ -786,8 +788,8 @@ ckan.module('dcatapit-edit-form', function($){
             var tab = $('<li class="nav-item"><a href="#' + tab_id + '-tab-container"><span>'+ name +'</span></a></li>');
             var form_p = $('<div id="'+ tab_id+'-tab-container"></div>');
             var that = this;
-            tabs_container.append(tab);
             container.append(form_p);
+            tabs_container.append(tab);
 
             $.each(fields, function(idx, elm){
                 if (elm['selector'] !== undefined){
