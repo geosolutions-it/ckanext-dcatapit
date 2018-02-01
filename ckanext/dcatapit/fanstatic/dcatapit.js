@@ -131,7 +131,7 @@ dcatapit.templated_input = {
                 var elval = that.extract_from_element(elm);
                 out.push(elval);
                 });
-            this.el.val(JSON.stringify(out));
+            this.el.attr('value', JSON.stringify(out));
             return out;
         }
      }
@@ -176,7 +176,7 @@ ckan.module('dcatapit-conforms-to', function($){
                         var refdoc_val = val[i];
                         var to_add = refdoc_ui.clone().removeClass('template');
                         refdocs_container.append(to_add);
-                        $('input', to_add).val(refdoc_val);
+                        $('input', to_add).attr('value', refdoc_val);
 
                     }
 
@@ -188,7 +188,7 @@ ckan.module('dcatapit-conforms-to', function($){
                         var local_val = val;
                     }
 
-                    ui.find('input[name=' + input_name + ']').val(local_val);
+                    ui.find('input[name=' + input_name + ']').attr('value', local_val);
                     ui.attr('lang', this.lang);
                 }
             }
@@ -295,13 +295,13 @@ ckan.module('dcatapit-alternate-identifier', function($){
                         }
 
                         var input_name = this.options.input_prefix + a;
-                        ui.find('input[name=' + input_name + ']').val(local_val);
+                        ui.find('input[name=' + input_name + ']').attr('value', local_val);
                         ui.attr('lang', this.lang);
                     }
                 } else {
                         var local_val = val;
                         var input_name = this.options.input_prefix + k;
-                        ui.find('input[name=' + input_name + ']').val(local_val);
+                        ui.find('input[name=' + input_name + ']').attr('value', local_val);
                         ui.attr('lang', this.lang);
                 }
             }
@@ -361,7 +361,7 @@ ckan.module('dcatapit-creator', function($){
                     local_val = val[this.lang];
                 }
                 var input_name = k //this.options.input_prefix + k;
-                ui.find('input[name=' + input_name + ']').val(local_val);
+                ui.find('input[name=' + input_name + ']').attr('value', local_val);
                 ui.attr('lang', this.lang);
             }
         },
@@ -405,7 +405,7 @@ ckan.module('dcatapit-temporal-coverage', function($){
                 var val = values[k];
                 var local_val = val;
                 var input_name = k //this.options.input_prefix + k;
-                ui.find('input[name=' + input_name + ']').val(local_val);
+                ui.find('input[name=' + input_name + ']').attr('value', local_val);
                 ui.attr('lang', this.lang);
             }
         },
@@ -513,10 +513,10 @@ ckan.module('geonames', function($){
                 return;
             }
             var url = 'https://geonames.org/' + details.geonameId;
-            this.store.val(url);
+            this.store.attr('value', url);
             //this.display.html(url);
             if (is_init == true){
-                $(this.el).val(details.name + ',' + details.adminName1 + ', '+ details.countryName);
+                $(this.el).attr('value', details.name + ',' + details.adminName1 + ', '+ details.countryName);
             }
         }
 
@@ -585,7 +585,7 @@ ckan.module('dcatapit-theme', function($){
             var that = this;
 
             var selected_theme = values['theme'];
-            $('select.theme_select', ui).val(selected_theme);
+            $('select.theme_select', ui).attr('value', selected_theme);
             that.set_subthemes(ui, values);
 
             var ac = ckan.module.registry['autocomplete'];
@@ -636,7 +636,6 @@ ckan.module('dcatapit-theme', function($){
     }
     return $.extend({}, dcatapit.templated_input, theme);
  });
-
 
 ckan.module('dcatapit-edit-form', function($){
     var edit_form = {
@@ -770,18 +769,21 @@ ckan.module('dcatapit-edit-form', function($){
             var tabs = to_tab['tab'];
             var form = to_tab['form'];
             var parent_name  = config['parent'] || '.control-group';
-            var extras = [];
 
+            var extras = $('[data-module="custom-fields"]');
+            form.append(extras[0]);
+
+            /*
+            var extras = [];
             var extras_in = $('[name^="extras__"]');
+
             $.each(extras_in, function(idx, elm){
                 var parent_elm = $(elm).parents(parent_name);
                 if (parent_elm.length>0 && $.inArray(parent_elm[0], extras) < 0){
-                    extras.push(parent_elm[0]);
+                    form.append($(parent_elm[0]));
                 }
             });
-            $.each(extras, function(idx, elm){
-                form.append(elm);
-            });
+            */
         },
 
         add_tab: function(tabs_container, container, tab_id, name, fields){
