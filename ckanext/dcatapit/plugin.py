@@ -27,6 +27,14 @@ except ImportError:
     class DefaultTranslation():
         pass
 
+MLR = None
+try:
+    from ckanext.multilang.plugin import MultilangResourcesPlugin
+    if MultilangResourcesPlugin.ENABLED_FEDERATED:
+        MLR = MultilangResourcesPlugin()
+except ImportError:
+    pass
+
 log = logging.getLogger(__file__)
 
 
@@ -55,6 +63,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         plugins.implements(plugins.ITranslation, inherit=True)
 
     # ------------- ITranslation ---------------#
+
 
     def i18n_domain(self):
         '''Change the gettext domain handled by this plugin
@@ -133,8 +142,11 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                 field['name']: validators
             })
 
+        # conditionally include schema fields from MultilangResourcesPlugin
+        if MLR:
+            schema = MLR._update_schema(schema)
+        
         log.debug("Schema updated for DCAT_AP-TI:  %r", schema)
-
         return schema
 
     def create_package_schema(self):
@@ -197,6 +209,11 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                 field['name']: validators
             })
 
+
+        # conditionally include schema fields from MultilangResourcesPlugin
+        if MLR:
+            schema = MLR._update_schema(schema)
+        
         log.debug("Schema updated for DCAT_AP-TI:  %r", schema)
 
         return schema
@@ -210,6 +227,16 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         # This plugin doesn't handle any special package types, it just
         # registers itself as the default (above).
         return []
+
+    if MLR:
+        def read_template(self):
+            return MLR.read_template()
+    
+        def edit_template(self):
+            return MLR.edit_template()
+
+        def resource_form(self):
+            return MLR.resource_form()
 
     # ------------- IValidators ---------------#
 
@@ -228,7 +255,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     # ------------- ITemplateHelpers ---------------#
 
     def get_helpers(self):
-        return {
+        dcatapit_helpers = {
             'get_dcatapit_package_schema': helpers.get_dcatapit_package_schema,
             'get_vocabulary_items': helpers.get_vocabulary_items,
             'get_vocabulary_item': helpers.get_vocabulary_item,
@@ -421,6 +448,8 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             pkg_dict['holder_name'] = org['name']
             pkg_dict['holder_identifier'] = org.get('identifier')
         return pkg_dict
+
+
 
 class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupForm):
 
