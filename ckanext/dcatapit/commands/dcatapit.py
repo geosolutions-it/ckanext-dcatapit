@@ -252,14 +252,14 @@ def do_load(vocab_name, url=None, filename=None, format=None):
     ##
     # Loading the RDF vocabulary
     ##
-    print "Loading graph ... for", vocab_name
+    print "Loading graph for", vocab_name
 
     g = Graph()
     for prefix, namespace in namespaces.iteritems():
         g.bind(prefix, namespace)
     fargs = {}
     if url:
-        fargs['url'] = url
+        fargs['location'] = url
     elif filename:
         fargs['source'] = filename
     if format:
