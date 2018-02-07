@@ -258,7 +258,7 @@ class ItalianDCATAPProfile(RDFProfile):
                         from_old_add = False
                         break
         if from_old_add:
-            eators.append(from_old)
+            creators.append(from_old)
         dataset_dict['creator'] = json.dumps(creators)
 
         # when all localized data have been parsed, check if there really any and add it to the dict
