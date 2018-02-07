@@ -251,6 +251,10 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'get_localized_subtheme': helpers.get_localized_subtheme,
         }
 
+        if MLR:
+            dcatapit_helpers.update(MLR.get_helpers())
+        return dcatapit_helpers
+
     # ------------- IPackageController ---------------#
 
     def after_create(self, context, pkg_dict):
