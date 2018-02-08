@@ -317,7 +317,11 @@ def do_load(vocab_name, url=None, filename=None, format=None):
             tag_lang = DCATAPITCommands._locales_ckan_mapping[pref_label['lang']]
             tag_localized_name = pref_label['localized_text']
 
-            print u'Storing tag: name[{0}] lang[{1}] label[{2}]'.format(tag_name, tag_lang, tag_localized_name)
+            try:
+               print(u"Storing tag: name[{}] lang[{}] label[{}]".format(tag_name, tag_lang, tag_localized_name))
+            except UnicodeEncodeError:
+               print(u"Storing tag: name[{}] lang[{}]".format(tag_name, tag_lang))
+
             interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
 
     print 'Vocabulary successfully loaded ({0})'.format(vocab_name)
