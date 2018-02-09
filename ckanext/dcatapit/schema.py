@@ -141,6 +141,7 @@ def get_custom_package_schema():
             'type': 'vocabulary',
             'vocabulary_name': 'eu_themes',
             'label': _('Dataset Themes'),
+            'sublabel': _("Subthemes"),
             'placeholder': _('eg. education, agriculture, energy'),
             'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eu_themes&incomplete=?',
             'is_required': True,
