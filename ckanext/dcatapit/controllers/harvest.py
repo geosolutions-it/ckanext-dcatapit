@@ -20,7 +20,7 @@ class HarvesterController(BaseController):
         try:
             context = {'model':model,
                        'user':c.user}
-            harvest_sources = p.toolkit.get_action('harvest_source_list')(context, {})
+            harvest_sources = p.toolkit.get_action('harvest_source_list')(context, {'only_active': True})
             c.harvest_sources = harvest_sources
 
             return render('harvest/sources_list.html')
