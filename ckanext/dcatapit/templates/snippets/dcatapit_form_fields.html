@@ -198,7 +198,10 @@
                                                     error=errors[field.name],
                                                     lang=h.lang(),
                                                     username=config.username,
-                                                    limit_to=config.limit_to) }}
+                                                    limit_to=config.limit_to,
+                                                    placeholder_name=field.placeholder_name,
+                                                    placeholder_url=field.placeholder_url,
+                                                    help=field.help) }}
 
 
             {% endif %}

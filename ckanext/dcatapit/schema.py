@@ -211,7 +211,8 @@ def get_custom_package_schema():
             'element': 'geonames',
             'type': 'geonames',
             'label': _('GeoNames URL'),
-            'placeholder': _('http://www.geonames.org/3175395'),
+            'placeholder_url': _('Enter geonames URL'),
+            'placeholder_name': _('Enter name of place'),
             'is_required': False,
             'help': _('package_geographical_geonames_url_help')
         },
