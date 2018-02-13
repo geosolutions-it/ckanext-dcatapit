@@ -345,6 +345,9 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         return dataset_dict
 
     def before_search(self, search_params):
+        '''
+        # this code may be needed with different versions of solr
+        
         fq_all = [] 
        
         if isinstance(search_params['fq'], (str,unicode,)):
@@ -354,6 +357,8 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         if fq and fq[0] and not fq[0].startswith(('+', '-')):
             fq[0] = u'+{}'.format(fq[0])
         search_params['fq'] = ' '.join(fq)
+        '''
+        
         return search_params
 
     def after_search(self, search_results, search_params):
