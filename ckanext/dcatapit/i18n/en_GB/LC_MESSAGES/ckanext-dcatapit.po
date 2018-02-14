@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-08 16:05+0100\n"
+"POT-Creation-Date: 2017-12-18 02:51+0100\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en_GB <LL@li.org>\n"
@@ -18,27 +18,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ckanext/dcatapit/plugin.py:638
+#: ckanext/dcatapit/plugin.py:643
 msgid "Source catalogs"
 msgstr ""
 
-#: ckanext/dcatapit/plugin.py:639
+#: ckanext/dcatapit/plugin.py:644
 msgid "Organization regions"
 msgstr ""
 
-#: ckanext/dcatapit/plugin.py:640
+#: ckanext/dcatapit/plugin.py:645
 msgid "Resources licenses"
 msgstr ""
 
-#: ckanext/dcatapit/plugin.py:641
+#: ckanext/dcatapit/plugin.py:646 ckanext/dcatapit/schema.py:144
 msgid "Subthemes"
 msgstr ""
 
-#: ckanext/dcatapit/plugin.py:646 ckanext/dcatapit/schema.py:97
+#: ckanext/dcatapit/plugin.py:651 ckanext/dcatapit/schema.py:97
 msgid "Region"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:18 ckanext/dcatapit/schema.py:152
+#: ckanext/dcatapit/schema.py:18 ckanext/dcatapit/schema.py:153
 msgid "Dataset Editor"
 msgstr ""
 
@@ -55,8 +55,8 @@ msgid "Catalog Organization Code"
 msgstr ""
 
 #: ckanext/dcatapit/schema.py:29 ckanext/dcatapit/schema.py:105
-#: ckanext/dcatapit/schema.py:166 ckanext/dcatapit/schema.py:277
-#: ckanext/dcatapit/schema.py:336
+#: ckanext/dcatapit/schema.py:167 ckanext/dcatapit/schema.py:278
+#: ckanext/dcatapit/schema.py:337
 msgid "IPA/IVA"
 msgstr ""
 
@@ -136,199 +136,199 @@ msgstr ""
 msgid "Dataset Themes"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:144
+#: ckanext/dcatapit/schema.py:145
 msgid "eg. education, agriculture, energy"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:147
+#: ckanext/dcatapit/schema.py:148
 msgid "package_theme_help"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:158 ckanext/dcatapit/schema.py:268
-#: ckanext/dcatapit/schema.py:328
+#: ckanext/dcatapit/schema.py:159 ckanext/dcatapit/schema.py:269
+#: ckanext/dcatapit/schema.py:329
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:73
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:178
 msgid "Name"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:160
+#: ckanext/dcatapit/schema.py:161
 msgid "publisher name"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:168
+#: ckanext/dcatapit/schema.py:169
 msgid "publisher identifier"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:171
+#: ckanext/dcatapit/schema.py:172
 msgid "package_publisher_help"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:178
+#: ckanext/dcatapit/schema.py:179
 msgid "Release Date"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:180
+#: ckanext/dcatapit/schema.py:181
 msgid "release date"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:182
+#: ckanext/dcatapit/schema.py:183
 msgid "package_issued_help"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:189
+#: ckanext/dcatapit/schema.py:190
 msgid "Modification Date"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:191
+#: ckanext/dcatapit/schema.py:192
 msgid "modification date"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:193
+#: ckanext/dcatapit/schema.py:194
 msgid "package_modified_help"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:201
+#: ckanext/dcatapit/schema.py:202
 msgid "Geographical Name"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:202
+#: ckanext/dcatapit/schema.py:203
 msgid "geographical name"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:205
+#: ckanext/dcatapit/schema.py:206
 msgid "Organizational Unit Responsible Competence Area"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:206
+#: ckanext/dcatapit/schema.py:207
 msgid "package_geographical_name_help"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:213
+#: ckanext/dcatapit/schema.py:214
 msgid "GeoNames URL"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:214
+#: ckanext/dcatapit/schema.py:215
 msgid "Enter geonames URL"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:215
+#: ckanext/dcatapit/schema.py:216
 msgid "Enter name of place"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:217
+#: ckanext/dcatapit/schema.py:218
 msgid "package_geographical_geonames_url_help"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:225
+#: ckanext/dcatapit/schema.py:226
 msgid "Dataset Languages"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:226
+#: ckanext/dcatapit/schema.py:227
 msgid "eg. italian, german, english"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:229
+#: ckanext/dcatapit/schema.py:230
 msgid "package_language_help"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:234
+#: ckanext/dcatapit/schema.py:235
 msgid "Temporal Coverage"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:240
+#: ckanext/dcatapit/schema.py:241
 msgid "Start Date"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:244 ckanext/dcatapit/schema.py:252
+#: ckanext/dcatapit/schema.py:245 ckanext/dcatapit/schema.py:253
 msgid "temporal coverage"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:248
+#: ckanext/dcatapit/schema.py:249
 msgid "End Date"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:256
+#: ckanext/dcatapit/schema.py:257
 msgid "package_temporal_coverage_help"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:262
+#: ckanext/dcatapit/schema.py:263
 msgid "Rights Holder"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:271 ckanext/dcatapit/schema.py:280
+#: ckanext/dcatapit/schema.py:272 ckanext/dcatapit/schema.py:281
 msgid "rights holder of the dataset"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:283
+#: ckanext/dcatapit/schema.py:284
 msgid "package_rights_holder_name_help"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:291
+#: ckanext/dcatapit/schema.py:292
 msgid "Frequency"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:292
+#: ckanext/dcatapit/schema.py:293
 msgid "accrual periodicity"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:295
+#: ckanext/dcatapit/schema.py:296
 msgid "package_frequency_help"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:302
+#: ckanext/dcatapit/schema.py:303
 msgid "Version Of"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:303
+#: ckanext/dcatapit/schema.py:304
 msgid "is version of a related dataset URI"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:305
+#: ckanext/dcatapit/schema.py:306
 msgid "package_is_version_of_help"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:312
+#: ckanext/dcatapit/schema.py:313
 msgid "Conforms To"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:313
+#: ckanext/dcatapit/schema.py:314
 msgid "conforms to"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:315
+#: ckanext/dcatapit/schema.py:316
 msgid "package_conforms_to_help"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:320
+#: ckanext/dcatapit/schema.py:321
 msgid "Creator"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:331 ckanext/dcatapit/schema.py:339
+#: ckanext/dcatapit/schema.py:332 ckanext/dcatapit/schema.py:340
 msgid "creator of the dataset"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:342
+#: ckanext/dcatapit/schema.py:343
 msgid "package_creator_help"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:365
+#: ckanext/dcatapit/schema.py:366
 msgid "Distribution Format"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:366
+#: ckanext/dcatapit/schema.py:367
 msgid "distribution format"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:374
+#: ckanext/dcatapit/schema.py:375
 #: ckanext/dcatapit/templates/package/resource_read.html:23
 msgid "License"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:375
+#: ckanext/dcatapit/schema.py:376
 msgid "license type"
 msgstr ""
 
-#: ckanext/dcatapit/schema.py:377
+#: ckanext/dcatapit/schema.py:378
 msgid ""
 "Questa proprietà si riferisce alla licenza con cui viene pubblicato il "
 "dataset. Scegliere una delle due licenze Creative Commons proposte."
@@ -762,7 +762,4 @@ msgstr ""
 #: ckanext/dcatapit/templates/package/snippets/resource_form.html:15
 msgid "eg. 1024"
 msgstr ""
-
-#~ msgid "http://www.geonames.org/3175395"
-#~ msgstr ""
 
