@@ -332,13 +332,17 @@ Old implementation of the couple element (one element with comma separated value
     {% endcall %}
 {% endmacro %}
 
-{% macro geonames(name, label, id, value, error, lang, username, limit_to, classes=[], attrs={}) %}
+{% macro geonames(name, label, id, value, error, lang, username, limit_to, 
+                  placeholder_name='',
+                  placeholder_url='',
+                  classes=[],
+                  attrs={},
+                  help='') %}
 
     {% call input_block(id or name, label or name, error, classes, is_required=False) %}
       {# actual value, not visible if js enabled #}
-      <input type="text" id="{{ name }}-store" name="{{ name }}" value="{{ value }}"/>
 
-      <input type="text" id="{{name}}-view" placeholder="{{ placeholder }}" name="{{ name }}-view" {{ attributes(attrs) }}
+      <input type="text" id="{{name}}-view" placeholder="{{ placeholder_name }}" name="{{ name }}-view" {{ attributes(attrs) }}
             readonly
             data-module="geonames"
             data-module-geonames-username="{{ username }}"
@@ -346,6 +350,9 @@ Old implementation of the couple element (one element with comma separated value
             data-module-geonames-display="#{{ name }}-display"
             data-module-geonames-language="{{ lang }}"
             data-module-geonames-store="#{{ name }}-store"/>
+      <input type="text" id="{{ name }}-store" name="{{ name }}" placeholder="{{ placeholder_url }}" value="{{ value }}"/>
+
+    {{ help_block(help) }}
     {% endcall %}
 
 {% endmacro %}
