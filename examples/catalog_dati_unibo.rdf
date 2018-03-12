@@ -1,0 +1,1256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+  xmlns:hydra="http://www.w3.org/ns/hydra/core#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:dcat="http://www.w3.org/ns/dcat#"
+  xmlns:dct="http://purl.org/dc/terms/"
+  xmlns:dcatapit="http://dati.gov.it/onto/dcatapit#"
+  xmlns:vcard="http://www.w3.org/2006/vcard/ns#"
+>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/8bbba481-63a5-4671-8303-b31b05bc9039">
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:title xml:lang="it">Corsi di studio 2005/2006</dct:title>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:title xml:lang="en">Degree programmes 2005/2006</dct:title>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <dct:license>
+      <dcatapit:LicenseDocument rdf:about="https://creativecommons.org/licenses/by/3.0/it/">
+        <rdf:type rdf:resource="http://purl.org/dc/terms/LicenseDocument"/>
+        <foaf:name>CC BY 3.0 IT</foaf:name>
+        <dct:type rdf:resource="http://purl.org/adms/licencetype/Attribution"/>
+        <owl:versionInfo>3.0</owl:versionInfo>
+      </dcatapit:LicenseDocument>
+    </dct:license>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/8bbba481-63a5-4671-8303-b31b05bc9039/download/corsi_2005_it.csv"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/8bbba481-63a5-4671-8303-b31b05bc9039"/>
+    <foaf:page>
+      <foaf:Document rdf:about="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+    </foaf:page>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:10:01.418371</dct:modified>
+  </dcat:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/2fd65e22-72a3-4cc2-9508-f54e7be7e902/resource/8af6979d-b771-4791-ac5a-aeb0b5687959">
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:31:20.519417</dct:modified>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <foaf:page>
+      <foaf:Document rdf:about="https://dati.unibo.it/pages/documentation-course-catalogue"/>
+    </foaf:page>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/2fd65e22-72a3-4cc2-9508-f54e7be7e902/resource/8af6979d-b771-4791-ac5a-aeb0b5687959/download/insegnamentidettagli_2016_it.csv"/>
+    <dct:title xml:lang="it">Dettaglio insegnamenti 2016/2017</dct:title>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/2fd65e22-72a3-4cc2-9508-f54e7be7e902/resource/8af6979d-b771-4791-ac5a-aeb0b5687959"/>
+    <dct:title xml:lang="en">Course catalogue details 2016/2017</dct:title>
+  </dcatapit:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/a726349a-d2d3-47bb-8868-0b97a92618d0">
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/a726349a-d2d3-47bb-8868-0b97a92618d0"/>
+    <dct:description xml:lang="en">TO DO</dct:description>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/ANNUAL"/>
+    <dct:title xml:lang="en">Staff distribution by gender</dct:title>
+    <dct:description xml:lang="it">Ripartizione del personale degli anni solari dal 2010 al 2015 per **genere**.</dct:description>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/a726349a-d2d3-47bb-8868-0b97a92618d0/download/personale_genere.csv"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-03-24T14:15:40.052677</dct:modified>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:title xml:lang="it">Distribuzione del personale per genere</dct:title>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+  </dcat:Distribution>
+  <hydra:PagedCollection rdf:about="http://paster/catalog.rdf?page=1">
+    <hydra:firstPage>http://paster/catalog.rdf?page=1</hydra:firstPage>
+    <hydra:totalItems rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</hydra:totalItems>
+    <hydra:itemsPerPage rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</hydra:itemsPerPage>
+    <hydra:lastPage>http://paster/catalog.rdf?page=1</hydra:lastPage>
+  </hydra:PagedCollection>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd/resource/d19dc828-9f57-464b-a448-f6400bb34106">
+    <foaf:page>
+      <foaf:Document rdf:about="https://dati.unibo.it/pages/documentation-curricula"/>
+    </foaf:page>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:20:09.481595</dct:modified>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd/resource/d19dc828-9f57-464b-a448-f6400bb34106/download/curriculadisponibili_2016_it.csv"/>
+    <dct:title xml:lang="it">Curricula disponibili 2016/2017</dct:title>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd/resource/d19dc828-9f57-464b-a448-f6400bb34106"/>
+    <dct:title xml:lang="en">Existing curricula 2016/2017</dct:title>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/d8257077-9d50-41fc-acdb-9b0985e04b3a">
+    <dct:title xml:lang="it">Corsi di studio 2016/2017</dct:title>
+    <dct:title xml:lang="en">Degree programmes 2016/2017</dct:title>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/d8257077-9d50-41fc-acdb-9b0985e04b3a/download/corsi_2016_it.csv"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/d8257077-9d50-41fc-acdb-9b0985e04b3a"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:12:02.288117</dct:modified>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/d81d9acd-f02c-48d9-9771-c47cb63d68a8">
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/d81d9acd-f02c-48d9-9771-c47cb63d68a8"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:title xml:lang="en">Degree programmes 2013/2014</dct:title>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/d81d9acd-f02c-48d9-9771-c47cb63d68a8/download/corsi_2013_it.csv"/>
+    <dct:title xml:lang="it">Corsi di studio 2013/2014</dct:title>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:02:01.610820</dct:modified>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+  </dcat:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/b4f7b6d3-2749-435f-b79c-cce1498c7d56">
+    <dct:description xml:lang="it">Ripartizione del personale degli anni solari dal 2010 al 2015 per **cittadinanza** (italiana o estera).</dct:description>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-03-24T14:16:27.706404</dct:modified>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/b4f7b6d3-2749-435f-b79c-cce1498c7d56/download/personale_cittadinanza.csv"/>
+    <dct:title xml:lang="en">Staff distribution by citizenship</dct:title>
+    <dct:description xml:lang="en">TO DO</dct:description>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/ANNUAL"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/b4f7b6d3-2749-435f-b79c-cce1498c7d56"/>
+    <dct:title xml:lang="it">Distribuzione del personale per cittadinanza</dct:title>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+  </dcatapit:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/5ea28b73-665c-46ad-8270-b8c53b0164bd/resource/7937ff64-d44c-4810-a308-1ad162f803c8">
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/5ea28b73-665c-46ad-8270-b8c53b0164bd/resource/7937ff64-d44c-4810-a308-1ad162f803c8"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-curricula"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/5ea28b73-665c-46ad-8270-b8c53b0164bd/resource/7937ff64-d44c-4810-a308-1ad162f803c8/download/curriculadettagli_2017_it.csv"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T05:17:26.394708</dct:modified>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:title xml:lang="it">Dettagli dei curricula 2017/2018</dct:title>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:title xml:lang="en">Curricula details 2017/2018</dct:title>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/557c11fe-1987-48ca-b199-15aa24688b95">
+    <dct:title xml:lang="en">Social Responsibility Report 2015</dct:title>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/557c11fe-1987-48ca-b199-15aa24688b95/download/bilanciosociale_2015.pdf"/>
+    <dct:title xml:lang="it">Bilancio sociale 2015</dct:title>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/PDF"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/557c11fe-1987-48ca-b199-15aa24688b95"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-03-14T14:36:54.907917</dct:modified>
+  </dcat:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/2e3ac9bd-f096-4cb4-8116-98a71edf07f1">
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <dct:title xml:lang="en">Degree programmes 2006/2007</dct:title>
+    <dct:title xml:lang="it">Corsi di studio 2006/2007</dct:title>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:09:02.005924</dct:modified>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/2e3ac9bd-f096-4cb4-8116-98a71edf07f1"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/2e3ac9bd-f096-4cb4-8116-98a71edf07f1/download/corsi_2006_it.csv"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+  </dcatapit:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/c08527c0-d956-4c1b-9737-7bf5cd37a316">
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/c08527c0-d956-4c1b-9737-7bf5cd37a316/download/corsi_2004-2017_it.csv"/>
+    <dct:title xml:lang="en">Degree programmes from 2004/2005 to 2017/2018</dct:title>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T05:01:04.117242</dct:modified>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:title xml:lang="it">Corsi di studio dal 2004/2005 al 2017/2018</dct:title>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/c08527c0-d956-4c1b-9737-7bf5cd37a316"/>
+  </dcatapit:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/60cb29d9-7e10-4b0e-b6ae-af75551d68f6">
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/60cb29d9-7e10-4b0e-b6ae-af75551d68f6"/>
+    <dct:title xml:lang="en">Social Responsibility Report 2014</dct:title>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/60cb29d9-7e10-4b0e-b6ae-af75551d68f6/download/bilanciosociale_2014.pdf"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/PDF"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-03-14T14:37:36.200178</dct:modified>
+    <dct:title xml:lang="it">Bilancio sociale 2014</dct:title>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/0b3b95a3-fbae-4e50-b335-4b20d0d44c6a">
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/0b3b95a3-fbae-4e50-b335-4b20d0d44c6a"/>
+    <dct:title xml:lang="en">Degree programmes 2015/2016</dct:title>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/0b3b95a3-fbae-4e50-b335-4b20d0d44c6a/download/corsi_2015_it.csv"/>
+    <dct:title xml:lang="it">Corsi di studio 2015/2016</dct:title>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:00:17.159270</dct:modified>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/19b0fff0-9fba-4817-9752-5f6943771b72">
+    <dct:title xml:lang="it">Bilancio Unico di Ateneo di esercizio 2016</dct:title>
+    <dct:title xml:lang="en">Financial Statements 2016</dct:title>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/19b0fff0-9fba-4817-9752-5f6943771b72"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ZXX"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-10-31T10:42:39.095134</dct:modified>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/19b0fff0-9fba-4817-9752-5f6943771b72/download/bilancio2016.xlsx"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/XLSX"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/5ea28b73-665c-46ad-8270-b8c53b0164bd/resource/a763d977-ec97-485d-a226-ffead4c7e2b0">
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/5ea28b73-665c-46ad-8270-b8c53b0164bd/resource/a763d977-ec97-485d-a226-ffead4c7e2b0/download/curriculadisponibili_2017_it.csv"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/5ea28b73-665c-46ad-8270-b8c53b0164bd/resource/a763d977-ec97-485d-a226-ffead4c7e2b0"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T05:15:11.638569</dct:modified>
+    <dct:title xml:lang="it">Curricula disponibili 2017/2018</dct:title>
+    <dct:title xml:lang="en">Existing curricula 2017/2018</dct:title>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-curricula"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/9fd0eda6-f07e-4da9-a01d-a457b6bea088">
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/ANNUAL"/>
+    <dct:description xml:lang="en">TO DO</dct:description>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:title xml:lang="it">Distribuzione del personale per tipologia</dct:title>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:title xml:lang="en">Staff distribution by type</dct:title>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/9fd0eda6-f07e-4da9-a01d-a457b6bea088/download/personale_tipologia.csv"/>
+    <dct:description xml:lang="it">Ripartizione del personale degli anni solari dal 2009 al 2015, suddiviso tra **personale docente / non docente** e per **tipologia**.&#13;
+&#13;
+Dove possibile, il dato è ulteriormente suddiviso per **durata** del rapporto di lavoro (a tempo determinato / a tempo indeterminato) e per **orario** di lavoro (tempo pieno / part-time / tempo definito).</dct:description>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/9fd0eda6-f07e-4da9-a01d-a457b6bea088"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-03-24T14:13:39.716993</dct:modified>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/9ad27723-846b-4ceb-91c9-654418f29940">
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/9ad27723-846b-4ceb-91c9-654418f29940/download/corsi_2004_it.csv"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:title xml:lang="en">Degree programmes 2004/2005</dct:title>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:11:01.831284</dct:modified>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/9ad27723-846b-4ceb-91c9-654418f29940"/>
+    <dct:title xml:lang="it">Corsi di studio 2004/2005</dct:title>
+  </dcat:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/8e78aafb-6547-4056-86bc-2f5bba5f0761/resource/ffddeebc-09e9-461e-ad0b-62df2899955f">
+    <dct:title xml:lang="en">Classrooms 2017/2018</dct:title>
+    <dct:title xml:lang="it">Aule 2017/2018</dct:title>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T05:06:29.931227</dct:modified>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8e78aafb-6547-4056-86bc-2f5bba5f0761/resource/ffddeebc-09e9-461e-ad0b-62df2899955f/download/aule_2017.csv"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ZXX"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <foaf:page>
+      <foaf:Document rdf:about="https://dati.unibo.it/pages/documentation-course-timetable"/>
+    </foaf:page>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8e78aafb-6547-4056-86bc-2f5bba5f0761/resource/ffddeebc-09e9-461e-ad0b-62df2899955f"/>
+  </dcatapit:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/5ea28b73-665c-46ad-8270-b8c53b0164bd/resource/c389f4af-7561-48d3-9db1-fd3389f3a460">
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T05:16:22.958829</dct:modified>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+    <dct:title xml:lang="en">Curricula structure 2017/2018</dct:title>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-curricula"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/5ea28b73-665c-46ad-8270-b8c53b0164bd/resource/c389f4af-7561-48d3-9db1-fd3389f3a460"/>
+    <dct:title xml:lang="it">Struttura dei curricula 2017/2018</dct:title>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/5ea28b73-665c-46ad-8270-b8c53b0164bd/resource/c389f4af-7561-48d3-9db1-fd3389f3a460/download/curriculastruttura_2017_it.csv"/>
+  </dcatapit:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/29dbc1f5-226c-4c95-a27d-107956cf62b3/resource/aa31b724-2feb-4da1-870a-9b9e1561541f">
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:title xml:lang="it">Luoghi UniboMappe</dct:title>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/29dbc1f5-226c-4c95-a27d-107956cf62b3/resource/aa31b724-2feb-4da1-870a-9b9e1561541f/download/mappe.csv"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-11T05:10:01.974623</dct:modified>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/29dbc1f5-226c-4c95-a27d-107956cf62b3/resource/aa31b724-2feb-4da1-870a-9b9e1561541f"/>
+    <dct:title xml:lang="en">UniboMappe points of interest</dct:title>
+  </dcat:Distribution>
+  <dcat:Catalog rdf:about="https://dati.unibo.it">
+    <dct:publisher>
+      <dcatapit:Agent rdf:about="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69">
+        <dct:identifier>uni_bo</dct:identifier>
+        <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Agent"/>
+        <foaf:name xml:lang="it">Alma Mater Studiorum - Università di Bologna</foaf:name>
+        <dct:type rdf:resource="http://purl.org/adms/publishertype/Academia-ScientificOrganisation"/>
+        <foaf:name xml:lang="en">Alma Mater Studiorum - University of Bologna</foaf:name>
+        <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Organization"/>
+      </dcatapit:Agent>
+    </dct:publisher>
+    <dcat:dataset>
+      <dcatapit:Dataset rdf:about="https://dati.unibo.it/dataset/db4cb33d-4122-4377-bdc4-75b4d6dd6a10">
+        <dcat:landingPage rdf:resource="https://dati.unibo.it/dataset/db4cb33d-4122-4377-bdc4-75b4d6dd6a10/"/>
+        <dct:creator rdf:resource="https://dati.unibo.it/organization/00c14c7c-f416-4dae-8d1f-5924c9efccd0"/>
+        <dct:description xml:lang="en">Timetable for the courses offered by the University of Bologna and geo-localized list of the lecture rooms where they take place, in academic year 2016/2017.&#13;
+&#13;
+--- &#13;
+&#13;
+**See also:** [Course unit catalogue](http://www.unibo.it/en/teaching/course-unit-catalogue) in the University Web Portal</dct:description>
+        <dct:identifier>db4cb33d-4122-4377-bdc4-75b4d6dd6a10</dct:identifier>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/db4cb33d-4122-4377-bdc4-75b4d6dd6a10/resource/3b9adbe8-c448-4f2f-b0f9-200d7c72869b"/>
+        <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:27:25.065223</dct:modified>
+        <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+        <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-11-21T10:41:41.155352</dct:issued>
+        <dct:rightsHolder rdf:resource="https://dati.unibo.it/organization/31f7674e-2f06-4b54-a833-d630bf8463ff"/>
+        <dcat:contactPoint>
+          <vcard:Kind rdf:nodeID="N3159b71b562442e99f455e9694714e41">
+            <vcard:hasEmail rdf:resource="mailto:opendata@unibo.it"/>
+            <vcard:fn>opendata@unibo.it</vcard:fn>
+          </vcard:Kind>
+        </dcat:contactPoint>
+        <dct:publisher rdf:resource="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69"/>
+        <dct:description xml:lang="it">Orari degli insegnamenti offerti dall'Università di Bologna ed elenco geolocalizzato delle aule didattiche, per l'anno accademico 2016/2017.&#13;
+&#13;
+--- &#13;
+&#13;
+**Vedi anche:** [Insegnamenti](http://www.unibo.it/it/didattica/insegnamenti) sul portale di Ateneo</dct:description>
+        <dct:title xml:lang="en">Course timetable 2016/2017</dct:title>
+        <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Dataset"/>
+        <owl:versionInfo>1.0.0</owl:versionInfo>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+        <dct:title xml:lang="it">Orario degli insegnamenti 2016/2017</dct:title>
+        <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-course-timetable"/>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/EDUC"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/db4cb33d-4122-4377-bdc4-75b4d6dd6a10/resource/23f2c258-b45d-4a71-a965-8b3b54b47df1"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+        <dct:accrualPeriodicity rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+      </dcatapit:Dataset>
+    </dcat:dataset>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+    <dcat:dataset>
+      <dcat:Dataset rdf:about="https://dati.unibo.it/dataset/29dbc1f5-226c-4c95-a27d-107956cf62b3">
+        <dct:description xml:lang="en">A list of geo-localized points of interest (libraries, museums, offices) of the University of Bologna and the nearby area.&#13;
+&#13;
+--- &#13;
+&#13;
+**See also:** [UniboMappe](http://www.unibo.it/uniboWeb/unibomappe/default.aspx?lang=en) in the University Web Portal</dct:description>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/EDUC"/>
+        <dct:creator rdf:resource="https://dati.unibo.it/organization/00c14c7c-f416-4dae-8d1f-5924c9efccd0"/>
+        <dcat:landingPage rdf:resource="https://dati.unibo.it/dataset/29dbc1f5-226c-4c95-a27d-107956cf62b3/"/>
+        <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2016-12-06T10:54:32.764244</dct:issued>
+        <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+        <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-11T05:10:04.115341</dct:modified>
+        <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Dataset"/>
+        <owl:versionInfo>1.0.0</owl:versionInfo>
+        <dct:rightsHolder rdf:resource="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69"/>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/GOVE"/>
+        <dct:publisher rdf:resource="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/29dbc1f5-226c-4c95-a27d-107956cf62b3/resource/aa31b724-2feb-4da1-870a-9b9e1561541f"/>
+        <dct:description xml:lang="it">Un elenco georeferenziato di luoghi di interesse (biblioteche, musei, uffici) dell'Università di Bologna e delle zone limitrofe.&#13;
+&#13;
+--- &#13;
+&#13;
+**Vedi anche:** [UniboMappe](http://www.unibo.it/uniboWeb/unibomappe/default.aspx) sul portale di Ateneo</dct:description>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+        <dct:title xml:lang="en">Points of interest</dct:title>
+        <dct:accrualPeriodicity rdf:resource="http://publications.europa.eu/resource/authority/frequency/UNKNOWN"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+        <dcat:contactPoint>
+          <vcard:Kind rdf:nodeID="N871f221ffb924fe38e6a4ad23cd0eaaf">
+            <vcard:hasEmail rdf:resource="mailto:opendata@unibo.it"/>
+            <vcard:fn>opendata@unibo.it</vcard:fn>
+          </vcard:Kind>
+        </dcat:contactPoint>
+        <dct:title xml:lang="it">Punti di interesse</dct:title>
+        <dct:identifier>29dbc1f5-226c-4c95-a27d-107956cf62b3</dct:identifier>
+      </dcat:Dataset>
+    </dcat:dataset>
+    <foaf:homepage rdf:resource="https://dati.unibo.it/"/>
+    <dcat:dataset>
+      <dcat:Dataset rdf:about="https://dati.unibo.it/dataset/5ea28b73-665c-46ad-8270-b8c53b0164bd">
+        <owl:versionInfo>1.0.0</owl:versionInfo>
+        <dct:identifier>5ea28b73-665c-46ad-8270-b8c53b0164bd</dct:identifier>
+        <dct:title xml:lang="it">Curricula 2017/2018</dct:title>
+        <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-curricula"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/EDUC"/>
+        <dct:publisher rdf:resource="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/5ea28b73-665c-46ad-8270-b8c53b0164bd/resource/7937ff64-d44c-4810-a308-1ad162f803c8"/>
+        <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T05:17:27.741523</dct:modified>
+        <dcat:contactPoint>
+          <vcard:Kind rdf:nodeID="N16099bd4ed1845e3bc3ed0795f963b3f">
+            <vcard:fn>opendata@unibo.it</vcard:fn>
+            <vcard:hasEmail rdf:resource="mailto:opendata@unibo.it"/>
+          </vcard:Kind>
+        </dcat:contactPoint>
+        <dct:description xml:lang="en">Curricula offered by the Degree Programmes of the University of Bologna in academic year 2017/2018.&#13;
+&#13;
+--- &#13;
+&#13;
+**See also:** [First and Second cycle degree programmes](http://www.unibo.it/en/teaching/degree-programmes) in the University Web Portal</dct:description>
+        <dct:title xml:lang="en">Curricula 2017/2018</dct:title>
+        <dct:accrualPeriodicity rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+        <dct:description xml:lang="it">Elenco dei curricula proposti dai corsi di studio dell'Università di Bologna nell'anno accademico 2017/2018.&#13;
+&#13;
+---&#13;
+&#13;
+**Vedi anche:** [Lauree e Lauree Magistrali](http://www.unibo.it/it/didattica/corsi-di-studio) sul portale di Ateneo&#13;
+</dct:description>
+        <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-03-30T07:55:42.070995</dct:issued>
+        <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/5ea28b73-665c-46ad-8270-b8c53b0164bd/resource/c389f4af-7561-48d3-9db1-fd3389f3a460"/>
+        <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Dataset"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/5ea28b73-665c-46ad-8270-b8c53b0164bd/resource/a763d977-ec97-485d-a226-ffead4c7e2b0"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+        <dct:rightsHolder rdf:resource="https://dati.unibo.it/organization/31f7674e-2f06-4b54-a833-d630bf8463ff"/>
+        <dct:creator rdf:resource="https://dati.unibo.it/organization/00c14c7c-f416-4dae-8d1f-5924c9efccd0"/>
+        <dcat:landingPage rdf:resource="https://dati.unibo.it/dataset/5ea28b73-665c-46ad-8270-b8c53b0164bd/"/>
+      </dcat:Dataset>
+    </dcat:dataset>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Catalog"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:title xml:lang="it">Open data UniBO</dct:title>
+    <dcat:dataset>
+      <dcat:Dataset rdf:about="https://dati.unibo.it/dataset/9bd5b817-3371-40f9-a5dd-8e254022882d">
+        <dct:rightsHolder rdf:resource="https://dati.unibo.it/organization/31f7674e-2f06-4b54-a833-d630bf8463ff"/>
+        <dct:description xml:lang="en">Catalogue of the course units offered by the University of Bologna in academic year 2017/2018.&#13;
+&#13;
+--- &#13;
+&#13;
+**See also:** [Course unit catalogue](http://www.unibo.it/en/teaching/course-unit-catalogue) in the University Web Portal</dct:description>
+        <dct:creator rdf:resource="https://dati.unibo.it/organization/00c14c7c-f416-4dae-8d1f-5924c9efccd0"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+        <dct:identifier>9bd5b817-3371-40f9-a5dd-8e254022882d</dct:identifier>
+        <dct:title xml:lang="it">Insegnamenti 2017/2018</dct:title>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/EDUC"/>
+        <dct:publisher rdf:resource="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69"/>
+        <dct:description xml:lang="it">Catalogo degli insegnamenti offerti dall'Università di Bologna nell'anno accademico 2017/2018.&#13;
+&#13;
+--- &#13;
+&#13;
+**Vedi anche:** [Insegnamenti](http://www.unibo.it/it/didattica/insegnamenti) sul portale di Ateneo&#13;
+</dct:description>
+        <dcat:contactPoint>
+          <vcard:Kind rdf:nodeID="Nda7acfd783b24a8d8ecc95c907f18fea">
+            <vcard:hasEmail rdf:resource="mailto:opendata@unibo.it"/>
+            <vcard:fn>opendata@unibo.it</vcard:fn>
+          </vcard:Kind>
+        </dcat:contactPoint>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/9bd5b817-3371-40f9-a5dd-8e254022882d/resource/57b47512-fa24-49c8-9bcb-026e8d7a4d57"/>
+        <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Dataset"/>
+        <dct:accrualPeriodicity rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+        <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+        <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T05:03:22.290774</dct:modified>
+        <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2016-12-05T09:54:32.038268</dct:issued>
+        <dcat:landingPage rdf:resource="https://dati.unibo.it/dataset/9bd5b817-3371-40f9-a5dd-8e254022882d/"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/9bd5b817-3371-40f9-a5dd-8e254022882d/resource/a961f6e0-6b42-4ede-8273-587a35b1b4e2"/>
+        <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-course-catalogue"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+        <owl:versionInfo>1.0.0</owl:versionInfo>
+        <dct:title xml:lang="en">Course unit catalogue 2017/2018</dct:title>
+      </dcat:Dataset>
+    </dcat:dataset>
+    <dcat:dataset>
+      <dcat:Dataset rdf:about="https://dati.unibo.it/dataset/2fd65e22-72a3-4cc2-9508-f54e7be7e902">
+        <dct:identifier>2fd65e22-72a3-4cc2-9508-f54e7be7e902</dct:identifier>
+        <dct:title xml:lang="en">Course unit catalogue 2016/2017</dct:title>
+        <dcat:contactPoint>
+          <vcard:Kind rdf:nodeID="N69c0f52653ba4c4abf2480743b45a424">
+            <vcard:fn>opendata@unibo.it</vcard:fn>
+            <vcard:hasEmail rdf:resource="mailto:opendata@unibo.it"/>
+          </vcard:Kind>
+        </dcat:contactPoint>
+        <owl:versionInfo>1.0.0</owl:versionInfo>
+        <dct:title xml:lang="it">Insegnamenti 2016/2017</dct:title>
+        <dct:publisher rdf:resource="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69"/>
+        <dct:description xml:lang="it">Catalogo degli insegnamenti offerti dall'Università di Bologna nell'anno accademico 2016/2017.&#13;
+&#13;
+--- &#13;
+&#13;
+**Vedi anche:** [Insegnamenti](http://www.unibo.it/it/didattica/insegnamenti) sul portale di Ateneo&#13;
+</dct:description>
+        <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Dataset"/>
+        <dcat:landingPage rdf:resource="https://dati.unibo.it/dataset/2fd65e22-72a3-4cc2-9508-f54e7be7e902/"/>
+        <dct:accrualPeriodicity rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/2fd65e22-72a3-4cc2-9508-f54e7be7e902/resource/d36681cd-4edf-4f24-88a4-e68d6485f80f"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+        <dct:description xml:lang="en">Catalogue of the course units offered by the University of Bologna in academic year 2016/2017.&#13;
+&#13;
+--- &#13;
+&#13;
+**See also:** [Course unit catalogue](http://www.unibo.it/en/teaching/course-unit-catalogue) in the University Web Portal</dct:description>
+        <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-11-21T11:08:28.236854</dct:issued>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/EDUC"/>
+        <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+        <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-course-catalogue"/>
+        <dct:rightsHolder rdf:resource="https://dati.unibo.it/organization/31f7674e-2f06-4b54-a833-d630bf8463ff"/>
+        <dct:creator rdf:resource="https://dati.unibo.it/organization/00c14c7c-f416-4dae-8d1f-5924c9efccd0"/>
+        <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:31:21.800256</dct:modified>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/2fd65e22-72a3-4cc2-9508-f54e7be7e902/resource/8af6979d-b771-4791-ac5a-aeb0b5687959"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+      </dcat:Dataset>
+    </dcat:dataset>
+    <dcat:dataset>
+      <dcat:Dataset rdf:about="https://dati.unibo.it/dataset/8e78aafb-6547-4056-86bc-2f5bba5f0761">
+        <dct:rightsHolder rdf:resource="https://dati.unibo.it/organization/31f7674e-2f06-4b54-a833-d630bf8463ff"/>
+        <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-course-timetable"/>
+        <dct:creator rdf:resource="https://dati.unibo.it/organization/00c14c7c-f416-4dae-8d1f-5924c9efccd0"/>
+        <dcat:contactPoint>
+          <vcard:Kind rdf:nodeID="Nf607a0fac2524e7cbbf264e57481e66e">
+            <vcard:fn>opendata@unibo.it</vcard:fn>
+            <vcard:hasEmail rdf:resource="mailto:opendata@unibo.it"/>
+          </vcard:Kind>
+        </dcat:contactPoint>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+        <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T05:06:31.089662</dct:modified>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/EDUC"/>
+        <dct:publisher rdf:resource="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69"/>
+        <dct:description xml:lang="it">Orari degli insegnamenti offerti dall'Università di Bologna ed elenco geolocalizzato delle aule didattiche, per l'anno accademico 2017/2018.&#13;
+&#13;
+**Attenzione: _gli orari degli insegnamenti sono soggetti a variazioni e notifiche_**; l'informazione più corretta e aggiornata è quella disponibile sul sito della scuola o del corso di studi.&#13;
+&#13;
+--- &#13;
+&#13;
+**Vedi anche:** [Insegnamenti](http://www.unibo.it/it/didattica/insegnamenti) sul portale di Ateneo</dct:description>
+        <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Dataset"/>
+        <dct:identifier>8e78aafb-6547-4056-86bc-2f5bba5f0761</dct:identifier>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8e78aafb-6547-4056-86bc-2f5bba5f0761/resource/ffddeebc-09e9-461e-ad0b-62df2899955f"/>
+        <dct:accrualPeriodicity rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8e78aafb-6547-4056-86bc-2f5bba5f0761/resource/87da00d4-c72d-4455-991a-e52a37d866f8"/>
+        <dct:description xml:lang="en">Timetable for the courses offered by the University of Bologna and geo-localized list of the lecture rooms where they take place, in academic year 2017/2018.&#13;
+&#13;
+**Warning: _course timetables are subject to changes and notifications_**; up-to-date information can be found on the School website or on the Degree Programme website.&#13;
+&#13;
+--- &#13;
+&#13;
+**See also:** [Course unit catalogue](http://www.unibo.it/en/teaching/course-unit-catalogue) in the University Web Portal</dct:description>
+        <owl:versionInfo>1.0.0</owl:versionInfo>
+        <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2016-12-05T09:59:37.979936</dct:issued>
+        <dct:title xml:lang="it">Orario degli insegnamenti 2017/2018</dct:title>
+        <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+        <dcat:landingPage rdf:resource="https://dati.unibo.it/dataset/8e78aafb-6547-4056-86bc-2f5bba5f0761/"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+        <dct:title xml:lang="en">Course timetable 2017/2018</dct:title>
+      </dcat:Dataset>
+    </dcat:dataset>
+    <dcat:dataset>
+      <dcat:Dataset rdf:about="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca">
+        <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Dataset"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/e2a477ba-f545-40e8-ba1d-3158a29394e6"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/19b0fff0-9fba-4817-9752-5f6943771b72"/>
+        <dct:description xml:lang="it">Lo stato patrimoniale rappresenta la situazione patrimoniale evidenziando le attività , le passività e il patrimonio netto dell’Ateneo al 31 dicembre 2016; il conto economico evidenzia il risultato della gestione nell’esercizio 2016 mentre il rendiconto finanziario evidenzia i flussi finanziari derivanti dalla gestione operativa, da quella di investimento e da quella di finanziamento nonché le disponibilità liquide all’inizio e alla fine dell’esercizio considerato. Questi tre documenti, insieme alla nota integrativa costituiscono il Bilancio d’esercizio.&#13;
+&#13;
+--- &#13;
+&#13;
+**Vedi anche:** [Bilancio di esercizio](http://www.unibo.it/it/ateneo/chi-siamo/bilanci-di-ateneo/bilancio-di-esercizio) sul portale di Ateneo&#13;
+</dct:description>
+        <dct:publisher rdf:resource="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69"/>
+        <dct:title xml:lang="en">Financial Statements 2016</dct:title>
+        <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-10-31T10:42:07.068599</dct:issued>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/GOVE"/>
+        <dct:identifier>0824deeb-8e76-4281-9120-c2177d0b13ca</dct:identifier>
+        <dcat:landingPage rdf:resource="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/"/>
+        <dcat:contactPoint rdf:resource="http://www.unibo.it/it/ateneo/organizzazione/amministrazione-generale/726/766"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/f76c9bcf-f0a9-4aca-8ea9-3efd44a9e4df"/>
+        <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+        <dct:rightsHolder rdf:resource="https://dati.unibo.it/organization/943d600b-04df-4bab-a134-d76bef162221"/>
+        <dct:creator rdf:resource="https://dati.unibo.it/organization/943d600b-04df-4bab-a134-d76bef162221"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+        <dct:accrualPeriodicity rdf:resource="http://publications.europa.eu/resource/authority/frequency/ANNUAL"/>
+        <dct:description xml:lang="en">This document represents the financial results of the annual administration and describes any financially important facts and events.&#13;
+&#13;
+It acts as an administrative control over the conformity to the authorisations for the management of public funds; it acts as a guarantee towards the State and all potential stakeholders over the financial health of the body in terms of liquidity and solvency, and provides information on the results achieved during the referred financial year.&#13;
+&#13;
+--- &#13;
+&#13;
+**See also:** [Financial Statements](http://www.unibo.it/en/university/who-we-are/university-budgets/financial-statements) in the University Web Portal&#13;
+&#13;
+</dct:description>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/af74b784-46f4-436c-a099-cea368736045"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+        <dct:title xml:lang="it">Bilancio di esercizio 2016</dct:title>
+        <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-12-04T13:10:12.136124</dct:modified>
+      </dcat:Dataset>
+    </dcat:dataset>
+    <dcat:themeTaxonomy>
+      <skos:ConceptScheme rdf:about="http://publications.europa.eu/resource/authority/data-theme">
+        <dct:title>Data Theme Vocabulary</dct:title>
+      </skos:ConceptScheme>
+    </dcat:themeTaxonomy>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:description xml:lang="en">Open data of the University of Bologna</dct:description>
+    <dct:title xml:lang="en">UniBO Open Data</dct:title>
+    <dcat:dataset>
+      <dcatapit:Dataset rdf:about="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114">
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/a726349a-d2d3-47bb-8868-0b97a92618d0"/>
+        <owl:versionInfo>1.0.0</owl:versionInfo>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/9fd0eda6-f07e-4da9-a01d-a457b6bea088"/>
+        <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-12-04T13:09:35.529270</dct:modified>
+        <dcat:contactPoint rdf:resource="http://www.unibo.it/it/ateneo/organizzazione/amministrazione-generale/726/766"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/b4f7b6d3-2749-435f-b79c-cce1498c7d56"/>
+        <dct:description xml:lang="en">Distribution of the teaching and non-teaching staff of the University of Bologna.&#13;
+&#13;
+Data of each year is extracted from the latest social responsibility record which had it available.&#13;
+&#13;
+--- &#13;
+&#13;
+**Sources:** [Social Responsibility Report ](/en/dataset/social-responsibility-report) </dct:description>
+        <dct:title xml:lang="en">Staff </dct:title>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/GOVE"/>
+        <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-03-24T14:10:35.499327</dct:issued>
+        <dcat:landingPage rdf:resource="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/"/>
+        <dct:identifier>7deb0ce5-3a25-47d8-8784-8086333b3114</dct:identifier>
+        <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/ANNUAL"/>
+        <dct:rightsHolder rdf:resource="https://dati.unibo.it/organization/943d600b-04df-4bab-a134-d76bef162221"/>
+        <dct:title xml:lang="it">Personale</dct:title>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/4ad1fcaf-1729-4c2f-b66a-c392e715f1cd"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+        <dct:accrualPeriodicity rdf:resource="http://publications.europa.eu/resource/authority/frequency/UNKNOWN"/>
+        <dct:publisher rdf:resource="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69"/>
+        <dct:creator rdf:resource="https://dati.unibo.it/organization/00c14c7c-f416-4dae-8d1f-5924c9efccd0"/>
+        <dct:description xml:lang="it">Composizione del personale docente e non docente dell'Università di Bologna.&#13;
+&#13;
+I dati di ciascun anno sono estratti dal bilancio sociale più recente tra quelli nei quali sono pubblicati.&#13;
+&#13;
+--- &#13;
+&#13;
+**Fonti:** [Bilancio sociale](/it/dataset/social-responsibility-report) </dct:description>
+        <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Dataset"/>
+      </dcatapit:Dataset>
+    </dcat:dataset>
+    <dcat:dataset>
+      <dcatapit:Dataset rdf:about="https://dati.unibo.it/dataset/acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd">
+        <dct:title xml:lang="it">Curricula 2016/2017</dct:title>
+        <dct:title xml:lang="en">Curricula 2016/2017</dct:title>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd/resource/31dc6739-8bae-4270-b1ba-4ccd18ea9903"/>
+        <dct:rightsHolder rdf:resource="https://dati.unibo.it/organization/31f7674e-2f06-4b54-a833-d630bf8463ff"/>
+        <dcat:landingPage rdf:resource="https://dati.unibo.it/dataset/acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd/"/>
+        <dct:creator rdf:resource="https://dati.unibo.it/organization/00c14c7c-f416-4dae-8d1f-5924c9efccd0"/>
+        <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-curricula"/>
+        <dct:identifier>acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd</dct:identifier>
+        <dct:description xml:lang="it">Elenco dei curricula proposti dai corsi di studio dell'Università di Bologna nell'anno accademico 2016/2017.&#13;
+&#13;
+---&#13;
+&#13;
+**Vedi anche:** [Lauree e Lauree Magistrali](http://www.unibo.it/it/didattica/corsi-di-studio) sul portale di Ateneo&#13;
+</dct:description>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/EDUC"/>
+        <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:22:23.696782</dct:modified>
+        <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Dataset"/>
+        <dct:accrualPeriodicity rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+        <dct:publisher rdf:resource="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69"/>
+        <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+        <owl:versionInfo>1.0.0</owl:versionInfo>
+        <dct:description xml:lang="en">Curricula offered by the Degree Programmes of the University of Bologna in academic year 2016/2017.&#13;
+&#13;
+--- &#13;
+&#13;
+**See also:** [First and Second cycle degree programmes](http://www.unibo.it/en/teaching/degree-programmes) in the University Web Portal</dct:description>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+        <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-11-21T11:46:02.853118</dct:issued>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd/resource/d19dc828-9f57-464b-a448-f6400bb34106"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd/resource/bba72b76-f99d-4c0c-8cd2-7fa60ad6a786"/>
+        <dcat:contactPoint>
+          <vcard:Kind rdf:nodeID="N01ecf82677f749b981991d941615453e">
+            <vcard:fn>opendata@unibo.it</vcard:fn>
+            <vcard:hasEmail rdf:resource="mailto:opendata@unibo.it"/>
+          </vcard:Kind>
+        </dcat:contactPoint>
+      </dcatapit:Dataset>
+    </dcat:dataset>
+    <dcat:dataset>
+      <dcatapit:Dataset rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434">
+        <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2016-12-05T09:48:09.557557</dct:issued>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/c08527c0-d956-4c1b-9737-7bf5cd37a316"/>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/EDUC"/>
+        <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+        <dct:accrualPeriodicity rdf:resource="http://publications.europa.eu/resource/authority/frequency/ANNUAL"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/0b3b95a3-fbae-4e50-b335-4b20d0d44c6a"/>
+        <dct:rightsHolder rdf:resource="https://dati.unibo.it/organization/31f7674e-2f06-4b54-a833-d630bf8463ff"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/2e3ac9bd-f096-4cb4-8116-98a71edf07f1"/>
+        <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Dataset"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/8bbba481-63a5-4671-8303-b31b05bc9039"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/cd0c691e-00c9-43f0-91a3-e06505338187"/>
+        <dct:identifier>8cbba6bd-1686-4828-b223-6f4dab477434</dct:identifier>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/f77bc26b-d7a1-4310-8f73-7eb0645f61e3"/>
+        <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T05:01:04.146489</dct:modified>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/d8257077-9d50-41fc-acdb-9b0985e04b3a"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/9ad27723-846b-4ceb-91c9-654418f29940"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+        <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/d81d9acd-f02c-48d9-9771-c47cb63d68a8"/>
+        <dct:description xml:lang="en">Catalogue of the First and Second cycle degree programmes offered by the University of Bologna, by academic year; a resource is also present holding data of all available academic years.&#13;
+&#13;
+--- &#13;
+&#13;
+**See also:** [First and Second cycle degree programmes](http://www.unibo.it/en/teaching/degree-programmes) in the University Web Portal</dct:description>
+        <dct:publisher rdf:resource="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/33f2f5d4-f786-4561-a5f8-09e7b3f8348b"/>
+        <dct:title xml:lang="en">Degree programmes</dct:title>
+        <owl:versionInfo>1.0.0</owl:versionInfo>
+        <dct:creator rdf:resource="https://dati.unibo.it/organization/00c14c7c-f416-4dae-8d1f-5924c9efccd0"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/8d4eb9f1-c006-4cd9-8394-2ec7a0a4765b"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/8e809c98-262f-4e82-a33e-efe7a7e18f72"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/c525895e-3671-4b16-a8e3-9f63ea473101"/>
+        <dct:description xml:lang="it">Catalogo dei corsi di Laurea e Laurea Magistrale offerti dall'Università di Bologna, suddivisi per anno accademico; è anche presente una risorsa con i dati di tutti gli anni accademici disponibili.&#13;
+&#13;
+--- &#13;
+&#13;
+**Vedi anche:** [Lauree e Lauree Magistrali](http://www.unibo.it/it/didattica/corsi-di-studio) sul portale di Ateneo</dct:description>
+        <dct:title xml:lang="it">Corsi di studio</dct:title>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/6e75e77d-4c73-455c-a3a8-5f6ed916e19d"/>
+        <dcat:contactPoint>
+          <vcard:Kind rdf:nodeID="N3210bff3dc87420f9209e10c02c4129c">
+            <vcard:hasEmail rdf:resource="mailto:opendata@unibo.it"/>
+            <vcard:fn>opendata@unibo.it</vcard:fn>
+          </vcard:Kind>
+        </dcat:contactPoint>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/INTR"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/9bb82527-9e7e-42e3-9518-f8c829260a84"/>
+        <dcat:landingPage rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/"/>
+      </dcatapit:Dataset>
+    </dcat:dataset>
+    <dcat:dataset>
+      <dcat:Dataset rdf:about="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e">
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/8bb7cd5f-e272-468b-a206-ce40683663f0"/>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/GOVE"/>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/INTR"/>
+        <dct:description xml:lang="en">The presence throughout the territory, the international outlook, the research, the programme catalogue, the information services: in these and many other areas, today the Alma Mater paves the way for innovation.&#13;
+&#13;
+A yearly brochure reports the most significant data about the University of Bologna.&#13;
+&#13;
+--- &#13;
+&#13;
+**See also:** [The University today: numbers and innovation](http://www.unibo.it/en/university/who-we-are/university-today/university-today) in the University Web Portal</dct:description>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/7a50c2e4-d55d-4129-adef-2f42d506f450"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/2beec75b-ac4a-426c-9b53-acf41e257478"/>
+        <dct:title xml:lang="it">L'Università oggi: tra numeri e innovazione</dct:title>
+        <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Dataset"/>
+        <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-01-17T10:22:17.014947</dct:issued>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/EDUC"/>
+        <dcat:contactPoint>
+          <vcard:Kind rdf:nodeID="Nb2796258ba274b4fa57e2117bb4340c7">
+            <vcard:hasEmail rdf:resource="mailto:opendata@unibo.it"/>
+            <vcard:fn>opendata@unibo.it</vcard:fn>
+          </vcard:Kind>
+        </dcat:contactPoint>
+        <dct:description xml:lang="it">La riorganizzazione del sistema universitario, la presenza sul territorio, l'apertura internazionale, la ricerca, l'offerta didattica, i servizi informativi: in questi e in molti altri ambiti l'Alma Mater promuove e percorre oggi la strada dell'innovazione.&#13;
+&#13;
+Una brochure pubblicata annualmente riporta i dati più significativi dell'Università di Bologna.&#13;
+&#13;
+--- &#13;
+&#13;
+**Vedi anche:** [L'Università oggi: tra numeri e innovazione](http://www.unibo.it/it/ateneo/chi-siamo/luniversita-oggi-tra-numeri-e-innovazione) sul portale di Ateneo</dct:description>
+        <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/8891360f-db73-4bd0-8af7-4c4e8903daa7"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/52c6d39f-bd61-497f-8269-62d7c0327fac"/>
+        <dct:identifier>71856b14-0aa1-43c7-8e0a-4210f352e60e</dct:identifier>
+        <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-12-07T09:18:32.306935</dct:modified>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+        <dct:accrualPeriodicity rdf:resource="http://publications.europa.eu/resource/authority/frequency/ANNUAL"/>
+        <dct:title xml:lang="en">The University today: numbers and innovation</dct:title>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/3efccd0f-8602-4f3b-a20d-c53835e26d9c"/>
+        <dct:rightsHolder rdf:resource="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/1be2f3d4-a4d8-4bed-b991-62ef42413c0a"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/TECH"/>
+        <dct:publisher rdf:resource="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69"/>
+        <dcat:landingPage rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/c1f406f5-87f3-459e-94b7-2f3bc7840932"/>
+      </dcat:Dataset>
+    </dcat:dataset>
+    <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-12-04T00:00:00</dct:issued>
+    <dcat:dataset>
+      <dcatapit:Dataset rdf:about="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90">
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/TECH"/>
+        <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-12-04T13:10:36.964938</dct:modified>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/GOVE"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/05947f53-7566-4409-a175-5553189404e6"/>
+        <dct:title xml:lang="it">Bilancio sociale</dct:title>
+        <dcat:contactPoint rdf:resource="http://www.unibo.it/it/ateneo/organizzazione/amministrazione-generale/726/766"/>
+        <dct:title xml:lang="en">Social Responsibility Report</dct:title>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/60cb29d9-7e10-4b0e-b6ae-af75551d68f6"/>
+        <dct:description xml:lang="en">Each year, the Social Responsibility Report summarises the resources, activities, results and impacts of the teaching, research and Third Mission.&#13;
+&#13;
+--- &#13;
+&#13;
+**See also:** [Social Responsibility Report](http://www.unibo.it/en/university/who-we-are/Social-Responsibility-Report/Social-Responsibility-Report) in the University Web Portal&#13;
+&#13;
+Selected data published in the social responsibility records has been extracted and made available as separate datasets with `.csv` resources:&#13;
+&#13;
+  * [Staff](/en/dataset/staff)&#13;
+</dct:description>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/INTR"/>
+        <dct:identifier>26e0665e-8b7d-4f0d-823b-b8180d883d90</dct:identifier>
+        <dct:publisher rdf:resource="https://dati.unibo.it/organization/230bf262-7493-4a82-8a39-873fcb928a69"/>
+        <dct:description xml:lang="it">Il Bilancio Sociale rendiconta annualmente le risorse, le attività, i risultati, gli impatti della didattica, della ricerca e della terza missione.&#13;
+&#13;
+--- &#13;
+&#13;
+**Vedi anche:** [Bilancio sociale](http://www.unibo.it/it/ateneo/chi-siamo/bilancio-sociale) sul portale di Ateneo&#13;
+&#13;
+Alcuni dei dati pubblicati nei bilanci sociali sono stati estratti e resi disponibili come dataset a sé stanti con risorse in formato `.csv`:&#13;
+&#13;
+  * [Personale](/it/dataset/staff)&#13;
+</dct:description>
+        <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Dataset"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+        <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+        <dcat:landingPage rdf:resource="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/"/>
+        <dct:rightsHolder rdf:resource="https://dati.unibo.it/organization/943d600b-04df-4bab-a134-d76bef162221"/>
+        <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/EDUC"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/c239e398-6b68-466f-886c-5dbc3c72f009"/>
+        <dct:accrualPeriodicity rdf:resource="http://publications.europa.eu/resource/authority/frequency/ANNUAL"/>
+        <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+        <dcat:distribution rdf:resource="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/557c11fe-1987-48ca-b199-15aa24688b95"/>
+        <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-03-14T14:35:31.887776</dct:issued>
+      </dcatapit:Dataset>
+    </dcat:dataset>
+    <dct:description xml:lang="it">Open data dell'Università di Bologna</dct:description>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T05:17:27.741523</dct:modified>
+  </dcat:Catalog>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/c525895e-3671-4b16-a8e3-9f63ea473101">
+    <dct:title xml:lang="en">Degree programmes 2009/2010</dct:title>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:06:02.150757</dct:modified>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/c525895e-3671-4b16-a8e3-9f63ea473101"/>
+    <dct:title xml:lang="it">Corsi di studio 2009/2010</dct:title>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/c525895e-3671-4b16-a8e3-9f63ea473101/download/corsi_2009_it.csv"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+  </dcatapit:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/9bb82527-9e7e-42e3-9518-f8c829260a84">
+    <dct:title xml:lang="it">Corsi di studio 2010/2011</dct:title>
+    <dct:title xml:lang="en">Degree programmes 2010/2011</dct:title>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:05:01.672645</dct:modified>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/9bb82527-9e7e-42e3-9518-f8c829260a84/download/corsi_2010_it.csv"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/9bb82527-9e7e-42e3-9518-f8c829260a84"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+  </dcat:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/7a50c2e4-d55d-4129-adef-2f42d506f450">
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/PDF"/>
+    <dct:title xml:lang="it">Brochure 2013 EN</dct:title>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/7a50c2e4-d55d-4129-adef-2f42d506f450"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/7a50c2e4-d55d-4129-adef-2f42d506f450/download/2013_en_brochure.pdf"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-01-17T10:58:08.723750</dct:modified>
+    <dct:title xml:lang="en">Brochure 2013 EN</dct:title>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+  </dcatapit:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/8e809c98-262f-4e82-a33e-efe7a7e18f72">
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/8e809c98-262f-4e82-a33e-efe7a7e18f72/download/corsi_2014_it.csv"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:title xml:lang="en">Degree programmes 2014/2015</dct:title>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/8e809c98-262f-4e82-a33e-efe7a7e18f72"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:01:03.045926</dct:modified>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:title xml:lang="it">Corsi di studio 2014/2015</dct:title>
+  </dcatapit:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/af74b784-46f4-436c-a099-cea368736045">
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/UNKNOWN"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-11-22T13:35:13.222504</dct:modified>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:title xml:lang="en">Cash flow statement 2016</dct:title>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/af74b784-46f4-436c-a099-cea368736045"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:title xml:lang="it">Rendiconto finanziario 2016</dct:title>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/af74b784-46f4-436c-a099-cea368736045/download/rendicontofinanziario_2016.csv"/>
+    <dct:description xml:lang="it">Il rendiconto finanziario evidenzia i flussi finanziari derivanti dalla gestione operativa, da quella di investimento e da quella di finanziamento nonché le disponibilità liquide all’inizio e alla fine dell’esercizio considerato</dct:description>
+  </dcatapit:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/cd0c691e-00c9-43f0-91a3-e06505338187">
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/cd0c691e-00c9-43f0-91a3-e06505338187/download/corsi_2008_it.csv"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:07:02.339608</dct:modified>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/cd0c691e-00c9-43f0-91a3-e06505338187"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:title xml:lang="en">Degree programmes 2008/2009</dct:title>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:title xml:lang="it">Corsi di studio 2008/2009</dct:title>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/05947f53-7566-4409-a175-5553189404e6">
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-03-14T14:37:56.121804</dct:modified>
+    <dct:title xml:lang="it">Bilancio sociale 2013</dct:title>
+    <dct:title xml:lang="en">Social Responsibility Report 2013</dct:title>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/PDF"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/05947f53-7566-4409-a175-5553189404e6/download/bilanciosociale_2013.pdf"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/05947f53-7566-4409-a175-5553189404e6"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/8d4eb9f1-c006-4cd9-8394-2ec7a0a4765b">
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:title xml:lang="it">Corsi di studio 2017/2018</dct:title>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T05:00:01.857977</dct:modified>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/8d4eb9f1-c006-4cd9-8394-2ec7a0a4765b"/>
+    <dct:title xml:lang="en">Degree programmes 2017/2018</dct:title>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/8d4eb9f1-c006-4cd9-8394-2ec7a0a4765b/download/corsi_2017_it.csv"/>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/c1f406f5-87f3-459e-94b7-2f3bc7840932">
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/c1f406f5-87f3-459e-94b7-2f3bc7840932"/>
+    <dct:title xml:lang="en">Brochure 2015 EN</dct:title>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:title xml:lang="it">Brochure 2015 EN</dct:title>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/c1f406f5-87f3-459e-94b7-2f3bc7840932/download/2015_en_brochure.pdf"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-01-17T11:00:28.544694</dct:modified>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/PDF"/>
+  </dcat:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/2fd65e22-72a3-4cc2-9508-f54e7be7e902/resource/d36681cd-4edf-4f24-88a4-e68d6485f80f">
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:title xml:lang="en">Course catalogue 2016/2017</dct:title>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-course-catalogue"/>
+    <dct:title xml:lang="it">Insegnamenti 2016/2017</dct:title>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/2fd65e22-72a3-4cc2-9508-f54e7be7e902/resource/d36681cd-4edf-4f24-88a4-e68d6485f80f/download/insegnamentiinfo_2016_it.csv"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/2fd65e22-72a3-4cc2-9508-f54e7be7e902/resource/d36681cd-4edf-4f24-88a4-e68d6485f80f"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:30:03.260489</dct:modified>
+  </dcatapit:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/f76c9bcf-f0a9-4aca-8ea9-3efd44a9e4df">
+    <dct:description xml:lang="it">Il conto economico evidenzia il risultato della gestione nell’esercizio 2016.</dct:description>
+    <dct:title xml:lang="it">Conto economico 2016</dct:title>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/f76c9bcf-f0a9-4aca-8ea9-3efd44a9e4df/download/contoeconomico_2016.csv"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-11-22T13:33:28.507574</dct:modified>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/UNKNOWN"/>
+    <dct:title xml:lang="en">Income statement 2016</dct:title>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/f76c9bcf-f0a9-4aca-8ea9-3efd44a9e4df"/>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+  </dcatapit:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/6e75e77d-4c73-455c-a3a8-5f6ed916e19d">
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/6e75e77d-4c73-455c-a3a8-5f6ed916e19d/download/corsi_2007_it.csv"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/6e75e77d-4c73-455c-a3a8-5f6ed916e19d"/>
+    <dct:title xml:lang="en">Degree programmes 2007/2008</dct:title>
+    <dct:title xml:lang="it">Corsi di studio 2007/2008</dct:title>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:08:01.732912</dct:modified>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+  </dcatapit:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd/resource/bba72b76-f99d-4c0c-8cd2-7fa60ad6a786">
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd/resource/bba72b76-f99d-4c0c-8cd2-7fa60ad6a786"/>
+    <dct:title xml:lang="en">Curricula details 2016/2017</dct:title>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:title xml:lang="it">Dettagli dei curricula 2016/2017</dct:title>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:22:22.282457</dct:modified>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd/resource/bba72b76-f99d-4c0c-8cd2-7fa60ad6a786/download/curriculadettagli_2016_it.csv"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-curricula"/>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/8bb7cd5f-e272-468b-a206-ce40683663f0">
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+    <dct:title xml:lang="it">Brochure 2012 IT</dct:title>
+    <dct:title xml:lang="en">Brochure 2012 IT</dct:title>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/PDF"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/8bb7cd5f-e272-468b-a206-ce40683663f0"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-01-17T10:56:18.354683</dct:modified>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/8bb7cd5f-e272-468b-a206-ce40683663f0/download/2012_it_brochure.pdf"/>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/4ad1fcaf-1729-4c2f-b66a-c392e715f1cd">
+    <dct:description xml:lang="it">Ripartizione del personale tecnico - amministrativo degli anni solari dal 2010 al 2015 per **categoria contrattuale** (B, C, D, EP).</dct:description>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:description xml:lang="en">TO DO</dct:description>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/ANNUAL"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:title xml:lang="it">Distribuzione del personale tecnico / amministrativo per categoria</dct:title>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-03-24T14:14:41.348802</dct:modified>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/4ad1fcaf-1729-4c2f-b66a-c392e715f1cd/download/personale_categoria.csv"/>
+    <dct:title xml:lang="en">Non-teaching staff distribution by category</dct:title>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/7deb0ce5-3a25-47d8-8784-8086333b3114/resource/4ad1fcaf-1729-4c2f-b66a-c392e715f1cd"/>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/8891360f-db73-4bd0-8af7-4c4e8903daa7">
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-01-17T10:57:11.722306</dct:modified>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/8891360f-db73-4bd0-8af7-4c4e8903daa7/download/2012_en_brochure.pdf"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:title xml:lang="it">Brochure 2012 EN</dct:title>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/8891360f-db73-4bd0-8af7-4c4e8903daa7"/>
+    <dct:title xml:lang="en">Brochure 2012 EN</dct:title>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/PDF"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/3efccd0f-8602-4f3b-a20d-c53835e26d9c">
+    <dct:title xml:lang="it">Brochure 2015 IT</dct:title>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/PDF"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:title xml:lang="en">Brochure 2015 IT</dct:title>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-01-17T11:00:02.560741</dct:modified>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/3efccd0f-8602-4f3b-a20d-c53835e26d9c"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/3efccd0f-8602-4f3b-a20d-c53835e26d9c/download/2015_it_brochure.pdf"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+  </dcat:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/52c6d39f-bd61-497f-8269-62d7c0327fac">
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/52c6d39f-bd61-497f-8269-62d7c0327fac/download/2017_it_brochure.pdf"/>
+    <dct:title xml:lang="it">Brochure 2017 IT</dct:title>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/52c6d39f-bd61-497f-8269-62d7c0327fac"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dct:title xml:lang="en">Brochure 2017 IT</dct:title>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/PDF"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-12-07T09:18:14.028516</dct:modified>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+  </dcatapit:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/9bd5b817-3371-40f9-a5dd-8e254022882d/resource/a961f6e0-6b42-4ede-8273-587a35b1b4e2">
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T05:02:03.546099</dct:modified>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+    <dct:title xml:lang="it">Insegnamenti 2017/2018</dct:title>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-course-catalogue"/>
+    <dct:title xml:lang="en">Course catalogue 2017/2018</dct:title>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/9bd5b817-3371-40f9-a5dd-8e254022882d/resource/a961f6e0-6b42-4ede-8273-587a35b1b4e2/download/insegnamentiinfo_2017_it.csv"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/9bd5b817-3371-40f9-a5dd-8e254022882d/resource/a961f6e0-6b42-4ede-8273-587a35b1b4e2"/>
+  </dcatapit:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/db4cb33d-4122-4377-bdc4-75b4d6dd6a10/resource/23f2c258-b45d-4a71-a965-8b3b54b47df1">
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/db4cb33d-4122-4377-bdc4-75b4d6dd6a10/resource/23f2c258-b45d-4a71-a965-8b3b54b47df1"/>
+    <dct:title xml:lang="en">Timetable 2016/2017</dct:title>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-course-timetable"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/db4cb33d-4122-4377-bdc4-75b4d6dd6a10/resource/23f2c258-b45d-4a71-a965-8b3b54b47df1/download/orari_2016.csv"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ZXX"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:25:30.581294</dct:modified>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:title xml:lang="it">Orari 2016/2017</dct:title>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+  </dcat:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd/resource/31dc6739-8bae-4270-b1ba-4ccd18ea9903">
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dct:title xml:lang="en">Curricula structure 2016/2017</dct:title>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-curricula"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd/resource/31dc6739-8bae-4270-b1ba-4ccd18ea9903"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/acf5ae8f-1463-43a8-9ff5-55d63ff5b0fd/resource/31dc6739-8bae-4270-b1ba-4ccd18ea9903/download/curriculastruttura_2016_it.csv"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:title xml:lang="it">Struttura dei curricula 2016/2017</dct:title>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-11-21T11:48:38.783072</dct:modified>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+  </dcatapit:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/9bd5b817-3371-40f9-a5dd-8e254022882d/resource/57b47512-fa24-49c8-9bcb-026e8d7a4d57">
+    <dct:title xml:lang="it">Dettaglio insegnamenti 2017/2018</dct:title>
+    <dct:title xml:lang="en">Course catalogue details 2017/2018</dct:title>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-course-catalogue"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/9bd5b817-3371-40f9-a5dd-8e254022882d/resource/57b47512-fa24-49c8-9bcb-026e8d7a4d57"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/9bd5b817-3371-40f9-a5dd-8e254022882d/resource/57b47512-fa24-49c8-9bcb-026e8d7a4d57/download/insegnamentidettagli_2017_it.csv"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T05:03:21.075793</dct:modified>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+  </dcatapit:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/c239e398-6b68-466f-886c-5dbc3c72f009">
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/c239e398-6b68-466f-886c-5dbc3c72f009"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/PDF"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-03-14T14:38:14.195616</dct:modified>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:title xml:lang="en">Social Responsibility Report 2012</dct:title>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/26e0665e-8b7d-4f0d-823b-b8180d883d90/resource/c239e398-6b68-466f-886c-5dbc3c72f009/download/bilanciosociale_2012.pdf"/>
+    <dct:title xml:lang="it">Bilancio sociale 2012</dct:title>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+  </dcat:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/2beec75b-ac4a-426c-9b53-acf41e257478">
+    <dct:title xml:lang="en">Brochure 2013 IT</dct:title>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/2beec75b-ac4a-426c-9b53-acf41e257478/download/2013_it_brochure.pdf"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/PDF"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/2beec75b-ac4a-426c-9b53-acf41e257478"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-01-17T10:57:44.723878</dct:modified>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dct:title xml:lang="it">Brochure 2013 IT</dct:title>
+  </dcatapit:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/8e78aafb-6547-4056-86bc-2f5bba5f0761/resource/87da00d4-c72d-4455-991a-e52a37d866f8">
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/DAILY"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:title xml:lang="it">Orari 2017/2018</dct:title>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8e78aafb-6547-4056-86bc-2f5bba5f0761/resource/87da00d4-c72d-4455-991a-e52a37d866f8"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ZXX"/>
+    <dct:title xml:lang="en">Timetable 2017/2018</dct:title>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-course-timetable"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T05:04:36.779181</dct:modified>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8e78aafb-6547-4056-86bc-2f5bba5f0761/resource/87da00d4-c72d-4455-991a-e52a37d866f8/download/orari_2017.csv"/>
+  </dcatapit:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/e2a477ba-f545-40e8-ba1d-3158a29394e6">
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/e2a477ba-f545-40e8-ba1d-3158a29394e6/download/statopatrimoniale_2016.csv"/>
+    <dct:title xml:lang="en">Statement of financial position 2016</dct:title>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/0824deeb-8e76-4281-9120-c2177d0b13ca/resource/e2a477ba-f545-40e8-ba1d-3158a29394e6"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-11-22T13:29:22.967568</dct:modified>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/UNKNOWN"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:title xml:lang="it">Stato patrimoniale 2016</dct:title>
+    <dct:description xml:lang="it">Lo stato patrimoniale rappresenta la situazione patrimoniale evidenziando le attività , le passività e il patrimonio netto dell’Ateneo al 31 dicembre 2016.</dct:description>
+  </dcat:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/1be2f3d4-a4d8-4bed-b991-62ef42413c0a">
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/NEVER"/>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/PDF"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017-01-17T11:00:55.873169</dct:modified>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/1be2f3d4-a4d8-4bed-b991-62ef42413c0a/download/2016_it_brochure.pdf"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/71856b14-0aa1-43c7-8e0a-4210f352e60e/resource/1be2f3d4-a4d8-4bed-b991-62ef42413c0a"/>
+    <dct:title xml:lang="it">Brochure 2016 IT</dct:title>
+    <dct:title xml:lang="en">Brochure 2016 IT</dct:title>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+  </dcatapit:Distribution>
+  <dcatapit:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/33f2f5d4-f786-4561-a5f8-09e7b3f8348b">
+    <dct:title xml:lang="en">Degree programmes 2012/2013</dct:title>
+    <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Distribution"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/33f2f5d4-f786-4561-a5f8-09e7b3f8348b/download/corsi_2012_it.csv"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:title xml:lang="it">Corsi di studio 2012/2013</dct:title>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:03:02.335502</dct:modified>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/33f2f5d4-f786-4561-a5f8-09e7b3f8348b"/>
+  </dcatapit:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/db4cb33d-4122-4377-bdc4-75b4d6dd6a10/resource/3b9adbe8-c448-4f2f-b0f9-200d7c72869b">
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:27:23.671090</dct:modified>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/db4cb33d-4122-4377-bdc4-75b4d6dd6a10/resource/3b9adbe8-c448-4f2f-b0f9-200d7c72869b/download/aule_2016.csv"/>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ZXX"/>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-course-timetable"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:title xml:lang="it">Aule 2016/2017</dct:title>
+    <dct:title xml:lang="en">Classrooms 2016/2017</dct:title>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/db4cb33d-4122-4377-bdc4-75b4d6dd6a10/resource/3b9adbe8-c448-4f2f-b0f9-200d7c72869b"/>
+  </dcat:Distribution>
+  <dcat:Distribution rdf:about="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/f77bc26b-d7a1-4310-8f73-7eb0645f61e3">
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Distribution"/>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2018-03-12T04:04:02.183233</dct:modified>
+    <dct:frequency rdf:resource="http://publications.europa.eu/resource/authority/frequency/WEEKLY"/>
+    <foaf:page rdf:resource="https://dati.unibo.it/pages/documentation-degree-programmes"/>
+    <dct:license rdf:resource="https://creativecommons.org/licenses/by/3.0/it/"/>
+    <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV"/>
+    <dct:title xml:lang="en">Degree programmes 2011/2012</dct:title>
+    <dct:title xml:lang="it">Corsi di studio 2011/2012</dct:title>
+    <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ITA"/>
+    <dcat:accessURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/f77bc26b-d7a1-4310-8f73-7eb0645f61e3"/>
+    <dcat:downloadURL rdf:resource="https://dati.unibo.it/dataset/8cbba6bd-1686-4828-b223-6f4dab477434/resource/f77bc26b-d7a1-4310-8f73-7eb0645f61e3/download/corsi_2011_it.csv"/>
+  </dcat:Distribution>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/GOVE">
+    <skos:prefLabel xml:lang="it">Governo e settore pubblico</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Government and public sector</skos:prefLabel>
+  </skos:Concept>
+  <foaf:Organization rdf:about="https://dati.unibo.it/organization/00c14c7c-f416-4dae-8d1f-5924c9efccd0">
+    <dct:type rdf:resource="http://purl.org/adms/publishertype/Academia-ScientificOrganisation"/>
+    <foaf:name xml:lang="it">CESIA - Area Sistemi e Servizi Informatici</foaf:name>
+    <dct:identifier>uni_bo/CLE/CESIA</dct:identifier>
+    <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Agent"/>
+    <foaf:name xml:lang="en">CESIA - IT Systems and Services Division</foaf:name>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Agent"/>
+  </foaf:Organization>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/EDUC">
+    <skos:prefLabel xml:lang="it">Istruzione, cultura e sport</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Education, culture and sport</skos:prefLabel>
+  </skos:Concept>
+  <dcatapit:Agent rdf:about="https://dati.unibo.it/organization/31f7674e-2f06-4b54-a833-d630bf8463ff">
+    <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Agent"/>
+    <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Organization"/>
+    <foaf:name xml:lang="it"> AFORM - Area della Didattica</foaf:name>
+    <dct:identifier>uni_bo/CLE/AFORM</dct:identifier>
+    <foaf:name xml:lang="en">AFORM - Education Division</foaf:name>
+    <dct:type rdf:resource="http://purl.org/adms/publishertype/Academia-ScientificOrganisation"/>
+  </dcatapit:Agent>
+  <vcard:Kind rdf:about="http://www.unibo.it/it/ateneo/organizzazione/amministrazione-generale/726/766">
+    <vcard:hasEmail rdf:resource="mailto:arag.dwh@unibo.it"/>
+    <vcard:fn>ARAG - Settore Programmazione e Supporto alla Valutazione</vcard:fn>
+  </vcard:Kind>
+  <foaf:Agent rdf:about="https://dati.unibo.it/organization/943d600b-04df-4bab-a134-d76bef162221">
+    <dct:identifier>uni_bo/CLE/ARAG</dct:identifier>
+    <rdf:type rdf:resource="http://dati.gov.it/onto/dcatapit#Agent"/>
+    <dct:type rdf:resource="http://purl.org/adms/publishertype/Academia-ScientificOrganisation"/>
+    <foaf:name xml:lang="en">ARAG - Finance and Subsidiaries Division</foaf:name>
+    <foaf:name xml:lang="it">ARAG - Area Finanza e Partecipate</foaf:name>
+    <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Organization"/>
+  </foaf:Agent>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/INTR">
+    <skos:prefLabel xml:lang="en">International issues</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Tematiche internazionali</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/TECH">
+    <skos:prefLabel xml:lang="en">Science and technology</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Scienza e tecnologia</skos:prefLabel>
+  </skos:Concept>
+</rdf:RDF>
