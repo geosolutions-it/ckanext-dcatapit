@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-12-18 02:51+0100\n"
+"POT-Creation-Date: 2018-03-12 22:57+0100\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -601,6 +601,10 @@ msgstr ""
 msgid "Harvest source not found"
 msgstr "Catalogo d'origine non trovato"
 
+#: ckanext/dcatapit/templates/footer.html:4
+msgid "Harvest list"
+msgstr ""
+
 #: ckanext/dcatapit/templates/harvest/sources_list.html:7
 #: ckanext/dcatapit/templates/harvest/sources_list.html:13
 msgid "Harvest Sources"
@@ -833,7 +837,3 @@ msgstr "Dimensione del file"
 #: ckanext/dcatapit/templates/package/snippets/resource_form.html:15
 msgid "eg. 1024"
 msgstr "es. 1024"
-
-#~ msgid "http://www.geonames.org/3175395"
-#~ msgstr "http://www.geonames.org/3175395"
-
