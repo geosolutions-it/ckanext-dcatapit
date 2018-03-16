@@ -351,6 +351,8 @@ ul.ui-tabs-nav {
 	top: 0;
 	left: 0;
 	cursor: default;
+    background: #fff;
+    border: solid 1px #343;
 }
 .ui-menu {
 	list-style: none;

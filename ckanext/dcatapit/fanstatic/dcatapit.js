@@ -771,7 +771,7 @@ ckan.module('dcatapit-edit-form', function($){
             var parent_name  = config['parent'] || '.control-group';
 
             var extras = $('[data-module="custom-fields"]');
-            form.append(extras[0]);
+            form.append(extras);
 
             /*
             var extras = [];
