@@ -12,7 +12,7 @@ from rdflib import URIRef, BNode, Literal
 import ckan.logic as logic
 
 from ckan.lib.i18n import get_locales
-from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF, ADMS, OWL, SCHEMA
+from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF, ADMS, OWL, SCHEMA, TIME
 from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
 
 import ckanext.dcatapit.interfaces as interfaces
@@ -258,7 +258,7 @@ class ItalianDCATAPProfile(RDFProfile):
                         from_old_add = False
                         break
         if from_old_add:
-            eators.append(from_old)
+            creators.append(from_old)
         dataset_dict['creator'] = json.dumps(creators)
 
         # when all localized data have been parsed, check if there really any and add it to the dict
@@ -393,7 +393,14 @@ class ItalianDCATAPProfile(RDFProfile):
                 # add localized string
                 lang_dict = loc_dict.setdefault(key, {})
                 lang_dict[lang_mapping_xmllang_to_ckan.get(lang)] = value
-
+                # use default lang for localized only if we don't have
+                # non-localized node
+                if lang == DEFAULT_LANG and not base_dict.get(key):
+                    base_dict[key] = value
+            # use as fallback
+            if not base_dict.get(key):
+                base_dict[key] = value
+                
     def _parse_themes(self, dataset, ref):
         self._remove_from_extra(dataset, 'theme')
         themes = list(self.g.objects(ref, DCAT.theme))
@@ -1025,10 +1032,20 @@ class ItalianDCATAPProfile(RDFProfile):
         self.g.add((agent, RDF['type'], FOAF.Agent))
         self.g.add((ref, _type, agent))
 
+        def _found_no_lang():
+            found_no_lang = False
+            for val in self.g.objects(agent, FOAF.name):
+                 if not hasattr(val, 'lang') or not val.lang:
+                     found_no_lang = True
+                     break
+            return found_no_lang
+
         if isinstance(agent_name, dict):
             for lang, aname in agent_name.items():
                 if lang in OFFERED_LANGS:
                     self.g.add((agent, FOAF.name, Literal(aname, lang=lang_mapping_ckan_to_xmllang.get(lang, lang))))
+                    if lang == DEFAULT_LANG and not _found_no_lang():
+                        self.g.add((agent, FOAF.name, Literal(aname)))
         else:
             if use_default_lang:
                 self.g.add((agent, FOAF.name, Literal(agent_name, lang=DEFAULT_LANG)))

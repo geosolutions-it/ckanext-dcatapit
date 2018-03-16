@@ -141,6 +141,7 @@ def get_custom_package_schema():
             'type': 'vocabulary',
             'vocabulary_name': 'eu_themes',
             'label': _('Dataset Themes'),
+            'sublabel': _("Subthemes"),
             'placeholder': _('eg. education, agriculture, energy'),
             'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eu_themes&incomplete=?',
             'is_required': True,
@@ -211,7 +212,8 @@ def get_custom_package_schema():
             'element': 'geonames',
             'type': 'geonames',
             'label': _('GeoNames URL'),
-            'placeholder': _('http://www.geonames.org/3175395'),
+            'placeholder_url': _('Enter geonames URL'),
+            'placeholder_name': _('Enter name of place'),
             'is_required': False,
             'help': _('package_geographical_geonames_url_help')
         },

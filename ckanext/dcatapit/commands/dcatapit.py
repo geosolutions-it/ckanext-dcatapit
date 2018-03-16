@@ -252,14 +252,14 @@ def do_load(vocab_name, url=None, filename=None, format=None):
     ##
     # Loading the RDF vocabulary
     ##
-    print "Loading graph ... for", vocab_name
+    print "Loading graph for", vocab_name
 
     g = Graph()
     for prefix, namespace in namespaces.iteritems():
         g.bind(prefix, namespace)
     fargs = {}
     if url:
-        fargs['url'] = url
+        fargs['location'] = url
     elif filename:
         fargs['source'] = filename
     if format:
@@ -317,7 +317,11 @@ def do_load(vocab_name, url=None, filename=None, format=None):
             tag_lang = DCATAPITCommands._locales_ckan_mapping[pref_label['lang']]
             tag_localized_name = pref_label['localized_text']
 
-            print u'Storing tag: name[{0}] lang[{1}] label[{2}]'.format(tag_name, tag_lang, tag_localized_name)
+            try:
+               print(u"Storing tag: name[{}] lang[{}] label[{}]".format(tag_name, tag_lang, tag_localized_name))
+            except UnicodeEncodeError:
+               print(u"Storing tag: name[{}] lang[{}]".format(tag_name, tag_lang))
+
             interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
 
     print 'Vocabulary successfully loaded ({0})'.format(vocab_name)
