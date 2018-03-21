@@ -641,7 +641,7 @@ class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
     def dataset_facets(self, facets_dict, package_type):
         
         # remove dataset license facet
-        facets_dict.pop('license_id')
+        facets_dict.pop('license_id', None)
         
         lang = interfaces.get_language() or validators.DEFAULT_LANG
         facets_dict['source_catalog_title'] = plugins.toolkit._("Source catalogs")
