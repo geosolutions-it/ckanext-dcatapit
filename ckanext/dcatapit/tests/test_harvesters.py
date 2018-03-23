@@ -184,6 +184,63 @@ class HarvestersTestCase(unittest.TestCase):
         self.assertEqual(org['identifier'], dataset['holder_identifier'])
 
 
+
+    def test_ckan_duplicated_name(self):
+
+        dataset0 = {'holder_name': 'test holder',
+                   'holder_identifier': 'abcdef',
+                   'notes': 'some notes',
+                   'modified': '2000-01-01',
+                   'theme': 'AGRI',
+                   'frequency': 'UNKNOWN',
+                   'publisher_name': 'publisher',
+                   'identifier': 'aasdfa',
+                   'publisher_identifier': 'publisher',
+                   'resources': [],
+                   'extras': [],
+                    }
+        
+        dataset1 = {'title': 'duplicated title',
+                    'name': 'duplicated-title',
+                   'id': 'dummyid'}
+        dataset1.update(dataset0)
+        data = json.dumps(dataset1)
+
+        harvest_dict = self._create_harvest_obj('http://mock/source/', name='dupname1')
+        harvest_obj = HarvestObject.get(harvest_dict['id'])
+        harvest_obj.content = data
+        h = DCATRDFHarvester()
+        _ = h.import_stage(harvest_obj)
+        self.assertTrue(_, harvest_obj.errors)
+        Session.flush()
+
+        dataset2 = {'title': 'duplicated title',
+                    'name': 'duplicated-title',
+                   'id': 'dummyid2'}
+
+        dataset2.update(dataset0)
+        data = json.dumps(dataset2)
+        harvest_dict = self._create_harvest_obj('http://mock/source/', name='dupname2')
+        harvest_obj = HarvestObject.get(harvest_dict['id'])
+        harvest_obj.content = data
+        h = DCATRDFHarvester()
+        _ = h.import_stage(harvest_obj)
+        self.assertTrue(_, harvest_obj.errors)
+        Session.flush()
+
+        # duplicated names are mangled, one should have numeric suffix
+        pkg_dict = helpers.call_action('package_show', context={}, name_or_id=dataset1['id'])
+        self.assertEqual(pkg_dict['id'], dataset1['id'])
+        self.assertEqual(pkg_dict['title'], dataset1['title'])
+        self.assertEqual(pkg_dict['name'], 'duplicated-title')
+
+        pkg_dict = helpers.call_action('package_show', context={}, name_or_id=dataset2['id'])
+        self.assertEqual(pkg_dict['id'], dataset2['id'])
+        self.assertEqual(pkg_dict['title'], dataset2['title'])
+        self.assertEqual(pkg_dict['name'], 'duplicated-title1')
+
+
+
     def setUp(self):
         def get_path(fname):
             return os.path.join(os.path.dirname(__file__),

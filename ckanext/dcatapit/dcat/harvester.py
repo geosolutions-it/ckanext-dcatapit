@@ -5,7 +5,7 @@ import ckan.plugins as p
 from ckan.lib.munge import munge_name
 
 from ckanext.dcat.interfaces import IDCATRDFHarvester
-
+from ckanext.harvest.harvesters.base import HarvesterBase
 from ckanext.dcatapit.dcat.profiles import LOCALISED_DICT_NAME_BASE, LOCALISED_DICT_NAME_RESOURCES
 import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit import helpers as dcatapit_helpers
@@ -39,9 +39,11 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
     def after_create(self, harvest_object, dataset_dict, temp_dict):
         return self._after(dataset_dict, temp_dict)
 
+
     def _before(self, dataset_dict, temp_dict, job):
         loc_dict = dataset_dict.pop(LOCALISED_DICT_NAME_BASE, {})
         res_dict = dataset_dict.pop(LOCALISED_DICT_NAME_RESOURCES, {})
+        
         if loc_dict or res_dict:
             temp_dict['dcatapit'] = {
                 LOCALISED_DICT_NAME_BASE: loc_dict,
@@ -51,6 +53,15 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
             self._handle_rights_holder(dataset_dict, temp_dict, job)
         except Exception, err:
             raise
+
+        if not dataset_dict.get('name'):
+            title = dataset_dict['title']
+            name = HarvesterBase._gen_new_name(title)
+
+            if not name:
+                raise Exception('Could not generate a unique name from the title or the GUID. Please choose a more unique title.')
+            dataset_dict['name'] = name
+
 
     def _handle_rights_holder(self, dataset_dict, temp_dict, job):
         try:
