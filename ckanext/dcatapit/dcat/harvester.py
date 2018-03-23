@@ -9,6 +9,7 @@ from ckanext.harvest.harvesters.base import HarvesterBase
 from ckanext.dcatapit.dcat.profiles import (LOCALISED_DICT_NAME_BASE,
                                             LOCALISED_DICT_NAME_RESOURCES)
 import ckanext.dcatapit.interfaces as interfaces
+from ckanext.dcatapit.mapping import map_nonconformant_groups
 from ckanext.dcatapit import helpers as dcatapit_helpers
 
 log = logging.getLogger(__name__)
