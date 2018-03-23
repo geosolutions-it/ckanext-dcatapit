@@ -6,14 +6,14 @@ from ckan.lib.munge import munge_name
 
 from ckanext.dcat.interfaces import IDCATRDFHarvester
 from ckanext.harvest.harvesters.base import HarvesterBase
-from ckanext.dcatapit.dcat.profiles import LOCALISED_DICT_NAME_BASE, LOCALISED_DICT_NAME_RESOURCES
+from ckanext.dcatapit.dcat.profiles import (LOCALISED_DICT_NAME_BASE,
+                                            LOCALISED_DICT_NAME_RESOURCES)
 import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit import helpers as dcatapit_helpers
-from ckanext.dcatapit.mapping import map_nonconformant_groups
 
 log = logging.getLogger(__name__)
 
-        
+
 class DCATAPITHarvesterPlugin(p.SingletonPlugin):
 
     p.implements(IDCATRDFHarvester, inherit=True)
@@ -34,40 +34,39 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
         return self._after(dataset_dict, temp_dict)
 
     def before_create(self, harvest_object, dataset_dict, temp_dict):
+        self._before_create(harvest_object, dataset_dict)
         self._before(dataset_dict, temp_dict, harvest_object)
 
     def after_create(self, harvest_object, dataset_dict, temp_dict):
         return self._after(dataset_dict, temp_dict)
 
+    def _before_create(self, harvest_object, dataset_dict):
+        title = dataset_dict['title']
+        name = HarvesterBase._gen_new_name(title)
+
+        if not name:
+            raise Exception('Could not generate a unique name '
+                            'from the title or the GUID. Please '
+                            'choose a more unique title.')
+        dataset_dict['name'] = name
 
     def _before(self, dataset_dict, temp_dict, job):
         loc_dict = dataset_dict.pop(LOCALISED_DICT_NAME_BASE, {})
         res_dict = dataset_dict.pop(LOCALISED_DICT_NAME_RESOURCES, {})
-        
+
         if loc_dict or res_dict:
             temp_dict['dcatapit'] = {
                 LOCALISED_DICT_NAME_BASE: loc_dict,
                 LOCALISED_DICT_NAME_RESOURCES: res_dict
             }
-        try:
-            self._handle_rights_holder(dataset_dict, temp_dict, job)
-        except Exception, err:
-            raise
-
-        if not dataset_dict.get('name'):
-            title = dataset_dict['title']
-            name = HarvesterBase._gen_new_name(title)
-
-            if not name:
-                raise Exception('Could not generate a unique name from the title or the GUID. Please choose a more unique title.')
-            dataset_dict['name'] = name
-
+        self._handle_rights_holder(dataset_dict, temp_dict, job)
 
     def _handle_rights_holder(self, dataset_dict, temp_dict, job):
         try:
             config = json.loads(job.source.config) if job.source.config else {}
         except (TypeError, ValueError,), err:
-            log.warning("Cannot parse job config to get rights holder: %s", err, exc_info=err)
+            log.warning("Cannot parse job config to get rights holder: %s",
+                        err, exc_info=err)
             config = {}
 
         orgs_conf = config.get('remote_orgs', None)
@@ -80,15 +79,18 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
 
             if holder_identifier and holder_name:
 
-                org = dcatapit_helpers.get_organization_by_identifier(ctx, holder_identifier)
+                org = dcatapit_helpers\
+                        .get_organization_by_identifier(ctx,
+                                                        holder_identifier)
                 if not org:
                     org_dict = {'identifier': holder_identifier,
                                 'name': munge_name(holder_name),
                                 'title': holder_name}
-                    org = p.toolkit.get_action('organization_create')(context=ctx, data_dict=org_dict)
+                    act = p.toolkit.get_action('organization_create')
+                    org = act(context=ctx, data_dict=org_dict)
 
                 dataset_dict['owner_org'] = org['name']
-                # remove holder fields, as this info will be handled in org 
+                # remove holder fields, as this info will be handled in org
                 dataset_dict.pop('holder_name', None)
                 dataset_dict.pop('holder_identifier', None)
 
@@ -112,7 +114,7 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
 
         ##
         # Managing Solr indexes for harvested package dict
-        ## 
+        ##
         interfaces.update_solr_package_indexes(dataset_dict)
 
         return None
@@ -121,7 +123,11 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
         try:
             for field, lang_dict in base_dict.iteritems():
                 for lang, text in lang_dict.iteritems():
-                    interfaces.upsert_package_multilang(pkg_id, field, 'package', lang, text)
+                    interfaces.upsert_package_multilang(pkg_id,
+                                                        field,
+                                                        'package',
+                                                        lang,
+                                                        text)
 
         except Exception, e:
             return str(e)
@@ -139,7 +145,10 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
                     continue
                 for field, lang_dict in res_dict.iteritems():
                     for lang, text in lang_dict.iteritems():
-                        interfaces.upsert_resource_multilang(res_id, field, lang, text)
+                        interfaces.upsert_resource_multilang(res_id,
+                                                             field,
+                                                             lang,
+                                                             text)
 
         except Exception, e:
             return str(e)
@@ -151,14 +160,17 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
 #        log.info("DATASET DICT: %s", dataset_dict)
         dataset = p.toolkit.get_action('package_show')({}, {'id': pkg_id})
 #        log.info("DATASET ----------- %s", dataset)
-        for resource in dataset.get('resources', []): 
+        for resource in dataset.get('resources', []):
             res_id = resource.get('id', None)
             res_uri = resource.get('uri', None)
             if res_id and res_uri:
-                log.debug('Mapping resource id %s to URI "%s"', res_id, res_uri)
+                log.debug('Mapping resource id %s to URI "%s"',
+                          res_id,
+                          res_uri)
                 ret[res_uri] = res_id
             else:
-                log.warn("Can't map URI for resource \"%s\"", resource.get('name', '---'))
+                log.warn("Can't map URI for resource \"%s\"",
+                         resource.get('name', '---'))
 
         return ret
 

@@ -123,7 +123,7 @@ class HarvestersTestCase(unittest.TestCase):
         h = DCATRDFHarvester()
         out = h.import_stage(harvest_obj)
 
-        pkg = helpers.call_action('package_show', context={}, name_or_id=dataset['name'])
+        pkg = helpers.call_action('package_show', context={}, name_or_id='some-title-2')
 
         for k in ('holder_name', 'holder_identifier',):
             self.assertEqual(pkg.get(k), dataset[k])
@@ -213,10 +213,11 @@ class HarvestersTestCase(unittest.TestCase):
         _ = h.import_stage(harvest_obj)
         self.assertTrue(_, harvest_obj.errors)
         Session.flush()
+        dataset1['_id'] = harvest_obj.package_id
 
         dataset2 = {'title': 'duplicated title',
                     'name': 'duplicated-title',
-                   'id': 'dummyid2'}
+                    'id': 'dummyid2'}
 
         dataset2.update(dataset0)
         data = json.dumps(dataset2)
@@ -227,15 +228,14 @@ class HarvestersTestCase(unittest.TestCase):
         _ = h.import_stage(harvest_obj)
         self.assertTrue(_, harvest_obj.errors)
         Session.flush()
+        dataset2['_id'] = harvest_obj.package_id
 
         # duplicated names are mangled, one should have numeric suffix
-        pkg_dict = helpers.call_action('package_show', context={}, name_or_id=dataset1['id'])
-        self.assertEqual(pkg_dict['id'], dataset1['id'])
+        pkg_dict = helpers.call_action('package_show', context={}, name_or_id=dataset1['_id'])
         self.assertEqual(pkg_dict['title'], dataset1['title'])
         self.assertEqual(pkg_dict['name'], 'duplicated-title')
 
-        pkg_dict = helpers.call_action('package_show', context={}, name_or_id=dataset2['id'])
-        self.assertEqual(pkg_dict['id'], dataset2['id'])
+        pkg_dict = helpers.call_action('package_show', context={}, name_or_id=dataset2['_id'])
         self.assertEqual(pkg_dict['title'], dataset2['title'])
         self.assertEqual(pkg_dict['name'], 'duplicated-title1')
 
