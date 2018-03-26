@@ -737,6 +737,18 @@ class TestDCATAPITProfileParsing(BaseParseTest):
             else:
                 assert False, "Unknown theme: {}".format(t)
 
+    
+    def test_alternate_identifiers(self):
+
+        contents = self._get_file_contents('dataset_identifier.rdf')
+
+        p = RDFParser(profiles=['it_dcat_ap'])
+        p.parse(contents)
+        g = p.g
+        datasets = [d for d in p.datasets()]
+        assert len(datasets) == 1
+        assert datasets[0]['alternate_identifier'] =='[{"identifier": "ISBN:alt id 123", "agent": {}}]',\
+                    datasets[0]['alternate_identifier']
 
     def test_publisher(self):
 

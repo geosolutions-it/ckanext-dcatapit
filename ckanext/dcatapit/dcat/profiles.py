@@ -17,6 +17,7 @@ from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
 
 import ckanext.dcatapit.interfaces as interfaces
 import ckanext.dcatapit.helpers as helpers
+from ckanext.dcatapit import validators
 from ckanext.dcatapit.model.subtheme import Subtheme
 
 
@@ -135,13 +136,38 @@ class ItalianDCATAPProfile(RDFProfile):
                 logf('No %s found for dataset "%s"', predicate, dataset_dict.get('title', '---'))
 
         alternate_identifiers = self.g.objects(dataset_ref, ADMS.identifier)
+        extras_alt_identifiers = None
+        extras_alt_idx = None
+
+        for eidx, ex in enumerate(dataset_dict.get('extras') or []):
+            if ex['key'] == 'alternate_identifier':
+                extras_alt_identifiers = ex['value']
+                extras_alt_idx = eidx
+                break
+        if extras_alt_identifiers is not None:
+            dataset_dict['extras'].pop(extras_alt_idx)
+
         alt_ids = []
+
         for alt_id in alternate_identifiers:
             alternate_id = self._alternate_id(dataset_ref, alt_id)
+
             if alternate_id:
                 alt_ids.append(alternate_id)
-        dataset_dict['alternate_identifier'] = json.dumps(alt_ids)
+        if extras_alt_identifiers and alt_ids:
+            raise ValueError("Two separate alternate identifers got for %s: %s and %s",
+                             dataset['id'],
+                             alt_ids,
+                             extras_alt_identifiers)
+        # let's reuse 
+        if extras_alt_identifiers and not alt_ids:
+            try:
+                validators.dcatapit_alternate_identifier(extras_alt_identifiers, {})
+                alt_ids = extras_alt_identifiers
+            except validators.Invalid:
+                pass
 
+        dataset_dict['alternate_identifier'] = json.dumps(alt_ids)
 
         # conformsTo
         self._remove_from_extra(dataset_dict, 'conforms_to')

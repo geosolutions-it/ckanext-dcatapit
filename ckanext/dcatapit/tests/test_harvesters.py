@@ -94,8 +94,7 @@ class HarvestersTestCase(unittest.TestCase):
                 self.assertEqual(res['license_type'], License.get(License.DEFAULT_LICENSE).uri)
             else:
                 self.assertEqual(res['license_type'], r[1]['license_type'])
-    
-    
+
     def test_remote_orgs(self):
         dataset = {'title': 'some title 2',
                    'id': 'sometitle2',
