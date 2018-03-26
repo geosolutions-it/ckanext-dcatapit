@@ -258,7 +258,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         lang = interfaces.get_language()
         otype = pkg_dict.get('type')
         if lang and otype == 'dataset':
-            for extra in pkg_dict.get('extras'):
+            for extra in pkg_dict.get('extras') or []:
                 for field in dcatapit_schema.get_custom_package_schema():
 
                     couples = field.get('couples', [])
@@ -281,7 +281,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         otype = pkg_dict.get('type')
 
         if lang and otype == 'dataset':             
-            for extra in pkg_dict.get('extras'):
+            for extra in pkg_dict.get('extras') or []:
                 for field in dcatapit_schema.get_custom_package_schema():
                     couples = field.get('couples', [])
                     if couples and len(couples) > 0:
