@@ -746,8 +746,9 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         p.parse(contents)
         g = p.g
         datasets = [d for d in p.datasets()]
-        assert(len(datasets) == 1)
-        assert(datasets[0]['alternate_identifier'] == [])
+        assert len(datasets) == 1
+        assert datasets[0]['alternate_identifier'] =='[{"identifier": "ISBN:alt id 123", "agent": {}}]',\
+                    datasets[0]['alternate_identifier']
 
     def test_publisher(self):
 

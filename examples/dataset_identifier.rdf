@@ -34,6 +34,12 @@
           </foaf:Agent>
         </dct:creator>
         <adms:identifier> N/A</adms:identifier>
+        <adms:identifier>alt id STR ID</adms:identifier>
+        <adms:identifier>
+          <rdf:Description rdf:nodeID="Na36ea4ff20f24900b6745815b33d10fe">
+            <skos:notation>ISBN:alt id 123</skos:notation>
+          </rdf:Description>
+        </adms:identifier>
         <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2015-04-09T00:00:00</dct:issued>
         <dcat:landingPage rdf:resource="http://odn.comune.prato.it/dataset/bilancio-2011-previsione"/>
         <dcat:distribution rdf:resource="http://odn.comune.prato.it/dataset/f29cd7eb-831e-49ed-8150-242d31197206/resource/92134edd-e9a5-4403-95f6-deedbc498d0d"/>
