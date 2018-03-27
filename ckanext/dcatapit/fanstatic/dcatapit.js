@@ -211,7 +211,9 @@ ckan.module('dcatapit-conforms-to', function($){
                     }
                     else {
                         var elval = elm.val();
-                        out[elm_name] = elval;
+                        if (typeof elval == 'string' && elval.trim() != ''){
+                            out[elm_name] = elval;
+                        }
                     }
                 } else {
                     if (!$.isArray(out[elm_name])){
@@ -396,7 +398,10 @@ ckan.module('dcatapit-temporal-coverage', function($){
                 var elm = $(elm);
                 var _elm_name = elm.attr('name');
                 var elm_name = _elm_name.slice(this.options.input_prefix.length);
-                out[elm_name] = elm.val();
+                var val = elm.val();
+                if (typeof val == 'string' && val.trim() != ''){
+                    out[elm_name] = val;
+                }
         },
 
         sub_add_values: function(ui, values){
@@ -568,9 +573,12 @@ ckan.module('dcatapit-theme', function($){
                 }
 
                 var elm_name = _elm_name.slice(this.options.input_prefix.length);
+                var val = elm.val();
 
                 if (elm_name == 'theme'){
-                    out['theme'] = elm.val();
+                    if (typeof val == 'string' && val.trim() != ''){
+                        out['theme'] = val;
+                    }
                 } else {
                     // 
                     sublist = elm.select2('data');
