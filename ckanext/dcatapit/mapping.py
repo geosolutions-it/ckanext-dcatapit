@@ -27,7 +27,12 @@ def _encode_list(items):
     return items or ''
 
 def _map_themes_json(fdesc):
-    data = json.load(fdesc)
+    try:
+        data = json.load(fdesc)
+    except UnicodeDecodeError:
+        # fix for docker env
+        data = json.load(fdesc, encoding='latin-1')
+        
     out = {}
     for map_item in data['data']:
         map_to = map_item['syn'][0]
