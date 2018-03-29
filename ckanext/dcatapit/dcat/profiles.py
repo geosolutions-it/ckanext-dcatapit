@@ -17,6 +17,7 @@ from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
 
 import ckanext.dcatapit.interfaces as interfaces
 import ckanext.dcatapit.helpers as helpers
+from ckanext.dcatapit import validators
 from ckanext.dcatapit.model.subtheme import Subtheme
 
 
@@ -135,13 +136,38 @@ class ItalianDCATAPProfile(RDFProfile):
                 logf('No %s found for dataset "%s"', predicate, dataset_dict.get('title', '---'))
 
         alternate_identifiers = self.g.objects(dataset_ref, ADMS.identifier)
+        extras_alt_identifiers = None
+        extras_alt_idx = None
+
+        for eidx, ex in enumerate(dataset_dict.get('extras') or []):
+            if ex['key'] == 'alternate_identifier':
+                extras_alt_identifiers = ex['value']
+                extras_alt_idx = eidx
+                break
+        if extras_alt_identifiers is not None:
+            dataset_dict['extras'].pop(extras_alt_idx)
+
         alt_ids = []
+
         for alt_id in alternate_identifiers:
             alternate_id = self._alternate_id(dataset_ref, alt_id)
+
             if alternate_id:
                 alt_ids.append(alternate_id)
-        dataset_dict['alternate_identifier'] = json.dumps(alt_ids)
+        if extras_alt_identifiers and alt_ids:
+            raise ValueError("Two separate alternate identifers got for %s: %s and %s",
+                             dataset['id'],
+                             alt_ids,
+                             extras_alt_identifiers)
+        # let's reuse 
+        if extras_alt_identifiers and not alt_ids:
+            try:
+                validators.dcatapit_alternate_identifier(extras_alt_identifiers, {})
+                alt_ids = extras_alt_identifiers
+            except validators.Invalid:
+                pass
 
+        dataset_dict['alternate_identifier'] = json.dumps(alt_ids)
 
         # conformsTo
         self._remove_from_extra(dataset_dict, 'conforms_to')
@@ -393,7 +419,14 @@ class ItalianDCATAPProfile(RDFProfile):
                 # add localized string
                 lang_dict = loc_dict.setdefault(key, {})
                 lang_dict[lang_mapping_xmllang_to_ckan.get(lang)] = value
-
+                # use default lang for localized only if we don't have
+                # non-localized node
+                if lang == DEFAULT_LANG and not base_dict.get(key):
+                    base_dict[key] = value
+            # use as fallback
+            if not base_dict.get(key):
+                base_dict[key] = value
+                
     def _parse_themes(self, dataset, ref):
         self._remove_from_extra(dataset, 'theme')
         themes = list(self.g.objects(ref, DCAT.theme))
@@ -1025,10 +1058,20 @@ class ItalianDCATAPProfile(RDFProfile):
         self.g.add((agent, RDF['type'], FOAF.Agent))
         self.g.add((ref, _type, agent))
 
+        def _found_no_lang():
+            found_no_lang = False
+            for val in self.g.objects(agent, FOAF.name):
+                 if not hasattr(val, 'lang') or not val.lang:
+                     found_no_lang = True
+                     break
+            return found_no_lang
+
         if isinstance(agent_name, dict):
             for lang, aname in agent_name.items():
                 if lang in OFFERED_LANGS:
                     self.g.add((agent, FOAF.name, Literal(aname, lang=lang_mapping_ckan_to_xmllang.get(lang, lang))))
+                    if lang == DEFAULT_LANG and not _found_no_lang():
+                        self.g.add((agent, FOAF.name, Literal(aname)))
         else:
             if use_default_lang:
                 self.g.add((agent, FOAF.name, Literal(agent_name, lang=DEFAULT_LANG)))

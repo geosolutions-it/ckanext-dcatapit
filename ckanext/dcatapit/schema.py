@@ -151,11 +151,11 @@ def get_custom_package_schema():
             'name': 'publisher',
             'element': 'couple',
             'label': _('Dataset Editor'),
-            'is_required': True,
+            'is_required': False,
             'couples': [
                 {
                     'name': 'publisher_name',
-                    'validator': ['not_empty'],
+                    'validator': ['ignore_missing'],
                     'label': _('Name'),
                     'type': 'text',
                     'placeholder': _('publisher name'),
@@ -163,7 +163,7 @@ def get_custom_package_schema():
                 },
                 {
                     'name': 'publisher_identifier',
-                    'validator': ['not_empty'],
+                    'validator': ['ignore_missing'],
                     'label': _('IPA/IVA'),
                     'type': 'text',
                     'placeholder': _('publisher identifier')

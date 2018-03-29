@@ -94,8 +94,7 @@ class HarvestersTestCase(unittest.TestCase):
                 self.assertEqual(res['license_type'], License.get(License.DEFAULT_LICENSE).uri)
             else:
                 self.assertEqual(res['license_type'], r[1]['license_type'])
-    
-    
+
     def test_remote_orgs(self):
         dataset = {'title': 'some title 2',
                    'id': 'sometitle2',
@@ -123,7 +122,7 @@ class HarvestersTestCase(unittest.TestCase):
         h = DCATRDFHarvester()
         out = h.import_stage(harvest_obj)
 
-        pkg = helpers.call_action('package_show', context={}, name_or_id=dataset['name'])
+        pkg = helpers.call_action('package_show', context={}, name_or_id='some-title-2')
 
         for k in ('holder_name', 'holder_identifier',):
             self.assertEqual(pkg.get(k), dataset[k])
@@ -182,6 +181,63 @@ class HarvestersTestCase(unittest.TestCase):
         self.assertIsNotNone(org_id)
         org = helpers.call_action('organization_show', context={}, id=org_id)
         self.assertEqual(org['identifier'], dataset['holder_identifier'])
+
+
+
+    def test_ckan_duplicated_name(self):
+
+        dataset0 = {'holder_name': 'test holder',
+                   'holder_identifier': 'abcdef',
+                   'notes': 'some notes',
+                   'modified': '2000-01-01',
+                   'theme': 'AGRI',
+                   'frequency': 'UNKNOWN',
+                   'publisher_name': 'publisher',
+                   'identifier': 'aasdfa',
+                   'publisher_identifier': 'publisher',
+                   'resources': [],
+                   'extras': [],
+                    }
+        
+        dataset1 = {'title': 'duplicated title',
+                    'name': 'duplicated-title',
+                   'id': 'dummyid'}
+        dataset1.update(dataset0)
+        data = json.dumps(dataset1)
+
+        harvest_dict = self._create_harvest_obj('http://mock/source/', name='dupname1')
+        harvest_obj = HarvestObject.get(harvest_dict['id'])
+        harvest_obj.content = data
+        h = DCATRDFHarvester()
+        _ = h.import_stage(harvest_obj)
+        self.assertTrue(_, harvest_obj.errors)
+        Session.flush()
+        dataset1['_id'] = harvest_obj.package_id
+
+        dataset2 = {'title': 'duplicated title',
+                    'name': 'duplicated-title',
+                    'id': 'dummyid2'}
+
+        dataset2.update(dataset0)
+        data = json.dumps(dataset2)
+        harvest_dict = self._create_harvest_obj('http://mock/source/', name='dupname2')
+        harvest_obj = HarvestObject.get(harvest_dict['id'])
+        harvest_obj.content = data
+        h = DCATRDFHarvester()
+        _ = h.import_stage(harvest_obj)
+        self.assertTrue(_, harvest_obj.errors)
+        Session.flush()
+        dataset2['_id'] = harvest_obj.package_id
+
+        # duplicated names are mangled, one should have numeric suffix
+        pkg_dict = helpers.call_action('package_show', context={}, name_or_id=dataset1['_id'])
+        self.assertEqual(pkg_dict['title'], dataset1['title'])
+        self.assertEqual(pkg_dict['name'], 'duplicated-title')
+
+        pkg_dict = helpers.call_action('package_show', context={}, name_or_id=dataset2['_id'])
+        self.assertEqual(pkg_dict['title'], dataset2['title'])
+        self.assertEqual(pkg_dict['name'], 'duplicated-title1')
+
 
 
     def setUp(self):

@@ -1,0 +1,5 @@
+{% ckan_extends %}
+    {% block footer_links %}
+     {{ super() }}
+      <li><a href="{{ h.url_for('harvest_list') }}">{{ _('Harvest list') }}</a></li>
+    {% endblock %}
