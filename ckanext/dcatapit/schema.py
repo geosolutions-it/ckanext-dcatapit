@@ -259,7 +259,7 @@ def get_custom_package_schema():
 
         {
             'name': 'rights_holder',
-            'element': 'couple',
+            'element': 'rights_holder',
             'label': _('Rights Holder'),
             'is_required': False,
             'read_only': True,
@@ -281,7 +281,8 @@ def get_custom_package_schema():
                     'placeholder': _('rights holder of the dataset')
                 }
             ],
-            'help': _('package_rights_holder_name_help')
+            'help': _('package_rights_holder_name_help'),
+            'help_create': _('package_rights_holder_name_create_help')
         },
         {
             'name': 'frequency',

@@ -87,11 +87,31 @@
                               is_required=field.is_required)
                   }}
 
+            {% elif field.element == 'rights_holder' %}
+                  {% if not data.get('owner_org') and not data.get(field.name) %}
+                        {{ dform.rights_holder_create(field.name, label=field.label, help=field.help_create) }}
+                  {% else %}
+
+                  {{ 
+                        dform.couple(
+                              field.name,
+                              labels=(field.couples[0].label, field.couples[1].label),
+                              names=(field.couples[0].name, field.couples[1].name),
+                              id='field-range-' + field.name, 
+                              label=field.label,
+                              read_only=(field.read_only or False),
+                              values=(data[field.couples[0].name], data[field.couples[1].name], False),
+                              error=errors[field.couples[0].name] or errors[field.couples[1].name],
+                              types=(field.couples[0].type, field.couples[1].type),
+                              is_required=field.is_required,
+                              help=field.help)
+                  }}
+                  {% endif %}
+
             {% elif field.element == 'couple' %}
 
                   {# -------------------------------------------------------------------------------
                   {% set couple_values = data[field.name].split(',') if data[field.name] else ['', ''] %}
-
                   {{ 
                         dform.couple(
                               field.name,
@@ -105,6 +125,7 @@
                               is_required=field.is_required,
                               help=field.help)
                   }}
+
                   ------------------------------------------------------------------------------- #}
                   {{ 
                         dform.couple(
