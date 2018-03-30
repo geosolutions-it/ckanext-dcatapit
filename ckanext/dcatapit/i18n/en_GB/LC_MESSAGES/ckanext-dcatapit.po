@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-29 19:20+0200\n"
+"POT-Creation-Date: 2018-03-30 10:07+0200\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en_GB <LL@li.org>\n"
@@ -18,23 +18,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ckanext/dcatapit/plugin.py:643
+#: ckanext/dcatapit/plugin.py:647
 msgid "Source catalogs"
 msgstr ""
 
-#: ckanext/dcatapit/plugin.py:644
+#: ckanext/dcatapit/plugin.py:648
 msgid "Organization regions"
 msgstr ""
 
-#: ckanext/dcatapit/plugin.py:645
+#: ckanext/dcatapit/plugin.py:649
 msgid "Resources licenses"
 msgstr ""
 
-#: ckanext/dcatapit/plugin.py:646 ckanext/dcatapit/schema.py:144
+#: ckanext/dcatapit/plugin.py:650 ckanext/dcatapit/schema.py:144
 msgid "Subthemes"
 msgstr ""
 
-#: ckanext/dcatapit/plugin.py:651 ckanext/dcatapit/schema.py:97
+#: ckanext/dcatapit/plugin.py:655 ckanext/dcatapit/schema.py:97
 msgid "Region"
 msgstr ""
 
@@ -532,6 +532,10 @@ msgstr ""
 
 #: ckanext/dcatapit/controllers/harvest.py:29
 msgid "Harvest source not found"
+msgstr ""
+
+#: ckanext/dcatapit/templates/footer.html:4
+msgid "Harvest list"
 msgstr ""
 
 #: ckanext/dcatapit/templates/harvest/sources_list.html:7
