@@ -131,8 +131,19 @@ dcatapit.templated_input = {
                 var elval = that.extract_from_element(elm);
                 out.push(elval);
                 });
+
+            // do any postprocessing if needed of extracted values
+            out = this.post_extract(out);
+
             this.el.val(JSON.stringify(out));
             return out;
+        },
+        post_extract: function(values){
+            if (this._post_extract !== undefined){
+                return this._post_extract(values);
+            } else {
+                return values;
+            }
         }
      }
 
@@ -419,6 +430,25 @@ ckan.module('dcatapit-temporal-coverage', function($){
 
                 $('.control-group', elm).addClass('error');
             }
+        },
+        _post_extract: function(values){
+            var out = [];
+
+            var _qualifies = function(value){
+                if (typeof value == 'string' && value.trim() !== ''){
+                    return value;
+                }
+                return null;
+            }
+            // remove empty rows, or rows with no temporal_start
+            for (var row of values){
+                var tstart = _qualifies(row['temporal_start']);
+                var tend = _qualifies(row['temporal_end']);
+                if (! (tstart == null && tend == null)){
+                    out.push(row);
+                }
+            }
+            return out;
         }
 
     };
