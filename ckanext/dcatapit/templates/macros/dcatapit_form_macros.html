@@ -66,6 +66,16 @@ Old implementation of the couple element (one element with comma separated value
 {% endmacro %}
 ------------------------------------------------------------------------------- #}
 
+{% macro rights_holder_create(name, label, help) %}
+  {% call input_block(name+ '-key', label or name) %}
+
+        <div style="font-size: 14px">
+        {% trans %}Select organization{% endtrans %}
+    {{ help_block(help) }}
+        </div>
+  {% endcall %}
+{% endmacro %}
+
 
 {% macro couple(name, labels=(), names=(), id="", label="", values=(), placeholders=(), error="", types="", classes=[], attrs={}, is_required=false, key_values=(), help='', read_only=False) %}
   {%- set classes = (classes|list) -%}
