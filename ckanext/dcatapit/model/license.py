@@ -358,7 +358,7 @@ def setup_license_models():
 
 
 ADMS=Namespace("http://www.w3.org/ns/adms#")
-CLVAPIT=Namespace("http://dati.gov.it/onto/clvapit#")
+CLVAPIT=Namespace("http://w3id.org/italia/onto/CLV/")
 DCATAPIT=Namespace("http://dati.gov.it/onto/dcatapit#")
 DCT=Namespace("http://purl.org/dc/terms/")
 FOAF=Namespace("http://xmlns.com/foaf/0.1/")
@@ -407,27 +407,28 @@ def load_from_graph(path=None, url=None):
 
     for license in g.subjects(None, SKOS.Concept):
         rank_order = g.value(license, CLVAPIT.hasRankOrder)
-        # 2nd level, we have exactMatch
+        version = g.value(license, OWL.versionInfo)
+        doc_uri = g.value(license, DCATAPIT.referenceDoc)
+
+        # exactMatch exists only in 2nd level
         license_type = g.value(license, SKOS.exactMatch)
         if not license_type:
             # 3rd level, need to go up
             parent = g.value(license, SKOS.broader)
             license_type = g.value(parent, SKOS.exactMatch)
 
-        version = g.value(license, OWL.versionInfo)
         _labels = g.objects(license, SKOS.prefLabel)
         labels = dict((l.language, unicode(l),) for l in _labels)
-        parent = None
         license_path=str(license).split('/')[-1].split('_')[0]
-        document_uri = g.value(license, DCATAPIT.referenceDoc)
+        print "Adding license [%s] [%s]" % (license, labels.get('it', None))
         l = License.from_data(unicode(license_type or ''),
                               str(version) if version else None,
                               uri=str(license),
                               path=license_path,
-                              document_uri=str(document_uri) if document_uri else None,
+                              document_uri=str(doc_uri) if doc_uri else None,
                               rank_order=int(str(rank_order)),
                               names=labels,
-                              parent=parent)
+                              parent=None)  # parent will be set later
 
     for license in g.subjects(None, SKOS.Concept):
         parent = None
