@@ -20,7 +20,7 @@ from ckan.plugins import toolkit
 from ckan.lib.base import config
 from ckan.logic import schema
 
-from ckan.tests.helpers import call_action
+from ckan.tests.helpers import call_action, change_config
 from ckan.model import meta, repo
 from ckan.model.user import User
 from ckan.model.group import Group
@@ -72,6 +72,8 @@ class BaseParseTest(object):
 
 class TestDCATAPITProfileParsing(BaseParseTest):
 
+    # ensure it localse, as dataset parsing is config-dependent
+    @change_config('ckan.locale_default', 'it')
     def test_graph_to_dataset(self):
 
         contents = self._get_file_contents('dataset.rdf')
@@ -85,7 +87,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         eq_(len(datasets), 1)
 
         dataset = datasets[0]
-
+        
         # Basic fields
         eq_(dataset['title'], u'Dataset di test DCAT_AP-IT')
         eq_(dataset['notes'], u'dcatapit dataset di test')
@@ -734,3 +736,50 @@ class TestDCATAPITProfileParsing(BaseParseTest):
                 assert set(t['subthemes']) == set(subthemes[0]['subthemes'])
             else:
                 assert False, "Unknown theme: {}".format(t)
+
+    
+    def test_alternate_identifiers(self):
+
+        contents = self._get_file_contents('dataset_identifier.rdf')
+
+        p = RDFParser(profiles=['it_dcat_ap'])
+        p.parse(contents)
+        g = p.g
+        datasets = [d for d in p.datasets()]
+        assert len(datasets) == 1
+        assert datasets[0]['alternate_identifier'] =='[{"identifier": "ISBN:alt id 123", "agent": {}}]',\
+                    datasets[0]['alternate_identifier']
+
+    def test_publisher(self):
+
+        contents = self._get_file_contents('catalog_dati_unibo.rdf')
+
+        p = RDFParser(profiles=['it_dcat_ap'])
+
+        p.parse(contents)
+        g = p.g
+
+        datasets = [d for d in p.datasets()]
+        assert(len(datasets)> 1)
+        for d in datasets:
+            did = d['identifier']
+            pname = d.get('publisher_name')
+            pid = d.get('publisher_identifier')
+            dat_ref = list(g.subjects(DCT.identifier, Literal(did)))[0]
+            pub_ref = g.value(dat_ref, DCT.publisher)
+            pubnames = list(g.objects(pub_ref, FOAF.name))
+            if not pubnames:
+                assert pname is None and pid is None,\
+                    "Got {}/{} for publisher, when no ref in graph".format(pname, pid)
+            else:
+                assert pname and pid, "no pname {} and pid {} for {}".format(pname, pid, pubnames)
+
+                lang_hit = False
+                for lname in pubnames:
+                    if hasattr(lname, 'lang'):
+                        if lname.lang and lname.lang == DEFAULT_LANG:
+                            lang_hit = pname == lname.value
+                    else:
+                        if not lang_hit:
+                            lang_hit = pname == lname.value
+                assert lang_hit, "There should be lang hit"
