@@ -34,7 +34,8 @@ CC_LICENSE = re.compile(r'https{0,1}://creativecommons.org/(licenses|publicdomai
 CC_LICENSE_NAME = re.compile(r'creative commons \w ', re.I)
 
 # http://www.dati.gov.it/iodl/2.0
-DATI_LICENSE = re.compile(r'https{0,1}://www.dati.gov.it/(?P<license>[\w\-\.]+)/')
+# https://www.dati.gov.it/content/italian-open-data-license-v20
+DATI_LICENSE = re.compile(r'https{0,1}://www.dati.gov.it/(content/)?(?P<license>[\w\-\.]+)/')
 
 # https://opendatacommons.org/licenses/odbl/summary/
 # but also
@@ -75,7 +76,7 @@ class License(_Base, DeclarativeBase):
                                                   remote_side=[id]),
                               lazy=True)
     
-    DEFAULT_LICENSE = "http://dati.gov.it/onto/controlledvocabulary/License/C1_Unknown"
+    DEFAULT_LICENSE = "http://w3id.org/italia/controlled-vocabulary/licences/C1_Unknown"
 
     @classmethod
     def get(cls, id_or_uri):

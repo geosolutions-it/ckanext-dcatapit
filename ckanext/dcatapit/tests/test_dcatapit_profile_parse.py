@@ -427,7 +427,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
                             {
                                 'id': 'resource/2222',
                                 'uri': 'http://resource/2222',
-                                'license_type': 'http://dati.gov.it/onto/controlledvocabulary/License/A311_GFDL13'
+                                'license_type': 'http://w3id.org/italia/controlled-vocabulary/licences/A311_GFDL13'
                             }
                         ]
                     }
