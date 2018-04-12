@@ -121,6 +121,33 @@
                     {% endfor %}
                 {% endif %}
 
+          {% elif field.element == 'rights_holder' %}
+                {% if pkg_dict.get('holder_name') %}
+                {% set couples = h.couple_to_dict(field.couples, pkg_dict)%}
+                <tr>
+                    <th scope="row" class="dataset-label">{{ field.label }}</th>
+                    <td class="dataset-details">
+                    {% if couples %}
+                        {% for couple in couples %}									
+                            {% if couple %}
+                        <span style="font-weight:bold">{{couple.label}}: </span><span>{{couple.value}}</span><br/>
+                            {% else %}
+                                {{ _('N/D') }}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {{ _('N/D') }}
+                    {% endif %}
+                    </td>
+                </tr>
+
+                {% else %}
+                      <tr>
+                          <th scope="row" class="dataset-label">{{ field.label }}</th>
+                          <td class="dataset-details">{{ field.default or _('N/D') }}
+                        </td>
+                      </tr>
+                {% endif %}
           {% else %}
 
               {% if pkg_dict[field.name] %}

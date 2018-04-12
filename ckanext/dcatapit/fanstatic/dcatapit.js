@@ -131,8 +131,19 @@ dcatapit.templated_input = {
                 var elval = that.extract_from_element(elm);
                 out.push(elval);
                 });
+
+            // do any postprocessing if needed of extracted values
+            out = this.post_extract(out);
+
             this.el.attr('value', JSON.stringify(out));
             return out;
+        },
+        post_extract: function(values){
+            if (this._post_extract !== undefined){
+                return this._post_extract(values);
+            } else {
+                return values;
+            }
         }
      }
 
@@ -211,7 +222,9 @@ ckan.module('dcatapit-conforms-to', function($){
                     }
                     else {
                         var elval = elm.val();
-                        out[elm_name] = elval;
+                        if (typeof elval == 'string' && elval.trim() != ''){
+                            out[elm_name] = elval;
+                        }
                     }
                 } else {
                     if (!$.isArray(out[elm_name])){
@@ -396,7 +409,10 @@ ckan.module('dcatapit-temporal-coverage', function($){
                 var elm = $(elm);
                 var _elm_name = elm.attr('name');
                 var elm_name = _elm_name.slice(this.options.input_prefix.length);
-                out[elm_name] = elm.val();
+                var val = elm.val();
+                if (typeof val == 'string' && val.trim() != ''){
+                    out[elm_name] = val;
+                }
         },
 
         sub_add_values: function(ui, values){
@@ -414,6 +430,25 @@ ckan.module('dcatapit-temporal-coverage', function($){
 
                 $('.control-group', elm).addClass('error');
             }
+        },
+        _post_extract: function(values){
+            var out = [];
+
+            var _qualifies = function(value){
+                if (typeof value == 'string' && value.trim() !== ''){
+                    return value;
+                }
+                return null;
+            }
+            // remove empty rows, or rows with no temporal_start
+            for (var row of values){
+                var tstart = _qualifies(row['temporal_start']);
+                var tend = _qualifies(row['temporal_end']);
+                if (! (tstart == null && tend == null)){
+                    out.push(row);
+                }
+            }
+            return out;
         }
 
     };
@@ -568,9 +603,12 @@ ckan.module('dcatapit-theme', function($){
                 }
 
                 var elm_name = _elm_name.slice(this.options.input_prefix.length);
+                var val = elm.val();
 
                 if (elm_name == 'theme'){
-                    out['theme'] = elm.val();
+                    if (typeof val == 'string' && val.trim() != ''){
+                        out['theme'] = val;
+                    }
                 } else {
                     // 
                     sublist = elm.select2('data');

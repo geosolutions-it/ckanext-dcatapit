@@ -279,6 +279,11 @@ def parse_date(val):
 
     raise Invalid(_("Invalid date input: {}").format(val))
 
+def serialize_date(val):
+    if not val:
+        return
+    return val.strftime(DATE_FORMATS[0])
+
 
 def parse_nullable_date(val):
     return parse_date(val) if val else None
@@ -298,14 +303,15 @@ def dcatapit_temporal_coverage(value, context):
     if not isinstance(data, list):
         raise Invalid(_("Temporal coverage values should be in a list, got {}").format(type(data)))
 
-    allowed_keys = {'temporal_start': parse_date,
+    allowed_keys = {'temporal_start': parse_nullable_date,
                     'temporal_end': parse_nullable_date}
     allowed_keys_set = set(allowed_keys.keys())
-
+    new_data = []
     for elm in data:
         if not isinstance(elm, dict):
             raise Invalid(_("Invalid temporal coverage item, should be a dict, got {}").format(type(elm)))
         keys_set = set(elm.keys())
+
         if not (keys_set.issubset(allowed_keys_set) and allowed_keys_set.issuperset(keys_set)):
             raise Invalid(_("Temporal coverage item contains invalid keys: {}").format(keys_set - allowed_keys_set))
 
@@ -315,10 +321,13 @@ def dcatapit_temporal_coverage(value, context):
             if parsed:
                tmp[k] = parsed
         
-        if tmp.get('temporal_end') and tmp['temporal_start'] > tmp['temporal_end']:
-            raise Invalid(_("Temporal coverage start {} is after end {}").format(tmp['temporal_start'], tmp['temporal_end']))
+        if not tmp.get('temporal_start'):
+            raise Invalid(_("Temporal coverage should contain start element"))
 
-    return value
+        if tmp.get('temporal_start') and tmp.get('temporal_end') and tmp['temporal_start'] > tmp['temporal_end']:
+            raise Invalid(_("Temporal coverage start {} is after end {}").format(tmp['temporal_start'], tmp['temporal_end']))
+        new_data.append(dict((k, serialize_date(v)) for k, v in tmp.items()))
+    return json.dumps(new_data)
 
 
 def dcatapit_subthemes(value, context):

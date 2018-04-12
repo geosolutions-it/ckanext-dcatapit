@@ -66,6 +66,16 @@ Old implementation of the couple element (one element with comma separated value
 {% endmacro %}
 ------------------------------------------------------------------------------- #}
 
+{% macro rights_holder_create(name, label, help) %}
+  {% call input_block(name+ '-key', label or name) %}
+
+        <div style="font-size: 14px">
+        {% trans %}Select organization{% endtrans %}
+    {{ help_block(help) }}
+        </div>
+  {% endcall %}
+{% endmacro %}
+
 
 {% macro couple(name, labels=(), names=(), id="", label="", values=(), placeholders=(), error="", types="", classes=[], attrs={}, is_required=false, key_values=(), help='', read_only=False) %}
   {%- set classes = (classes|list) -%}
@@ -220,14 +230,10 @@ Old implementation of the couple element (one element with comma separated value
                     </span>
         {% endcall %}
     </div>
-        <div class="temporal-coverage_container add_new_container" data-add-with=".add_new_temporal-coverage" data-add-template=".temporal-coverage.template"></div>
 
     <div class="temporal-coverage_container add_new_container" data-add-with=".add_new_temporal-coverage" data-add-template=".temporal-coverage.template"></div>
-
            <span class="add_new_temporal-coverage add_new {% if error and error is iterable %}error{% endif %}"><i class="icon-plus"></i> {% trans %}Add new Temporal Coverage{% endtrans %}</span>
-
             {{ help_block(help) }}
-
         <input type="hidden" name="temporal_coverage" value="{{ value or dict()| safe}}" data-module="dcatapit-temporal-coverage" data-module-template=".temporal-coverage" data-module-container=".temporal-coverage_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="temporal-coverage" data-module-error="{{ error|join(',') }}" />
     
         {% if error and error is iterable %}

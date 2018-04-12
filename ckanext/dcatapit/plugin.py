@@ -258,7 +258,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         lang = interfaces.get_language()
         otype = pkg_dict.get('type')
         if lang and otype == 'dataset':
-            for extra in pkg_dict.get('extras'):
+            for extra in pkg_dict.get('extras') or []:
                 for field in dcatapit_schema.get_custom_package_schema():
 
                     couples = field.get('couples', [])
@@ -281,7 +281,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         otype = pkg_dict.get('type')
 
         if lang and otype == 'dataset':             
-            for extra in pkg_dict.get('extras'):
+            for extra in pkg_dict.get('extras') or []:
                 for field in dcatapit_schema.get_custom_package_schema():
                     couples = field.get('couples', [])
                     if couples and len(couples) > 0:
@@ -646,6 +646,10 @@ class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
 
     # IFacets
     def dataset_facets(self, facets_dict, package_type):
+        
+        # remove dataset license facet
+        facets_dict.pop('license_id', None)
+        
         lang = interfaces.get_language() or validators.DEFAULT_LANG
         facets_dict['source_catalog_title'] = plugins.toolkit._("Source catalogs")
         facets_dict['organization_region_{}'.format(lang)] = plugins.toolkit._("Organization regions")

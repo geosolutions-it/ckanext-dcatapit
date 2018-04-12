@@ -34,7 +34,8 @@ CC_LICENSE = re.compile(r'https{0,1}://creativecommons.org/(licenses|publicdomai
 CC_LICENSE_NAME = re.compile(r'creative commons \w ', re.I)
 
 # http://www.dati.gov.it/iodl/2.0
-DATI_LICENSE = re.compile(r'https{0,1}://www.dati.gov.it/(?P<license>[\w\-\.]+)/')
+# https://www.dati.gov.it/content/italian-open-data-license-v20
+DATI_LICENSE = re.compile(r'https{0,1}://www.dati.gov.it/(content/)?(?P<license>[\w\-\.]+)/')
 
 # https://opendatacommons.org/licenses/odbl/summary/
 # but also
@@ -75,7 +76,7 @@ class License(_Base, DeclarativeBase):
                                                   remote_side=[id]),
                               lazy=True)
     
-    DEFAULT_LICENSE = "http://dati.gov.it/onto/controlledvocabulary/License/C1_Unknown"
+    DEFAULT_LICENSE = "http://w3id.org/italia/controlled-vocabulary/licences/C1_Unknown"
 
     @classmethod
     def get(cls, id_or_uri):
@@ -358,7 +359,7 @@ def setup_license_models():
 
 
 ADMS=Namespace("http://www.w3.org/ns/adms#")
-CLVAPIT=Namespace("http://dati.gov.it/onto/clvapit#")
+CLVAPIT=Namespace("http://w3id.org/italia/onto/CLV/")
 DCATAPIT=Namespace("http://dati.gov.it/onto/dcatapit#")
 DCT=Namespace("http://purl.org/dc/terms/")
 FOAF=Namespace("http://xmlns.com/foaf/0.1/")
@@ -407,27 +408,28 @@ def load_from_graph(path=None, url=None):
 
     for license in g.subjects(None, SKOS.Concept):
         rank_order = g.value(license, CLVAPIT.hasRankOrder)
-        # 2nd level, we have exactMatch
+        version = g.value(license, OWL.versionInfo)
+        doc_uri = g.value(license, DCATAPIT.referenceDoc)
+
+        # exactMatch exists only in 2nd level
         license_type = g.value(license, SKOS.exactMatch)
         if not license_type:
             # 3rd level, need to go up
             parent = g.value(license, SKOS.broader)
             license_type = g.value(parent, SKOS.exactMatch)
 
-        version = g.value(license, OWL.versionInfo)
         _labels = g.objects(license, SKOS.prefLabel)
         labels = dict((l.language, unicode(l),) for l in _labels)
-        parent = None
         license_path=str(license).split('/')[-1].split('_')[0]
-        document_uri = g.value(license, DCATAPIT.referenceDoc)
+        print "Adding license [%s] [%s]" % (license, labels.get('it', None))
         l = License.from_data(unicode(license_type or ''),
                               str(version) if version else None,
                               uri=str(license),
                               path=license_path,
-                              document_uri=str(document_uri) if document_uri else None,
+                              document_uri=str(doc_uri) if doc_uri else None,
                               rank_order=int(str(rank_order)),
                               names=labels,
-                              parent=parent)
+                              parent=None)  # parent will be set later
 
     for license in g.subjects(None, SKOS.Concept):
         parent = None
