@@ -359,7 +359,7 @@ def setup_license_models():
 
 
 ADMS=Namespace("http://www.w3.org/ns/adms#")
-CLVAPIT=Namespace("http://w3id.org/italia/onto/CLV/")
+CLVAPIT=Namespace("https://w3id.org/italia/onto/CLV/")
 DCATAPIT=Namespace("http://dati.gov.it/onto/dcatapit#")
 DCT=Namespace("http://purl.org/dc/terms/")
 FOAF=Namespace("http://xmlns.com/foaf/0.1/")
