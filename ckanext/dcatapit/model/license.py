@@ -76,7 +76,7 @@ class License(_Base, DeclarativeBase):
                                                   remote_side=[id]),
                               lazy=True)
     
-    DEFAULT_LICENSE = "http://w3id.org/italia/controlled-vocabulary/licences/C1_Unknown"
+    DEFAULT_LICENSE = "https://w3id.org/italia/controlled-vocabulary/licences/C1_Unknown"
 
     @classmethod
     def get(cls, id_or_uri):
