@@ -71,7 +71,7 @@ class HarvestersTestCase(unittest.TestCase):
                             {
                                 'id': 'resource/2222',
                                 'url': 'http://resource/2222',
-                                'license_type': 'http://w3id.org/italia/controlled-vocabulary/licences/A311_GFDL13'
+                                'license_type': 'https://w3id.org/italia/controlled-vocabulary/licences/A311_GFDL13'
                             }
                         ]
                     }
