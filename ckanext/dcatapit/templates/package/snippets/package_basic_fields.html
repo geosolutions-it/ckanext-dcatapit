@@ -4,88 +4,17 @@
 
 {% block package_basic_fields_custom %}
 
+    {% resource 'vendor/jquery.ui.core.js' %}
+    {% resource 'vendor/jquery.ui.widget.js' %}
 
-    <div id="dcatapit-edit-form-settings" class="hidden">{{ h.json_dump({'tabs': [
-    {'id': 'information',
-    'name': _('Information'),
-    'fields': [{'name': 'title'},
-               {'name': 'name'},
-               {'name': 'notes'},
-               {'name': None, 'selector': '.slug-preview-value', 'parent': '.slug-preview'},
-               {'name': 'description'},
-               {'name': 'identifier'},
-               {'name': 'alternate_identifier'},
-               {'name': 'language'},
-               {'name': 'is_version_of'},
-               {'name': 'license_id'},
-               {'name': 'private', 'parent': '[data-module="dataset-visibility"]'},
-               {'name': 'version'}
-              ]},
-    {'id': 'classification',
-     'name': _('Classification'),
-     'fields': [
-               {'name': 'theme', 'parent': '.theme-wrap'},
-               {'name': 'tag_string'},
-                ]},
-    {'id': 'organization',
-     'name': _('Organizations'),
-     'fields': [
-               {'name': 'owner_org'},
-               {'name': 'publisher_name'},
-               {'name': 'creator', 'parent': '.creator-wrap'},
-               {'name': 'author'},
-               {'name': 'author_email'},
-               {'name': 'maintainer'},
-               {'name': 'maintainer_email'},
-               {'name': None, 'selector': '[for="field-range-rights_holder-key"]'},
-               ],},
-    {'id': 'temporal',
-     'name': _('Temporal'),
-     'fields': [
-                {'name': 'issued'},
-                {'name': 'modified'},
-                {'name': 'frequency'},
-                {'name': 'released'},
-                {'name': 'temporal_coverage', 'parent': '.temporal-coverage-wrap'},
-               ]},
-    {'id': 'spatial',
-     'name': _('Spatial'),
-     'fields': [
-                {'name': 'geographical_name'},
-                {'name': 'geographical_geonames_url'},
-               ]},
-    {'id': 'standards',
-     'name': _('Standards'),
-     'fields': [ 
-                {'name': 'conforms_to'} 
-               ]},
-    {'id': 'related',
-     'name': _('Related databases'),
-     'fields': [
-                {'name': 'is_version_of'},
-                {'name': 'url'}
-              ]},
-    {'id': 'extra',
-     'name': _('Extra'),
-     'fields': [],
-     'use_extra': true},
-    ]}) }}
-    </div>
-    
-    {% resource 'ckanext-dcatapit/dcatapit.css' %}
-
-    {% resource 'ckanext-dcatapit/jquery.ui.core.js' %}
     {% resource 'ckanext-dcatapit/jquery.ui.position.js' %}
-    {% resource 'ckanext-dcatapit/jquery.ui.widget.js' %}
-    {% resource 'ckanext-dcatapit/jquery.ui.tabs.js' %}
     {% resource 'ckanext-dcatapit/jquery.ui.menu.js' %}
     {% resource 'ckanext-dcatapit/jquery.ui.autocomplete.js' %}
-    {% resource 'ckanext-dcatapit/jquery.ui.tooltip.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.tooltip.js' %}                   
     {% resource 'ckanext-dcatapit/jeoquery.js' %}
+
     {% resource 'ckanext-dcatapit/dcatapit.js' %}
-
-   <div class="dcatapit-form" data-module="dcatapit-edit-form" data-module-settings-container="#dcatapit-edit-form-settings" data-module-form-container="#dataset-edit">
+    {% resource 'ckanext-dcatapit/dcatapit.css' %}
 	{% snippet 'snippets/dcatapit_form_fields.html', data=data, errors=errors, schema_fields=pkg_fields %}
-    </div>
-{% endblock %}
 
+{% endblock %}
