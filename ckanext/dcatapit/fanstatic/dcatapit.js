@@ -711,7 +711,7 @@ ckan.module('dcatapit-edit-form', function($){
             var that = this;
 
             // where tabs are added
-            var tabs_list = $('<ul id="form-tabs" class="unstyled nav nav-simple"></ul>');
+            var tabs_list = $('<ul id="form-tabs" class="unstyled nav nav-simple nav-facets"></ul>');
             // where form fields are moved
             var tabs_container = $('<div class="forms-container"></div>');
 
