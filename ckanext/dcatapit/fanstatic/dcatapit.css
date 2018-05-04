@@ -75,7 +75,10 @@
     border: dotted 1px #ccc;
     padding-top: 5px;
     padding-bottom: 5px;
+    padding-right: 5px;
     border-radius: 5px;
+    margin-top: 5px!important;
+    margin-bottom: 5px!important;
 }
 
 .inline-block {
