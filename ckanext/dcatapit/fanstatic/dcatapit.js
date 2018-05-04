@@ -46,23 +46,30 @@ dcatapit.templated_input = {
                  this element with template class.
             */
             $('.add_new_container', ctx).each(function(idx, elm){
-                var add_with = $($(elm).data("add-with"), $(elm).parent());
-                var tmpl = $($(elm).data('add-template'), $(elm).parent());
+                var add_with_list = $($(elm).data("add-with"));
 
-                // marker to check if we didn't add handlers already
-                if (add_with.data('has-container-cb')){
-                    return;
-                }
 
-                /* callback for onclick - add new template
-                     and add callbacks for inputs to update main input after change
-                */
-                var h = function(evt){
-                    var t = that.add_row(tmpl, elm, []);
-                }
-                add_with.data('has-container-cb', true);
+                add_with_list.each(function(ydx, add_with_elm){
+                    var add_with = $(add_with_elm);
+                    
+                    // , $(elm).parent());
+                    var tmpl = $($(elm).data('add-template'), $(elm).parent());
 
-                add_with.click(h);
+                    // marker to check if we didn't add handlers already
+                    if (add_with.data('has-container-cb')){
+                        return;
+                    }
+
+                    /* callback for onclick - add new template
+                         and add callbacks for inputs to update main input after change
+                    */
+                    var h = function(evt){
+                        var t = that.add_row(tmpl, elm, []);
+                    }
+                    add_with.data('has-container-cb', true);
+
+                    add_with.click(h);
+                });
             });
             var remove_h = function(evt){
                 var elm = $(evt.delegateTarget);
@@ -135,7 +142,7 @@ dcatapit.templated_input = {
             // do any postprocessing if needed of extracted values
             out = this.post_extract(out);
 
-            this.el.val(JSON.stringify(out));
+            this.el.attr('value', JSON.stringify(out));
             return out;
         },
         post_extract: function(values){
@@ -187,7 +194,7 @@ ckan.module('dcatapit-conforms-to', function($){
                         var refdoc_val = val[i];
                         var to_add = refdoc_ui.clone().removeClass('template');
                         refdocs_container.append(to_add);
-                        $('input', to_add).val(refdoc_val);
+                        $('input', to_add).attr('value', refdoc_val);
 
                     }
 
@@ -199,7 +206,7 @@ ckan.module('dcatapit-conforms-to', function($){
                         var local_val = val;
                     }
 
-                    ui.find('input[name=' + input_name + ']').val(local_val);
+                    ui.find('input[name=' + input_name + ']').attr('value', local_val);
                     ui.attr('lang', this.lang);
                 }
             }
@@ -308,13 +315,13 @@ ckan.module('dcatapit-alternate-identifier', function($){
                         }
 
                         var input_name = this.options.input_prefix + a;
-                        ui.find('input[name=' + input_name + ']').val(local_val);
+                        ui.find('input[name=' + input_name + ']').attr('value', local_val);
                         ui.attr('lang', this.lang);
                     }
                 } else {
                         var local_val = val;
                         var input_name = this.options.input_prefix + k;
-                        ui.find('input[name=' + input_name + ']').val(local_val);
+                        ui.find('input[name=' + input_name + ']').attr('value', local_val);
                         ui.attr('lang', this.lang);
                 }
             }
@@ -374,7 +381,7 @@ ckan.module('dcatapit-creator', function($){
                     local_val = val[this.lang];
                 }
                 var input_name = k //this.options.input_prefix + k;
-                ui.find('input[name=' + input_name + ']').val(local_val);
+                ui.find('input[name=' + input_name + ']').attr('value', local_val);
                 ui.attr('lang', this.lang);
             }
         },
@@ -421,7 +428,7 @@ ckan.module('dcatapit-temporal-coverage', function($){
                 var val = values[k];
                 var local_val = val;
                 var input_name = k //this.options.input_prefix + k;
-                ui.find('input[name=' + input_name + ']').val(local_val);
+                ui.find('input[name=' + input_name + ']').attr('value', local_val);
                 ui.attr('lang', this.lang);
             }
         },
@@ -548,10 +555,10 @@ ckan.module('geonames', function($){
                 return;
             }
             var url = 'https://geonames.org/' + details.geonameId;
-            this.store.val(url);
+            this.store.attr('value', url);
             //this.display.html(url);
             if (is_init == true){
-                $(this.el).val(details.name + ',' + details.adminName1 + ', '+ details.countryName);
+                $(this.el).attr('value', details.name + ',' + details.adminName1 + ', '+ details.countryName);
             }
         }
 
@@ -665,7 +672,7 @@ ckan.module('dcatapit-theme', function($){
                     var sel_op = $('<option value="'+opt['value'] + '">' + opt['name'] + '</option>')
 
                     sel.append(sel_op);
-                    if ($.inArray(sel_op.val(), selected_subthemes)>-1){
+                    if ($.inArray(opt['value'], selected_subthemes)>-1){
                         sel_op.prop('selected', true);
                         }
                     }
@@ -673,4 +680,180 @@ ckan.module('dcatapit-theme', function($){
         }
     }
     return $.extend({}, dcatapit.templated_input, theme);
+ });
+
+ckan.module('dcatapit-edit-form', function($){
+    var edit_form = {
+        initialize: function(){
+            if (this.has_errors()){
+                console.log('form with errors');
+            }
+            this.el = $(this.el);
+            $.proxyAll(this, /_on/);
+            this.settings = this.load_settings(this.options.settingsContainer);
+            this.container = $(this.options.formContainer);
+            this.init_tabs(this.settings, this.container);
+        },
+
+        get_errors: function(){
+            return $('.error-explanation.alert');
+        },
+        has_errors: function(){
+            var err = this.get_errors();
+            return err.length > 0;
+        },
+
+        load_settings: function(container){
+            var serialized_settings = $(container).html();
+            try {
+                var val = $.parseJSON(serialized_settings);
+            } catch (err){
+                console.log('cannot parse', serialized_settings, err);
+                var val = {'tabs': []};
+            }
+            return val;
+        },
+
+        init_tabs: function(settings, container){
+            var that = this;
+
+            // where tabs are added
+            var tabs_list = $('<ul id="form-tabs" class="unstyled nav nav-simple nav-facets"></ul>');
+            // where form fields are moved
+            var tabs_container = $('<div class="forms-container"></div>');
+
+            container.prepend(tabs_container);
+            container.prepend(tabs_list);
+
+            $.each(settings['tabs'], function(idx, elm){
+                var this_tab = that.add_tab(tabs_list,
+                                            tabs_container,
+                                            elm['id'],
+                                            elm['name'],
+                                            elm['fields']);
+                if (elm['use_extra']||false){
+                    that.collect_extras(this_tab, elm);
+                }
+            });
+            // initiate tabs
+            container.tabs({'activate': function(evt, ui){
+                                                        $(ui.newTab).addClass('hovered');
+                                                        $(ui.oldTab).removeClass('hovered');
+                                                        return true;
+                                                        
+                                                        }});
+
+            $(tabs_list.find('li')[0]).addClass('hovered').find('a').click();
+            // move tabs controls to secondary content
+            $('#tabs-container').append(tabs_list);
+            this.build_nav(tabs_list.find('li'), tabs_container.find('.ui-tabs-panel'));
+            this.handle_errors(tabs_list.find('li'), tabs_container.find('.ui-tabs-panel'), container);
+            container.prepend($('ol.stages'));
+        },
+
+        handle_errors: function(tabs, panels, main_c){
+            var err = this.get_errors();
+            if (err.length > 0){
+                main_c.prepend(err);
+            }
+            $.each(panels, function(idx, panel){
+                var got_errors = $(panel).find('.error-block').length > 0;
+                if (got_errors){
+                    $(tabs[idx]).addClass('with-error');
+                }
+
+            });;
+
+
+        
+        },
+
+        build_nav: function(tabs, panels){
+            var that = this;
+            $.each(tabs, function(idx, elm){
+                var next = null;
+                var prev = null;
+                var current = $(elm);
+                if (idx == 0){
+                    if (tabs.length > 1){
+                        next = $(tabs[idx+1]);
+                    }
+                } else if (idx < tabs.length) {
+                    next = $(tabs[idx+1]);
+                    prev = $(tabs[idx-1]);
+
+                } else {
+                    prev = $(tabs[idx-1]);
+                }
+                var panel = $(panels[idx]);
+                that.add_nav(prev, next, panel);
+            });
+
+        },
+
+        add_nav: function(prev_tab, next_tab, panel){
+            var nav = $('<div class="form-nav"></div>');
+            if (prev_tab !== null){
+                var title = prev_tab.find('a span').html();
+                var prev = $('<span class="prev-item form-nav-item btn btn-small"><a title="prev: '+ title +'" href="#">'+ title +'</a></span>');
+                nav.append(prev);
+                prev.find('a').click(function(){ prev_tab.find('a').click()});
+            }
+            if (next_tab !== null){
+                var title = next_tab.find('a span').html();
+                if (title !== undefined){
+                    var next = $('<span class="next-item form-nav-item btn btn-small"><a title="next: '+ title +'" href="#">'+ title +'</a></span>');
+                    nav.append(next);
+                    next.find('a').click(function(){ next_tab.find('a').click()});
+                }
+            }
+            panel.append(nav);
+        },
+
+        collect_extras: function(to_tab, config){
+            var tabs = to_tab['tab'];
+            var form = to_tab['form'];
+            var parent_name  = config['parent'] || '.control-group';
+
+            var extras = $('[data-module="custom-fields"]');
+            form.append(extras);
+
+            /*
+            var extras = [];
+            var extras_in = $('[name^="extras__"]');
+
+            $.each(extras_in, function(idx, elm){
+                var parent_elm = $(elm).parents(parent_name);
+                if (parent_elm.length>0 && $.inArray(parent_elm[0], extras) < 0){
+                    form.append($(parent_elm[0]));
+                }
+            });
+            */
+        },
+
+        add_tab: function(tabs_container, container, tab_id, name, fields){
+            var tab = $('<li class="nav-item"><a href="#' + tab_id + '-tab-container"><span>'+ name +'</span></a></li>');
+            var form_p = $('<div id="'+ tab_id+'-tab-container"></div>');
+            var that = this;
+            container.append(form_p);
+            tabs_container.append(tab);
+
+            $.each(fields, function(idx, elm){
+                if (elm['selector'] !== undefined){
+                    var field = $(elm['selector']);
+                } else {
+                    var field = $('[name="' + elm['name'] +'"]');
+                }
+                // customized parent lookup
+                var parent_name  = elm['parent'] || '.control-group';
+                var field_container = field.parents(parent_name);
+                if  (field_container.length > 0){
+                    form_p.append(field_container);
+                }
+            });
+            return {'tab': tab, 'form': form_p}
+        }
+    }
+
+    return $.extend({}, edit_form);
  });
