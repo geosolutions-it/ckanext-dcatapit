@@ -64,11 +64,31 @@
 
 .conforms_to .remove, .alternate_identifier .remove, .creator .remove, .temporal-coverage .remove, .theme .remove{
     display: inline-block;
+    padding-right: 10px;
     width: 100%;
     padding-right: 20px;
     text-align: right;
     cursor: pointer;
-    color: #e33;
+}
+
+.remove_reference_documentation {
+    width: 20px!important;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.remove .button {
+    display: inline-block;
+    border-radius: 15px;
+    border: solid 1px #000;
+    color: #fff;
+    background-color: #bd362f;
+    position: relative;
+    font-size: 0px;
+    top: 0;
+    left: 5px;
+    padding: 6px 8px;
+    line-height: 8px;
 }
 
 .removable {

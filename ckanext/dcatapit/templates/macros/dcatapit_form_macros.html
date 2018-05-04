@@ -404,8 +404,10 @@ Old implementation of the couple element (one element with comma separated value
 {# renders remove markup #}
 {% macro remove_button(classes, parent=None) %}
     <span class="remove {{ classes }}" {% if parent %}data-remove-parent="{{ parent }}"{% endif %}>
-        <i class="icon-minus"></i>
-        {% trans %}Remove{% endtrans %}
+        <span class="button">
+            <i class="icon-remove"></i>
+            {% trans %}Remove{% endtrans %}
+        </span>
     </span>
 {% endmacro %}
 
