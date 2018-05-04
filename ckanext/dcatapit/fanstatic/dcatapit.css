@@ -22,8 +22,18 @@
 .w200 {
     max-width: 200px;
 }
+
+.w380 {
+    max-width: 380px;
+    width: 380px;
+}
 .add_new {
     cursor: pointer;
+    margin-top:  5px;
+    margin-bottom:  5px;
+    margin-left: 130px;
+    display:  inline-block;
+    width: 100%;
 }
 .temporal-coverage-wrap .add_new {
     margin-left: 130px;
@@ -48,12 +58,24 @@
 .bold {
     font-weight: bold;
 }
-.conforms_to .remove_conforms_to, .alternate_identifier .remove, .creator .remove, .temporal-coverage .remove, .theme .remove {
-    float: right;
+.control-custom .remove {
+    font-size: 14px;
+}
+
+.conforms_to .remove, .alternate_identifier .remove, .creator .remove, .temporal-coverage .remove, .theme .remove{
+    display: inline-block;
+    width: 100%;
     padding-right: 20px;
     text-align: right;
     cursor: pointer;
     color: #e33;
+}
+
+.removable {
+    border: dotted 1px #ccc;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
 }
 
 .inline-block {

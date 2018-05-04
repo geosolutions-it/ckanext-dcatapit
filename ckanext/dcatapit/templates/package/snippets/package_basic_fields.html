@@ -14,7 +14,7 @@
                {'name': None, 'selector': '.slug-preview-value', 'parent': '.slug-preview'},
                {'name': 'description'},
                {'name': 'identifier'},
-               {'name': 'alternate_identifier'},
+               {'name': 'alternate_identifier', 'parent': '.alternate-identifier-wrap'},
                {'name': 'language'},
                {'name': 'is_version_of'},
                {'name': 'license_id'},
@@ -58,7 +58,7 @@
     {'id': 'standards',
      'name': _('Standards'),
      'fields': [ 
-                {'name': 'conforms_to'} 
+                {'name': 'conforms_to', 'parent': '.conforms-to-wrap'} 
                ]},
     {'id': 'related',
      'name': _('Related databases'),
