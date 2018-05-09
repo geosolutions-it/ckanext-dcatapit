@@ -64,7 +64,6 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
     # ------------- ITranslation ---------------#
 
-
     def i18n_domain(self):
         '''Change the gettext domain handled by this plugin
         This implementation assumes the gettext domain is
@@ -453,8 +452,6 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             pkg_dict['holder_name'] = org['name']
             pkg_dict['holder_identifier'] = org.get('identifier')
         return pkg_dict
-
-
 
 class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupForm):
 
