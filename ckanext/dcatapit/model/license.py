@@ -186,7 +186,7 @@ class License(_Base, DeclarativeBase):
     def get_by_lang(cls, lang, label):
         q = cls.q().join(LocalizedLicenseName,
                          LocalizedLicenseName.license_id == cls.id)\
-                   .where(LocalizedLicenseName.lang == lang,
+                   .filter(LocalizedLicenseName.lang == lang,
                           LocalizedLicenseName.label == label)
         return q.first()
 

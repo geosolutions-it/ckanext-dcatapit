@@ -3,6 +3,7 @@ import json
 
 from ckan import logic
 from ckan import lib
+from ckan.lib.base import config
 
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
@@ -21,13 +22,21 @@ from ckan.model import Session, repo
 
 from routes.mapper import SubMapper, Mapper as _Mapper
 
+log = logging.getLogger(__file__)
+
 try:
     from ckan.lib.plugins import DefaultTranslation
 except ImportError:
     class DefaultTranslation():
         pass
 
-log = logging.getLogger(__file__)
+LOCALIZED_RESOURCES_KEY = 'ckanext.dcatapit.localized_resources'
+LOCALIZED_RESOURCES_ENABLED = toolkit.asbool(config.get(LOCALIZED_RESOURCES_KEY, "False"))
+MLR = None
+if LOCALIZED_RESOURCES_ENABLED:
+    from ckanext.multilang.plugin import MultilangResourcesAux
+    MLR = MultilangResourcesAux()
+    # admin chose to enable the localized resource, so let the ImportError out 
 
 
 class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm, DefaultTranslation):
@@ -133,8 +142,11 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                 field['name']: validators
             })
 
+        # conditionally include schema fields from MultilangResourcesPlugin
+        if MLR:
+            schema = MLR.update_schema(schema)
+        
         log.debug("Schema updated for DCAT_AP-TI:  %r", schema)
-
         return schema
 
     def create_package_schema(self):
@@ -197,6 +209,11 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                 field['name']: validators
             })
 
+
+        # conditionally include schema fields from MultilangResourcesPlugin
+        if MLR:
+            schema = MLR.update_schema(schema)
+        
         log.debug("Schema updated for DCAT_AP-TI:  %r", schema)
 
         return schema
@@ -210,6 +227,16 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         # This plugin doesn't handle any special package types, it just
         # registers itself as the default (above).
         return []
+
+    if MLR:
+        def read_template(self):
+            return MLR.read_template()
+    
+        def edit_template(self):
+            return MLR.edit_template()
+
+        def resource_form(self):
+            return MLR.resource_form()
 
     # ------------- IValidators ---------------#
 
@@ -228,7 +255,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     # ------------- ITemplateHelpers ---------------#
 
     def get_helpers(self):
-        return {
+        dcatapit_helpers = {
             'get_dcatapit_package_schema': helpers.get_dcatapit_package_schema,
             'get_vocabulary_items': helpers.get_vocabulary_items,
             'get_vocabulary_item': helpers.get_vocabulary_item,
@@ -250,6 +277,10 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'dump_dcatapit_subthemes': helpers.dump_dcatapit_subthemes,
             'get_localized_subtheme': helpers.get_localized_subtheme,
         }
+
+        if MLR:
+            dcatapit_helpers.update(MLR.get_helpers())
+        return dcatapit_helpers
 
     # ------------- IPackageController ---------------#
 
@@ -319,11 +350,14 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         licenses = []
         for l in _licenses:
             lic = License.get(l)
-            for loclic in lic.get_names():
-                lname = loclic['name']
-                lang = loclic['lang']
-                if lname:
-                    dataset_dict['resource_license_{}'.format(lang)] = lname
+            if lic:
+                for loclic in lic.get_names():
+                    lname = loclic['name']
+                    lang = loclic['lang']
+                    if lname:
+                        dataset_dict['resource_license_{}'.format(lang)] = lname
+            else:
+                log.warn('Bad license: license not found: %r ', l)
 
         dataset_dict['resource_license'] = _licenses
 
