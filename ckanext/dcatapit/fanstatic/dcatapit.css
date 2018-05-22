@@ -69,6 +69,8 @@
     padding-right: 20px;
     text-align: right;
     cursor: pointer;
+    float: right;
+    margin-top: 5px;
 }
 
 .remove_reference_documentation {
