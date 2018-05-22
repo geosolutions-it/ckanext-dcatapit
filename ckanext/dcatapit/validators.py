@@ -1,6 +1,7 @@
 import json
 import logging
 
+from sqlalchemy import and_
 from ckan.common import _, ungettext
 
 from ckan.logic.validators import url_validator
@@ -48,7 +49,14 @@ def dcatapit_id_unique(value, context):
     if package:
         package_id = package.id
 
-        result = session.query(model.PackageExtra).filter(model.PackageExtra.package_id != package_id, model.PackageExtra.key == 'identifier', model.PackageExtra.value == value).first()
+        result = session.query(model.PackageExtra)\
+                        .join(model.Package, and_(model.PackageExtra.package_id == model.Package.id,
+                                                  model.Package.type == 'dataset',
+                                                  model.Package.state == 'active'))\
+                        .filter(model.PackageExtra.package_id != package_id,
+                                model.PackageExtra.key == 'identifier',
+                                model.PackageExtra.value == value)\
+                        .first()
 
         if result:
             raise Invalid(_('Another package exists with the same identifier'))

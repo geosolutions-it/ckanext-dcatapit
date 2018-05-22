@@ -33,10 +33,6 @@
                {'name': 'owner_org'},
                {'name': 'publisher_name'},
                {'name': 'creator', 'parent': '.creator-wrap'},
-               {'name': 'author'},
-               {'name': 'author_email'},
-               {'name': 'maintainer'},
-               {'name': 'maintainer_email'},
                {'name': None, 'selector': '[for="field-range-rights_holder-key"]'},
                {'name': None, 'selector': '[for="rights_holder-key"]'},
                ],},
@@ -61,14 +57,19 @@
                 {'name': 'conforms_to', 'parent': '.conforms-to-wrap'} 
                ]},
     {'id': 'related',
-     'name': _('Related databases'),
+     'name': _('Related Datasets'),
      'fields': [
                 {'name': 'is_version_of'},
                 {'name': 'url'}
               ]},
     {'id': 'extra',
-     'name': _('Extra'),
-     'fields': [],
+     'name': _('Additional Info'),
+     'fields': [
+                {'name': 'author'},
+                {'name': 'author_email'},
+                {'name': 'maintainer'},
+                {'name': 'maintainer_email'},
+               ],
      'use_extra': true},
     ]}) }}
     </div>
