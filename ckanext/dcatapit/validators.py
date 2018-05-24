@@ -49,6 +49,7 @@ def dcatapit_id_unique(value, context):
     if package:
         package_id = package.id
 
+        # existing dataset, exclude current one from search
         result = session.query(model.PackageExtra)\
                         .join(model.Package, and_(model.PackageExtra.package_id == model.Package.id,
                                                   model.Package.type == 'dataset',
@@ -57,9 +58,19 @@ def dcatapit_id_unique(value, context):
                                 model.PackageExtra.key == 'identifier',
                                 model.PackageExtra.value == value)\
                         .first()
+    else:
+        # no package in context, so this is new dataset, no exclude here
+        # just search among live datasets
+        result = session.query(model.PackageExtra)\
+                        .join(model.Package, and_(model.PackageExtra.package_id == model.Package.id,
+                                                  model.Package.type == 'dataset',
+                                                  model.Package.state == 'active'))\
+                        .filter(model.PackageExtra.key == 'identifier',
+                                model.PackageExtra.value == value)\
+                        .first()
 
-        if result:
-            raise Invalid(_('Another package exists with the same identifier'))
+    if result is not None:
+        raise Invalid(_('Another package exists with the same identifier'))
 
     return value
 
