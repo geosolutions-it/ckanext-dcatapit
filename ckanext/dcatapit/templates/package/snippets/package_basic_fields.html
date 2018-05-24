@@ -86,8 +86,10 @@
     {% resource 'ckanext-dcatapit/jeoquery.js' %}
     {% resource 'ckanext-dcatapit/dcatapit.js' %}
 	{% snippet 'snippets/dcatapit_form_fields.html', data=data, errors=errors, schema_fields=pkg_fields %}
+    {% if h.dcatapit_enable_form_tabs() %}
     <div class="dcatapit-form" data-module="dcatapit-edit-form" data-module-settings-container="#dcatapit-edit-form-settings" data-module-form-container="#dataset-edit">
     </div>
+    {% endif %}
 
 
 {% endblock %}
