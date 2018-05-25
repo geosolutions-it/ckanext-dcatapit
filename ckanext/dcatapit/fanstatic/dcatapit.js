@@ -46,23 +46,30 @@ dcatapit.templated_input = {
                  this element with template class.
             */
             $('.add_new_container', ctx).each(function(idx, elm){
-                var add_with = $($(elm).data("add-with"), $(elm).parent());
-                var tmpl = $($(elm).data('add-template'), $(elm).parent());
+                var add_with_list = $($(elm).data("add-with"));
 
-                // marker to check if we didn't add handlers already
-                if (add_with.data('has-container-cb')){
-                    return;
-                }
 
-                /* callback for onclick - add new template
-                     and add callbacks for inputs to update main input after change
-                */
-                var h = function(evt){
-                    var t = that.add_row(tmpl, elm, []);
-                }
-                add_with.data('has-container-cb', true);
+                add_with_list.each(function(ydx, add_with_elm){
+                    var add_with = $(add_with_elm);
+                    
+                    // , $(elm).parent());
+                    var tmpl = $($(elm).data('add-template'), $(elm).parent());
 
-                add_with.click(h);
+                    // marker to check if we didn't add handlers already
+                    if (add_with.data('has-container-cb')){
+                        return;
+                    }
+
+                    /* callback for onclick - add new template
+                         and add callbacks for inputs to update main input after change
+                    */
+                    var h = function(evt){
+                        var t = that.add_row(tmpl, elm, []);
+                    }
+                    add_with.data('has-container-cb', true);
+
+                    add_with.click(h);
+                });
             });
             var remove_h = function(evt){
                 var elm = $(evt.delegateTarget);
@@ -711,7 +718,7 @@ ckan.module('dcatapit-edit-form', function($){
             var that = this;
 
             // where tabs are added
-            var tabs_list = $('<ul id="form-tabs" class="unstyled nav nav-simple"></ul>');
+            var tabs_list = $('<ul id="form-tabs" class="unstyled nav nav-simple nav-facets"></ul>');
             // where form fields are moved
             var tabs_container = $('<div class="forms-container"></div>');
 
