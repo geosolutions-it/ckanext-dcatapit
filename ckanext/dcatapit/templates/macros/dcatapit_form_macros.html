@@ -151,23 +151,22 @@ Old implementation of the couple element (one element with comma separated value
 
 {% macro themes(name, id='', label='', value='', placeholder='', error='', options=(), classes=[], attrs={}, type='', sublabel='', is_required=False, help=None) %}
 <div class="theme-wrap">
-    <div class="template theme">
-        
+    <div class="template theme removable">
+
         {% call vocabulary(name, id=id, label=label, placeholder=placeholder, error=error, options=options, classes=classes, attrs=attrs, multiple=False, use_autocomplete=False) %}
         {% endcall %}
 
         {% call subtheme(name, label=sublabel, placeholder=subplaceholder, options=suboptions, classes=classes) %}
         {% endcall %}
 
-    <span class="remove remove_theme" data-remove-parent=".theme"><i class="icon-minus" title="remove"></i> {% trans %}Remove theme{% endtrans %}</span>
+    {{ remove_button('remove_theme', parent='.theme') }}
+
     </div>
-
     <div class="theme_container add_new_container" data-add-with=".add_new_theme" data-add-template=".theme.template"></div>
+    {{ add_button(_("Add a Theme"), 'add_new_theme', help) }}
 
-    <span class="add_new_theme add_new"><i class="icon-plus"></i> {% trans %}Add new Theme{% endtrans %}</span>
     <input type="hidden" name="theme" value="{{ value or list()| safe}}" data-module="dcatapit-theme" data-module-template=".theme" data-module-container=".theme_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="theme" />
 
-    {{ help_block(help) }}
 </div>
 {% endmacro %}
 
@@ -179,7 +178,7 @@ Old implementation of the couple element (one element with comma separated value
     {% set values = ['', ''] %}
 
     <div class="creator-wrap">
-    <div class="creator template control-custom">
+    <div class="creator template removable">
     {% call  couple(name,
                 labels=labels,
                 names=names,
@@ -190,18 +189,16 @@ Old implementation of the couple element (one element with comma separated value
                 error=error,
                 types=types) %}
 
-
-                <span class="remove remove_reference_documentation" data-remove-parent=".creator"><i class="icon-minus" title="remove"></i>{% trans %}Remove creator{% endtrans %}</span>
+                {{ remove_button('remove_reference_documentation', parent='.creator') }}
     {% endcall %}
     </div>
 
     <div class="creator_container add_new_container" data-add-with=".add_new_creator" data-add-template=".creator.template"></div>
 
-            <span class="add_new_creator add_new"><i class="icon-plus"></i> {% trans %}Add new Creator{% endtrans %}</span>
+    {{ add_button(_("Add new Creator"), 'add_new_creator', help) }}
 
     <input type="hidden" name="creator" value="{{ value or dict()| safe}}" data-module="dcatapit-creator" data-module-template=".creator" data-module-container=".creator_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="creator" />
 
-    {{ help_block(help) }}
     </div>
 {% endmacro %}
 
@@ -214,7 +211,7 @@ Old implementation of the couple element (one element with comma separated value
     {% set values = ['', ''] %}
 
     <div class="temporal-coverage-wrap">
-        <div class="temporal-coverage template control-custom">
+        <div class="temporal-coverage template removable">
         {% call  couple(name,
                     labels=labels,
                     names=names,
@@ -224,16 +221,18 @@ Old implementation of the couple element (one element with comma separated value
                     placeholders=placeholders,
                     types=types) %}
 
-                    <span class="remove" data-remove-parent=".temporal-coverage">
-                        <i class="icon-minus" title="remove"></i>
-                        {% trans %}Remove temporal-coverage{% endtrans %} 
-                    </span>
+        {{ remove_button('', parent='.temporal-coverage') }}
         {% endcall %}
     </div>
 
     <div class="temporal-coverage_container add_new_container" data-add-with=".add_new_temporal-coverage" data-add-template=".temporal-coverage.template"></div>
-           <span class="add_new_temporal-coverage add_new {% if error and error is iterable %}error{% endif %}"><i class="icon-plus"></i> {% trans %}Add new Temporal Coverage{% endtrans %}</span>
-            {{ help_block(help) }}
+        {% set classes=['add_new_temporal-coverage'] %}
+        {% if error and error is iterable %}
+            {% do classes.append('error') %}
+        {% endif %}
+        {{ add_button(_("Add new Temporal Coverage"), ' '.join(classes), help) }}
+
+
         <input type="hidden" name="temporal_coverage" value="{{ value or dict()| safe}}" data-module="dcatapit-temporal-coverage" data-module-template=".temporal-coverage" data-module-container=".temporal-coverage_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="temporal-coverage" data-module-error="{{ error|join(',') }}" />
     
         {% if error and error is iterable %}
@@ -250,9 +249,8 @@ Old implementation of the couple element (one element with comma separated value
 
 
 {% macro alternate_identifier(name, id='', label='', value='', error='', lang='', help='') %}
-
-    {% call input_block(id, label, error, classes=[], extra_html='', is_required=False) %}
-        <div class="alternate_identifier template">
+    <div class="alternate-identifier-wrap">
+    {% call input_block(id, label, error, classes=['alternate_identifier', 'template', 'removable'], extra_html='', is_required=False) %}
             <div class="input-prepend">
                 <label for="alt_identifier" class="add-on">{% trans %}OthId Identifier{% endtrans %}</label>
                 <input name="alt_identifier" type="text" value="" placeholder="{% trans %}OthId dataset identifier{% endtrans %}"/>
@@ -268,74 +266,64 @@ Old implementation of the couple element (one element with comma separated value
                 <input name="alt_agent_identifier" type="text" value="" placeholder="{% trans %}OthId organization identifier{% endtrans %}"/>
             </div>
             <br/>
-            <span class="remove remove_alt_identifier"><i class="icon-minus"></i> {% trans %}Remove{% endtrans %}</span>
 
-        </div>
-
-        <div class="alternate_identifier_container add_new_container" data-add-with=".add_new_alternate_identifier" data-add-template=".alternate_identifier.template"></div>
-        
-        <span class="add_new_alternate_identifier add_new"><i class="icon-plus"></i> {% trans %}Add new identifier{% endtrans %}</span>
-
-    {{ help_block(help) }}
-
-        <input type="hidden" name="alternate_identifier" value="{{ value or dict()| safe}}" data-module="dcatapit-alternate-identifier" data-module-template=".alternate_identifier" data-module-container=".alternate_identifier_container" data-module-lang="{{ lang }}" data-module-input_prefix="alt_" data-module-data_name="alternate-identifier" />
-
-
+            {{ remove_button('remove_alt_identifier', parent='.removable') }}
 
     {% endcall %}
 
+    <div class="alternate_identifier_container add_new_container" data-add-with=".add_new_alternate_identifier" data-add-template=".alternate_identifier.template"></div>
+    <input type="hidden" name="alternate_identifier" value="{{ value or dict()| safe}}" data-module="dcatapit-alternate-identifier" data-module-template=".alternate_identifier" data-module-container=".alternate_identifier_container" data-module-lang="{{ lang }}" data-module-input_prefix="alt_" data-module-data_name="alternate-identifier" />
+
+        {{ add_button(_("Add new identifier"), 'add_new_alternate_identifier', help) }}
+
+    </div>
 {% endmacro %}
 
 {% macro conforms_to(name, id='', label='', value='', error='', classes=[], placeholder='', lang='', help='') %}
-    {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
+    <div class="conforms-to-wrap">
+        {% call input_block(id or name, label or name, error, classes=['conforms_to', 'template', 'removable'], extra_html=extra_html, is_required=is_required) %}
 
-    <div class="conforms_to template">
-        
-        <input type="hidden" name="conforms_to_uri" value=""/>
-        
-        <div class="input-prepend">
-            <label for="conforms_to_identifier" class="add-on">{% trans %}Std Identifier{% endtrans %}
-            </label>
-                <input type="text" name="conforms_to_identifier" type="text" value="" placeholder="{% trans %}Std Identifier sample{% endtrans %}"/>
-        </div>
-        <div class="input-prepend">
-            <label for="conforms_to_title" class="add-on">{% trans %}Std Title{% endtrans %}
-            </label>
-                <input type="text" name="conforms_to_title" value="" type="text" placeholder="{% trans %}Std Title sample{% endtrans %}"/>
-        </div>
-        
-        <div class="input-prepend">
-            <label for="conforms_to_description" class="add-on">{% trans %}Std Description{% endtrans %}
-            </label>
-                <input type="text" name="conforms_to_description" value="" type="text" placeholder="{% trans %}Std Description sample{% endtrans %}"/>
-        </div>
-        <div class="row-fluid">
-                <span class="span2"></span>
-                <span class="span10">
-                <label class="add-on">{% trans %}Std Reference documentation{% endtrans %}</label>
-                <div class="reference_documentation template">
-                    
-                    <input type="text" name="conforms_to_referenceDocumentation" type="text"  placeholder="{% trans %}Std Reference documentation sample{% endtrans %}"/>
-                    <span class="remove remove_reference_documentation"><i class="icon-minus" title="remove"></i></span>
-                </div>
+            <input type="hidden" name="conforms_to_uri" value=""/>
+            <div class="input-prepend">
+                <label for="conforms_to_identifier" class="add-on">{% trans %}Std Identifier{% endtrans %}
+                </label>
+                    <input type="text" name="conforms_to_identifier" type="text" value="" placeholder="{% trans %}Std Identifier sample{% endtrans %}"/>
+            </div>
+            <div class="input-prepend">
+                <label for="conforms_to_title" class="add-on">{% trans %}Std Title{% endtrans %}
+                </label>
+                    <input type="text" name="conforms_to_title" value="" type="text" placeholder="{% trans %}Std Title sample{% endtrans %}"/>
+            </div>
+            
+            <div class="input-prepend">
+                <label for="conforms_to_description" class="add-on">{% trans %}Std Description{% endtrans %}
+                </label>
+                    <input type="text" name="conforms_to_description" value="" type="text" placeholder="{% trans %}Std Description sample{% endtrans %}"/>
+            </div>
+            <div class="row-fluid">
+                    <span class="span11">
+                    <label class="add-on">{% trans %}Std Reference documentation{% endtrans %}</label>
+                    <div class="reference_documentation template">
+                        <input class="w380" type="text" name="conforms_to_referenceDocumentation" type="text"  placeholder="{% trans %}Std Reference documentation sample{% endtrans %}"/>
+                        {{ remove_button('remove_reference_documentation') }}
+                    </div>
 
-                <div class="reference_container add_new_container" data-add-with=".add_new_reference" data-add-template=".reference_documentation.template">
-                </div>
-                <span class="add_new_reference add_new"><i class="icon-plus"></i> {% trans %}Add new reference{% endtrans %}</span>
-                </span>
-        </div>
-        <span class="remove remove_conforms_to"><i class="icon-minus"></i> {% trans %}Remove{% endtrans %}</span>
-    </div>
+                    <div class="reference_container add_new_container" data-add-with=".add_new_reference" data-add-template=".reference_documentation.template">
+
+                    </div>
+                    {{ add_button(_("Add new reference"), 'add_new_reference', None) }}
+
+            </div>
+
+            {{ remove_button('remove_conforms_to', parent='.removable') }}
+
+        {% endcall %}
 
     <div class="conforms_to_container add_new_container" data-add-with=".add_new_conforms_to" data-add-template=".conforms_to.template"></div>
 
-    <span class="add_new_conforms_to add_new"><i class="icon-plus"></i> {% trans %}Add new conforms to{% endtrans %}</span>
-
-    {{ help_block(help) }}
-
     <input type="hidden" name="conforms_to" value="{{ value or dict()| safe}}" data-module="dcatapit-conforms-to" data-module-template=".conforms_to" data-module-container=".conforms_to_container" data-module-lang="{{ lang }}" data-module-input_prefix="conforms_to_" data-module-data_name="conforms-to" />
-
-    {% endcall %}
+        {{ add_button(_("Add new conforms to"), 'add_new_conforms_to', help) }}
+    </div>
 {% endmacro %}
 
 {% macro geonames(name, label, id, value, error, lang, username, limit_to, 
@@ -411,4 +399,26 @@ Old implementation of the couple element (one element with comma separated value
       <i class="icon-info-sign size-12" title="{{ content }}"></i>
     </span>
     {% endif %}
+{% endmacro %}
+
+{# renders remove markup #}
+{% macro remove_button(classes, parent=None) %}
+    <span class="remove {{ classes }}" {% if parent %}data-remove-parent="{{ parent }}"{% endif %}>
+        <span class="button">
+            <i class="icon-remove"></i>
+            {% trans %}Remove{% endtrans %}
+        </span>
+    </span>
+    <span class="clearfix"></span>
+{% endmacro %}
+
+{# reenders add button markup #}
+{% macro add_button(label, classes, help=None) %}
+    <span class="add_new {{ classes }}">
+        <i class="icon-plus"></i>
+        {{ label }}
+        {% if help %}
+            {{ help_block(help) }}
+        {% endif %}
+    </span>
 {% endmacro %}

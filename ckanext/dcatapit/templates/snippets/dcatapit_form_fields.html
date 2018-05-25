@@ -1,7 +1,7 @@
 
 {% import 'macros/dcatapit_form_macros.html' as dform %}
-{% for field in schema_fields %}
 
+{% for field in schema_fields %}
       {% if not field.ignore and not field.ignore_from_edit %}
 
             {% if field.element == 'input' %}

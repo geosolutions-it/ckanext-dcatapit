@@ -22,8 +22,18 @@
 .w200 {
     max-width: 200px;
 }
+
+.w380 {
+    max-width: 380px;
+    width: 380px;
+}
 .add_new {
     cursor: pointer;
+    margin-top:  5px;
+    margin-bottom:  5px;
+    margin-left: 130px;
+    display:  inline-block;
+    width: 100%;
 }
 .temporal-coverage-wrap .add_new {
     margin-left: 130px;
@@ -48,12 +58,49 @@
 .bold {
     font-weight: bold;
 }
-.conforms_to .remove_conforms_to, .alternate_identifier .remove, .creator .remove, .temporal-coverage .remove, .theme .remove {
-    float: right;
+.control-custom .remove {
+    font-size: 14px;
+}
+
+.conforms_to .remove, .alternate_identifier .remove, .creator .remove, .temporal-coverage .remove, .theme .remove{
+    display: inline-block;
+    padding-right: 10px;
+    width: 100%;
     padding-right: 20px;
     text-align: right;
     cursor: pointer;
-    color: #e33;
+    float: right;
+    margin-top: 5px;
+}
+
+.remove_reference_documentation {
+    width: 20px!important;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.remove .button {
+    display: inline-block;
+    border-radius: 15px;
+    border: solid 1px #000;
+    color: #fff;
+    background-color: #bd362f;
+    position: relative;
+    font-size: 0px;
+    top: 0;
+    left: 5px;
+    padding: 6px 8px;
+    line-height: 8px;
+}
+
+.removable {
+    border: dotted 1px #ccc;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    margin-top: 5px!important;
+    margin-bottom: 5px!important;
 }
 
 .inline-block {
@@ -77,9 +124,7 @@
 .ui-widget-content a {
     color: #333333;
 }
-.ui-widget-header {
-    border: 1px solid #dddddd;
-    background: #e9e9e9;
+.module-tabs .ui-widget-header {
     color: #333333;
     font-weight: bold;
 }
@@ -95,6 +140,7 @@
     max-width: 300px;
     -webkit-box-shadow: 0 0 5px #aaa;
     box-shadow: 0 0 5px #aaa;
+    background-color: #fefefe!important;
 }
 body .ui-tooltip {
     border-width: 2px;
@@ -170,7 +216,7 @@ ul.ui-tabs-nav {
 }
 
 .hovered {
-    background-color: #eee;
+    background-color: #8ca0a6;
 }
 
 .form-nav {
@@ -198,55 +244,69 @@ ul.ui-tabs-nav {
 
 /* Interaction states
 ----------------------------------*/
-.ui-state-default,
-.ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default {
-	border: 1px solid #c5c5c5;
-	background: #f6f6f6;
+.module-tabs .ui-state-default,
+.module-tabs .ui-widget-content .ui-state-default,
+.module-tabs .ui-widget-header .ui-state-default {
 	font-weight: normal;
 	color: #454545;
 }
-.ui-state-default a,
-.ui-state-default a:link,
-.ui-state-default a:visited {
+.module-tabs .ui-state-default a,
+.module-tabs .ui-state-default a:link,
+.module-tabs .ui-state-default a:visited {
 	color: #454545;
 	text-decoration: none;
 }
-.ui-state-hover,
-.ui-widget-content .ui-state-hover,
-.ui-widget-header .ui-state-hover,
-.ui-state-focus,
-.ui-widget-content .ui-state-focus,
-.ui-widget-header .ui-state-focus {
-	border: 1px solid #cccccc;
-	background: #ededed;
-	font-weight: normal;
-	color: #2b2b2b;
-}
-.ui-state-hover a,
-.ui-state-hover a:hover,
-.ui-state-hover a:link,
-.ui-state-hover a:visited,
-.ui-state-focus a,
-.ui-state-focus a:hover,
-.ui-state-focus a:link,
-.ui-state-focus a:visited {
+.module-tabs .ui-state-hover a,
+.module-tabs .ui-state-hover a:hover,
+.module-tabs .ui-state-hover a:link,
+.module-tabs .ui-state-hover a:visited,
+.module-tabs .ui-state-focus a,
+.module-tabs .ui-state-focus a:hover,
+.module-tabs .ui-state-focus a:link,
+.module-tabs .ui-state-focus a:visited {
 	color: #2b2b2b;
 	text-decoration: none;
 }
-.ui-state-active,
-.ui-widget-content .ui-state-active,
-.ui-widget-header .ui-state-active {
-	border: 1px solid #003eff;
-	background: #007fff;
+
+.module-tabs .ui-state-active,
+.module-tabs .ui-widget-content .ui-state-active,
+.module-tabs .ui-widget-header .ui-state-active,
+.module-tabs .ui-state-active.ui-state-hover
+{
 	font-weight: normal;
 	color: #ffffff;
+	background-color: #8ca0a6;
 }
-.ui-state-active a,
-.ui-state-active a:link,
-.ui-state-active a:visited {
+
+.module-tabs .ui-state-active a:before{
+
+    content: ' ';
+    position: absolute;
+    top: 0;
+    right: -6px;
+    width: 6px;
+    height: 34px;
+    background-image: url("../../../base/images/nav-active.png?1");
+}
+
+.module-tabs .ui-state-active a,
+.module-tabs .ui-state-active a:link,
+.module-tabs .ui-state-active a:visited {
 	color: #333;
 	text-decoration: none;
+	background-color: #8ca0a6;
+}
+
+
+.module-tabs .ui-state-hover,
+.module-tabs .ui-widget-content .ui-state-hover,
+.module-tabs .ui-widget-header .ui-state-hover,
+.module-tabs .ui-state-focus,
+.module-tabs .ui-widget-content .ui-state-focus,
+.module-tabs .ui-widget-header .ui-state-focus {
+	font-weight: normal;
+	color: #2b2b2b;
+	background-color: #eee;
 }
 
 /* Interaction Cues
@@ -254,8 +314,6 @@ ul.ui-tabs-nav {
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
-	border: 1px solid #dad55e;
-	background: #fffa90;
 	color: #777620;
 }
 .ui-state-highlight a,
@@ -266,8 +324,6 @@ ul.ui-tabs-nav {
 .ui-state-error,
 .ui-widget-content .ui-state-error,
 .ui-widget-header .ui-state-error {
-	border: 1px solid #f1a899;
-	background: #fddfdf;
 	color: #5f3f3f;
 }
 .ui-state-error a,
@@ -463,3 +519,5 @@ ul.ui-tabs-nav {
 	position: absolute;
 	width: 1px;
 }
+
+
