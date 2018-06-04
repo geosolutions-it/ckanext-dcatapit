@@ -76,7 +76,7 @@ class License(_Base, DeclarativeBase):
                                                   remote_side=[id]),
                               lazy=True)
     
-    DEFAULT_LICENSE = "http://w3id.org/italia/controlled-vocabulary/licences/C1_Unknown"
+    DEFAULT_LICENSE = "https://w3id.org/italia/controlled-vocabulary/licences/C1_Unknown"
 
     @classmethod
     def get(cls, id_or_uri):
@@ -186,7 +186,7 @@ class License(_Base, DeclarativeBase):
     def get_by_lang(cls, lang, label):
         q = cls.q().join(LocalizedLicenseName,
                          LocalizedLicenseName.license_id == cls.id)\
-                   .where(LocalizedLicenseName.lang == lang,
+                   .filter(LocalizedLicenseName.lang == lang,
                           LocalizedLicenseName.label == label)
         return q.first()
 
@@ -359,7 +359,7 @@ def setup_license_models():
 
 
 ADMS=Namespace("http://www.w3.org/ns/adms#")
-CLVAPIT=Namespace("http://w3id.org/italia/onto/CLV/")
+CLVAPIT=Namespace("https://w3id.org/italia/onto/CLV/")
 DCATAPIT=Namespace("http://dati.gov.it/onto/dcatapit#")
 DCT=Namespace("http://purl.org/dc/terms/")
 FOAF=Namespace("http://xmlns.com/foaf/0.1/")

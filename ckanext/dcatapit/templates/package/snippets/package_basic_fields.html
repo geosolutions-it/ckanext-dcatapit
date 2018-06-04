@@ -14,7 +14,7 @@
                {'name': None, 'selector': '.slug-preview-value', 'parent': '.slug-preview'},
                {'name': 'description'},
                {'name': 'identifier'},
-               {'name': 'alternate_identifier'},
+               {'name': 'alternate_identifier', 'parent': '.alternate-identifier-wrap'},
                {'name': 'language'},
                {'name': 'is_version_of'},
                {'name': 'license_id'},
@@ -33,11 +33,8 @@
                {'name': 'owner_org'},
                {'name': 'publisher_name'},
                {'name': 'creator', 'parent': '.creator-wrap'},
-               {'name': 'author'},
-               {'name': 'author_email'},
-               {'name': 'maintainer'},
-               {'name': 'maintainer_email'},
                {'name': None, 'selector': '[for="field-range-rights_holder-key"]'},
+               {'name': None, 'selector': '[for="rights_holder-key"]'},
                ],},
     {'id': 'temporal',
      'name': _('Temporal'),
@@ -57,35 +54,42 @@
     {'id': 'standards',
      'name': _('Standards'),
      'fields': [ 
-                {'name': 'conforms_to'} 
+                {'name': 'conforms_to', 'parent': '.conforms-to-wrap'} 
                ]},
     {'id': 'related',
-     'name': _('Related databases'),
+     'name': _('Related Datasets'),
      'fields': [
                 {'name': 'is_version_of'},
                 {'name': 'url'}
               ]},
     {'id': 'extra',
-     'name': _('Extra'),
-     'fields': [],
+     'name': _('Additional Info'),
+     'fields': [
+                {'name': 'author'},
+                {'name': 'author_email'},
+                {'name': 'maintainer'},
+                {'name': 'maintainer_email'},
+               ],
      'use_extra': true},
     ]}) }}
     </div>
     
     {% resource 'ckanext-dcatapit/dcatapit.css' %}
 
-    {% resource 'ckanext-dcatapit/jquery.ui.core.js' %}
+    {% resource 'vendor/jquery.ui.core.js' %}
+    {% resource 'vendor/jquery.ui.widget.js' %}
     {% resource 'ckanext-dcatapit/jquery.ui.position.js' %}
-    {% resource 'ckanext-dcatapit/jquery.ui.widget.js' %}
-    {% resource 'ckanext-dcatapit/jquery.ui.tabs.js' %}
     {% resource 'ckanext-dcatapit/jquery.ui.menu.js' %}
     {% resource 'ckanext-dcatapit/jquery.ui.autocomplete.js' %}
     {% resource 'ckanext-dcatapit/jquery.ui.tooltip.js' %}
+    {% resource 'ckanext-dcatapit/jquery.ui.tabs.js' %}
     {% resource 'ckanext-dcatapit/jeoquery.js' %}
     {% resource 'ckanext-dcatapit/dcatapit.js' %}
-
-   <div class="dcatapit-form" data-module="dcatapit-edit-form" data-module-settings-container="#dcatapit-edit-form-settings" data-module-form-container="#dataset-edit">
 	{% snippet 'snippets/dcatapit_form_fields.html', data=data, errors=errors, schema_fields=pkg_fields %}
+    {% if h.dcatapit_enable_form_tabs() %}
+    <div class="dcatapit-form" data-module="dcatapit-edit-form" data-module-settings-container="#dcatapit-edit-form-settings" data-module-form-container="#dataset-edit">
     </div>
-{% endblock %}
+    {% endif %}
 
+
+{% endblock %}

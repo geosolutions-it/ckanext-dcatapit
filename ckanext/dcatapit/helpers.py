@@ -27,6 +27,7 @@ dateformats = [
 ]
 
 # config param names
+DCATAPIT_ENABLE_FORM_TABS = 'ckanext.dcatapit.form_tabs'
 GEONAMES_USERNAME = 'geonames.username'
 GEONAMES_LIMIT_TO = 'geonames.limits.countries'
 DEFAULT_CTX = {'ignore_auth': True}
@@ -311,3 +312,11 @@ def get_organization_by_identifier(context, identifier):
         ctx.update(DEFAULT_ORG_CTX)
 
         return toolkit.get_action('organization_show')(context=ctx, data_dict={'id': ge.group_id})
+
+
+def get_enable_form_tabs():
+    conf_var = config.get(DCATAPIT_ENABLE_FORM_TABS)
+    if conf_var is not None:
+        return toolkit.asbool(conf_var)
+    # default
+    return True

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-04-11 13:27+0200\n"
+"POT-Creation-Date: 2018-05-02 18:30+0200\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -18,23 +18,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ckanext/dcatapit/plugin.py:647
+#: ckanext/dcatapit/plugin.py:654
 msgid "Source catalogs"
 msgstr "Cataloghi di origine"
 
-#: ckanext/dcatapit/plugin.py:648
+#: ckanext/dcatapit/plugin.py:655
 msgid "Organization regions"
 msgstr "Regioni"
 
-#: ckanext/dcatapit/plugin.py:649
+#: ckanext/dcatapit/plugin.py:656
 msgid "Resources licenses"
 msgstr "Licenze sulle risorse"
 
-#: ckanext/dcatapit/plugin.py:650 ckanext/dcatapit/schema.py:144
+#: ckanext/dcatapit/plugin.py:657 ckanext/dcatapit/schema.py:144
 msgid "Subthemes"
 msgstr "Sottotemi"
 
-#: ckanext/dcatapit/plugin.py:655 ckanext/dcatapit/schema.py:97
+#: ckanext/dcatapit/plugin.py:662 ckanext/dcatapit/schema.py:97
 msgid "Region"
 msgstr "Regione"
 
@@ -667,7 +667,8 @@ msgid "Remove theme"
 msgstr "Elimina tema"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:167
-msgid "Add new Theme"
+#, fuzzy
+msgid "Add a Theme"
 msgstr "Aggiungi altro tema"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:194
@@ -844,6 +845,42 @@ msgstr ""
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:232
 msgid "Last Updated"
 msgstr "Ultimo aggiornamento"
+
+#: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:10
+#, fuzzy
+msgid "Information"
+msgstr "Informazioni supplementari"
+
+#: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:25
+msgid "Classification"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:31
+#, fuzzy
+msgid "Organizations"
+msgstr "email dell'organizzazione"
+
+#: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:44
+#, fuzzy
+msgid "Temporal"
+msgstr "Estensione temporale"
+
+#: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:53
+msgid "Spatial"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:59
+msgid "Standards"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:64
+#, fuzzy
+msgid "Related databases"
+msgstr "Data di rilascio"
+
+#: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:70
+msgid "Extra"
+msgstr ""
 
 #: ckanext/dcatapit/templates/package/snippets/resource_form.html:13
 msgid "Last Modified"
