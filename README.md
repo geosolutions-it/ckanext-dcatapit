@@ -181,7 +181,7 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
 
 This extension improves look'n'feel of dataset edit form. Form inputs will be grouped into logical sets, and access is handled through tabs. 
 
-![Dataset Form](docs/images/edit_form.png "Dataset Form" | width=600)
+![Dataset Form](docs/images/edit_form.png "Dataset Form")
 
 By default, this improvement is enabled. You can disable it by setting `ckanext.dcatapit.form_tabs` config variable to `false`.
 
