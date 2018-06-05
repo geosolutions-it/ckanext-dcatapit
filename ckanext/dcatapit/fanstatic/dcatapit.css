@@ -535,6 +535,48 @@ ul.ui-tabs-nav {
     margin-left: 0;
 }
 
+.removable .control-group .controls .span11 .add_new,
+.removable.control-group  .controls .span11 .add_new {
+    padding: 0;
+}
+
+.removable .control-group .controls .span11 .reference_documentation,
+.removable.control-group  .controls .span11 .reference_documentation {
+    display: flex;
+}
+
+.removable .control-group .controls .span11 .reference_documentation,
+.removable.control-group  .controls .span11 .reference_documentation {
+    display: flex;
+}
+
+.removable .control-group .controls .span11 .reference_documentation + .reference_documentation,
+.removable.control-group  .controls .span11 .reference_documentation + .reference_documentation {
+    margin-top: 8px;
+}
+
+.removable .control-group .controls .span11 .reference_documentation .remove,
+.removable.control-group  .controls .span11 .reference_documentation .remove {
+  margin: 0;
+  display: flex;
+  margin-left: 5px;
+}
+
+.removable .control-group .controls .span11 .reference_documentation .remove .button,
+.removable.control-group  .controls .span11 .reference_documentation .remove .button {
+    width: 30px;
+    margin: auto;
+    top: auto;
+    left: auto;
+}
+
+.removable .control-group .controls .span11 .reference_documentation input,
+.removable.control-group  .controls .span11 .reference_documentation input {
+    flex: 1;
+    max-width: none;
+    width: auto;
+}
+
 .removable .control-group:last-child{
     margin-bottom: 0;
 }
