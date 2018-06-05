@@ -29,14 +29,12 @@
 }
 .add_new {
     cursor: pointer;
-    margin-top:  5px;
-    margin-bottom:  5px;
-    margin-left: 130px;
-    display:  inline-block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 130px;
+    display: inline-block;
     width: 100%;
-}
-.temporal-coverage-wrap .add_new {
-    margin-left: 130px;
+    box-sizing: border-box;
 }
 
 .temporal-coverage-wrap .add_new.error {
@@ -520,4 +518,57 @@ ul.ui-tabs-nav {
 	width: 1px;
 }
 
+.removable .control-group,
+.removable.control-group {
+    display: flex;
+}
 
+.removable .control-group .control-label,
+.removable.control-group .control-label {
+    padding-right: 8px;
+    width: 120px;
+}
+
+.removable .control-group .controls,
+.removable.control-group  .controls {
+    flex: 1;
+    margin-left: 0;
+}
+
+.removable .control-group:last-child{
+    margin-bottom: 0;
+}
+
+.removable .control-group .controls.editor,
+.removable.control-group  .controls.editor {
+    display: flex;
+}
+
+.removable .control-group .controls.editor .input-prepend,
+.removable.control-group  .controls.editor .input-prepend {
+    flex: 1;
+    display: flex;
+}
+
+.removable .control-group .controls.editor .input-prepend input,
+.removable.control-group  .controls.editor .input-prepend input {
+    flex: 2;
+}
+
+
+.removable .control-group .controls.editor .remove,
+.removable.control-group  .controls.editor .remove {
+    width: 30px !important;
+    margin: 0;
+}
+
+.removable .remove {
+    display: block;
+    padding: 0;
+}
+
+.removable .remove .button {
+    border: none;
+    border-radius: 50%;
+    margin-right: 5px;
+}
