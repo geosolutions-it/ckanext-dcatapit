@@ -37,6 +37,8 @@ A demo instance can be found [here](http://dcatapit.geo-solutions.it/).
 
 This extension provides plugins that allow CKAN to expose and consume metadata from other catalogs using RDF documents serialized according to the [Italian DCAT Application Profile](http://www.dati.gov.it/content/dcat-ap_it_v10). The Data Catalog Vocabulary (DCAT) is "an RDF vocabulary designed to facilitate interoperability between data catalogs published on the Web".
 
+Also, if enabled, this extension improves dataset form look'n'feel. See [Dataset form](#dataset-form)
+
 ## Requirements
 
 The ckanext-dcatapit extension has been developed for CKAN 2.4 or later and is based on the [ckanext-dcat plugin](https://github.com/ckan/ckanext-dcat).
@@ -174,6 +176,16 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
  14. DCATAPIT license tree. Download [license mapping file](https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/Licenze/Licenze.rdf). Alternatively you can use ``examples/licenses.rdf``, but mind that it may be outdated. Import `license.rdf` it with command:
 
          paster --plugin=ckanext-dcatapit vocabulary load --filename path/to/license.rdf --name licenses --config=/etc/ckan/default/production.ini
+
+### Dataset form
+
+This extension improves look'n'feel of dataset edit form. Form inputs will be grouped into logical sets, and access is handled through tabs. 
+    
+<p align="center">
+    <img src="docs/images/edit_form.png" alt="Dataset Form" title="Dataset Form" align="center">
+</p>
+
+By default, this improvement is enabled. You can disable it by setting `ckanext.dcatapit.form_tabs` config variable to `false`.
 
 ## Development Installation
 
