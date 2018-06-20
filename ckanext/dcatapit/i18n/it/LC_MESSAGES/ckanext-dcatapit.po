@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-06-20 16:20+0200\n"
+"POT-Creation-Date: 2018-06-20 17:51+0200\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -853,11 +853,11 @@ msgstr "Organizzazioni"
 
 #: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:40
 msgid "Temporal"
-msgstr "Temporale"
+msgstr "Riferimenti Temporali"
 
 #: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:49
 msgid "Spatial"
-msgstr "Spaziale"
+msgstr "Riferimenti Spaziali"
 
 #: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:55
 msgid "Standards"
@@ -865,7 +865,7 @@ msgstr "Standards"
 
 #: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:60
 msgid "Related Datasets"
-msgstr "Data di rilascio"
+msgstr "Datasets Collegati"
 
 #: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:66
 msgid "Additional Info"
