@@ -1,0 +1,10 @@
+{% extends "package/edit.html" %}
+
+
+{% block secondary_content %}
+    {{ super() }}
+    {# tabs container (for tab buttons, they should be stacked from top to bottom) #}
+    <section class="module module-narrow module-tabs">
+            <div id="tabs-container"></div>
+    </section>
+{% endblock %}

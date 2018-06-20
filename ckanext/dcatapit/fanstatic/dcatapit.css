@@ -22,11 +22,19 @@
 .w200 {
     max-width: 200px;
 }
+
+.w380 {
+    max-width: 380px;
+    width: 380px;
+}
 .add_new {
     cursor: pointer;
-}
-.temporal-coverage-wrap .add_new {
-    margin-left: 130px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 130px;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .temporal-coverage-wrap .add_new.error {
@@ -48,12 +56,49 @@
 .bold {
     font-weight: bold;
 }
-.conforms_to .remove_conforms_to, .alternate_identifier .remove, .creator .remove, .temporal-coverage .remove, .theme .remove {
-    float: right;
+.control-custom .remove {
+    font-size: 14px;
+}
+
+.conforms_to .remove, .alternate_identifier .remove, .creator .remove, .temporal-coverage .remove, .theme .remove{
+    display: inline-block;
+    padding-right: 10px;
+    width: 100%;
     padding-right: 20px;
     text-align: right;
     cursor: pointer;
-    color: #e33;
+    float: right;
+    margin-top: 5px;
+}
+
+.remove_reference_documentation {
+    width: 20px!important;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.remove .button {
+    display: inline-block;
+    border-radius: 15px;
+    border: solid 1px #000;
+    color: #fff;
+    background-color: #bd362f;
+    position: relative;
+    font-size: 0px;
+    top: 0;
+    left: 5px;
+    padding: 6px 8px;
+    line-height: 8px;
+}
+
+.removable {
+    border: dotted 1px #ccc;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    margin-top: 5px!important;
+    margin-bottom: 5px!important;
 }
 
 .inline-block {
@@ -74,24 +119,10 @@
 .ui-widget .ui-widget {
     font-size: 1em;
 }
-.ui-widget input,
-.ui-widget select,
-.ui-widget textarea,
-.ui-widget button {
-    font-family: Arial,Helvetica,sans-serif;
-    font-size: 1em;
-}
-.ui-widget-content {
-    border: 1px solid #dddddd;
-    background: #ffffff;
-    color: #333333;
-}
 .ui-widget-content a {
     color: #333333;
 }
-.ui-widget-header {
-    border: 1px solid #dddddd;
-    background: #e9e9e9;
+.module-tabs .ui-widget-header {
     color: #333333;
     font-weight: bold;
 }
@@ -107,6 +138,7 @@
     max-width: 300px;
     -webkit-box-shadow: 0 0 5px #aaa;
     box-shadow: 0 0 5px #aaa;
+    background-color: #fefefe!important;
 }
 body .ui-tooltip {
     border-width: 2px;
@@ -122,93 +154,157 @@ body .ui-tooltip {
     border-radius: 3px;
 }
 
+/*!
+ * jQuery UI Tabs 1.10.4
+ * http://jqueryui.com
+ *
+ * Copyright 2014 jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * http://api.jqueryui.com/tabs/#theming
+ */
+.ui-tabs {
+	position: relative;/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+	padding: .2em;
+}
+.ui-tabs .ui-tabs-nav {
+	/* margin: 0; */
+	/* padding: .2em .2em 0; */
+	float:  left;
+	width:  160px;
+}
+.ui-tabs .ui-tabs-nav li {
+	list-style: none;
+	float: left;
+	position: relative;
+	top: 0;
+	margin: 1px .2em 0 0;
+	border-bottom-width: 0;
+	padding: 0;
+	white-space: nowrap;
+}
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+	float: left;
+	padding: .5em 1em;
+	text-decoration: none;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+	margin-bottom: -1px;
+	padding-bottom: 1px;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor,
+.ui-tabs .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor,
+.ui-tabs .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
+	cursor: text;
+}
+.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor {
+	cursor: pointer;
+}
+.ui-tabs .ui-tabs-panel {
+	display: block;
+	border-width: 0;
+	padding: 1em 1.4em;
+	background: none;
+}
+
+ul.ui-tabs-nav {
+    list-style-type: none;
+    margin-left: 1pt;
+}
+
+.hovered {
+    background-color: #8ca0a6;
+}
+
+.form-nav {
+    padding: 6pt;
+}
 
 
+.prev-item {
+    float: left;
+}
 
-.ui-widget {
-	font-family: Arial,Helvetica,sans-serif;
-	font-size: 1em;
+.next-item {
+    float: right;
 }
-.ui-widget .ui-widget {
-	font-size: 1em;
+
+.with-error a {
+    color: #b55457;
+
 }
-.ui-widget input,
-.ui-widget select,
-.ui-widget textarea,
-.ui-widget button {
-	font-family: Arial,Helvetica,sans-serif;
-	font-size: 1em;
-}
-.ui-widget-content {
-	border: 1px solid #dddddd;
-	background: #ffffff;
-	color: #333333;
-}
-.ui-widget-content a {
-	color: #333333;
-}
-.ui-widget-header {
-	border: 1px solid #dddddd;
-	background: #e9e9e9;
-	color: #333333;
-	font-weight: bold;
-}
-.ui-widget-header a {
-	color: #333333;
+
+.form-nav-item a {
+    text-decoration: none;
 }
 
 
 /* Interaction states
 ----------------------------------*/
-.ui-state-default,
-.ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default {
-	border: 1px solid #c5c5c5;
-	background: #f6f6f6;
+.module-tabs .ui-state-default,
+.module-tabs .ui-widget-content .ui-state-default,
+.module-tabs .ui-widget-header .ui-state-default {
 	font-weight: normal;
 	color: #454545;
 }
-.ui-state-default a,
-.ui-state-default a:link,
-.ui-state-default a:visited {
+.module-tabs .ui-state-default a,
+.module-tabs .ui-state-default a:link,
+.module-tabs .ui-state-default a:visited {
 	color: #454545;
 	text-decoration: none;
 }
-.ui-state-hover,
-.ui-widget-content .ui-state-hover,
-.ui-widget-header .ui-state-hover,
-.ui-state-focus,
-.ui-widget-content .ui-state-focus,
-.ui-widget-header .ui-state-focus {
-	border: 1px solid #cccccc;
-	background: #ededed;
-	font-weight: normal;
-	color: #2b2b2b;
-}
-.ui-state-hover a,
-.ui-state-hover a:hover,
-.ui-state-hover a:link,
-.ui-state-hover a:visited,
-.ui-state-focus a,
-.ui-state-focus a:hover,
-.ui-state-focus a:link,
-.ui-state-focus a:visited {
+.module-tabs .ui-state-hover a,
+.module-tabs .ui-state-hover a:hover,
+.module-tabs .ui-state-hover a:link,
+.module-tabs .ui-state-hover a:visited,
+.module-tabs .ui-state-focus a,
+.module-tabs .ui-state-focus a:hover,
+.module-tabs .ui-state-focus a:link,
+.module-tabs .ui-state-focus a:visited {
 	color: #2b2b2b;
 	text-decoration: none;
 }
-.ui-state-active,
-.ui-widget-content .ui-state-active,
-.ui-widget-header .ui-state-active {
-	border: 1px solid #003eff;
-	background: #007fff;
+
+.module-tabs .ui-state-active,
+.module-tabs .ui-widget-content .ui-state-active,
+.module-tabs .ui-widget-header .ui-state-active,
+.module-tabs .ui-state-active.ui-state-hover
+{
 	font-weight: normal;
 	color: #ffffff;
+	background-color: #8ca0a6;
 }
-.ui-state-active a,
-.ui-state-active a:link,
-.ui-state-active a:visited {
-	color: #ffffff;
+
+.module-tabs .ui-state-active a:before{
+
+    content: ' ';
+    position: absolute;
+    top: 0;
+    right: -6px;
+    width: 6px;
+    height: 34px;
+    background-image: url("../../../base/images/nav-active.png?1");
+}
+
+.module-tabs .ui-state-active a,
+.module-tabs .ui-state-active a:link,
+.module-tabs .ui-state-active a:visited {
+	color: #333;
 	text-decoration: none;
+	background-color: #8ca0a6;
+}
+
+
+.module-tabs .ui-state-hover,
+.module-tabs .ui-widget-content .ui-state-hover,
+.module-tabs .ui-widget-header .ui-state-hover,
+.module-tabs .ui-state-focus,
+.module-tabs .ui-widget-content .ui-state-focus,
+.module-tabs .ui-widget-header .ui-state-focus {
+	font-weight: normal;
+	color: #2b2b2b;
+	background-color: #eee;
 }
 
 /* Interaction Cues
@@ -216,8 +312,6 @@ body .ui-tooltip {
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
-	border: 1px solid #dad55e;
-	background: #fffa90;
 	color: #777620;
 }
 .ui-state-highlight a,
@@ -228,8 +322,6 @@ body .ui-tooltip {
 .ui-state-error,
 .ui-widget-content .ui-state-error,
 .ui-widget-header .ui-state-error {
-	border: 1px solid #f1a899;
-	background: #fddfdf;
 	color: #5f3f3f;
 }
 .ui-state-error a,
@@ -313,6 +405,8 @@ body .ui-tooltip {
 	top: 0;
 	left: 0;
 	cursor: default;
+    background: #fff;
+    border: solid 1px #343;
 }
 .ui-menu {
 	list-style: none;
@@ -407,6 +501,12 @@ body .ui-tooltip {
 .ui-helper-hidden {
 	display: none;
 }
+
+.hidden {
+    display: none;
+
+}
+
 .ui-helper-hidden-accessible {
 	border: 0;
 	clip: rect(0 0 0 0);
@@ -416,4 +516,101 @@ body .ui-tooltip {
 	padding: 0;
 	position: absolute;
 	width: 1px;
+}
+
+.removable .control-group,
+.removable.control-group {
+    display: flex;
+}
+
+.removable .control-group .control-label,
+.removable.control-group .control-label {
+    padding-right: 8px;
+    width: 120px;
+}
+
+.removable .control-group .controls,
+.removable.control-group  .controls {
+    flex: 1;
+    margin-left: 0;
+}
+
+.removable .control-group .controls .span11 .add_new,
+.removable.control-group  .controls .span11 .add_new {
+    padding: 0;
+}
+
+.removable .control-group .controls .span11 .reference_documentation,
+.removable.control-group  .controls .span11 .reference_documentation {
+    display: flex;
+}
+
+.removable .control-group .controls .span11 .reference_documentation,
+.removable.control-group  .controls .span11 .reference_documentation {
+    display: flex;
+}
+
+.removable .control-group .controls .span11 .reference_documentation + .reference_documentation,
+.removable.control-group  .controls .span11 .reference_documentation + .reference_documentation {
+    margin-top: 8px;
+}
+
+.removable .control-group .controls .span11 .reference_documentation .remove,
+.removable.control-group  .controls .span11 .reference_documentation .remove {
+  margin: 0;
+  display: flex;
+  margin-left: 5px;
+}
+
+.removable .control-group .controls .span11 .reference_documentation .remove .button,
+.removable.control-group  .controls .span11 .reference_documentation .remove .button {
+    width: 30px;
+    margin: auto;
+    top: auto;
+    left: auto;
+}
+
+.removable .control-group .controls .span11 .reference_documentation input,
+.removable.control-group  .controls .span11 .reference_documentation input {
+    flex: 1;
+    max-width: none;
+    width: auto;
+}
+
+.removable .control-group:last-child{
+    margin-bottom: 0;
+}
+
+.removable .control-group .controls.editor,
+.removable.control-group  .controls.editor {
+    display: flex;
+}
+
+.removable .control-group .controls.editor .input-prepend,
+.removable.control-group  .controls.editor .input-prepend {
+    flex: 1;
+    display: flex;
+}
+
+.removable .control-group .controls.editor .input-prepend input,
+.removable.control-group  .controls.editor .input-prepend input {
+    flex: 2;
+}
+
+
+.removable .control-group .controls.editor .remove,
+.removable.control-group  .controls.editor .remove {
+    width: 30px !important;
+    margin: 0;
+}
+
+.removable .remove {
+    display: block;
+    padding: 0;
+}
+
+.removable .remove .button {
+    border: none;
+    border-radius: 50%;
+    margin-right: 5px;
 }

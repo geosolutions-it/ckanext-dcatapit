@@ -276,6 +276,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'get_dcatapit_subthemes': helpers.get_dcatapit_subthemes,
             'dump_dcatapit_subthemes': helpers.dump_dcatapit_subthemes,
             'get_localized_subtheme': helpers.get_localized_subtheme,
+            'dcatapit_enable_form_tabs': helpers.get_enable_form_tabs,
         }
 
         if MLR:
@@ -456,6 +457,13 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             pkg_dict['holder_name'] = org['name']
             pkg_dict['holder_identifier'] = org.get('identifier')
         return pkg_dict
+ 
+    def edit_template(self):
+        return 'package/dcatapit_edit.html'
+
+    def new_template(self):
+        return 'package/dcatapit_new.html'
+
 
 class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupForm):
 

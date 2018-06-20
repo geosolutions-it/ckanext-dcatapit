@@ -106,7 +106,7 @@ class HarvestersTestCase(unittest.TestCase):
                    'theme': 'AGRI',
                    'frequency': 'UNKNOWN',
                    'publisher_name': 'publisher',
-                   'identifier': 'aasdfa',
+                   'identifier': 'identifier2',
                    'publisher_identifier': 'publisher',
                     }
        
@@ -121,6 +121,7 @@ class HarvestersTestCase(unittest.TestCase):
         
         h = DCATRDFHarvester()
         out = h.import_stage(harvest_obj)
+        self.assertTrue(out, harvest_obj.errors)
 
         pkg = helpers.call_action('package_show', context={}, name_or_id='some-title-2')
 
@@ -133,6 +134,7 @@ class HarvestersTestCase(unittest.TestCase):
                         'title': 'some title 3',
                         'holder_name': 'test test holder' ,
                         'holder_identifier': 'abcdefg',
+                        'identifier': 'identifier3',
                         })
 
         harvest_dict = self._create_harvest_obj('http://mock/source/b',
@@ -142,6 +144,7 @@ class HarvestersTestCase(unittest.TestCase):
         harvest_obj.content = json.dumps(dataset)
         
         out = h.import_stage(harvest_obj)
+        self.assertTrue(out, harvest_obj.errors)
         pkg = helpers.call_action('package_show', context={}, name_or_id='testpkg_3')
         self.assertTrue(out)
         self.assertTrue(isinstance(out, bool))
@@ -162,6 +165,7 @@ class HarvestersTestCase(unittest.TestCase):
         dataset.update({'id': 'sometitle4',
                         'name': munge_name('some title 4'),
                         'title': 'some title 4',
+                        'identifier': 'identifier4',
                         })
 
         harvest_dict = self._create_harvest_obj('http://mock/source/c',
@@ -171,8 +175,8 @@ class HarvestersTestCase(unittest.TestCase):
         harvest_obj.content = json.dumps(dataset)
         
         out = h.import_stage(harvest_obj)
+        self.assertTrue(out, harvest_obj.errors)
         pkg = helpers.call_action('package_show', context={}, name_or_id='testpkg_4')
-        self.assertTrue(out)
         self.assertTrue(isinstance(out, bool))
         pkg = helpers.call_action('package_show', context={}, name_or_id=dataset['name'])
 
@@ -219,7 +223,9 @@ class HarvestersTestCase(unittest.TestCase):
                     'id': 'dummyid2'}
 
         dataset2.update(dataset0)
+        dataset2['identifier'] = 'otherid'
         data = json.dumps(dataset2)
+
         harvest_dict = self._create_harvest_obj('http://mock/source/', name='dupname2')
         harvest_obj = HarvestObject.get(harvest_dict['id'])
         harvest_obj.content = data
