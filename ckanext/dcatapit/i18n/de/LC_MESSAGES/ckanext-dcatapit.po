@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-06-21 12:01+0200\n"
+"POT-Creation-Date: 2018-06-21 12:40+0200\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -691,29 +691,29 @@ msgstr "zeitliche Abdeckung"
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:255
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:87
 msgid "OthId Identifier"
-msgstr "anderen Bezeichner"
+msgstr "Code"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:256
 msgid "OthId dataset identifier"
-msgstr "dataset identifier"
+msgstr "Andere ID des Datensatzes"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:260
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:90
 msgid "OthId Organization"
-msgstr "Organisation E-Mail"
+msgstr "Code-Manager"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:261
 msgid "OthId organization name"
-msgstr "Organisation E-Mail"
+msgstr "es: ISBN"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:265
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:93
 msgid "OthId Organization ID"
-msgstr "Organisation E-Mail"
+msgstr "ID des Managers"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:266
 msgid "OthId organization identifier"
-msgstr "Organisation Website-URL"
+msgstr "es: 978-88-89637"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:277
 msgid "Add new identifier"
