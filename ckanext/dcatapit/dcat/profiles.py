@@ -484,15 +484,17 @@ class ItalianDCATAPProfile(RDFProfile):
         else:
             temp_cov = []
         
-        if d.get('temporal_start') or d.get('temporal_end'):
-            temp_cov.append({'temporal_start': d['temporal_start'],
-                             'temporal_end': d['temporal_end']})
+        if d.get('temporal_start'):
+            temporal_coverage_item = {'temporal_start': d['temporal_start']}
+            if d.get('temporal_end'):
+                temporal_coverage_item.update({'temporal_end': d['temporal_end']})
+            temp_cov.append(temporal_coverage_item)
         if not temp_cov:
             return
 
         for tc in temp_cov:
             start = tc['temporal_start']
-            end = tc['temporal_end']
+            end = tc.get('temporal_end')
             temporal_extent = BNode()
             g.add((temporal_extent, RDF.type, DCT.PeriodOfTime))
             _added = False
@@ -968,7 +970,7 @@ class ItalianDCATAPProfile(RDFProfile):
         if themes:
             for theme in themes:
                 theme_name = theme['theme']
-                subthemes = theme['subthemes']
+                subthemes = theme.get('subthemes') or []
                 theme_ref = URIRef(theme_name)
                                
                 self.g.remove((dataset_ref, DCAT.theme, theme_ref))
