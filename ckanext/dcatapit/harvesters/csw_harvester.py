@@ -1,3 +1,5 @@
+import re
+import json
 import logging
 import ckanext.dcatapit.harvesters.utils as utils
 
@@ -12,6 +14,25 @@ from ckanext.spatial.model import ISOResponsibleParty
 from ckanext.dcatapit.model import License
 
 log = logging.getLogger(__name__)
+
+class ISOTextGroup(ISOElement):
+    elements = [
+        ISOElement(
+            name="text",
+            search_paths=[
+                "gmd:LocalisedCharacterString/text()"
+            ],
+            multiplicity="1",
+        ),
+        ISOElement(
+            name="locale",
+            search_paths=[
+                "gmd:LocalisedCharacterString/@locale"
+            ],
+            multiplicity="1",
+        )
+    ]
+
 
 ISODocument.elements.append(
     ISOResponsibleParty(
@@ -33,6 +54,15 @@ ISODocument.elements.append(
         multiplicity="1",
      ))
 
+ISODocument.elements.append(
+    ISOTextGroup(
+        name="conformity-title-text",
+        search_paths=[
+            "gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title/gmd:PT_FreeText/gmd:textGroup",
+            ],
+        multiplicity="1..*",
+     ))
+
 ISOKeyword.elements.append(
     ISOElement(
         name="thesaurus-title",
@@ -51,11 +81,20 @@ ISOKeyword.elements.append(
         multiplicity="1",
     ))
 
+ISOResponsibleParty.elements.append(
+    ISOTextGroup(
+        name="organisation-name-localized",
+        search_paths=[
+            "gmd:organisationName/gmd:PT_FreeText/gmd:textGroup"
+        ],
+        multiplicity="1..*",
+    )
+)
 
 class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
     _dcatapit_config = {
-        'dataset_themes': 'OP_DATPRO',
+        'dataset_themes': [{'theme': 'OP_DATPRO', 'subthemes': []}],
         'dataset_places': None,
         'dataset_languages': 'ITA',
         'frequency': 'UNKNOWN',
@@ -103,6 +142,12 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         }
     }
 
+    _ckan_locales_mapping = {
+        'ita': 'it',
+        'ger': 'de',
+        'eng': 'en_GB'
+    }
+
     def info(self):
         return {
             'name': 'DCAT_AP-IT CSW Harvester',
@@ -118,6 +163,8 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
             utils._mapping_frequencies_to_mdr_vocabulary)
         mapping_languages_to_mdr_vocabulary = self.source_config.get('mapping_languages_to_mdr_vocabulary', \
             utils._mapping_languages_to_mdr_vocabulary)
+
+        self._default_values = default_values = self.source_config.get('default_values') or {}
 
         dcatapit_config = self.source_config.get('dcatapit_config', self._dcatapit_config)
 
@@ -150,15 +197,18 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
             dataset_themes = utils.get_controlled_vocabulary_values('eu_themes', \
                 controlled_vocabularies.get('dcatapit_skos_theme_id', default_vocab_id), iso_values["keywords"])
 
-        if dataset_themes and len(dataset_themes) > 1:
+        if dataset_themes:
             dataset_themes = list(set(dataset_themes))
-            dataset_themes = '{' + ','.join(str(l) for l in dataset_themes) + '}'
+            dataset_themes = [{'theme': str(l), 'subthemes': []} for l in dataset_themes]
+
         else:
-            dataset_themes = dataset_themes[0] if dataset_themes and len(dataset_themes) > 0 else dcatapit_config.get('dataset_themes', \
-                self._dcatapit_config.get('dataset_themes'))
+            dataset_themes = default_values.get('dataset_theme')
+
+        if isinstance(dataset_themes, (str, unicode,)):
+            dataset_themes = [{'theme': dt} for dt in dataset_themes.strip('{}').split(',')]
 
         log.info("Medatata harvested dataset themes: %r", dataset_themes)
-        package_dict['extras'].append({'key': 'theme', 'value': dataset_themes})
+        package_dict['extras'].append({'key': 'theme', 'value': json.dumps(dataset_themes)})
 
         #  -- publisher -- #
         citedResponsiblePartys = iso_values["cited-responsible-party"]
@@ -236,25 +286,64 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
         package_dict['extras'].append({'key': 'language', 'value': language})
 
-        #  -- temporal_coverage -- #
+        # temporal_coverage
+        # ##################
+        temporal_coverage = []
+        temporal_start = None
+        temporal_end = None
+
         for key in ['temporal-extent-begin', 'temporal-extent-end']:
             if len(iso_values[key]) > 0:
                 temporal_extent_value = iso_values[key][0]
                 if key == 'temporal-extent-begin':
-                    package_dict['extras'].append({'key': 'temporal_start', 'value': temporal_extent_value})
+                    temporal_start = temporal_extent_value
                 if key == 'temporal-extent-end':
-                    package_dict['extras'].append({'key': 'temporal_end', 'value': temporal_extent_value})
+                    temporal_end = temporal_extent_value
+        if temporal_start:
+            temporal_coverage.append({'temporal_start': temporal_start,
+                                      'temporal_end': temporal_end})
+        if temporal_coverage:
+            package_dict['extras'].append({'key': 'temporal_coverage', 'value': json.dumps(temporal_coverage)})
 
-        #  -- conforms_to -- #
-        conforms_to = iso_values["conformity-specification-title"]
-        package_dict['extras'].append({'key': 'conforms_to', 'value': conforms_to})
+        # conforms_to
+        # ##################
+        conforms_to_identifier = iso_values["conformity-specification-title"]
+        conforms_to_locale = self._ckan_locales_mapping.get(iso_values["metadata-language"], 'it').lower()
 
-        #  -- creator -- #
+        conforms_to = {'identifier': conforms_to_identifier,
+                       'title': {conforms_to_locale: conforms_to_identifier}}
+
+        for entry in iso_values["conformity-title-text"]:
+            if entry['text'] and entry['locale'].lower()[1:]:
+                conforms_to_locale = self._ckan_locales_mapping[entry['locale'].lower()[1:]]
+                if self._ckan_locales_mapping[entry['locale'].lower()[1:]]:
+                    conforms_to['title'][conforms_to_locale] = entry['text']
+        
+        if conforms_to:
+            package_dict['extras'].append({'key': 'conforms_to', 'value': json.dumps([conforms_to])})
+
+        # creator
+        # ###############
         citedResponsiblePartys = iso_values["cited-responsible-party"]
-        agent_name, agent_code = utils.get_responsible_party(citedResponsiblePartys, \
-            agents.get('author', self._dcatapit_config.get('agents').get('author')))
-        package_dict['extras'].append({'key': 'creator_name', 'value': agent_name})
-        package_dict['extras'].append({'key': 'creator_identifier', 'value': agent_code or default_agent_code})
+        self.localized_creator = []
+
+        for party in citedResponsiblePartys:
+            if party["role"] == "author":
+                creator_name = party["organisation-name"]
+
+                agent_code, organization_name = self.get_agent('author', creator_name, default_values)
+                creator_lang = self._ckan_locales_mapping.get(iso_values["metadata-language"], 'it').lower()
+                
+                creator = {'creator_name': {creator_lang: organization_name or creator_name},
+                           'creator_identifier': agent_code or default_agent_code}
+
+                for entry in party["organisation-name-localized"]:
+                    if entry['text'] and entry['locale'].lower()[1:]:
+                        agent_code, organization_name = self.get_agent('author', entry['text'], default_values)
+                        creator_lang = self._ckan_locales_mapping[entry['locale'].lower()[1:]]
+                        if creator_lang:
+                            creator['creator_name'][creator_lang] = organization_name or entry['text']
+                package_dict['extras'].append({'key': 'creator', 'value': json.dumps([creator])})
 
 
         #  -- license handling -- #
@@ -281,3 +370,43 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
         # End of processing, return the modified package
         return package_dict
+
+
+    def get_agent(self, agent_type, agent_string, default_values):
+
+        ## Agent Code
+        agent_regex_config = self._dcatapit_config['agents'][agent_type]['code_regex']
+
+        aregex = agent_regex_config.get('regex') or default_values.get('agent_code_regex').get('regex')
+        agent_code = re.search(aregex, agent_string)
+        if agent_code:
+            regex_groups = agent_regex_config.get('groups')
+            
+            if regex_groups and isinstance(regex_groups, list) and len(regex_groups) > 0:
+                code = ''
+                for group in regex_groups:
+                    code += agent_code.group(group)
+
+                agent_code = code
+
+            agent_code = agent_code.lower().strip()
+
+        ## Agent Name
+        org_name_regex_config = self._dcatapit_config['agents'][agent_type]['name_regex']
+
+        oregex = org_name_regex_config.get('regex') or self._default_values.get('org_name_regex').get('regex')
+        organization_name = re.search(oregex, agent_string)
+        if organization_name:
+            regex_groups = org_name_regex_config.get('groups')
+
+            if regex_groups and isinstance(regex_groups, list) and len(regex_groups) > 0:
+                code = ''
+                for group in regex_groups:
+                    code += organization_name.group(group)
+
+                organization_name = code
+
+            organization_name = organization_name.lstrip()
+
+        return [agent_code, organization_name]
+
