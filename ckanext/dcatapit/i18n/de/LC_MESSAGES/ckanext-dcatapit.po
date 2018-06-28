@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-06-20 17:51+0200\n"
+"POT-Creation-Date: 2018-06-21 12:40+0200\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -229,7 +229,6 @@ msgid "Organizational Unit Responsible Competence Area"
 msgstr "Zuständigkeitsgebiet der Organisationseinheit"
 
 #: ckanext/dcatapit/schema.py:207
-#, fuzzy
 msgid "package_geographical_name_help"
 msgstr ""
 "Es ist das geographische Gebiet, das durch den Datenbestand abgedeckt "
@@ -290,7 +289,6 @@ msgid "End Date"
 msgstr "Enddatum"
 
 #: ckanext/dcatapit/schema.py:257
-#, fuzzy
 msgid "package_temporal_coverage_help"
 msgstr ""
 "Geben Sie gegebenenfalls das Anfangs- und Enddatum des Zeitraums ein, auf"
@@ -316,7 +314,6 @@ msgstr ""
 "einer dritten öffentlichen oder privaten Einrichtung kommissioniert hat."
 
 #: ckanext/dcatapit/schema.py:285
-#, fuzzy
 msgid "package_rights_holder_name_create_help"
 msgstr ""
 "Es ist die Organisation (oder die öffentliche Verwaltung), die das "
@@ -338,7 +335,6 @@ msgid "accrual periodicity"
 msgstr "Periodendauer"
 
 #: ckanext/dcatapit/schema.py:297
-#, fuzzy
 msgid "package_frequency_help"
 msgstr ""
 "Zeithäufigkeit, mit der der Datenbestand aktualisiert wird. Wählen Sie "
@@ -562,7 +558,6 @@ msgid "Temporal coverage value should not be empty"
 msgstr ""
 
 #: ckanext/dcatapit/validators.py:320
-#, fuzzy
 msgid "Temporal coverage value is not valid"
 msgstr "zeitliche Abdeckung"
 
@@ -666,7 +661,6 @@ msgid "Last harvest run"
 msgstr "Letzte Ernte laufen"
 
 #: ckanext/dcatapit/templates/harvest/sources_list.html:25
-#, fuzzy
 msgid "Update frequency"
 msgstr "Frequenz"
 
@@ -679,12 +673,10 @@ msgid "Custom"
 msgstr "Brauch"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:73
-#, fuzzy
 msgid "Select organization"
 msgstr "Organisation E-Mail"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:166
-#, fuzzy
 msgid "Add a Theme"
 msgstr "Neues Thema hinzufügen"
 
@@ -693,56 +685,46 @@ msgid "Add new Creator"
 msgstr "Schöpfer hinzufügen"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:233
-#, fuzzy
 msgid "Add new Temporal Coverage"
 msgstr "zeitliche Abdeckung"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:255
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:87
-#, fuzzy
 msgid "OthId Identifier"
-msgstr "anderen Bezeichner"
+msgstr "Code"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:256
-#, fuzzy
 msgid "OthId dataset identifier"
-msgstr "dataset identifier"
+msgstr "Andere ID des Datensatzes"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:260
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:90
-#, fuzzy
 msgid "OthId Organization"
-msgstr "Organisation E-Mail"
+msgstr "Code-Manager"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:261
-#, fuzzy
 msgid "OthId organization name"
-msgstr "Organisation E-Mail"
+msgstr "es: ISBN"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:265
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:93
-#, fuzzy
 msgid "OthId Organization ID"
-msgstr "Organisation E-Mail"
+msgstr "ID des Managers"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:266
-#, fuzzy
 msgid "OthId organization identifier"
-msgstr "Organisation Website-URL"
+msgstr "es: 978-88-89637"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:277
-#, fuzzy
 msgid "Add new identifier"
 msgstr "dataset identifier"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:288
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:108
-#, fuzzy
 msgid "Std Identifier"
 msgstr "Anderen Bezeichner"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:290
-#, fuzzy
 msgid "Std Identifier sample"
 msgstr "anderen Bezeichner"
 
@@ -778,7 +760,6 @@ msgid "Add new reference"
 msgstr "Neue Referenz hinzufügen"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:325
-#, fuzzy
 msgid "Add new conforms to"
 msgstr "entspricht"
 
@@ -787,7 +768,6 @@ msgid "Remove"
 msgstr "Löschen"
 
 #: ckanext/dcatapit/templates/package/resource_read.html:9
-#, fuzzy
 msgid "Resource Metadata"
 msgstr "Ressourcenmetadaten"
 
@@ -809,12 +789,10 @@ msgid "Format"
 msgstr "Format"
 
 #: ckanext/dcatapit/templates/package/resource_read.html:34
-#, fuzzy
 msgid "Additional Information"
 msgstr "zusätzliche Information"
 
 #: ckanext/dcatapit/templates/package/resource_read.html:44
-#, fuzzy
 msgid "Last updated"
 msgstr "Letzte Aktualisierung"
 
@@ -865,7 +843,6 @@ msgid "Homepage"
 msgstr "Startseite"
 
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:232
-#, fuzzy
 msgid "Last Updated"
 msgstr "Letzte Aktualisierung"
 
