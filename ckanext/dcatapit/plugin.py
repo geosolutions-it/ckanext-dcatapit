@@ -365,7 +365,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         org_id = dataset_dict['owner_org']
         organization_show = plugins.toolkit.get_action('organization_show')
         if org_id:
-            org = organization_show(DEFAULT_ORG_CTX, {'id': org_id})
+            org = organization_show(DEFAULT_ORG_CTX.copy(), {'id': org_id})
         else:
             org = {}
         if org.get('region'):
@@ -452,7 +452,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                 return pkg_dict
             if org is None:
                 get_org = toolkit.get_action('organization_show')
-                ctx = DEFAULT_ORG_CTX
+                ctx = DEFAULT_ORG_CTX.copy()
                 org = get_org(ctx, {'id': pkg_dict['owner_org']})
             pkg_dict['holder_name'] = org['name']
             pkg_dict['holder_identifier'] = org.get('identifier')

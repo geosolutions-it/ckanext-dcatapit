@@ -309,7 +309,7 @@ def get_organization_by_identifier(context, identifier):
         # safety check
         assert ge.group_id is not None
         ctx = context.copy()
-        ctx.update(DEFAULT_ORG_CTX)
+        ctx.update(DEFAULT_ORG_CTX.copy())
 
         return toolkit.get_action('organization_show')(context=ctx, data_dict={'id': ge.group_id})
 
