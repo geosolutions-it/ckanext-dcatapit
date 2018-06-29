@@ -2,6 +2,9 @@ import json
 import logging
 import ckanext.dcatapit.harvesters.utils as utils
 
+from ckan import model
+from ckan.model import Session
+
 from ckan.plugins.core import SingletonPlugin
 from ckanext.spatial.harvesters.csw import CSWHarvester
 
@@ -291,6 +294,26 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
             creator['creator_name'] = {creator_lang: agent_name}
             creator['creator_identifier'] = agent_code 
             package_dict['extras'].append({'key': 'creator', 'value': json.dumps([creator])})
+
+        # ckan_license
+        # ##################
+        ckan_license = None
+        use_constraints = iso_values.get('use-constraints')
+        if use_constraints:
+            use_constraints = use_constraints[0]
+            import ckan.logic.action.get as _license
+            license_list = _license.license_list({'model': model, 'session': Session, 'user': 'harvest'}, {})
+            for license in license_list:
+                if use_constraints == str(license.get('id')) or use_constraints == str(license.get('url')) or (str(license.get('id')) in use_constraints.lower()):
+                    ckan_license = license
+                    break
+
+        if ckan_license:
+            package_dict['license_id'] = ckan_license.get('id')
+        else:
+            default_license = self.source_config.get('default_license')
+            if default_license:
+                package_dict['license_id'] = default_license
 
         #  -- license handling -- #
         license_id = package_dict.get('license_id')
