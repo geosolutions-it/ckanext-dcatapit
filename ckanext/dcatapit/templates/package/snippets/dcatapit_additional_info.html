@@ -107,10 +107,10 @@
                 <td class="dataset-details">
                     <span style="font-weight:bold">{{_('Std Identifier')}}: </span><span>{{ std.identifier }}</span><br/>
 
-                        {% if std.get('title') %}
+                        {% if std.get('title') and std.title[lang] %}
                     <span style="font-weight:bold">{{_('Std Title')}}: </span><span>{{ std.title[lang] }}</span><br/>
                         {% endif %}
-                        {% if std.get('description') %}
+                        {% if std.get('description') and std.description[lang] %}
                     <span style="font-weight:bold">{{_('Std Description')}}: </span><span>{{ std.description[lang] }}</span><br/>
                         {% endif %}
                         {% for ref in std['referenceDocumentation'] %}
