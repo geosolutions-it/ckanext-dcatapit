@@ -1,4 +1,3 @@
-import re
 import json
 import logging
 import ckanext.dcatapit.harvesters.utils as utils
@@ -125,7 +124,7 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
         self._ckan_locales_mapping = self.source_config.get('ckan_locales_mapping') or utils._ckan_locales_mapping
 
-        self._default_values = default_values = self.source_config.get('default_values') or {}
+        default_values = self.source_config.get('default_values') or {}
 
         dcatapit_config = self.source_config.get('dcatapit_config', self._dcatapit_config)
 
