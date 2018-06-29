@@ -283,12 +283,13 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         agent_name, agent_code = utils.get_responsible_party(citedResponsiblePartys, \
             agents.get('author', self._dcatapit_config.get('agents').get('author')))
 
-        creator = {}
-        creator_lang = self._ckan_locales_mapping.get(iso_values["metadata-language"], 'it').lower()
-        creator['creator_name'] = {creator_lang: agent_name}
-        creator['creator_identifier'] = agent_code or default_agent_code
-        package_dict['extras'].append({'key': 'creator', 'value': json.dumps([creator])})
-
+        if (agent_name and agent_code):
+            
+            creator = {}
+            creator_lang = self._ckan_locales_mapping.get(iso_values["metadata-language"], 'it').lower()
+            creator['creator_name'] = {creator_lang: agent_name}
+            creator['creator_identifier'] = agent_code or default_agent_code
+            package_dict['extras'].append({'key': 'creator', 'value': json.dumps([creator])})
 
         #  -- license handling -- #
         license_id = package_dict.get('license_id')
