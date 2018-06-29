@@ -15,24 +15,6 @@ from ckanext.dcatapit.model import License
 
 log = logging.getLogger(__name__)
 
-class ISOTextGroup(ISOElement):
-    elements = [
-        ISOElement(
-            name="text",
-            search_paths=[
-                "gmd:LocalisedCharacterString/text()"
-            ],
-            multiplicity="1",
-        ),
-        ISOElement(
-            name="locale",
-            search_paths=[
-                "gmd:LocalisedCharacterString/@locale"
-            ],
-            multiplicity="1",
-        )
-    ]
-
 
 ISODocument.elements.append(
     ISOResponsibleParty(
@@ -54,15 +36,6 @@ ISODocument.elements.append(
         multiplicity="1",
      ))
 
-ISODocument.elements.append(
-    ISOTextGroup(
-        name="conformity-title-text",
-        search_paths=[
-            "gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title/gmd:PT_FreeText/gmd:textGroup",
-            ],
-        multiplicity="1..*",
-     ))
-
 ISOKeyword.elements.append(
     ISOElement(
         name="thesaurus-title",
@@ -81,15 +54,6 @@ ISOKeyword.elements.append(
         multiplicity="1",
     ))
 
-ISOResponsibleParty.elements.append(
-    ISOTextGroup(
-        name="organisation-name-localized",
-        search_paths=[
-            "gmd:organisationName/gmd:PT_FreeText/gmd:textGroup"
-        ],
-        multiplicity="1..*",
-    )
-)
 
 class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
@@ -142,11 +106,6 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         }
     }
 
-    _ckan_locales_mapping = {
-        'ita': 'it',
-        'ger': 'de',
-        'eng': 'en_GB'
-    }
 
     def info(self):
         return {
@@ -163,6 +122,8 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
             utils._mapping_frequencies_to_mdr_vocabulary)
         mapping_languages_to_mdr_vocabulary = self.source_config.get('mapping_languages_to_mdr_vocabulary', \
             utils._mapping_languages_to_mdr_vocabulary)
+
+        self._ckan_locales_mapping = self.source_config.get('ckan_locales_mapping') or utils._ckan_locales_mapping
 
         self._default_values = default_values = self.source_config.get('default_values') or {}
 
@@ -313,37 +274,21 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         conforms_to = {'identifier': conforms_to_identifier,
                        'title': {conforms_to_locale: conforms_to_identifier}}
 
-        for entry in iso_values["conformity-title-text"]:
-            if entry['text'] and entry['locale'].lower()[1:]:
-                conforms_to_locale = self._ckan_locales_mapping[entry['locale'].lower()[1:]]
-                if self._ckan_locales_mapping[entry['locale'].lower()[1:]]:
-                    conforms_to['title'][conforms_to_locale] = entry['text']
-        
         if conforms_to:
             package_dict['extras'].append({'key': 'conforms_to', 'value': json.dumps([conforms_to])})
 
         # creator
         # ###############
+        #  -- creator -- #
         citedResponsiblePartys = iso_values["cited-responsible-party"]
-        self.localized_creator = []
+        agent_name, agent_code = utils.get_responsible_party(citedResponsiblePartys, \
+            agents.get('author', self._dcatapit_config.get('agents').get('author')))
 
-        for party in citedResponsiblePartys:
-            if party["role"] == "author":
-                creator_name = party["organisation-name"]
-
-                agent_code, organization_name = self.get_agent('author', creator_name, default_values)
-                creator_lang = self._ckan_locales_mapping.get(iso_values["metadata-language"], 'it').lower()
-                
-                creator = {'creator_name': {creator_lang: organization_name or creator_name},
-                           'creator_identifier': agent_code or default_agent_code}
-
-                for entry in party["organisation-name-localized"]:
-                    if entry['text'] and entry['locale'].lower()[1:]:
-                        agent_code, organization_name = self.get_agent('author', entry['text'], default_values)
-                        creator_lang = self._ckan_locales_mapping[entry['locale'].lower()[1:]]
-                        if creator_lang:
-                            creator['creator_name'][creator_lang] = organization_name or entry['text']
-                package_dict['extras'].append({'key': 'creator', 'value': json.dumps([creator])})
+        creator = {}
+        creator_lang = self._ckan_locales_mapping.get(iso_values["metadata-language"], 'it').lower()
+        creator['creator_name'] = {creator_lang: agent_name}
+        creator['creator_identifier'] = agent_code or default_agent_code
+        package_dict['extras'].append({'key': 'creator', 'value': json.dumps([creator])})
 
 
         #  -- license handling -- #
@@ -370,43 +315,3 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
         # End of processing, return the modified package
         return package_dict
-
-
-    def get_agent(self, agent_type, agent_string, default_values):
-
-        ## Agent Code
-        agent_regex_config = self._dcatapit_config['agents'][agent_type]['code_regex']
-
-        aregex = agent_regex_config.get('regex') or default_values.get('agent_code_regex').get('regex')
-        agent_code = re.search(aregex, agent_string)
-        if agent_code:
-            regex_groups = agent_regex_config.get('groups')
-            
-            if regex_groups and isinstance(regex_groups, list) and len(regex_groups) > 0:
-                code = ''
-                for group in regex_groups:
-                    code += agent_code.group(group)
-
-                agent_code = code
-
-            agent_code = agent_code.lower().strip()
-
-        ## Agent Name
-        org_name_regex_config = self._dcatapit_config['agents'][agent_type]['name_regex']
-
-        oregex = org_name_regex_config.get('regex') or self._default_values.get('org_name_regex').get('regex')
-        organization_name = re.search(oregex, agent_string)
-        if organization_name:
-            regex_groups = org_name_regex_config.get('groups')
-
-            if regex_groups and isinstance(regex_groups, list) and len(regex_groups) > 0:
-                code = ''
-                for group in regex_groups:
-                    code += organization_name.group(group)
-
-                organization_name = code
-
-            organization_name = organization_name.lstrip()
-
-        return [agent_code, organization_name]
-
