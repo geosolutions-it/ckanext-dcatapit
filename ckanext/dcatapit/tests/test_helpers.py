@@ -47,3 +47,11 @@ def test_list_to_string():
 def test_format():
     value = helpers.format('14-11-2011', '%Y-%m-%d', 'date')
     eq_(value, '2011-11-14')
+
+def test_org_context():
+    # ensure ctx are separated, and no data is leaked between them
+    ctx1 = helpers.get_org_context()
+    ctx1['test'] = True
+    ctx2 = helpers.get_org_context()
+    
+    assert ctx2.get('test') is None
