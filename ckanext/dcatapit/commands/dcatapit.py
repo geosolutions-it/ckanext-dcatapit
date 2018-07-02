@@ -4,6 +4,8 @@
 import logging
 import re
 import traceback
+import json
+from pprint import pprint
 
 import ckan.plugins.toolkit as toolkit
 from ckan.lib.munge import munge_tag
@@ -15,6 +17,7 @@ from ckanext.dcatapit.model.license import (
 from ckanext.dcatapit.model.subtheme import (
     load_subthemes, clear_subthemes)
 from ckan.model.meta import Session
+from ckan.logic import ValidationError
 
 from pylons import config
 from ckan.lib.cli import CkanCommand
@@ -119,6 +122,8 @@ class DCATAPITCommands(CkanCommand):
             self.load()
         elif cmd == 'initdb':
             self.initdb()
+        elif cmd == 'migrate_data':
+            self.migrate_data()
         else:
             print self.usage
             log.error('ERROR: Command "%s" not recognized' % (cmd,))
@@ -130,6 +135,9 @@ class DCATAPITCommands(CkanCommand):
         db_setup()
         setup_license_models()
         setup_subtheme_models()
+
+    def migrate_data(self):
+        do_migrate_data()
 
     def load(self):
         ##
@@ -325,3 +333,65 @@ def do_load(vocab_name, url=None, filename=None, format=None):
             interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
 
     print 'Vocabulary successfully loaded ({0})'.format(vocab_name)
+
+def do_migrate_data():
+
+    user = toolkit.get_action('get_site_user')({'ignore_auth': True}, {})
+    context = {'user': user['name'],
+               'ignore_auth': True,
+               'use_cache': False}
+    plist = toolkit.get_action('package_list')
+    pshow = toolkit.get_action('package_show')
+    pupdate = toolkit.get_action('package_update')
+    for pname in plist(context, {}):
+
+        pdata = pshow(context, {'name_or_id': pname}) #, 'use_default_schema': True})
+
+        if pdata['type'] != 'dataset':
+            continue
+
+        # remove empty conforms_to to avoid silly validation errors
+        if not pdata.get('conforms_to'):
+            pdata.pop('conforms_to', None)
+        # the same for alternate_identifier
+        if not pdata.get('alternate_identifier'):
+            pdata.pop('alternate_identifier', None)
+
+        # tags can be multilang, but they won't pass validation then
+        # all we need is id in tag, we can munge name to pass validation
+        for t in pdata['tags']:
+            t['name'] = munge_tag(t['name'])
+        update_creator(pdata)        
+        # let 
+        pdata['metadata_modified'] = None
+        try:
+           out = pupdate(context, pdata)
+        except ValidationError, err:
+            print 'Cannot update due to validation error {}'.format(pdata['name'])
+            print err
+            print
+            continue
+        except Exception, err:
+            print 'Cannot update due to general error {}'.format(pdata['name'])
+            print err
+            print
+            continue
+
+        print out['name']
+        print '---' * 3
+
+def update_creator(pdata):
+    cname = pdata.get('creator_name')
+    cident = pdata.get('creator_identifier')
+
+    if not (cname and cident):
+        for ex in pdata['extras']:
+            if ex['key'] == 'creator_name':
+                cname = ex['value']
+            if ex['key'] == 'creator_identifier':
+                cident = ex['value']
+
+    if (cname or cident):
+        lang = interfaces.get_language()
+        pdata['creator'] = json.dumps([{'creator_identifier': cident,
+                                        'creator_name': {lang: cname}}])
