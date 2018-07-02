@@ -32,6 +32,12 @@ _mapping_languages_to_mdr_vocabulary = {
     'eng': 'ENG'
 }
 
+_ckan_locales_mapping = {
+        'ita': 'it',
+        'ger': 'de',
+        'eng': 'en_GB'
+    }
+
 def get_responsible_party(citedResponsiblePartys, agent_config):
     for party in citedResponsiblePartys:
         role = agent_config.get('role', None)
