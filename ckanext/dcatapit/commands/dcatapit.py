@@ -382,7 +382,8 @@ def do_migrate_data():
         print '---' * 3
 
 def get_package_list():
-    return Session.query(Package.name).filter(Package.state=='active')
+    return Session.query(Package.name).filter(Package.state=='active',
+                                              Package.type=='dataset')
 
 def update_creator(pdata):
     cname = pdata.pop('creator_name', None)
