@@ -17,6 +17,7 @@ from ckanext.dcatapit.model.license import (
 from ckanext.dcatapit.model.subtheme import (
     load_subthemes, clear_subthemes)
 from ckan.model.meta import Session
+from ckan.model import Package
 from ckan.logic import ValidationError
 
 from pylons import config
@@ -340,10 +341,9 @@ def do_migrate_data():
     context = {'user': user['name'],
                'ignore_auth': True,
                'use_cache': False}
-    plist = toolkit.get_action('package_list')
     pshow = toolkit.get_action('package_show')
     pupdate = toolkit.get_action('package_update')
-    for pname in plist(context, {}):
+    for pname in get_package_list():
         pdata = pshow(context, {'name_or_id': pname}) #, 'use_default_schema': True})
 
         if pdata['type'] != 'dataset':
@@ -380,6 +380,9 @@ def do_migrate_data():
 
         print out['name']
         print '---' * 3
+
+def get_package_list():
+    return Session.query(Package.name).filter(Package.state=='active')
 
 def update_creator(pdata):
     cname = pdata.pop('creator_name', None)
