@@ -265,9 +265,9 @@ class TestDCATAPITProfileParsing(BaseParseTest):
                 translator = object()
             environ = {'pylons.pylons': p()}
         pylons.request = dummyreq()
-        pylons.translator.pylons_lang = 'en_GB'
+        pylons.translator.pylons_lang = ['en_GB']
         set_lang('en_GB')
-        assert get_lang() == 'en_GB'
+        assert get_lang() == ['en_GB']
 
         assert 'dcatapit_theme_group_mapper' in config['ckan.plugins'], "No dcatapit_theme_group_mapper plugin in config"
         contents = self._get_file_contents('dataset.rdf')
