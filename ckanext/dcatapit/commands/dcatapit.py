@@ -344,7 +344,6 @@ def do_migrate_data():
     pshow = toolkit.get_action('package_show')
     pupdate = toolkit.get_action('package_update')
     for pname in plist(context, {}):
-
         pdata = pshow(context, {'name_or_id': pname}) #, 'use_default_schema': True})
 
         if pdata['type'] != 'dataset':
@@ -383,15 +382,21 @@ def do_migrate_data():
         print '---' * 3
 
 def update_creator(pdata):
-    cname = pdata.get('creator_name')
-    cident = pdata.get('creator_identifier')
+    cname = pdata.pop('creator_name', None)
+    cident = pdata.pop('creator_identifier', None)
 
+    to_delete = []
     if not (cname and cident):
-        for ex in pdata['extras']:
+        for idx, ex in enumerate(pdata['extras']):
             if ex['key'] == 'creator_name':
+                to_delete.append(idx)
                 cname = ex['value']
-            if ex['key'] == 'creator_identifier':
+            elif ex['key'] == 'creator_identifier':
+                to_delete.append(idx)
                 cident = ex['value']
+        if to_delete:
+            for idx in reversed(to_delete):
+                pdata['extras'].pop(idx)
 
     if (cname or cident):
         lang = interfaces.get_language()
@@ -399,11 +404,17 @@ def update_creator(pdata):
                                         'creator_name': {lang: cname}}])
 
 def update_theme(pdata):
-    theme = pdata.get('theme')
+    theme = pdata.pop('theme', None)
     if not theme:
-        for ex in pdata['extras']:
+        to_delete = []
+        for idx, ex in enumerate(pdata['extras']):
             if ex['key'] == 'theme':
+                to_delete.append(idx)
                 theme = ex['value']
+        if to_delete:
+            for idx in reversed(to_delete):
+                pdata['extras'].pop(idx)
+    
     if theme:
         validator = toolkit.get_validator('dcatapit_subthemes')
 
@@ -411,15 +422,21 @@ def update_theme(pdata):
         pdata['theme'] = theme
 
 def update_temporal_coverage(pdata):
-    tstart = pdata.get('temporal_start')
-    tend = pdata.get('temporal_end')
+    tstart = pdata.pop('temporal_start', None)
+    tend = pdata.pop('temporal_end', None)
 
     if not (tstart and tend):
-        for ex in pdata['extras']:
+        to_delete = []
+        for idx, ex in enumerate(pdata['extras']):
             if ex['key'] == 'temporal_start':
+                to_delete.append(idx)
                 tstart = ex['value']
             if ex['key'] == 'temporal_end':
+                to_delete.append(idx)
                 tend = ex['value']
+        if to_delete:
+            for idx in reversed(to_delete):
+                pdata['extras'].pop(idx)
     
     if (tstart):
         pdata['temporal_coverage'] = json.dumps([{'temporal_start': tstart,
