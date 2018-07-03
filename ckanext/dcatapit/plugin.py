@@ -14,7 +14,7 @@ import ckanext.dcatapit.helpers as helpers
 import ckanext.dcatapit.interfaces as interfaces
 from   ckanext.dcatapit.dcat.harvester import map_nonconformant_groups
 from   ckanext.dcatapit.mapping import populate_theme_groups
-from   ckanext.dcatapit.helpers import DEFAULT_ORG_CTX
+from   ckanext.dcatapit.helpers import get_org_context
 from   ckanext.dcatapit.model.license import License
 
 from ckan.model.package import Package
@@ -365,7 +365,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         org_id = dataset_dict['owner_org']
         organization_show = plugins.toolkit.get_action('organization_show')
         if org_id:
-            org = organization_show(DEFAULT_ORG_CTX, {'id': org_id})
+            org = organization_show(get_org_context(), {'id': org_id})
         else:
             org = {}
         if org.get('region'):
@@ -452,7 +452,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                 return pkg_dict
             if org is None:
                 get_org = toolkit.get_action('organization_show')
-                ctx = DEFAULT_ORG_CTX
+                ctx = get_org_context()
                 org = get_org(ctx, {'id': pkg_dict['owner_org']})
             pkg_dict['holder_name'] = org['name']
             pkg_dict['holder_identifier'] = org.get('identifier')
