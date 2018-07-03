@@ -361,7 +361,9 @@ def do_migrate_data():
         # all we need is id in tag, we can munge name to pass validation
         for t in pdata['tags']:
             t['name'] = munge_tag(t['name'])
-        update_creator(pdata)        
+        update_creator(pdata)
+        update_temporal_coverage(pdata)
+        update_theme(pdata)
         # let 
         pdata['metadata_modified'] = None
         try:
@@ -395,3 +397,30 @@ def update_creator(pdata):
         lang = interfaces.get_language()
         pdata['creator'] = json.dumps([{'creator_identifier': cident,
                                         'creator_name': {lang: cname}}])
+
+def update_theme(pdata):
+    theme = pdata.get('theme')
+    if not theme:
+        for ex in pdata['extras']:
+            if ex['key'] == 'theme':
+                theme = ex['value']
+    if theme:
+        validator = toolkit.get_validator('dcatapit_subthemes')
+
+        theme = validator(theme, {})
+        pdata['theme'] = theme
+
+def update_temporal_coverage(pdata):
+    tstart = pdata.get('temporal_start')
+    tend = pdata.get('temporal_end')
+
+    if not (tstart and tend):
+        for ex in pdata['extras']:
+            if ex['key'] == 'temporal_start':
+                tstart = ex['value']
+            if ex['key'] == 'temporal_end':
+                tend = ex['value']
+    
+    if (tstart):
+        pdata['temporal_coverage'] = json.dumps([{'temporal_start': tstart,
+                                                  'temporal_end': tend}])
