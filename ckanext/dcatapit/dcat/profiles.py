@@ -18,6 +18,7 @@ from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
 import ckanext.dcatapit.interfaces as interfaces
 import ckanext.dcatapit.helpers as helpers
 from ckanext.dcatapit import validators
+from ckanext.dcatapit import schema
 from ckanext.dcatapit.model.subtheme import Subtheme
 
 
@@ -607,6 +608,15 @@ class ItalianDCATAPProfile(RDFProfile):
     def graph_from_dataset(self, dataset_dict, dataset_ref):
 
         title = dataset_dict.get('title')
+
+        # extract fields from extras, just in case
+        schema_fields = schema.get_custom_package_schema() 
+        for fdef in schema_fields:
+            for eidx, ex in enumerate(dataset_dict['extras']):
+                if ex['key'] == fdef['name']:
+                    dataset_dict['extras'].pop(eidx)
+                    dataset_dict[fdef['name']] = ex['value']
+                    break
         
         g = self.g
 
@@ -711,15 +721,6 @@ class ItalianDCATAPProfile(RDFProfile):
         self.g.remove((dataset_ref, ADMS.identifier, None,))
 
         # alternate_identifier sometimes resides in extras
-        extras_alt_identifiers = None
-        for eidx, ex in enumerate(dataset_dict.get('extras') or []):
-            if ex['key'] == 'alternate_identifier':
-                extras_alt_identifiers = ex['value']
-                extras_alt_idx = eidx
-                break
-        if extras_alt_identifiers is not None:
-            val = dataset_dict['extras'].pop(extras_alt_idx)
-            dataset_dict['alternate_identifier'] = val['value']
 
         try:
             alt_ids = json.loads(dataset_dict['alternate_identifier'])
