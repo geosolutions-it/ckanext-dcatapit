@@ -612,7 +612,7 @@ class ItalianDCATAPProfile(RDFProfile):
         # extract fields from extras, just in case
         schema_fields = schema.get_custom_package_schema() 
         for fdef in schema_fields:
-            for eidx, ex in enumerate(dataset_dict['extras']):
+            for eidx, ex in enumerate(dataset_dict.get('extras') or []):
                 if ex['key'] == fdef['name']:
                     dataset_dict['extras'].pop(eidx)
                     dataset_dict[fdef['name']] = ex['value']
