@@ -20,6 +20,7 @@ CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
 - [Managing translations](#managing-translations)
     - [Creating a new translation](#creating-a-new-translation)
     - [Updating an existing translation](#updating-an-existing-translation)
+- [Updating old installation](#updating-old-installation)
 - [Contributing](#contributing)
 - [Support, Communication and Credits](#support-communication-and-credits)
 
@@ -406,6 +407,27 @@ In order to update the existing translations proceed as follow:
 3. Once the translation files (po) have been updated adding the new translations needed, compile them by running:
 
        python setup.py compile_catalog --locale YOUR_LANGUAGE
+
+
+## Updating old installation
+
+In order to update old installation:
+
+1. Update extension code:
+
+        git pull
+
+2. Run model update
+
+        paster --plugin=ckanext-dcatapit vocabulary initdb --config=/etc/ckan/default/production.ini
+
+3. Run vocabulary load commands, especially license:
+
+       paster --plugin=ckanext-dcatapit vocabulary load --filename path/to/license.rdf --name licenses --config=/etc/ckan/default/production.ini
+
+4. Run data migration command:
+
+        paster --plugin=ckanext-dcatapit vocabulary migrate_data --config=/etc/ckan/default/production.ini
 
 ## Contributing
 
