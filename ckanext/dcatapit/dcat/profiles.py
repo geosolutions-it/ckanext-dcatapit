@@ -709,6 +709,18 @@ class ItalianDCATAPProfile(RDFProfile):
 
         ### ADMS:identifier alternative identifiers
         self.g.remove((dataset_ref, ADMS.identifier, None,))
+
+        # alternate_identifier sometimes resides in extras
+        extras_alt_identifiers = None
+        for eidx, ex in enumerate(dataset_dict.get('extras') or []):
+            if ex['key'] == 'alternate_identifier':
+                extras_alt_identifiers = ex['value']
+                extras_alt_idx = eidx
+                break
+        if extras_alt_identifiers is not None:
+            val = dataset_dict['extras'].pop(extras_alt_idx)
+            dataset_dict['alternate_identifier'] = val['value']
+
         try:
             alt_ids = json.loads(dataset_dict['alternate_identifier'])
         except (KeyError, TypeError, ValueError,):
