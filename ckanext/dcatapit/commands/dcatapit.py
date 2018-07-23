@@ -391,7 +391,7 @@ def update_creator(pdata):
 
     to_delete = []
     if not (cname and cident):
-        for idx, ex in enumerate(pdata['extras']):
+        for idx, ex in enumerate(pdata.get('extras') or []):
             if ex['key'] == 'creator_name':
                 to_delete.append(idx)
                 cname = ex['value']
