@@ -377,7 +377,10 @@ def dcatapit_subthemes(value, context):
 
     allowed_keys_set = set(allowed_keys.keys())
     check_with_db = context.get('dcatapit_subthemes_check_in_db') if context else True
-
+    
+    if not data:
+        raise Invalid(_("Theme data should not be empty"))
+    
     for item in data:
         if not isinstance(item, dict):
             raise Invalid(_("Invalid theme item, should be a dict, got {}".format(type(item))))

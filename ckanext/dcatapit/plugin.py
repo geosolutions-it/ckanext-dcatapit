@@ -97,7 +97,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         validators = []
         for validator in field['validator']:
             validators.append(toolkit.get_validator(validator))
-
+        
         converters = [toolkit.get_converter('convert_to_extras')]
 
         schema.update({
