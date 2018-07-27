@@ -86,8 +86,8 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
      the DCAT_AP-IT specs.
    * `dcatapit_config`: extends the admin configuration schema allowing to edit and visualize extra fields according to 
      the DCAT_AP-IT specs.
-   * `dcatapit_subcatalog_facets`: when the property `ckanext.dcat.expose_subcatalogs` is set to `True` 
-     (see *transitive harvesting* in ckanext-dcat), this plugin will add a facet containing the harvested subcatalogs.
+   * `dcatapit_subcatalog_facets`: adds a facet containing the harvested subcatalogs. It needs the property
+     `ckanext.dcat.expose_subcatalogs` to be set to `True` (see *transitive harvesting* in ckanext-dcat).
    * `dcatapit_theme_group_mapper`: binds automatically a dataset to groups according to the themes in the dataset. 
      In the configuration file you'll need to specify a file containing the mapping between the themes and the groups:
       
