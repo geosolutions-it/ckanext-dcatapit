@@ -411,7 +411,7 @@ def update_theme(pdata):
     theme = pdata.pop('theme', None)
     if not theme:
         to_delete = []
-        for idx, ex in enumerate(pdata['extras']):
+        for idx, ex in enumerate(pdata.get('extras') or []):
             if ex['key'] == 'theme':
                 to_delete.append(idx)
                 theme = ex['value']
@@ -431,7 +431,7 @@ def update_temporal_coverage(pdata):
 
     if not (tstart and tend):
         to_delete = []
-        for idx, ex in enumerate(pdata['extras']):
+        for idx, ex in enumerate(pdata.get('extras') or []):
             if ex['key'] == 'temporal_start':
                 to_delete.append(idx)
                 tstart = ex['value']
