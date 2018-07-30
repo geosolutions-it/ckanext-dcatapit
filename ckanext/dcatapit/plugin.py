@@ -49,7 +49,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     
     # IValidators
     plugins.implements(plugins.IValidators)
-    
+   
     # ITemplateHelpers
     plugins.implements(plugins.ITemplateHelpers)
     
@@ -359,7 +359,6 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                         dataset_dict['resource_license_{}'.format(lang)] = lname
             else:
                 log.warn('Bad license: license not found: %r ', l)
-
         dataset_dict['resource_license'] = _licenses
 
         org_id = dataset_dict['owner_org']
@@ -694,7 +693,8 @@ class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
         return facets_dict
 
     def organization_facets(self, facets_dict, organization_type, package_type):
-        facets_dict['region'] = plugins.toolkit._("Region")
+        lang = interfaces.get_language() or validators.DEFAULT_LANG
+        facets_dict['organization_region_{}'.format(lang)] = plugins.toolkit._("Region")
         return facets_dict
 
 class DCATAPITHarvestListPlugin(plugins.SingletonPlugin):
