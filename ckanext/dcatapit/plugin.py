@@ -454,7 +454,8 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                 get_org = toolkit.get_action('organization_show')
                 ctx = get_org_context()
                 org = get_org(ctx, {'id': pkg_dict['owner_org']})
-            pkg_dict['holder_name'] = org['name']
+            
+            pkg_dict['holder_name'] = org['title']
             pkg_dict['holder_identifier'] = org.get('identifier')
         return pkg_dict
  

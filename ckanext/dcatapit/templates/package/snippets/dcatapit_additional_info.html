@@ -34,71 +34,104 @@
             {% elif field.name == 'theme' %}
                 {% set themes = (h.load_dcatapit_subthemes(pkg_dict[field.name], lang) or []) %}
 
-                {% for theme in themes %}
-                <tr>
-                  <th scope="row" class="dataset-label">{{ field.label }}</th>
-                  <td class="dataset-details">
-                    <span class="bold">{{ theme.theme }}</span>
-                    <br/>
-                    {% for subtheme in theme.subthemes %}
-                        <span>{{ h.get_localized_subtheme(subtheme, lang) }}</span><br/>
+                {% if not themes %}
+                    <tr>
+                      <th scope="row" class="dataset-label">{{ field.label }}</th>
+                      <td class="dataset-details">
+                            {{ _('N/D') }}
+                      </td>
+                    </tr>
+                {% else %}
+                    {% for theme in themes %}
+                    <tr>
+                      <th scope="row" class="dataset-label">{{ field.label }}</th>
+                      <td class="dataset-details">
+                        <span class="bold">{{ theme.theme }}</span>
+                        <br/>
+                        {% for subtheme in theme.subthemes %}
+                            <span>{{ h.get_localized_subtheme(subtheme, lang) }}</span><br/>
+                        {% endfor %}
+                      </td>
+                    </tr>
                     {% endfor %}
-                  </td>
-                </tr>
-                {% endfor %}
+                {% endif %}
 
             {% elif field.element == 'temporal_coverage' %}
                 {% set temp_cov = (h.load_json_or_list(pkg_dict[field.name]) or []) %}
 
-                {% for temp in temp_cov %}
-            <tr>
-                <th scope="row" class="dataset-label">{{ _(field.label) }}</th>
-                    <td class="dataset-details">
-                             <span class="bold">{{_('From')}}: </span><span>{{ temp.temporal_start }}</span>
-                    {% if temp.temporal_end %}
-                             <span class="bold">    {{_('Until')}}: </span><span>{{ temp.temporal_end }}</span>
-                    {% endif %}
-                </td>
-            </tr>
-                {% endfor %}
+                {% if not temp_cov %}
+                    <tr>
+                      <th scope="row" class="dataset-label">{{ field.label }}</th>
+                      <td class="dataset-details">
+                            {{ _('N/D') }}
+                      </td>
+                    </tr>
+                {% else %}
+                    {% for temp in temp_cov %}
+                    <tr>
+                        <th scope="row" class="dataset-label">{{ _(field.label) }}</th>
+                        <td class="dataset-details">
+                            <span class="bold">{{_('From')}}: </span><span>{{ temp.temporal_start }}</span>
+                            {% if temp.temporal_end %}
+                                     <span class="bold">    {{_('Until')}}: </span><span>{{ temp.temporal_end }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
 
 
             {% elif field.element == 'creator' %}
                 {% set creators = (h.load_json_or_list(pkg_dict[field.name]) or []) %}
-
-                {% for creator in creators %}
-            <tr>
-                <th scope="row" class="dataset-label">{{ _(field.label) }}</th>
-                <td class="dataset-details">
-                    {% if creator.creator_name[lang] %}
-                    <span class="bold">{{_('Name')}}: </span><span>{{ creator.creator_name[lang] }}</span>
-                    <br/>
-                    {% endif %}
-                    <span class="bold">IPA/IVA: </span><span>{{ creator.creator_identifier }}</span>
-                </td>
-            </tr>
-                {% endfor %}
-
+                {% if not creators %}
+                    <tr>
+                      <th scope="row" class="dataset-label">{{ field.label }}</th>
+                      <td class="dataset-details">
+                            {{ _('N/D') }}
+                      </td>
+                    </tr>
+                {% else %}
+                    {% for creator in creators %}
+                        <tr>
+                            <th scope="row" class="dataset-label">{{ _(field.label) }}</th>
+                            <td class="dataset-details">
+                                {% if creator.creator_name[lang] %}
+                                <span class="bold">{{_('Name')}}: </span><span>{{ creator.creator_name[lang] }}</span>
+                                <br/>
+                                {% endif %}
+                                <span class="bold">IPA/IVA: </span><span>{{ creator.creator_identifier }}</span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
             {% elif field.element == 'alternate_identifier' %}
                 {% set alt_identifiers = (h.load_json_or_list(pkg_dict[field.name]) or []) %}
+                {% if not alt_identifiers %}
+                    <tr>
+                      <th scope="row" class="dataset-label">{{ field.label }}</th>
+                      <td class="dataset-details">
+                            {{ _('N/D') }}
+                      </td>
+                    </tr>
+                {% else %}
 
                     {% for alt_id in alt_identifiers %}
-            <tr>
-                <th scope="row" class="dataset-label">{{ field.label }}</th>
-                <td class="dataset-details">
-                    <span style="font-weight:bold">{{_('OthId Identifier')}}: </span><span>{{ alt_id.identifier }}</span><br/>
+                        <tr>
+                            <th scope="row" class="dataset-label">{{ field.label }}</th>
+                            <td class="dataset-details">
+                                <span style="font-weight:bold">{{_('OthId Identifier')}}: </span><span>{{ alt_id.identifier }}</span><br/>
 
-                        {% if alt_id.agent %}
-                    <span style="font-weight:bold">{{_('OthId Organization')}}: </span><span>{{ alt_id.agent.agent_name[lang] }}</span>
-                            {% if alt_id.agent.agent_identifier %}
-                    <br/>
-                    <span style="font-weight:bold">{{_('OthId Organization ID')}}: </span><span>{{ alt_id.agent.agent_identifier }}</span><br/>
-                            {% endif %}
-                        {% endif %}
-                </td>
-            </tr>
+                                    {% if alt_id.agent %}
+                                <span style="font-weight:bold">{{_('OthId Organization')}}: </span><span>{{ alt_id.agent.agent_name[lang] }}</span>
+                                        {% if alt_id.agent.agent_identifier %}
+                                <br/>
+                                <span style="font-weight:bold">{{_('OthId Organization ID')}}: </span><span>{{ alt_id.agent.agent_identifier }}</span><br/>
+                                        {% endif %}
+                                    {% endif %}
+                            </td>
+                        </tr>
                     {% endfor %}
-
+                {% endif %}
             {% elif field.element == 'conforms_to' %}
                 {% set conforms_to = h.load_json_or_list(pkg_dict[field.name]) %}
 

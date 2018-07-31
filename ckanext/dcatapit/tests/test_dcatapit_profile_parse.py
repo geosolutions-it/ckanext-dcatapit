@@ -294,7 +294,8 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         if org is None:
             org  = call_action('organization_create',
                                 context={'user': user_name},
-                                name='dummy')
+                                name='dummy',
+                                identifier='aaaaaa')
         existing_g = Group.by_name('existing-group')
         if existing_g is None:
             existing_g  = call_action('group_create',

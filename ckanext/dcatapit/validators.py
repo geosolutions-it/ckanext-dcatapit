@@ -12,15 +12,16 @@ from ckan.lib.i18n import get_locales
 
 from ckanext.dcatapit.model. subtheme import Subtheme, ThemeToSubtheme
 
-log = logging.getLogger(__file__)
-
 try:
     from ckan.common import config
 except ImportError:
     from pylons import config
 
+
 DEFAULT_LANG = config.get('ckan.locale_default', 'en')
+log = logging.getLogger(__file__)
 available_locales = get_locales()
+
 
 def is_blank (string):
     return not (string and string.strip())

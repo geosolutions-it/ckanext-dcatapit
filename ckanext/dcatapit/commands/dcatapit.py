@@ -17,9 +17,10 @@ from ckanext.dcatapit.model.license import (
 from ckanext.dcatapit.model.subtheme import (
     load_subthemes, clear_subthemes)
 from ckan.model.meta import Session
-from ckan.model import Package
+from ckan.model import Package, Group, GroupExtra
 from ckan.logic import ValidationError
 
+from sqlalchemy import and_
 from pylons import config
 from ckan.lib.cli import CkanCommand
 
@@ -343,6 +344,21 @@ def do_migrate_data():
                'use_cache': False}
     pshow = toolkit.get_action('package_show')
     pupdate = toolkit.get_action('package_update')
+    oshow = toolkit.get_action('organization_show')
+    oupdate = toolkit.get_action('organization_patch')
+
+    for oname in get_organization_list():
+        odata = oshow(context, {'id': oname, 'include_extras': True,
+                                             'include_tags': True,
+                                             'include_users': False,
+                                             })
+        if not odata.get('identifier'):
+            odata['identifier'] = tmp_identifier = get_temp_org_identifier()
+            print(u"org: [{}] {} : setting temporal identifier: {}".format(odata['name'],
+                                                                           odata['title'],
+                                                                           tmp_identifier))
+            oupdate(context, {'id': odata['id'], 'identifier': odata['identifier']})
+
     for pname in get_package_list():
         pdata = pshow(context, {'name_or_id': pname}) #, 'use_default_schema': True})
 
@@ -365,6 +381,7 @@ def do_migrate_data():
         update_theme(pdata)
         # let 
         pdata['metadata_modified'] = None
+        print('updating', pdata['name'])
         try:
            out = pupdate(context, pdata)
         except ValidationError, err:
@@ -372,18 +389,23 @@ def do_migrate_data():
             print err
             print
             continue
+
         except Exception, err:
             print 'Cannot update due to general error {}'.format(pdata['name'])
             print err
             print
             continue
 
-        print out['name']
         print '---' * 3
 
 def get_package_list():
     return Session.query(Package.name).filter(Package.state=='active',
                                               Package.type=='dataset')
+
+def get_organization_list():
+    return Session.query(Group.name).filter(Group.state=='active',
+                                            Group.type=='organization')
+
 
 def update_creator(pdata):
     cname = pdata.pop('creator_name', None)
@@ -445,3 +467,21 @@ def update_temporal_coverage(pdata):
     if (tstart):
         pdata['temporal_coverage'] = json.dumps([{'temporal_start': tstart,
                                                   'temporal_end': tend}])
+
+TEMP_IPA_CODE = 'tmp_ipa_code'
+
+def get_temp_org_identifier():
+    c = ipa_temp_code_count()
+    return '{}_{}'.format(TEMP_IPA_CODE, c + 1)
+
+def ipa_temp_code_count():
+    s = Session
+    q = s.query(GroupExtra.value).join(Group, and_(Group.id==GroupExtra.group_id,
+                                                   GroupExtra.state=='active'))\
+                                 .filter(Group.type == 'organization',
+                                         Group.state == 'active',
+                                         GroupExtra.key == 'identifier',
+                                         GroupExtra.value.startswith(TEMP_IPA_CODE))\
+                                 .group_by(GroupExtra.value)\
+                                 .count()
+    return q
