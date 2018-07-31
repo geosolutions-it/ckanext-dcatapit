@@ -5,6 +5,8 @@ import logging
 import re
 import traceback
 import json
+import uuid
+from datetime import datetime
 from pprint import pprint
 
 import ckan.plugins.toolkit as toolkit
@@ -19,6 +21,7 @@ from ckanext.dcatapit.model.subtheme import (
 from ckan.model.meta import Session
 from ckan.model import Package, Group, GroupExtra
 from ckan.logic import ValidationError
+from ckan.lib.navl.dictization_functions import Invalid
 
 from sqlalchemy import and_
 from pylons import config
@@ -344,6 +347,7 @@ def do_migrate_data():
                'use_cache': False}
     pshow = toolkit.get_action('package_show')
     pupdate = toolkit.get_action('package_update')
+    pcreate = toolkit.get_action('package_create')
     oshow = toolkit.get_action('organization_show')
     oupdate = toolkit.get_action('organization_patch')
 
@@ -352,6 +356,7 @@ def do_migrate_data():
                                              'include_tags': True,
                                              'include_users': False,
                                              })
+        # we require identifier for org now.
         if not odata.get('identifier'):
             odata['identifier'] = tmp_identifier = get_temp_org_identifier()
             print(u"org: [{}] {} : setting temporal identifier: {}".format(odata['name'],
@@ -379,9 +384,10 @@ def do_migrate_data():
         update_creator(pdata)
         update_temporal_coverage(pdata)
         update_theme(pdata)
-        # let 
+        update_identifier(pdata)
+        update_modified(pdata)
         pdata['metadata_modified'] = None
-        print('updating', pdata['name'])
+        print 'updating', pdata['name']
         try:
            out = pupdate(context, pdata)
         except ValidationError, err:
@@ -429,6 +435,9 @@ def update_creator(pdata):
         pdata['creator'] = json.dumps([{'creator_identifier': cident,
                                         'creator_name': {lang: cname}}])
 
+
+DEFAULT_THEME = json.dumps([{'theme': 'OP_DATPRO', 'subthemes': []}])
+
 def update_theme(pdata):
     theme = pdata.pop('theme', None)
     if not theme:
@@ -441,11 +450,17 @@ def update_theme(pdata):
             for idx in reversed(to_delete):
                 pdata['extras'].pop(idx)
     
-    if theme:
-        validator = toolkit.get_validator('dcatapit_subthemes')
+    # default theme if nothing available
+    if not theme:
+        theme = DEFAULT_THEME
+    validator = toolkit.get_validator('dcatapit_subthemes')
 
+    try:
         theme = validator(theme, {})
-        pdata['theme'] = theme
+    except Invalid, err:
+        print 'dataset {}: cannot use theme {}: {}. Using default theme'.format(pdata['name'], theme, err)
+        theme = DEFAULT_THEME
+    pdata['theme'] = theme
 
 def update_temporal_coverage(pdata):
     tstart = pdata.pop('temporal_start', None)
@@ -463,10 +478,37 @@ def update_temporal_coverage(pdata):
         if to_delete:
             for idx in reversed(to_delete):
                 pdata['extras'].pop(idx)
-    
     if (tstart):
-        pdata['temporal_coverage'] = json.dumps([{'temporal_start': tstart,
-                                                  'temporal_end': tend}])
+        temp_cov = json.dumps([{'temporal_start': tstart,
+                                'temporal_end': tend}])
+        validator = toolkit.get_validator('dcatapit_temporal_coverage')
+        try:
+            temp_cov = validator(temp_cov, {})
+            pdata['temporal_coverage'] = temp_cov
+        except Invalid, err:
+            print 'dataset {}: cannot use temporal coverage {}: {}'.format(pdata['name'], (tstart,tend,), err)
+
+def update_identifier(pdata):
+    identifier = pdata.pop('identifier', None)
+    if not identifier:
+        to_delete = []
+        for idx, ex in enumerate(pdata.get('extras') or []):
+            if ex['key'] == 'identifier':
+                to_delete.append(idx)
+                identifier = ex['value']
+        if to_delete:
+            for idx in reversed(to_delete):
+                pdata['extras'].pop(idx)
+    
+    # default theme if nothing available
+    if not identifier:
+        identifier = str(uuid.uuid4())
+    pdata['identifier'] = identifier
+
+def update_modified(pdata):
+    if not pdata.get('modified'):
+        pdata['modified'] = datetime.now().strftime("%Y-%m-%d'")
+
 
 TEMP_IPA_CODE = 'tmp_ipa_code'
 
