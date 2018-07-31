@@ -427,7 +427,24 @@ In order to update old installation:
 
 4. Run data migration command:
 
-        paster --plugin=ckanext-dcatapit vocabulary migrate_data --config=/etc/ckan/default/production.ini
+        paster --plugin=ckanext-dcatapit vocabulary migrate_data --config=/etc/ckan/default/production.ini > migration.log
+
+You can review migration results by viewing `migration.log` file. It will contain list of messages generated during migration. 
+
+Migration script will:
+ * update all organizations and assign temporary identifier in form of `tmp_ipa_code_X` (where `X` is a number in sequence). Organization identifier is required field now, and thus temporary value is created to avoid errors in validation. Script will report each organization which have updated identifier in log with message similar to following: `org: [pab-foreste] PAB: Foreste : setting temporal identifier: tmp_ipa_code_1`
+
+ * update all packages and migrate DCAT AP_IT fields. Where possible, it will try to transform those fields into new notation/format. Successful package data migration will be marked with message like this:
+
+        ---------
+        updating ortofoto-di-merano-2005
+        ---------
+
+  If migration is not possible for some reason, there will be a message like this:
+
+        dataset test-dataset: cannot use temporal coverage (u'2015', None): 'Invalid date input: 2015'
+        updating test-dataset
+        ---------
 
 ## Contributing
 
