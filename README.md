@@ -141,7 +141,7 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
         <field name="dcat_theme" type="string" indexed="true" stored="false" multiValued="true"/>
         <field name="dcat_subtheme" type="string" indexed="true" stored="false" multiValued="true"/>
         <dynamicField name="dcat_subtheme_*" type="string" indexed="true" stored="false" multiValued="true"/>
-        <dynamicField name="organization_region_*" type="string" indexed="true" stored="false" multiValued="false"/>
+        <dynamicField name="organization_region_*" type="string" indexed="true" stored="false" multiValued="true"/>
         <dynamicField name="resource_license_*" type="string" indexed="true" stored="false" multiValued="true"/>
         <field name="resource_license" type="string" indexed="true" stored="false" multiValued="true"/>
         
@@ -176,6 +176,13 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
  14. DCATAPIT license tree. Download [license mapping file](https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/Licenze/Licenze.rdf). Alternatively you can use ``examples/licenses.rdf``, but mind that it may be outdated. Import `license.rdf` it with command:
 
          paster --plugin=ckanext-dcatapit vocabulary load --filename path/to/license.rdf --name licenses --config=/etc/ckan/default/production.ini
+
+
+### Organization as a Rights Holder
+
+ Dataset's Rights Holder field is binded to dataset's Organization. Because of that, catalogue should be reindexed in solr after organization's change in name or identifier.
+
+        paster --plugin=ckan search-index rebuild --config=/etc/ckan/default/production.ini
 
 ### Dataset form
 
