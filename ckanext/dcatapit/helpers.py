@@ -309,7 +309,7 @@ def get_organization_by_identifier(context, identifier):
         # safety check
         assert ge.group_id is not None
         ctx = context.copy()
-        ctx.update(DEFAULT_ORG_CTX)
+        ctx.update(get_org_context())
 
         return toolkit.get_action('organization_show')(context=ctx, data_dict={'id': ge.group_id})
 
@@ -320,3 +320,8 @@ def get_enable_form_tabs():
         return toolkit.asbool(conf_var)
     # default
     return True
+
+def get_org_context():
+    return DEFAULT_ORG_CTX.copy()
+
+
