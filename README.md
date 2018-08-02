@@ -178,9 +178,9 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
          paster --plugin=ckanext-dcatapit vocabulary load --filename path/to/license.rdf --name licenses --config=/etc/ckan/default/production.ini
 
 
-### Organization as a Rights Holder
+### Dataset reindexing after Organization change
 
- Dataset's Rights Holder field is binded to dataset's Organization. Because of that, catalogue should be reindexed in solr after organization's change in name or identifier.
+ Due to use of Organization's field in dataset search (rights holder hame, regions), catalogue should be reindexed in solr after organization's change in name and regions fields.
 
         paster --plugin=ckan search-index rebuild --config=/etc/ckan/default/production.ini
 
