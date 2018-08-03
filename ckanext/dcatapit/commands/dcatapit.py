@@ -60,7 +60,8 @@ class DCATAPITCommands(CkanCommand):
           eu_themes   -> http://publications.europa.eu/mdr/resource/authority/data-theme/skos/data-theme-skos.rdf
           places      -> http://publications.europa.eu/mdr/resource/authority/place/skos/places-skos.rdf
           frequencies -> http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf
-          regions     -> https://github.com/italia/daf-ontologie-vocabolari-controllati/blob/master/VocabolariControllati/ClassificazioneTerritorio/Istat-Classificazione-08-Territorio.rdf?raw=true
+          regions     -> https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/territorial-classifications/regions/regions.rdf
+
           filetype -> http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf
        PATH_TO_INI_FILE is the path to the Ckan configuration file
 
@@ -191,12 +192,14 @@ class DCATAPITCommands(CkanCommand):
             
         do_load(vocab_name, url=url, filename=filename, format=format)
 
+REGION_TYPE = 'https://w3id.org/italia/onto/CLV/Region'
+NAME_TYPE = 'https://w3id.org/italia/onto/l0/name'
 
 def do_load_regions(g, vocab_name):
     concepts = []
     pref_labels = []
-    for reg in g.subjects(None, URIRef('http://dati.gov.it/onto/clvapit#Region')):
-        names = list(g.objects(reg, URIRef('http://dati.gov.it/onto/clvapit#name')))
+    for reg in g.subjects(None, URIRef(REGION_TYPE)):
+        names = list(g.objects(reg, URIRef(NAME_TYPE)))
         identifier = munge_tag(unicode(reg).split('/')[-1])
 
         concepts.append(identifier)

@@ -26,6 +26,7 @@
                                   options=options,
                                   selected=data[field.name],
                                   error=errors[field.name],
+                                  is_required=field.is_required,
                                   help=field.help) }}
 
             {% elif field.element == 'multiselect' %}
@@ -42,7 +43,6 @@
                                  attrs=tag_attrs,
                                  is_required=field.is_required,
                                  help=field.help) }}
-
 
             {% elif field.element == 'themes' %}
 
@@ -71,7 +71,6 @@
                   }}
 
             {% elif field.element == 'vocabulary' or field.element == 'region' %}
-
                   {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
                   {{ 
                         dform.vocabulary(

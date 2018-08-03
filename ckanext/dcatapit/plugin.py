@@ -49,7 +49,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     
     # IValidators
     plugins.implements(plugins.IValidators)
-    
+   
     # ITemplateHelpers
     plugins.implements(plugins.ITemplateHelpers)
     
@@ -58,6 +58,8 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     
     # IPackageController
     plugins.implements(plugins.IPackageController, inherit=True)
+
+    plugins.implements(plugins.IFacets, inherit=True)
     
     # ITranslation
     if toolkit.check_ckan_version(min_version='2.5.0'):
@@ -97,7 +99,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         validators = []
         for validator in field['validator']:
             validators.append(toolkit.get_validator(validator))
-
+        
         converters = [toolkit.get_converter('convert_to_extras')]
 
         schema.update({
@@ -358,7 +360,6 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                         dataset_dict['resource_license_{}'.format(lang)] = lname
             else:
                 log.warn('Bad license: license not found: %r ', l)
-
         dataset_dict['resource_license'] = _licenses
 
         org_id = dataset_dict['owner_org']
@@ -369,12 +370,24 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             org = {}
         if org.get('region'):
 
-            # multilang!
+            # multilang values
+            # note region can be in {val1,val2} notation for multiple values
             region_base = org['region']
-            tags = interfaces.get_all_localized_tag_labels(region_base)
+            if not isinstance(region_base, (list,tuple,)):
+                region_base = region_base.strip('{}').split(',')
+            tags = {}
+
+            for region_name in region_base:
+                ltags = interfaces.get_all_localized_tag_labels(region_name)
+                for tlang, tvalue in ltags.items():
+                    try:
+                        tags[tlang].append(tvalue)
+                    except KeyError:
+                        tags[tlang] = [tvalue]
+            
             for lang, region in tags.items():
                 dataset_dict['organization_region_{}'.format(lang)] = region
-
+            
         self._update_pkg_rights_holder(dataset_dict, org=org)
         return dataset_dict
 
@@ -484,6 +497,14 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     def new_template(self):
         return 'package/dcatapit_new.html'
 
+    # IFacets
+    def dataset_facets(self, facets_dict, package_type):
+        # remove dataset license facet
+        facets_dict.pop('license_id', None)
+        lang = interfaces.get_language() or validators.DEFAULT_LANG
+        facets_dict['resource_license_{}'.format(lang)] = plugins.toolkit._("Resources licenses")
+        facets_dict['dcat_subtheme_{}'.format(lang)] = plugins.toolkit._("Subthemes")
+        return facets_dict
 
 class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupForm):
 
@@ -708,13 +729,12 @@ class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
         lang = interfaces.get_language() or validators.DEFAULT_LANG
         facets_dict['source_catalog_title'] = plugins.toolkit._("Source catalogs")
         facets_dict['organization_region_{}'.format(lang)] = plugins.toolkit._("Organization regions")
-        facets_dict['resource_license_{}'.format(lang)] = plugins.toolkit._("Resources licenses")
-        facets_dict['dcat_subtheme_{}'.format(lang)] = plugins.toolkit._("Subthemes")
 
         return facets_dict
 
     def organization_facets(self, facets_dict, organization_type, package_type):
-        facets_dict['region'] = plugins.toolkit._("Region")
+        lang = interfaces.get_language() or validators.DEFAULT_LANG
+        facets_dict['organization_region_{}'.format(lang)] = plugins.toolkit._("Region")
         return facets_dict
 
 class DCATAPITHarvestListPlugin(plugins.SingletonPlugin):

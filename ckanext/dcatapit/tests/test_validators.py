@@ -163,7 +163,7 @@ def test_subthemes():
                    ('{AGRI,INVALID}', False,),
                    ('SOME,INVALID,THEME', False,),
                    (json.dumps({}), False,),
-                   (json.dumps([]), True,),
+                   (json.dumps([]), False,),
                    (json.dumps([{'theme': 'AGRI'}]), True,),
                    (json.dumps([{'theme': 'AGRI'},
                                 {'theme': 'AGRI'}]), False,),
