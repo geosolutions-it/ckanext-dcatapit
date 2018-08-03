@@ -1,6 +1,7 @@
 {% ckan_extends %}
 
 {% set res = c.resource %}
+{% set lang = h.lang() %}
 {% set lic_type, lic_name, lic_duri, lic_version, lic_uri, lic_names = h.get_dcatapit_license(res.license_type) %}
 
         {% block resource_additional_information_inner %}

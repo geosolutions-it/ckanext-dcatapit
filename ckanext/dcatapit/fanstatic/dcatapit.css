@@ -37,7 +37,7 @@
     box-sizing: border-box;
 }
 
-.temporal-coverage-wrap .add_new.error {
+.add_new.error {
     color: #c6898b;
 }
 
