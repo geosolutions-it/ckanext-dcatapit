@@ -356,13 +356,24 @@ def do_migrate_data():
                                              'include_tags': True,
                                              'include_users': False,
                                              })
+        
+        oidentifier = odata.get('identifier')
+
         # we require identifier for org now.
-        if not odata.get('identifier'):
-            odata['identifier'] = tmp_identifier = get_temp_org_identifier()
-            print(u"org: [{}] {} : setting temporal identifier: {}".format(odata['name'],
+        if not oidentifier:
+            odata.pop('identifier', None)
+            tmp_identifier = get_temp_org_identifier()
+            print (u"org: [{}] {} : setting temporal identifier: {}".format(odata['name'],
                                                                            odata['title'],
-                                                                           tmp_identifier))
-            oupdate(context, {'id': odata['id'], 'identifier': odata['identifier']})
+                                                                           tmp_identifier)).encode('utf-8')
+            context['allow_partial_update'] = True
+            oupdate(context, {'id': odata['id'],
+                              'identifier': tmp_identifier})
+
+            out = oshow(context, {'id': oname,
+                                  'include_extras': True,
+                                  'include_tags': True,
+                                  'include_users': True})
 
     for pname in get_package_list():
         pdata = pshow(context, {'name_or_id': pname}) #, 'use_default_schema': True})
@@ -382,23 +393,27 @@ def do_migrate_data():
         for t in pdata['tags']:
             t['name'] = munge_tag(t['name'])
         update_creator(pdata)
+        update_holder(pdata)
         update_temporal_coverage(pdata)
         update_theme(pdata)
         update_identifier(pdata)
         update_modified(pdata)
+        update_frequency(pdata)
         pdata['metadata_modified'] = None
         print 'updating', pdata['name']
         try:
            out = pupdate(context, pdata)
         except ValidationError, err:
-            print 'Cannot update due to validation error {}'.format(pdata['name'])
+            print (u'Cannot update due to validation error {}'.format(pdata['name'])).encode('utf-8')
             print err
+            print (pdata)
             print
             continue
 
         except Exception, err:
-            print 'Cannot update due to general error {}'.format(pdata['name'])
+            print (u'Cannot update due to general error {}'.format(pdata['name'])).encode('utf-8')
             print err
+            print (pdata)
             print
             continue
 
@@ -411,6 +426,32 @@ def get_package_list():
 def get_organization_list():
     return Session.query(Group.name).filter(Group.state=='active',
                                             Group.type=='organization')
+
+TEMP_HOLDER_ID = 'temp_holder_id'
+
+def update_holder(pdata):
+    cname = pdata.pop('holder_name', None)
+    cident = pdata.pop('holder_identifier', None)
+
+    to_delete = []
+    if not (cname and cident):
+        for idx, ex in enumerate(pdata.get('extras') or []):
+            if ex['key'] == 'holder_name':
+                to_delete.append(idx)
+                cname = ex['value']
+            elif ex['key'] == 'holder_identifier':
+                to_delete.append(idx)
+                cident = ex['value']
+        if to_delete:
+            for idx in reversed(to_delete):
+                pdata['extras'].pop(idx)
+    if cname and not cident:
+        cident = TEMP_HOLDER_ID
+        print (u'package {} has temporary holder_identifier value: {}'.format(pdata['title'], cident)).encode('utf-8')
+    if (cname and cident):
+        pdata['holder_identifier'] = cident
+        pdata['holder_name'] = cname
+
 
 
 def update_creator(pdata):
@@ -458,7 +499,7 @@ def update_theme(pdata):
     try:
         theme = validator(theme, {})
     except Invalid, err:
-        print 'dataset {}: cannot use theme {}: {}. Using default theme'.format(pdata['name'], theme, err)
+        print (u'dataset {}: cannot use theme {}: {}. Using default theme'.format(pdata['name'], theme, err)).encode('utf-8')
         theme = DEFAULT_THEME
     pdata['theme'] = theme
 
@@ -486,7 +527,26 @@ def update_temporal_coverage(pdata):
             temp_cov = validator(temp_cov, {})
             pdata['temporal_coverage'] = temp_cov
         except Invalid, err:
-            print 'dataset {}: cannot use temporal coverage {}: {}'.format(pdata['name'], (tstart,tend,), err)
+            print (u'dataset {}: cannot use temporal coverage {}: {}'.format(pdata['name'], (tstart,tend,), err)).encode('utf-8')
+
+def update_frequency(pdata):
+    frequency = pdata.pop('frequency', None)
+    if not frequency:
+        to_delete = []
+        for idx, ex in enumerate(pdata.get('extras') or []):
+            if ex['key'] == 'frequency':
+                to_delete.append(idx)
+                frequency = ex['value']
+        if to_delete:
+            for idx in reversed(to_delete):
+                pdata['extras'].pop(idx)
+    
+    # default frequency
+    if not frequency:
+        frequency = 'UNKNOWN'
+    pdata['frequency'] = frequency
+
+
 
 def update_identifier(pdata):
     identifier = pdata.pop('identifier', None)
