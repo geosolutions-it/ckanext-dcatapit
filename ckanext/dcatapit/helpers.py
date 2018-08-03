@@ -333,6 +333,6 @@ def get_icustomschema_fields():
 
         for extra in extra_schema:
             extra['external'] = True
-        out += extra_schema
+        out.extend(extra_schema)
     
     return out

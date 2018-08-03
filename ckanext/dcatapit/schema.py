@@ -345,15 +345,8 @@ def get_custom_package_schema():
         }
     ]
 
-
-    for plugin in PluginImplementations(interfaces.ICustomSchema):
-        extra_schema = plugin.get_custom_schema()
-
-        for extra in extra_schema:
-            extra['external'] = True
-
-        package_schema = package_schema + extra_schema
-
+    from ckanext.dcatapit.helpers import get_icustomschema_fields
+    package_schema.extend(get_icustomschema_fields()) 
     return package_schema
 
 def get_custom_resource_schema():
