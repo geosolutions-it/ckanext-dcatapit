@@ -224,7 +224,7 @@ The ckanext-dcatapit extension provides also a CSW harvester built on the **ckan
 
     {
        "dcatapit_config":{
-          "dataset_themes":"OP_DATPRO",
+          "dataset_themes":[{"theme": "OP_DATPRO", "subthemes": []}],
           "dataset_places":"ITA_BZO",
           "dataset_languages":"{ITA,DEU}",
           "frequency":"UNKNOWN",
