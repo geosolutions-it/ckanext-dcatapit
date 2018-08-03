@@ -180,7 +180,7 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
 
 ### Dataset reindexing after Organization change
 
- Due to use of Organization's region field in dataset search, catalogue should be reindexed in solr after organization's change in regions field.
+Due to use of Organization's *region* field in dataset search facet, the catalogue should be reindexed in Solr after an organization's change in *region* field.
 
         paster --plugin=ckan search-index rebuild --config=/etc/ckan/default/production.ini
 
