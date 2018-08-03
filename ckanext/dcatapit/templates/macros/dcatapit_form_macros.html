@@ -123,7 +123,7 @@ Old implementation of the couple element (one element with comma separated value
 
 
 
-{% macro vocabulary(name, id='', label='', value='', placeholder='', type='text', error="", options=(), classes=[], attrs={}, is_required=false, multiple=True, use_autocomplete=True) %}
+{% macro vocabulary(name, id='', label='', value='', placeholder='', type='text', error="", options=(), classes=[], attrs={}, is_required=False, multiple=True, use_autocomplete=True) %}
   {%- set extra_html = caller() if caller -%}
   {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
 
@@ -138,7 +138,7 @@ Old implementation of the couple element (one element with comma separated value
 {% endmacro %}
 
 
-{% macro subtheme(name, theme_class='', id='', label='', placeholder='', options='', classes=[]) %}
+{% macro subtheme(name, theme_class='', id='', label='', placeholder='', options='', classes=[], is_required=False) %}
     {% set id = id or 'subtheme_'+id %}
     {%- set extra_html = caller() if caller -%}
 
@@ -149,21 +149,34 @@ Old implementation of the couple element (one element with comma separated value
 {% endmacro %}
 
 
-{% macro themes(name, id='', label='', value='', placeholder='', error='', options=(), classes=[], attrs={}, type='', sublabel='', is_required=False, help=None) %}
-<div class="theme-wrap">
+{% macro themes(name, id='', label='', value='', placeholder='', error='', options=(), classes=[], attrs={}, type='', sublabel='', is_required=True, help=None) %}
+<div class="theme-wrap{% if error %} error{% endif %}">
     <div class="template theme removable">
 
-        {% call vocabulary(name, id=id, label=label, placeholder=placeholder, error=error, options=options, classes=classes, attrs=attrs, multiple=False, use_autocomplete=False) %}
+        {% call vocabulary(name, id=id, label=label,
+                           placeholder=placeholder,
+                           error=error,
+                           options=options,
+                           classes=classes,
+                           attrs=attrs,
+                           multiple=False,
+                           use_autocomplete=False,
+                           is_required=True) %}
         {% endcall %}
 
-        {% call subtheme(name, label=sublabel, placeholder=subplaceholder, options=suboptions, classes=classes) %}
+        {% call subtheme(name, label=sublabel, placeholder=subplaceholder, options=suboptions, classes=classes, is_required=False) %}
         {% endcall %}
 
     {{ remove_button('remove_theme', parent='.theme') }}
 
     </div>
     <div class="theme_container add_new_container" data-add-with=".add_new_theme" data-add-template=".theme.template"></div>
-    {{ add_button(_("Add a Theme"), 'add_new_theme', help) }}
+        {% if error and error is iterable %}
+            {% do classes.append('error') %}
+        {% endif %}
+        {% set newc=classes.append('add_new_theme') %}
+    {{ add_button(_("Add a Theme"), ' '.join(classes), help, is_required=is_required) }}
+
 
     <input type="hidden" name="theme" value="{{ value or list()| safe}}" data-module="dcatapit-theme" data-module-template=".theme" data-module-container=".theme_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="theme" />
 
@@ -413,9 +426,10 @@ Old implementation of the couple element (one element with comma separated value
 {% endmacro %}
 
 {# reenders add button markup #}
-{% macro add_button(label, classes, help=None) %}
+{% macro add_button(label, classes, help=None, is_required=False) %}
     <span class="add_new {{ classes }}">
         <i class="icon-plus"></i>
+        {% if is_required %}<span title="{{ _("This field is required") }}" class="control-required">*</span> {% endif %}
         {{ label }}
         {% if help %}
             {{ help_block(help) }}
