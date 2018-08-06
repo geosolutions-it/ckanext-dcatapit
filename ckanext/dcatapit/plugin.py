@@ -278,6 +278,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'dump_dcatapit_subthemes': helpers.dump_dcatapit_subthemes,
             'get_localized_subtheme': helpers.get_localized_subtheme,
             'dcatapit_enable_form_tabs': helpers.get_enable_form_tabs,
+            'dcatapit_get_icustomschema_fields': helpers.get_icustomschema_fields,
         }
 
         if MLR:

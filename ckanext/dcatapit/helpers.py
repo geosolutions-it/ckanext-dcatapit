@@ -5,6 +5,8 @@ from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from ckan.model import GroupExtra, Session
 import ckan.lib.helpers as h
 import ckan.plugins.toolkit as toolkit
+from ckan.plugins import PluginImplementations
+
 import ckanext.dcatapit.schema as dcatapit_schema
 
 import ckanext.dcatapit.interfaces as interfaces
@@ -324,4 +326,13 @@ def get_enable_form_tabs():
 def get_org_context():
     return DEFAULT_ORG_CTX.copy()
 
+def get_icustomschema_fields():
+    out = []
+    for plugin in PluginImplementations(interfaces.ICustomSchema):
+        extra_schema = plugin.get_custom_schema()
 
+        for extra in extra_schema:
+            extra['external'] = True
+        out.extend(extra_schema)
+    
+    return out

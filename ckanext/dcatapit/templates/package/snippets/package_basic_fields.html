@@ -1,7 +1,12 @@
 {% ckan_extends %}
 
 {% set pkg_fields = h.get_dcatapit_package_schema() %}
-
+{% set icustom_fields = [] %}
+{% for custom_field in h.dcatapit_get_icustomschema_fields() %}
+    {% if {'name': custom_field['name']} not in icustom_fields %}
+        {% set tmp=icustom_fields.append({'name': custom_field['name']}) %}
+    {% endif %}
+{% endfor %}
 {% block package_basic_fields_custom %}
 
 
@@ -68,8 +73,7 @@
                 {'name': 'author'},
                 {'name': 'author_email'},
                 {'name': 'maintainer'},
-                {'name': 'maintainer_email'},
-               ],
+                {'name': 'maintainer_email'},] + icustom_fields,
      'use_extra': true},
     ]}) }}
     </div>
