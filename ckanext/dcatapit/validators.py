@@ -288,7 +288,16 @@ DATE_FORMATS = ['%Y-%m-%d',
                 '%Y%m%d',
                 '%Y-%m-%dT%H:%M:%S',
                 '%Y-%m-%d %H:%M:%S',
-                '%Y-%m-%d %H:%M']
+                '%Y-%m-%d %H:%M',
+                # faulty ones, but still can be used
+                '%Y',
+                'N/A%Y',
+                'N/A %Y',
+                '%b. %Y',
+                '%B %Y',
+                '%d.%m.%Y',
+                '%d/%m/%Y',
+                ]
 
 def parse_date(val):
     for format in DATE_FORMATS:

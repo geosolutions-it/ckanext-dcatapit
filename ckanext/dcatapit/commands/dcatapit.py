@@ -526,6 +526,8 @@ def update_temporal_coverage(pdata):
         temp_cov = json.dumps([{'temporal_start': tstart,
                                 'temporal_end': tend}])
         validator = toolkit.get_validator('dcatapit_temporal_coverage')
+        if (tstart == tend):
+            print (u'dataset {} has the same temporal coverage start/end: {}/{}'.format(pdata['name'], tstart,tend)).encode('utf-8')
         try:
             temp_cov = validator(temp_cov, {})
             pdata['temporal_coverage'] = temp_cov
