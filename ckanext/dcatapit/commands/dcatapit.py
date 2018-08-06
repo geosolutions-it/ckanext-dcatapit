@@ -31,6 +31,7 @@ from rdflib import Graph
 from rdflib.term import URIRef
 from rdflib.namespace import SKOS, DC
 from ckanext.dcat.profiles import namespaces
+from ckanext.dcatapit import validators
 
 LANGUAGE_THEME_NAME = 'languages'
 EUROPEAN_THEME_NAME = 'eu_themes'
@@ -571,8 +572,13 @@ def update_identifier(pdata):
     pdata['identifier'] = identifier
 
 def update_modified(pdata):
-    if not pdata.get('modified'):
-        pdata['modified'] = datetime.now().strftime("%Y-%m-%d'")
+    try:
+        data = validators.parse_date(pdata['modified'])
+    except (KeyError, Invalid,), err:
+        print (u"dataset {}: modified date {} : {}. Using now timestamp"
+                .format(pdata['title'], pdata.get('modified'), err)).encode('utf-8')
+        data = datetime.now()
+    pdata['modified'] = datetime.now().strftime("%Y-%m-%d'")
 
 
 TEMP_IPA_CODE = 'tmp_ipa_code'

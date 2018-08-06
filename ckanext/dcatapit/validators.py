@@ -306,7 +306,7 @@ def parse_date(val):
         except (ValueError, TypeError,):
             pass
 
-    raise Invalid(_("Invalid date input: {}").format(val))
+    raise Invalid(_(u"Invalid date input: {}").format(val))
 
 def serialize_date(val):
     if not val:
