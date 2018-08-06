@@ -549,6 +549,7 @@ def update_frequency(pdata):
     
     # default frequency
     if not frequency:
+        print (u'dataset {}: no frequency. Using default, UNKNOWN.'.format(pdata['title'])).encode('utf-8')
         frequency = 'UNKNOWN'
     pdata['frequency'] = frequency
 
@@ -568,15 +569,17 @@ def update_identifier(pdata):
     
     # default theme if nothing available
     if not identifier:
+        print (u'dataset {}: no identifier. generating new one'.format(pdata['title'])).encode('utf-8')
         identifier = str(uuid.uuid4())
     pdata['identifier'] = identifier
 
 def update_modified(pdata):
     try:
         data = validators.parse_date(pdata['modified'])
-    except (KeyError, Invalid,), err:
-        print (u"dataset {}: modified date {} : {}. Using now timestamp"
-                .format(pdata['title'], pdata.get('modified'), err)).encode('utf-8')
+    except (KeyError, Invalid,):
+        val = pdata.get('modified') or None
+        print (u"dataset {}: invalid modified date {}. Using now timestamp"
+                .format(pdata['title'], val)).encode('utf-8')
         data = datetime.now()
     pdata['modified'] = datetime.now().strftime("%Y-%m-%d'")
 
