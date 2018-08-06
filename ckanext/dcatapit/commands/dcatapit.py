@@ -380,6 +380,8 @@ def do_migrate_data():
                                   'include_users': True})
 
     for pname in get_package_list():
+        pname = pname[0]
+        
         pdata = pshow(context, {'name_or_id': pname}) #, 'use_default_schema': True})
 
         if pdata['type'] != 'dataset':
@@ -404,7 +406,7 @@ def do_migrate_data():
         update_modified(pdata)
         update_frequency(pdata)
         pdata['metadata_modified'] = None
-        print 'updating', pdata['name']
+        print 'updating', pdata['id'], pdata['name']
         try:
            out = pupdate(context, pdata)
         except ValidationError, err:
@@ -436,27 +438,9 @@ TEMP_HOLDER_ID = 'temp_holder_id'
 def update_holder(pdata):
     cname = pdata.pop('holder_name', None)
     cident = pdata.pop('holder_identifier', None)
-
-    to_delete = []
-    if not (cname and cident):
-        for idx, ex in enumerate(pdata.get('extras') or []):
-            if ex['key'] == 'holder_name':
-                to_delete.append(idx)
-                cname = ex['value']
-            elif ex['key'] == 'holder_identifier':
-                to_delete.append(idx)
-                cident = ex['value']
-        if to_delete:
-            for idx in reversed(to_delete):
-                pdata['extras'].pop(idx)
-    if cname and not cident:
-        cident = TEMP_HOLDER_ID
-        print (u'package {} has temporary holder_identifier value: {}'.format(pdata['title'], cident)).encode('utf-8')
-    if (cname and cident):
-        pdata['holder_identifier'] = cident
-        pdata['holder_name'] = cname
-
-
+    # we remove baked in holder fields, so it will be
+    # populated with organization's name/identifier on the fly
+    return
 
 def update_creator(pdata):
     cname = pdata.pop('creator_name', None)
@@ -528,7 +512,8 @@ def update_temporal_coverage(pdata):
                                 'temporal_end': tend}])
         validator = toolkit.get_validator('dcatapit_temporal_coverage')
         if (tstart == tend):
-            print (u'dataset {} has the same temporal coverage start/end: {}/{}'.format(pdata['name'], tstart,tend)).encode('utf-8')
+            print (u'dataset {} has the same temporal coverage start/end: {}/{}, using start only'.format(pdata['name'], tstart,tend)).encode('utf-8')
+            tend = None
         try:
             temp_cov = validator(temp_cov, {})
             pdata['temporal_coverage'] = temp_cov
