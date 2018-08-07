@@ -906,8 +906,8 @@ class ItalianDCATAPProfile(RDFProfile):
             g.add((license, DCT.type, URIRef(dcat_license)))
             if license_version:
                 g.add((license, OWL.versionInfo, Literal(license_version)))
-            for n in names:
-                g.add((license, FOAF.name, Literal(n['name'], lang=n['lang'])))
+            for lang, name in names.items():
+                g.add((license, FOAF.name, Literal(name, lang=lang)))
             
             g.add((distribution, DCT.license, license))
 
