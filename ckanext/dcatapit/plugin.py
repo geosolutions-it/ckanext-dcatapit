@@ -466,12 +466,14 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             if ex['key'].startswith('holder_'):
                 to_remove.append(eidx)
                 pkg_update[ex['key']] = ex['value']
+
         for k in pkg_update.keys():
             if k in pkg_dict:
                 raise KeyError("Duplicated key in pkg_dict: {}: {} in extras vs {} in pkg"
                                .format(k, pkg_update[k], pkg_dict[k]))
-        for tr in to_remove:
-            pkg_dict['extras'].pop(tr)
+        for tr in reversed(to_remove):
+            val = pkg_dict['extras'].pop(tr)
+            assert val['key'].startswith('holder_'), val
         pkg_dict.update(pkg_update)
 
         return self._update_pkg_rights_holder(pkg_dict)
@@ -479,7 +481,6 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     def _update_pkg_rights_holder(self, pkg_dict, org=None):
         if pkg_dict.get('type') != 'dataset':
             return pkg_dict
-
         if not (pkg_dict.get('holder_identifier') and pkg_dict.get('holder_name')):
             if not pkg_dict.get('owner_org'):
                 return pkg_dict
