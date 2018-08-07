@@ -438,9 +438,24 @@ TEMP_HOLDER_ID = 'temp_holder_id'
 def update_holder(pdata):
     cname = pdata.pop('holder_name', None)
     cident = pdata.pop('holder_identifier', None)
-    # we remove baked in holder fields, so it will be
-    # populated with organization's name/identifier on the fly
-    return
+    to_delete = []
+    if not (cname and cident):
+        for idx, ex in enumerate(pdata.get('extras') or []):
+            if ex['key'] == 'holder_name':
+                to_delete.append(idx)
+                cname = ex['value']
+            elif ex['key'] == 'holder_identifier':
+                to_delete.append(idx)
+                cident = ex['value']
+        if to_delete:
+            for idx in reversed(to_delete):
+                pdata['extras'].pop(idx)
+    if cname and not cident:
+        cident = TEMP_HOLDER_ID
+        print (u'package {} has temporary holder_identifier value: {}'.format(pdata['title'], cident)).encode('utf-8')
+    if (cname and cident):
+        pdata['holder_identifier'] = cident
+        pdata['holder_name'] = cname
 
 def update_creator(pdata):
     cname = pdata.pop('creator_name', None)

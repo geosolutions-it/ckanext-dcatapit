@@ -481,16 +481,25 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     def _update_pkg_rights_holder(self, pkg_dict, org=None):
         if pkg_dict.get('type') != 'dataset':
             return pkg_dict
-        if not (pkg_dict.get('holder_identifier') and pkg_dict.get('holder_name')):
+        # logic:
+        # this will use organization's name as holder_name if one of conditions is met
+        # * there's holder identifier that match organization's identifier
+        # * there's no holder identifier/name in package
+        # see also https://github.com/geosolutions-it/ckanext-dcatapit/pull/213#issuecomment-410668740
+        holder_identifier = pkg_dict.get('holder_identifier')
+            
+        if holder_identifier or not (pkg_dict.get('holder_identifier') and pkg_dict.get('holder_name')):
             if not pkg_dict.get('owner_org'):
                 return pkg_dict
             if org is None:
                 get_org = toolkit.get_action('organization_show')
                 ctx = get_org_context()
+                # force multilang use
+                ctx['for_view'] = True
                 org = get_org(ctx, {'id': pkg_dict['owner_org']})
-            
-            pkg_dict['holder_name'] = org['title']
-            pkg_dict['holder_identifier'] = org.get('identifier') or None
+            if (holder_identifier and holder_identifier == org.get('identifier')) or not holder_identifier:
+                pkg_dict['holder_name'] = org['title']
+                pkg_dict['holder_identifier'] = org.get('identifier') or None
         return pkg_dict
  
     def edit_template(self):
