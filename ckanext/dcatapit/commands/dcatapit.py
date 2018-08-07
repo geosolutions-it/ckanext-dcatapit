@@ -498,12 +498,12 @@ def update_temporal_coverage(pdata):
             for idx in reversed(to_delete):
                 pdata['extras'].pop(idx)
     if (tstart):
-        temp_cov = json.dumps([{'temporal_start': tstart,
-                                'temporal_end': tend}])
         validator = toolkit.get_validator('dcatapit_temporal_coverage')
         if (tstart == tend):
             print (u'dataset {} has the same temporal coverage start/end: {}/{}, using start only'.format(pdata['name'], tstart,tend)).encode('utf-8')
             tend = None
+        temp_cov = json.dumps([{'temporal_start': tstart,
+                                'temporal_end': tend}])
         try:
             temp_cov = validator(temp_cov, {})
             pdata['temporal_coverage'] = temp_cov
@@ -556,7 +556,7 @@ def update_modified(pdata):
         print (u"dataset {}: invalid modified date {}. Using now timestamp"
                 .format(pdata['title'], val)).encode('utf-8')
         data = datetime.now()
-    pdata['modified'] = datetime.now().strftime("%Y-%m-%d'")
+    pdata['modified'] = datetime.now().strftime("%Y-%m-%d")
 
 
 TEMP_IPA_CODE = 'tmp_ipa_code'
