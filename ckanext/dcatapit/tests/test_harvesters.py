@@ -124,7 +124,7 @@ class HarvestersTestCase(unittest.TestCase):
         self.assertTrue(out, harvest_obj.errors)
 
         pkg = helpers.call_action('package_show', context={}, name_or_id='some-title-2')
-
+        
         for k in ('holder_name', 'holder_identifier',):
             self.assertEqual(pkg.get(k), dataset[k])
 

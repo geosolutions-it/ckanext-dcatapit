@@ -338,4 +338,4 @@ def get_icustomschema_fields():
     return out
 
 def dataset_is_local(pkg_id):
-    return Session.query(Session.query(HarvestObject).filter(HarvestObject.package_id == pkg_id).exists())
+    return not Session.query(Session.query(HarvestObject).filter(HarvestObject.package_id == pkg_id).exists())

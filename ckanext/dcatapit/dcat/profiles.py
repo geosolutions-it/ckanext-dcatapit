@@ -935,8 +935,6 @@ class ItalianDCATAPProfile(RDFProfile):
                     lang = lang.split('_')[0]  # rdflib is quite picky in lang names
                     if exclude_default_lang and lang == default_lang:
                         continue
-                    if field_name == 'holder_name':
-                        print('existing', list(self.g.objects(ref, pred)))
                     self.g.add((ref, pred, Literal(value, lang=lang)))
         else:
             log.warn("No mulitlang source data")
@@ -1093,6 +1091,7 @@ class ItalianDCATAPProfile(RDFProfile):
             if use_default_lang:
                 # we may use web context language or lang from config
                 lang = get_lang() or DEFAULT_LANG
+                lang = lang.split('_')[0]  # rdflib is quite picky in lang names
                 self.g.add((agent, FOAF.name, Literal(agent_name, lang=lang)))
             else:
                 self.g.add((agent, FOAF.name, Literal(agent_name)))
