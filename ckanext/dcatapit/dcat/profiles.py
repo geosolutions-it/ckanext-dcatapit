@@ -933,6 +933,8 @@ class ItalianDCATAPProfile(RDFProfile):
                     continue
                 for lang, value in lang_dict.iteritems():
                    lang = lang.split('_')[0]  # rdflib is quite picky in lang names
+                   if field_name == 'holder_name':
+                       print('existing', list(self.g.objects(ref, pred)))
                    self.g.add((ref, pred, Literal(value, lang=lang)))
         else:
             log.warn("No mulitlang source data")
@@ -953,7 +955,6 @@ class ItalianDCATAPProfile(RDFProfile):
             use_dataset = False
             agent_name = org_dict.get('name')
             agent_id = org_dict.get('identifier')
-
             if agent_id and agent_name:
                 agent_data = (agent_name, agent_id,)
                 holder_ref = self._add_agent(org_dict,
@@ -1080,7 +1081,6 @@ class ItalianDCATAPProfile(RDFProfile):
                      found_no_lang = True
                      break
             return found_no_lang
-
         if isinstance(agent_name, dict):
             for lang, aname in agent_name.items():
                 if lang in OFFERED_LANGS:

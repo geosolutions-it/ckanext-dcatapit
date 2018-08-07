@@ -399,7 +399,6 @@ def do_migrate_data():
         for t in pdata['tags']:
             t['name'] = munge_tag(t['name'])
         update_creator(pdata)
-        update_holder(pdata)
         update_temporal_coverage(pdata)
         update_theme(pdata)
         update_identifier(pdata)
@@ -432,30 +431,6 @@ def get_package_list():
 def get_organization_list():
     return Session.query(Group.name).filter(Group.state=='active',
                                             Group.type=='organization')
-
-TEMP_HOLDER_ID = 'temp_holder_id'
-
-def update_holder(pdata):
-    cname = pdata.pop('holder_name', None)
-    cident = pdata.pop('holder_identifier', None)
-    to_delete = []
-    if not (cname and cident):
-        for idx, ex in enumerate(pdata.get('extras') or []):
-            if ex['key'] == 'holder_name':
-                to_delete.append(idx)
-                cname = ex['value']
-            elif ex['key'] == 'holder_identifier':
-                to_delete.append(idx)
-                cident = ex['value']
-        if to_delete:
-            for idx in reversed(to_delete):
-                pdata['extras'].pop(idx)
-    if cname and not cident:
-        cident = TEMP_HOLDER_ID
-        print (u'package {} has temporary holder_identifier value: {}'.format(pdata['title'], cident)).encode('utf-8')
-    if (cname and cident):
-        pdata['holder_identifier'] = cident
-        pdata['holder_name'] = cname
 
 def update_creator(pdata):
     cname = pdata.pop('creator_name', None)
