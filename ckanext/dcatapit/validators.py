@@ -387,6 +387,8 @@ def dcatapit_subthemes(value, context):
         keys_set = set(item.keys())
         if keys_set - allowed_keys_set:
             raise Invalid(_("Theme item contains invalid keys: {}".format(keys_set - allowed_keys_set)))
+        if allowed_keys_set - keys_set:
+            raise Invalid(_("Theme data should not be empty"))
 
         for k, v in item.items():
             allowed_type = allowed_keys[k]
@@ -409,7 +411,7 @@ def dcatapit_subthemes(value, context):
             if s not in slist:
                 raise Invalid(_("Invalid subtheme: {}".format(s)))
 
-    reduced_themes = set([s['theme'] for s in data])
+    reduced_themes = set([s.get('theme') for s in data if s.get('theme')])
     if len(data) != len(reduced_themes):
         raise Invalid(_("There are duplicate themes. Expected {} items, got {}".format(len(data), len(reduced_themes))))
 
