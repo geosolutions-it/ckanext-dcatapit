@@ -19,12 +19,12 @@ from ckanext.dcatapit.model.license import (
 from ckanext.dcatapit.model.subtheme import (
     load_subthemes, clear_subthemes)
 from ckan.model.meta import Session
-from ckan.model import Package, Group, GroupExtra
+from ckan.model import Package, Group, GroupExtra, Tag, PackageExtra
 from ckan.logic import ValidationError
 from ckan.lib.navl.dictization_functions import Invalid
 
 from sqlalchemy import and_
-from pylons import config
+from ckan.lib.base import config
 from ckan.lib.cli import CkanCommand
 
 from rdflib import Graph
@@ -32,6 +32,7 @@ from rdflib.term import URIRef
 from rdflib.namespace import SKOS, DC
 from ckanext.dcat.profiles import namespaces
 from ckanext.dcatapit import validators
+from ckanext.multilang.model import PackageMultilang as ML_PM
 
 LANGUAGE_THEME_NAME = 'languages'
 EUROPEAN_THEME_NAME = 'eu_themes'
@@ -41,6 +42,8 @@ FILETYPE_THEME_NAME = 'filetype'
 LICENSES_NAME = 'licenses'
 REGIONS_NAME = 'regions'
 SUBTHEME_NAME = 'subthemes'
+DEFAULT_LANG = config.get('ckan.locale_default', 'en')
+DATE_FORMAT = '%d-%m-%Y'
 
 log = logging.getLogger(__name__)
 
@@ -390,20 +393,25 @@ def do_migrate_data():
         # remove empty conforms_to to avoid silly validation errors
         if not pdata.get('conforms_to'):
             pdata.pop('conforms_to', None)
-        # the same for alternate_identifier
+        # ... the same for alternate_identifier
         if not pdata.get('alternate_identifier'):
             pdata.pop('alternate_identifier', None)
 
-        # tags can be multilang, but they won't pass validation then
-        # all we need is id in tag, we can munge name to pass validation
+        # tags can be multilang, but they won't pass validation
+        # we can munge name to pass validation
+        # better way to handle this is welcomed
         for t in pdata['tags']:
             t['name'] = munge_tag(t['name'])
+        
         update_creator(pdata)
         update_temporal_coverage(pdata)
         update_theme(pdata)
         update_identifier(pdata)
         update_modified(pdata)
         update_frequency(pdata)
+        update_conforms_to(pdata)
+        update_holder_info(pdata)
+
         pdata['metadata_modified'] = None
         print 'updating', pdata['id'], pdata['name']
         try:
@@ -421,16 +429,59 @@ def do_migrate_data():
             print (pdata)
             print
             continue
-
         print '---' * 3
 
 def get_package_list():
     return Session.query(Package.name).filter(Package.state=='active',
-                                              Package.type=='dataset')
+                                              Package.type=='dataset')\
+                                      .order_by(Package.title)
+
 
 def get_organization_list():
     return Session.query(Group.name).filter(Group.state=='active',
-                                            Group.type=='organization')
+                                            Group.type=='organization')\
+                                    .order_by(Group.title)
+
+
+def update_holder_info(pdata):
+    if pdata.get('holder_name') and not pdata.get('holder_identifier'):
+        pdata['holder_identifier'] = get_temp_holder_identifier()
+        print (u'dataset {}: holder_name present: {}, but no holder_identifier in data. using generated one: {}'
+               .format(pdata['name'], pdata['holder_name'],pdata['holder_identifier']))
+
+
+def update_conforms_to(pdata):
+    cname = pdata.pop('conforms_to', None)
+
+    to_delete = []
+    if not cname:
+        for idx, ex in enumerate(pdata.get('extras') or []):
+            if ex['key'] == 'conforms_to':
+                to_delete.append(idx)
+                cname = ex['value']
+        if to_delete:
+            for idx in reversed(to_delete):
+                pdata['extras'].pop(idx)
+    
+    ml_pkg = interfaces.get_for_package(pdata['id'])
+    if ml_pkg:
+        try:
+            ml_conforms_to = ml_pkg['conforms_to']
+        except KeyError:
+            ml_conforms_to = {}
+    if cname:
+        standard = {'identifier': None, 'description': {}}
+        if not ml_conforms_to:
+            standard['identifier'] = cname
+        else:
+            standard['identifier'] = ml_conforms_to.get('it') or ml_conforms_to.get(DEFAULT_LANG) or cname
+            for lang, val in ml_conforms_to.items():
+                standard['description'][lang] = val
+
+        Session.query(ML_PM).filter(ML_PM.package_id==pdata['id'],
+                                    ML_PM.field=='conforms_to').delete()
+        pdata['conforms_to'] = json.dumps([standard])
+
 
 def update_creator(pdata):
     cname = pdata.pop('creator_name', None)
@@ -497,7 +548,21 @@ def update_temporal_coverage(pdata):
         if to_delete:
             for idx in reversed(to_delete):
                 pdata['extras'].pop(idx)
+
+    try:
+        tstart = validators.parse_date(tstart).strftime(DATE_FORMAT)
+    except Invalid:
+        tstart = None
+    try:
+        tend = validators.parse_date(tend).strftime(DATE_FORMAT)
+    except Invalid:
+        tend = None
+    ## handle 2010-01-01 to 2010-01-01 case, use whole year 
+    # if tstart == tend and tstart.day == 1 and tstart.month == 1:
+    #     tend = tend.replace(day=31, month=12)
+
     if (tstart):
+
         validator = toolkit.get_validator('dcatapit_temporal_coverage')
         if (tstart == tend):
             print (u'dataset {} has the same temporal coverage start/end: {}/{}, using start only'.format(pdata['name'], tstart,tend)).encode('utf-8')
@@ -524,7 +589,7 @@ def update_frequency(pdata):
     
     # default frequency
     if not frequency:
-        print (u'dataset {}: no frequency. Using default, UNKNOWN.'.format(pdata['title'])).encode('utf-8')
+        print (u'dataset {}: no frequency. Using default, UNKNOWN.'.format(pdata['name'])).encode('utf-8')
         frequency = 'UNKNOWN'
     pdata['frequency'] = frequency
 
@@ -544,7 +609,7 @@ def update_identifier(pdata):
     
     # default theme if nothing available
     if not identifier:
-        print (u'dataset {}: no identifier. generating new one'.format(pdata['title'])).encode('utf-8')
+        print (u'dataset {}: no identifier. generating new one'.format(pdata['name'])).encode('utf-8')
         identifier = str(uuid.uuid4())
     pdata['identifier'] = identifier
 
@@ -554,25 +619,43 @@ def update_modified(pdata):
     except (KeyError, Invalid,):
         val = pdata.get('modified') or None
         print (u"dataset {}: invalid modified date {}. Using now timestamp"
-                .format(pdata['title'], val)).encode('utf-8')
+                .format(pdata['name'], val)).encode('utf-8')
         data = datetime.now()
     pdata['modified'] = datetime.now().strftime("%Y-%m-%d")
 
 
 TEMP_IPA_CODE = 'tmp_ipa_code'
+TEMP_HOLDER_CODE = 'tmp_holder_code'
+
+def get_temp_holder_identifier():
+    c = package_temp_code_count(TEMP_HOLDER_CODE)
+    return '{}_{}'.format(TEMP_HOLDER_CODE, c + 1)
 
 def get_temp_org_identifier():
-    c = ipa_temp_code_count()
+    c = group_temp_code_count(TEMP_IPA_CODE)
     return '{}_{}'.format(TEMP_IPA_CODE, c + 1)
 
-def ipa_temp_code_count():
+
+def package_temp_code_count(BASE_CODE):
+    s = Session
+    q = s.query(PackageExtra.value).join(Package, and_(Package.id==PackageExtra.package_id,
+                                                   PackageExtra.state=='active'))\
+                                 .filter(Package.type == 'organization',
+                                         Package.state == 'active',
+                                         PackageExtra.key == 'identifier',
+                                         PackageExtra.value.startswith(BASE_CODE))\
+                                 .group_by(PackageExtra.value)\
+                                 .count()
+    return q
+
+def group_temp_code_count(BASE_CODE):
     s = Session
     q = s.query(GroupExtra.value).join(Group, and_(Group.id==GroupExtra.group_id,
                                                    GroupExtra.state=='active'))\
                                  .filter(Group.type == 'organization',
                                          Group.state == 'active',
                                          GroupExtra.key == 'identifier',
-                                         GroupExtra.value.startswith(TEMP_IPA_CODE))\
+                                         GroupExtra.value.startswith(BASE_CODE))\
                                  .group_by(GroupExtra.value)\
                                  .count()
     return q
