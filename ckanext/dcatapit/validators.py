@@ -387,7 +387,7 @@ def dcatapit_subthemes(value, context):
         keys_set = set(item.keys())
         if keys_set - allowed_keys_set:
             raise Invalid(_("Theme item contains invalid keys: {}".format(keys_set - allowed_keys_set)))
-        if allowed_keys_set - keys_set:
+        if not item.get('theme'):
             raise Invalid(_("Theme data should not be empty"))
 
         for k, v in item.items():
