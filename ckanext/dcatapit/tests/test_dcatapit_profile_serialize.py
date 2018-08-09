@@ -353,7 +353,8 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
                 _holder_names = list(g.objects(holder_ref, FOAF.name))
                 _holder_ids = list((str(ob) for ob in g.objects(holder_ref, DCT.identifier)))
 
-                assert len(_holder_names) == 1
+                # default, and one with lang
+                assert len(_holder_names) == 2
                 assert len(_holder_ids) == 1
                 
                 test_id = pkg.get('holder_identifier') or org_dict['identifier']
