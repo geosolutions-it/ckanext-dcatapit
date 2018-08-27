@@ -310,6 +310,7 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             'holder_name':'bolzano',
             'holder_identifier':'234234234',
             'theme':'{ECON,ENVI}',
+            'dataset_is_local': False,
             'language':'{DEU,ENG,ITA}',
         }
         
@@ -328,6 +329,7 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             'creator_name':'test',
             'creator_identifier':'412946129',
             'theme':'{ECON,ENVI}',
+            'dataset_is_local': True,
             'language':'{DEU,ENG,ITA}',
             'owner_org': org['name'],
         }
@@ -352,9 +354,14 @@ class TestDCATAPITProfileSerializeDataset(BaseSerializeTest):
             for holder_ref in rights_holders:
                 _holder_names = list(g.objects(holder_ref, FOAF.name))
                 _holder_ids = list((str(ob) for ob in g.objects(holder_ref, DCT.identifier)))
-
-                # default, and one with lang
-                assert len(_holder_names) == 2
+                
+                # local dataset will use organization name only
+                # while remote will have at least two names - one with lang, one default without lang
+                if pkg['dataset_is_local']:
+                    num_holder_names = 1
+                else:
+                    num_holder_names = 2
+                assert len(_holder_names) == num_holder_names, _holder_names
                 assert len(_holder_ids) == 1
                 
                 test_id = pkg.get('holder_identifier') or org_dict['identifier']
