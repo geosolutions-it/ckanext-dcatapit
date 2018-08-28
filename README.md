@@ -20,7 +20,7 @@ CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
 - [Managing translations](#managing-translations)
     - [Creating a new translation](#creating-a-new-translation)
     - [Updating an existing translation](#updating-an-existing-translation)
-- [Updating old installation](#updating-old-installation)
+- [Updating an old installation](#updating-an-old-installation)
 - [Contributing](#contributing)
 - [Support, Communication and Credits](#support-communication-and-credits)
 
@@ -416,9 +416,9 @@ In order to update the existing translations proceed as follow:
        python setup.py compile_catalog --locale YOUR_LANGUAGE
 
 
-## Updating old installation from 1.0.0 to 1.1.0 version
+## Updating an old installation
 
-In order to update old installation:
+In order to update an old installation (from 1.0.0 to 1.1.0 version):
 
 1. Dump of ckan and datastore databases
 
@@ -428,11 +428,13 @@ In order to update old installation:
 
 3. Update the Solr schema as reported in the installation steps and restart Solr
 
-4. Run model update
+4. Ensure that all the configuration properties required by the new version have been properly provided in .ini file
+
+5. Run model update
 
         paster --plugin=ckanext-dcatapit vocabulary initdb --config=/etc/ckan/default/production.ini
 
-5. Run vocabulary load commands (regions, licenses and sub-themes):
+6. Run vocabulary load commands (regions, licenses and sub-themes):
 
 		wget "https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/territorial-classifications/regions/regions.rdf" -O "/tmp/regions.rdf"
 	
@@ -443,7 +445,7 @@ In order to update old installation:
 		paster --plugin=ckanext-dcatapit vocabulary load --filename "/tmp/licenses.rdf" --name licenses --config "/etc/ckan/default/production.ini"
 		paster --plugin=ckanext-dcatapit vocabulary load --filename "ckanext-dcatapit/examples/eurovoc_mapping.rdf" --name subthemes --config "/etc/ckan/default/production.ini" "ckanext-dcatapit/examples/eurovoc.rdf"
 
-6. Run data migration command:
+7. Run data migration command:
 
         paster --plugin=ckanext-dcatapit vocabulary migrate_data --config=/etc/ckan/default/production.ini > migration.log
 
@@ -466,11 +468,11 @@ Migration script will:
 	updating b36e6f42-d0eb-4b53-8e41-170c50a2384c occupati-e-disoccupati
 	---------
 	
-7. Rebuild Solr indexes:
+8. Rebuild Solr indexes:
 
 		paster --plugin=ckan search-index rebuild -c /etc/ckan/default/production.ini
 		
-8. Restart Ckan
+9. Restart Ckan
 
 			
 ## Contributing
