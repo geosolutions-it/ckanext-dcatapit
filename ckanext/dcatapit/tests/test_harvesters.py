@@ -124,7 +124,7 @@ class HarvestersTestCase(unittest.TestCase):
         self.assertTrue(out, harvest_obj.errors)
 
         pkg = helpers.call_action('package_show', context={}, name_or_id='some-title-2')
-
+        
         for k in ('holder_name', 'holder_identifier',):
             self.assertEqual(pkg.get(k), dataset[k])
 
@@ -157,7 +157,7 @@ class HarvestersTestCase(unittest.TestCase):
         self.assertEqual(org['identifier'], dataset['holder_identifier'])
 
         # package's holder should be updated with organization's data
-        for k in (('holder_name', 'name',), ('holder_identifier','identifier',)):
+        for k in (('holder_name', 'title',), ('holder_identifier','identifier',)):
             self.assertEqual(pkg.get(k[0]), org[k[1]] )
 
         # check for existing org

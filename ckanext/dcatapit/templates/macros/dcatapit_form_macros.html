@@ -77,7 +77,7 @@ Old implementation of the couple element (one element with comma separated value
 {% endmacro %}
 
 
-{% macro couple(name, labels=(), names=(), id="", label="", values=(), placeholders=(), error="", types="", classes=[], attrs={}, is_required=false, key_values=(), help='', read_only=False) %}
+{% macro couple(name, labels=(), names=(), id="", label="", values=(), placeholders=(), error="", types="", classes=[], attrs={}, is_required=false, key_values=(), help='', read_only=False, modify_fields=False) %}
   {%- set classes = (classes|list) -%}
   {%- set label_id = (id) ~ "-key" -%}
   {%- set extra_html = caller() if caller -%}
@@ -97,6 +97,18 @@ Old implementation of the couple element (one element with comma separated value
             <span class="">{{ values[1]| empty_and_escape }}</span>
           </div>
         </div>
+       {% if modify_fields %}
+      <input id="{{ names[0] }}-value" 
+             type="hidden" 
+             name="{{ names[0] }}" 
+             value="{{ values[0] | empty_and_escape }}" 
+             placeholder="{{ placeholders[0] }}" />
+      <input id="{{ names[1] }}-value" 
+             type="hidden" 
+             name="{{ names[1] }}" 
+             value="{{ values[1] | empty_and_escape }}" 
+             placeholder="{{ placeholders[1] }}" />
+        {% endif %}
       {% else %}
 
     <div class="input-prepend" {{ form.attributes(attrs) }}>

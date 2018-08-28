@@ -5,7 +5,7 @@ import ckan.lib.search as search
 from pylons import config
 from ckan.lib.base import model
 from ckan.model import Session
-from pylons.i18n.translation import get_lang
+from ckan.lib.i18n import get_lang
 
 from ckan.plugins.interfaces import Interface
 from ckanext.dcatapit.model import DCATAPITTagVocabulary, License, Subtheme, SubthemeLabel

@@ -183,5 +183,4 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
             {'ignore_auth': True, 'defer_commit': True},
             {})
         self._user_name = user['name']
-
         return self._user_name

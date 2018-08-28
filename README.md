@@ -20,6 +20,7 @@ CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
 - [Managing translations](#managing-translations)
     - [Creating a new translation](#creating-a-new-translation)
     - [Updating an existing translation](#updating-an-existing-translation)
+- [Updating old installation](#updating-old-installation)
 - [Contributing](#contributing)
 - [Support, Communication and Credits](#support-communication-and-credits)
 
@@ -414,6 +415,64 @@ In order to update the existing translations proceed as follow:
 
        python setup.py compile_catalog --locale YOUR_LANGUAGE
 
+
+## Updating old installation from 1.0.0 to 1.1.0 version
+
+In order to update old installation:
+
+1. Dump of ckan and datastore databases
+
+2. Update extension code:
+
+        git pull
+
+3. Update the Solr schema as reported in the installation steps and restart Solr
+
+4. Run model update
+
+        paster --plugin=ckanext-dcatapit vocabulary initdb --config=/etc/ckan/default/production.ini
+
+5. Run vocabulary load commands (regions, licenses and sub-themes):
+
+		wget "https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/territorial-classifications/regions/regions.rdf" -O "/tmp/regions.rdf"
+	
+		paster --plugin=ckanext-dcatapit vocabulary load --filename "/tmp/regions.rdf" --name regions --config "/etc/ckan/default/production.ini"
+
+		wget "https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/licences/licences.rdf" -O "/tmp/licenses.rdf"
+	
+		paster --plugin=ckanext-dcatapit vocabulary load --filename "/tmp/licenses.rdf" --name licenses --config "/etc/ckan/default/production.ini"
+		paster --plugin=ckanext-dcatapit vocabulary load --filename "ckanext-dcatapit/examples/eurovoc_mapping.rdf" --name subthemes --config "/etc/ckan/default/production.ini" "ckanext-dcatapit/examples/eurovoc.rdf"
+
+6. Run data migration command:
+
+        paster --plugin=ckanext-dcatapit vocabulary migrate_data --config=/etc/ckan/default/production.ini > migration.log
+
+You can review migration results by viewing `migration.log` file. It will contain list of messages generated during migration. 
+
+Migration script will:
+ * update all organizations and assign temporary identifier in form of `tmp_ipa_code_X` (where `X` is a number in sequence). Organization identifier is required field now, and thus temporary value is created to avoid errors in validation. Script will report each organization which have updated identifier in log with message similar to following: `org: [pab-foreste] PAB: Foreste : setting temporal identifier: tmp_ipa_code_1`
+
+ * update all packages and migrate DCAT AP_IT fields. Where possible, it will try to transform those fields into new notation/format. Successful package data migration will be marked with message like this:
+
+        ---------
+        updating ortofoto-di-merano-2005
+        ---------
+
+  If migration is not possible for some reason, there will be a message like this:
+  
+	dataset test-dataset: the same temporal coverage start/end: 01-01-2014/01-01-2014, using start only
+	dataset test-dataset: no identifier. generating new one
+	dataset test-dataset: invalid modified date Manuelle. Using now timestamp
+	updating b36e6f42-d0eb-4b53-8e41-170c50a2384c occupati-e-disoccupati
+	---------
+	
+7. Rebuild Solr indexes:
+
+		paster --plugin=ckan search-index rebuild -c /etc/ckan/default/production.ini
+		
+8. Restart Ckan
+
+			
 ## Contributing
 
 We welcome contributions in any form:

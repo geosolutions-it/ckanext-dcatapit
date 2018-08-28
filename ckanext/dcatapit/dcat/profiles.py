@@ -11,13 +11,14 @@ from rdflib import URIRef, BNode, Literal
 
 import ckan.logic as logic
 
-from ckan.lib.i18n import get_locales
+from ckan.lib.i18n import get_locales, get_lang
 from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF, ADMS, OWL, SCHEMA, TIME
 from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
 
 import ckanext.dcatapit.interfaces as interfaces
 import ckanext.dcatapit.helpers as helpers
 from ckanext.dcatapit import validators
+from ckanext.dcatapit import schema
 from ckanext.dcatapit.model.subtheme import Subtheme
 
 
@@ -607,6 +608,15 @@ class ItalianDCATAPProfile(RDFProfile):
     def graph_from_dataset(self, dataset_dict, dataset_ref):
 
         title = dataset_dict.get('title')
+
+        # extract fields from extras, just in case
+        schema_fields = schema.get_custom_package_schema() 
+        for fdef in schema_fields:
+            for eidx, ex in enumerate(dataset_dict.get('extras') or []):
+                if ex['key'] == fdef['name']:
+                    dataset_dict['extras'].pop(eidx)
+                    dataset_dict[fdef['name']] = ex['value']
+                    break
         
         g = self.g
 
@@ -709,6 +719,9 @@ class ItalianDCATAPProfile(RDFProfile):
 
         ### ADMS:identifier alternative identifiers
         self.g.remove((dataset_ref, ADMS.identifier, None,))
+
+        # alternate_identifier sometimes resides in extras
+
         try:
             alt_ids = json.loads(dataset_dict['alternate_identifier'])
         except (KeyError, TypeError, ValueError,):
@@ -843,7 +856,13 @@ class ItalianDCATAPProfile(RDFProfile):
         if holder_use_dataset and holder_ref:
             loc_package_mapping['holder_name'] = (holder_ref, FOAF.name)
 
-        self._add_multilang_values(loc_dict, loc_package_mapping)
+        dataset_is_local = dataset_dict.get('dataset_is_local')
+        if dataset_is_local:
+            _org_name = interfaces.get_for_group_or_organization(dataset_dict['owner_org'])
+            if _org_name.get('title'):
+                loc_dict['holder_name'] = _org_name['title']
+            
+        self._add_multilang_values(loc_dict, loc_package_mapping, exclude_default_lang=dataset_is_local)
         if not holder_use_dataset and holder_ref:
             loc_dict = interfaces.get_for_group_or_organization(org_dict['id'])
             loc_package_mapping = {'name': (holder_ref, FOAF.name)}
@@ -893,8 +912,8 @@ class ItalianDCATAPProfile(RDFProfile):
             g.add((license, DCT.type, URIRef(dcat_license)))
             if license_version:
                 g.add((license, OWL.versionInfo, Literal(license_version)))
-            for n in names:
-                g.add((license, FOAF.name, Literal(n['name'], lang=n['lang'])))
+            for lang, name in names.items():
+                g.add((license, FOAF.name, Literal(name, lang=lang)))
             
             g.add((distribution, DCT.license, license))
 
@@ -911,16 +930,21 @@ class ItalianDCATAPProfile(RDFProfile):
             }
             self._add_multilang_values(loc_dict, loc_resource_mapping)
 
-    def _add_multilang_values(self, loc_dict, loc_mapping):
+    def _add_multilang_values(self, loc_dict, loc_mapping, exclude_default_lang=False):
         if loc_dict:
+            default_lang = get_lang() or DEFAULT_LANG
+            default_lang = default_lang.split('_')[0]
             for field_name, lang_dict in loc_dict.iteritems():
                 ref, pred = loc_mapping.get(field_name, (None, None))
                 if not pred:
                     log.warn('Multilang field not mapped "%s"', field_name)
                     continue
                 for lang, value in lang_dict.iteritems():
-                   lang = lang.split('_')[0]  # rdflib is quite picky in lang names
-                   self.g.add((ref, pred, Literal(value, lang=lang)))
+                    lang = lang.split('_')[0]  # rdflib is quite picky in lang names
+                    
+                    if exclude_default_lang and lang == default_lang:
+                        continue
+                    self.g.add((ref, pred, Literal(value, lang=lang)))
         else:
             log.warn("No mulitlang source data")
 
@@ -929,18 +953,18 @@ class ItalianDCATAPProfile(RDFProfile):
         agent_name = self._get_dict_value(dataset_dict, basekey + '_name', None)
         agent_id = self._get_dict_value(dataset_dict, basekey + '_identifier', None)
         holder_ref = None
-        if agent_id and agent_name:
+        dataset_is_local = dataset_dict.get('dataset_is_local')
+        if (agent_id and agent_name):
             use_dataset = True
             holder_ref = self._add_agent(dataset_dict,
                                          ref,
                                          'holder',
                                          DCT.rightsHolder,
-                                         use_default_lang=True)
+                                         use_default_lang=dataset_is_local)
         else:
             use_dataset = False
             agent_name = org_dict.get('name')
             agent_id = org_dict.get('identifier')
-
             if agent_id and agent_name:
                 agent_data = (agent_name, agent_id,)
                 holder_ref = self._add_agent(org_dict,
@@ -1055,6 +1079,8 @@ class ItalianDCATAPProfile(RDFProfile):
             agent_id = self._get_dict_value(_dict, basekey + '_identifier','N/A')
 
         agent = BNode()
+        rlang = get_lang() or DEFAULT_LANG
+        rlang = rlang.split('_')[0]
 
         self.g.add((agent, RDF['type'], DCATAPIT.Agent))
         self.g.add((agent, RDF['type'], FOAF.Agent))
@@ -1067,16 +1093,16 @@ class ItalianDCATAPProfile(RDFProfile):
                      found_no_lang = True
                      break
             return found_no_lang
-
         if isinstance(agent_name, dict):
             for lang, aname in agent_name.items():
                 if lang in OFFERED_LANGS:
                     self.g.add((agent, FOAF.name, Literal(aname, lang=lang_mapping_ckan_to_xmllang.get(lang, lang))))
-                    if lang == DEFAULT_LANG and not _found_no_lang():
+                    if lang == rlang and not _found_no_lang():
                         self.g.add((agent, FOAF.name, Literal(aname)))
         else:
             if use_default_lang:
-                self.g.add((agent, FOAF.name, Literal(agent_name, lang=DEFAULT_LANG)))
+                # we may use web context language or lang from config
+                self.g.add((agent, FOAF.name, Literal(agent_name, lang=rlang)))
             else:
                 self.g.add((agent, FOAF.name, Literal(agent_name)))
         self.g.add((agent, DCT.identifier, Literal(agent_id)))

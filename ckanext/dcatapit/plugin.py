@@ -215,7 +215,6 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         # conditionally include schema fields from MultilangResourcesPlugin
         if MLR:
             schema = MLR.update_schema(schema)
-        
         log.debug("Schema updated for DCAT_AP-TI:  %r", schema)
 
         return schema
@@ -454,8 +453,35 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
     def before_view(self, pkg_dict):
         return self._update_pkg_rights_holder(pkg_dict)
-
+    
     def after_show(self, context, pkg_dict):
+        
+        # in some cases (automatic solr indexing after update)
+        # pkg_dict may come without validation and thus
+        # without extras converted to main dict.
+        # this will ensure that holder keys are extracted to main dict
+        pkg_update = {}
+        to_remove = []
+        for eidx, ex in enumerate(pkg_dict.get('extras') or []):
+            if ex['key'].startswith('holder_'):
+                to_remove.append(eidx)
+                pkg_update[ex['key']] = ex['value']
+
+        for k in pkg_update.keys():
+            if k in pkg_dict:
+                raise KeyError("Duplicated key in pkg_dict: {}: {} in extras vs {} in pkg"
+                               .format(k, pkg_update[k], pkg_dict[k]))
+        for tr in reversed(to_remove):
+            val = pkg_dict['extras'].pop(tr)
+            assert val['key'].startswith('holder_'), val
+        pkg_dict.update(pkg_update)
+
+        # remove holder info if pkg is local, use org as a source
+        # see https://github.com/geosolutions-it/ckanext-dcatapit/pull/213#issuecomment-410668740
+        pkg_dict['dataset_is_local'] = helpers.dataset_is_local(pkg_dict['id'])
+        if pkg_dict['dataset_is_local']:
+            pkg_dict.pop('holder_identifier', None)
+            pkg_dict.pop('holder_name', None)
         return self._update_pkg_rights_holder(pkg_dict)
 
     def _update_pkg_rights_holder(self, pkg_dict, org=None):
@@ -467,9 +493,11 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             if org is None:
                 get_org = toolkit.get_action('organization_show')
                 ctx = get_org_context()
+                # force multilang use
+                ctx['for_view'] = True
                 org = get_org(ctx, {'id': pkg_dict['owner_org']})
-            pkg_dict['holder_name'] = org['name']
-            pkg_dict['holder_identifier'] = org.get('identifier')
+            pkg_dict['holder_name'] = org['title']
+            pkg_dict['holder_identifier'] = org.get('identifier') or None
         return pkg_dict
  
     def edit_template(self):

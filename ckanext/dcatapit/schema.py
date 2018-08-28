@@ -101,12 +101,14 @@ def get_custom_organization_schema():
 		    'is_required': False
 	    },
         {
+
+            # field become required by https://github.com/geosolutions-it/ckanext-dcatapit/pull/213#pullrequestreview-139966344
             'name': 'identifier',
             'label': _('IPA/IVA'),
-            'validator': ['ignore_missing'],
+            'validator': ['not_empty'],
             'element': 'input',
             'type': 'text',
-            'is_required': False,
+            'is_required': True, 
             'placeholder': _('organization IPA/IVA code')
         }
     ]

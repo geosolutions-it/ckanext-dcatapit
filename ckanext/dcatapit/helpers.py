@@ -6,6 +6,7 @@ from ckan.model import GroupExtra, Session
 import ckan.lib.helpers as h
 import ckan.plugins.toolkit as toolkit
 from ckan.plugins import PluginImplementations
+from ckanext.harvest.model import HarvestObject
 
 import ckanext.dcatapit.schema as dcatapit_schema
 
@@ -334,5 +335,9 @@ def get_icustomschema_fields():
         for extra in extra_schema:
             extra['external'] = True
         out.extend(extra_schema)
-    
     return out
+
+def dataset_is_local(pkg_id):
+    q = Session.query(HarvestObject).filter(HarvestObject.package_id == pkg_id).exists()
+    is_remote = Session.query(q).scalar()
+    return not is_remote

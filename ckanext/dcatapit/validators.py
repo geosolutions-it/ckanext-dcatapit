@@ -12,15 +12,16 @@ from ckan.lib.i18n import get_locales
 
 from ckanext.dcatapit.model. subtheme import Subtheme, ThemeToSubtheme
 
-log = logging.getLogger(__file__)
-
 try:
     from ckan.common import config
 except ImportError:
     from pylons import config
 
+
 DEFAULT_LANG = config.get('ckan.locale_default', 'en')
+log = logging.getLogger(__file__)
 available_locales = get_locales()
+
 
 def is_blank (string):
     return not (string and string.strip())
@@ -284,10 +285,22 @@ def dcatapit_creator(value, context):
 
 
 DATE_FORMATS = ['%Y-%m-%d',
+                '%d-%m-%Y',
                 '%Y%m%d',
                 '%Y-%m-%dT%H:%M:%S',
                 '%Y-%m-%d %H:%M:%S',
-                '%Y-%m-%d %H:%M']
+                '%Y-%m-%d %H:%M',
+                # faulty ones, but still can be used
+                '%Y',
+                'N/A%Y',
+                'N/A %Y',
+                '%b. %Y',
+                '%b.%Y',
+                '%B %Y',
+                '%m/%Y',
+                '%d.%m.%Y',
+                '%d/%m/%Y',
+                ]
 
 def parse_date(val):
     for format in DATE_FORMATS:
@@ -296,7 +309,7 @@ def parse_date(val):
         except (ValueError, TypeError,):
             pass
 
-    raise Invalid(_("Invalid date input: {}").format(val))
+    raise Invalid(_(u"Invalid date input: {}").format(val))
 
 def serialize_date(val):
     if not val:
