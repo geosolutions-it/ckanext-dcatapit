@@ -857,6 +857,10 @@ class ItalianDCATAPProfile(RDFProfile):
             loc_package_mapping['holder_name'] = (holder_ref, FOAF.name)
 
         dataset_is_local = dataset_dict.get('dataset_is_local')
+        if dataset_is_local:
+            _org_name = interfaces.get_for_group_or_organization(dataset_dict['owner_org'])
+            loc_dict['holder_name'] = _org_name['title']
+            
         self._add_multilang_values(loc_dict, loc_package_mapping, exclude_default_lang=dataset_is_local)
         if not holder_use_dataset and holder_ref:
             loc_dict = interfaces.get_for_group_or_organization(org_dict['id'])

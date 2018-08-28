@@ -11,6 +11,7 @@ from pprint import pprint
 
 import ckan.plugins.toolkit as toolkit
 from ckan.lib.munge import munge_tag
+from ckan.logic.schema import tag_name_validator
 import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit.model.license import (
     load_from_graph as load_licenses_from_graph,
@@ -19,7 +20,7 @@ from ckanext.dcatapit.model.license import (
 from ckanext.dcatapit.model.subtheme import (
     load_subthemes, clear_subthemes)
 from ckan.model.meta import Session
-from ckan.model import Package, Group, GroupExtra, Tag, PackageExtra
+from ckan.model import Package, Group, GroupExtra, Tag, PackageExtra, PackageTag
 from ckan.logic import ValidationError
 from ckan.lib.navl.dictization_functions import Invalid
 
@@ -32,6 +33,7 @@ from rdflib.term import URIRef
 from rdflib.namespace import SKOS, DC
 from ckanext.dcat.profiles import namespaces
 from ckanext.dcatapit import validators
+from ckanext.dcatapit.plugin import DCATAPITPackagePlugin
 from ckanext.multilang.model import PackageMultilang as ML_PM
 
 LANGUAGE_THEME_NAME = 'languages'
@@ -357,6 +359,8 @@ def do_migrate_data():
     pcreate = toolkit.get_action('package_create')
     oshow = toolkit.get_action('organization_show')
     oupdate = toolkit.get_action('organization_patch')
+    pupdate_schema = DCATAPITPackagePlugin().update_package_schema()
+    pupdate_schema['tags']['name'].remove(tag_name_validator)
 
     for oname in get_organization_list():
         odata = oshow(context, {'id': oname, 'include_extras': True,
@@ -382,7 +386,9 @@ def do_migrate_data():
                                   'include_tags': True,
                                   'include_users': True})
 
+    pcontext = context.copy()
     for pname in get_package_list():
+        pcontext['schema'] = pupdate_schema
         pname = pname[0]
         
         pdata = pshow(context, {'name_or_id': pname}) #, 'use_default_schema': True})
@@ -396,12 +402,6 @@ def do_migrate_data():
         # ... the same for alternate_identifier
         if not pdata.get('alternate_identifier'):
             pdata.pop('alternate_identifier', None)
-
-        # tags can be multilang, but they won't pass validation
-        # we can munge name to pass validation
-        # better way to handle this is welcomed
-        for t in pdata['tags']:
-            t['name'] = munge_tag(t['name'])
         
         update_creator(pdata)
         update_temporal_coverage(pdata)
@@ -415,7 +415,7 @@ def do_migrate_data():
         pdata['metadata_modified'] = None
         print 'updating', pdata['id'], pdata['name']
         try:
-           out = pupdate(context, pdata)
+           out = pupdate(pcontext, pdata)
         except ValidationError, err:
             print (u'Cannot update due to validation error {}'.format(pdata['name'])).encode('utf-8')
             print err
@@ -565,7 +565,7 @@ def update_temporal_coverage(pdata):
 
         validator = toolkit.get_validator('dcatapit_temporal_coverage')
         if (tstart == tend):
-            print (u'dataset {} has the same temporal coverage start/end: {}/{}, using start only'.format(pdata['name'], tstart,tend)).encode('utf-8')
+            print (u'dataset {}: the same temporal coverage start/end: {}/{}, using start only'.format(pdata['name'], tstart,tend)).encode('utf-8')
             tend = None
         temp_cov = json.dumps([{'temporal_start': tstart,
                                 'temporal_end': tend}])
