@@ -426,7 +426,7 @@ In order to update old installation:
 
         git pull
 
-3. Update the Solr schema as reported in the installation steps
+3. Update the Solr schema as reported in the installation steps and restart Solr
 
 4. Run model update
 
@@ -469,6 +469,9 @@ Migration script will:
 7. Rebuild Solr indexes:
 
 		paster --plugin=ckan search-index rebuild -c /etc/ckan/default/production.ini
+		
+8. Restart Ckan
+
 			
 ## Contributing
 
