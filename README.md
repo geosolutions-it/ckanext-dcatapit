@@ -416,23 +416,34 @@ In order to update the existing translations proceed as follow:
        python setup.py compile_catalog --locale YOUR_LANGUAGE
 
 
-## Updating old installation
+## Updating old installation from 1.0.0 to 1.1.0 version
 
 In order to update old installation:
 
-1. Update extension code:
+1. Dump of ckan and datastore databases
+
+2. Update extension code:
 
         git pull
 
-2. Run model update
+3. Update the Solr schema as reported in the installation steps
+
+4. Run model update
 
         paster --plugin=ckanext-dcatapit vocabulary initdb --config=/etc/ckan/default/production.ini
 
-3. Run vocabulary load commands, especially license:
+5. Run vocabulary load commands (regions, licenses and sub-themes):
 
-       paster --plugin=ckanext-dcatapit vocabulary load --filename path/to/license.rdf --name licenses --config=/etc/ckan/default/production.ini
+		wget "https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/territorial-classifications/regions/regions.rdf" -O "/tmp/regions.rdf"
+	
+		paster --plugin=ckanext-dcatapit vocabulary load --filename "/tmp/regions.rdf" --name regions --config "/etc/ckan/default/production.ini"
 
-4. Run data migration command:
+		wget "https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/licences/licences.rdf" -O "/tmp/licenses.rdf"
+	
+		paster --plugin=ckanext-dcatapit vocabulary load --filename "/tmp/licenses.rdf" --name licenses --config "/etc/ckan/default/production.ini"
+		paster --plugin=ckanext-dcatapit vocabulary load --filename "ckanext-dcatapit/examples/eurovoc_mapping.rdf" --name subthemes --config "/etc/ckan/default/production.ini" "ckanext-dcatapit/examples/eurovoc.rdf"
+
+6. Run data migration command:
 
         paster --plugin=ckanext-dcatapit vocabulary migrate_data --config=/etc/ckan/default/production.ini > migration.log
 
@@ -448,11 +459,17 @@ Migration script will:
         ---------
 
   If migration is not possible for some reason, there will be a message like this:
+  
+	dataset test-dataset: the same temporal coverage start/end: 01-01-2014/01-01-2014, using start only
+	dataset test-dataset: no identifier. generating new one
+	dataset test-dataset: invalid modified date Manuelle. Using now timestamp
+	updating b36e6f42-d0eb-4b53-8e41-170c50a2384c occupati-e-disoccupati
+	---------
+	
+7. Rebuild Solr indexes:
 
-        dataset test-dataset: cannot use temporal coverage (u'2015', None): 'Invalid date input: 2015'
-        updating test-dataset
-        ---------
-
+		paster --plugin=ckan search-index rebuild -c /etc/ckan/default/production.ini
+			
 ## Contributing
 
 We welcome contributions in any form:
