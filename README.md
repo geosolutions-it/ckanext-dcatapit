@@ -97,11 +97,12 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
      The mapping ini file should have a section named `dcatapit:theme_group_mapping` and shall contain lines in the form:
       
          theme_key = group1 [, group2 ...]
+	 
+     a [sample file](https://github.com/geosolutions-it/ckanext-dcatapit/blob/master/examples/theme_to_group.ini) in examples directory of this project
 
    * `dcatapit_ckan_harvester`: a CKAN harvester that binds remote CKAN groups into local themes; that is, given a local
       group/themes mapping, if an harvested dataset belongs to a given remote group, the mapped themes will locally be added
-      to the harvested dataset.
-      You'll have to define the property:
+      to the harvested dataset. You'll have to define the property:
       
          ckanext.dcatapit.nonconformant_themes_mapping.file = /path/to/your/group_to_theme_file
 	 
