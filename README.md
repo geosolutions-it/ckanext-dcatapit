@@ -421,15 +421,26 @@ In order to update the existing translations proceed as follow:
 
 In order to update an old installation (from 1.0.0 to 1.1.0 version):
 
-1. Dump of ckan and datastore databases
+1. Dump of ckan and datastore databases (this is a safety measure):
+
+		su postgres
+		pg_dump -U postgres -i ckan > ckan.dump
+		pg_dump -U postgres -i datastore > datastore.dump
 
 2. Update extension code:
 
         git pull
 
-3. Update the Solr schema as reported in the installation steps and restart Solr
+3. Update the Solr schema as reported in the installation steps and then restart Solr. In particular ensure that following fields are present in schema.xml:
 
-4. Ensure that all the configuration properties required by the new version have been properly provided in .ini file
+		<field name="dcat_theme" type="string" indexed="true" stored="false" multiValued="true"/>
+		<field name="dcat_subtheme" type="string" indexed="true" stored="false" multiValued="true"/>
+		<dynamicField name="dcat_subtheme_*" type="string" indexed="true" stored="false" multiValued="true"/>
+		<dynamicField name="organization_region_*" type="string" indexed="true" stored="false" multiValued="true"/>
+		<dynamicField name="resource_license_*" type="string" indexed="true" stored="false" multiValued="true"/>
+		<field name="resource_license" type="string" indexed="true" stored="false" multiValued="true"/>
+
+4. Ensure that all the configuration properties required by the new version have been properly provided in .ini file (see [Installation](#installation) paragraph)
 
 5. Run model update
 
