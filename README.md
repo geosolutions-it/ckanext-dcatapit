@@ -442,11 +442,14 @@ In order to update an old installation (from 1.0.0 to 1.1.0 version):
 
 4. Ensure that all the configuration properties required by the new version have been properly provided in .ini file (see [Installation](#installation) paragraph)
 
-5. Run model update
+5. Activate the virtual environment:
+
+		. /usr/lib/ckan/default/bin/activate
+6. Run model update
 
         paster --plugin=ckanext-dcatapit vocabulary initdb --config=/etc/ckan/default/production.ini
 
-6. Run vocabulary load commands (regions, licenses and sub-themes):
+7. Run vocabulary load commands (regions, licenses and sub-themes):
 
 		wget "https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/territorial-classifications/regions/regions.rdf" -O "/tmp/regions.rdf"
 	
@@ -457,7 +460,7 @@ In order to update an old installation (from 1.0.0 to 1.1.0 version):
 		paster --plugin=ckanext-dcatapit vocabulary load --filename "/tmp/licenses.rdf" --name licenses --config "/etc/ckan/default/production.ini"
 		paster --plugin=ckanext-dcatapit vocabulary load --filename "ckanext-dcatapit/examples/eurovoc_mapping.rdf" --name subthemes --config "/etc/ckan/default/production.ini" "ckanext-dcatapit/examples/eurovoc.rdf"
 
-7. Run data migration command:
+8. Run data migration command:
 
         paster --plugin=ckanext-dcatapit vocabulary migrate_data --config=/etc/ckan/default/production.ini > migration.log
 
@@ -480,11 +483,11 @@ Migration script will:
 	updating b36e6f42-d0eb-4b53-8e41-170c50a2384c occupati-e-disoccupati
 	---------
 	
-8. Rebuild Solr indexes:
+9. Rebuild Solr indexes:
 
 		paster --plugin=ckan search-index rebuild -c /etc/ckan/default/production.ini
 		
-9. Restart Ckan
+10. Restart Ckan
 
 ### Field conversion notes
 
