@@ -486,6 +486,16 @@ Migration script will:
 		
 9. Restart Ckan
 
+### Field conversion notes
+
+- **conforms_to** is more complex structure now. It contains identifier, title and description. Converter will use old string value as an identifier of standard, and if multilang values are present, they will populate description subfield of standard. In case of multilang values present, Italian translation will be used as identifier.
+- **creator** is a list of entities. It’s composed of *creator_name* and *creator_identifier*, and converter will use existing values (including multilang name)
+- **temporal_coverage** is a list of entries, where each entry is constructed from two old fields: *temporal_start* and *temporal_end*. If both values are equal, only *temporal_start* will be used. Some values may not be parseable, and should be adjusted manually in dataset.
+- **theme** is required now, so if dataset lacks theme(s), default one (*OP_DATPRO*) will be assigned. Subthemes will be empty.
+- **identifier** is required now. If it’s missing, new one (*UUID*) will be generated.
+- **modified** is required now. If it’s missing or invalid, current date will be used.
+- **frequency** is required now. If it’s missing or invalid *UNKNOWN* value will be used.
+- **holder_name** and **holder_identifier** behaves differently in new DCAT_AP-IT version. When dataset is created locally (wasn’t harvested), rights holder information is gathered directly from organization to which dataset belongs. Organization is the source of *holder_name* and *holder_identifier* fields (including multilang name). However, harvested datasets will preserve original holder information that is attached to dataset.
 			
 ## Contributing
 
