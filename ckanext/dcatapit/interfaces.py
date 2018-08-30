@@ -352,9 +352,9 @@ def populate_resource_license(package_dict):
     license = None
     access_constraints = None
     for ex in package_dict.get('extras') or []:
-        if ex['key'] == 'license_url':
+        if ex['key'] in ('license_url', 'licence_url',):
             license_url = ex['value']
-        elif ex['key'] == 'license':
+        elif ex['key'] in ('license', 'licence',):
             license = ex['value']
         elif ex['key'] == 'access_constraints':
             access_constraints = ex['value']
