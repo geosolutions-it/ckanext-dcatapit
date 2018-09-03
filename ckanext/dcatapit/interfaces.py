@@ -345,3 +345,26 @@ def get_localized_subthemes(subthemes):
         except KeyError:
             out[lang] = [label]
     return out
+
+def populate_resource_license(package_dict):
+    license_id = package_dict.get('license_id')
+    license_url = None
+    license = None
+    access_constraints = None
+    for ex in package_dict.get('extras') or []:
+        if ex['key'] in ('license_url', 'licence_url',):
+            license_url = ex['value']
+        elif ex['key'] in ('license', 'licence',):
+            license = ex['value']
+        elif ex['key'] == 'access_constraints':
+            access_constraints = ex['value']
+
+    if not (access_constraints or license_id or license or license_url):
+        l = License.get(License.DEFAULT_LICENSE)
+
+    else:
+        l, default = License.find_by_token(access_constraints, license, license_id, license_url)
+    
+    for res in package_dict['resources']:
+        res['license_type'] = l.uri
+    return package_dict

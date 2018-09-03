@@ -411,7 +411,7 @@ def do_migrate_data():
         update_frequency(pdata)
         update_conforms_to(pdata)
         update_holder_info(pdata)
-
+        interfaces.populate_resource_license(pdata)
         pdata['metadata_modified'] = None
         print 'updating', pdata['id'], pdata['name']
         try:
