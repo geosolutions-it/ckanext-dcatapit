@@ -853,8 +853,6 @@ class ItalianDCATAPProfile(RDFProfile):
             'notes': (dataset_ref, DCT.description),
             'publisher_name': (publisher_ref, FOAF.name),
         }
-        if holder_use_dataset and holder_ref:
-            loc_package_mapping['holder_name'] = (holder_ref, FOAF.name)
 
         dataset_is_local = dataset_dict.get('dataset_is_local')
         if dataset_is_local:
@@ -862,7 +860,11 @@ class ItalianDCATAPProfile(RDFProfile):
             if _org_name.get('title'):
                 loc_dict['holder_name'] = _org_name['title']
             
-        self._add_multilang_values(loc_dict, loc_package_mapping, exclude_default_lang=dataset_is_local)
+        # rights holder should use special trick to avoid duplicated foaf:name entries
+        if holder_use_dataset and holder_ref:
+            self._add_multilang_values(loc_dict, {'holder_name':(holder_ref, FOAF.name)}, exclude_default_lang=dataset_is_local)
+
+        self._add_multilang_values(loc_dict, loc_package_mapping)
         if not holder_use_dataset and holder_ref:
             loc_dict = interfaces.get_for_group_or_organization(org_dict['id'])
             loc_package_mapping = {'name': (holder_ref, FOAF.name)}
