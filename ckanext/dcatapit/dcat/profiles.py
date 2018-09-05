@@ -157,7 +157,7 @@ class ItalianDCATAPProfile(RDFProfile):
                 alt_ids.append(alternate_id)
         if extras_alt_identifiers and alt_ids:
             raise ValueError("Two separate alternate identifers got for %s: %s and %s",
-                             dataset['id'],
+                             dataset_dict.get('id'),
                              alt_ids,
                              extras_alt_identifiers)
         # let's reuse 
