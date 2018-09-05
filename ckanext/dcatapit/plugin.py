@@ -434,6 +434,14 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                         self.manage_extras_for_search(couple, _dict, _dict_extras)
                 else:
                     self.manage_extras_for_search(field, _dict, _dict_extras)
+        
+            # remove holder info if pkg is local, use org as a source
+            # see https://github.com/geosolutions-it/ckanext-dcatapit/pull/213#issuecomment-410668740
+            _dict['dataset_is_local'] = helpers.dataset_is_local(_dict['id'])
+            if _dict['dataset_is_local']:
+                _dict.pop('holder_identifier', None)
+                _dict.pop('holder_name', None)
+            self._update_pkg_rights_holder(_dict)
 
         return search_results
 
