@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-08-28 16:16+0200\n"
+"POT-Creation-Date: 2018-09-06 14:36+0200\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -18,23 +18,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ckanext/dcatapit/plugin.py:514
+#: ckanext/dcatapit/plugin.py:522
 msgid "Resources licenses"
 msgstr "Licenze sulle risorse"
 
-#: ckanext/dcatapit/plugin.py:515 ckanext/dcatapit/schema.py:146
+#: ckanext/dcatapit/plugin.py:523 ckanext/dcatapit/schema.py:146
 msgid "Subthemes"
 msgstr "Sottotemi"
 
-#: ckanext/dcatapit/plugin.py:739
+#: ckanext/dcatapit/plugin.py:747
 msgid "Source catalogs"
 msgstr "Cataloghi di origine"
 
-#: ckanext/dcatapit/plugin.py:740
+#: ckanext/dcatapit/plugin.py:748
 msgid "Organization regions"
 msgstr "Regioni"
 
-#: ckanext/dcatapit/plugin.py:746 ckanext/dcatapit/schema.py:97
+#: ckanext/dcatapit/plugin.py:754 ckanext/dcatapit/schema.py:97
 msgid "Region"
 msgstr "Regione"
 
@@ -390,6 +390,7 @@ msgstr ""
 "identificativo."
 
 #: ckanext/dcatapit/schema.py:362
+#: ckanext/dcatapit/templates/package/resource_read.html:20
 msgid "Distribution Format"
 msgstr "Formato di distribuzione"
 
@@ -774,11 +775,6 @@ msgstr "Nome campo"
 msgid "Value"
 msgstr "Valore"
 
-#: ckanext/dcatapit/templates/package/resource_read.html:20
-#: ckanext/dcatapit/templates/package/resource_read.html:53
-msgid "Format"
-msgstr "Formato"
-
 #: ckanext/dcatapit/templates/package/resource_read.html:35
 msgid "Additional Information"
 msgstr "Informazioni supplementari"
@@ -796,6 +792,10 @@ msgstr "Sconosciuto"
 #: ckanext/dcatapit/templates/package/resource_read.html:49
 msgid "Created"
 msgstr "Creato"
+
+#: ckanext/dcatapit/templates/package/resource_read.html:53
+msgid "Format"
+msgstr "Formato"
 
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:2
 msgid "Dataset Metadata"

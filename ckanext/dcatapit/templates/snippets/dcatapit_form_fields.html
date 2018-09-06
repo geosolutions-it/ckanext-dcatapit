@@ -87,7 +87,7 @@
                   }}
 
             {% elif field.element == 'rights_holder' %}
-                  {% if not data.get('owner_org') and not data.get(field.name) %}
+                  {% if (not data.get('owner_org') and not data.get(field.name) and data.get('dataset_is_local')) %}
                         {{ dform.rights_holder_create(field.name, label=field.label, help=field.help_create) }}
                   {% else %}
                         {{ 
@@ -97,7 +97,7 @@
                               names=(field.couples[0].name, field.couples[1].name),
                               id='field-range-' + field.name, 
                               label=field.label,
-                              read_only=(field.read_only or False),
+                              read_only=(field.read_only or False) if data.get('dataset_is_local') else False,
                               modify_fields=not data.get('dataset_is_local'),
                               values=(data[field.couples[0].name], data[field.couples[1].name], False),
                               error=errors[field.couples[0].name] or errors[field.couples[1].name],

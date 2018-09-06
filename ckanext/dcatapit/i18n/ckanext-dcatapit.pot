@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 1.1.0a0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-08-28 16:16+0200\n"
+"POT-Creation-Date: 2018-09-06 14:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,23 +18,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ckanext/dcatapit/plugin.py:514
+#: ckanext/dcatapit/plugin.py:522
 msgid "Resources licenses"
 msgstr ""
 
-#: ckanext/dcatapit/plugin.py:515 ckanext/dcatapit/schema.py:146
+#: ckanext/dcatapit/plugin.py:523 ckanext/dcatapit/schema.py:146
 msgid "Subthemes"
 msgstr ""
 
-#: ckanext/dcatapit/plugin.py:739
+#: ckanext/dcatapit/plugin.py:747
 msgid "Source catalogs"
 msgstr ""
 
-#: ckanext/dcatapit/plugin.py:740
+#: ckanext/dcatapit/plugin.py:748
 msgid "Organization regions"
 msgstr ""
 
-#: ckanext/dcatapit/plugin.py:746 ckanext/dcatapit/schema.py:97
+#: ckanext/dcatapit/plugin.py:754 ckanext/dcatapit/schema.py:97
 msgid "Region"
 msgstr ""
 
@@ -316,6 +316,7 @@ msgid "package_creator_help"
 msgstr ""
 
 #: ckanext/dcatapit/schema.py:362
+#: ckanext/dcatapit/templates/package/resource_read.html:20
 msgid "Distribution Format"
 msgstr ""
 
@@ -698,11 +699,6 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: ckanext/dcatapit/templates/package/resource_read.html:20
-#: ckanext/dcatapit/templates/package/resource_read.html:53
-msgid "Format"
-msgstr ""
-
 #: ckanext/dcatapit/templates/package/resource_read.html:35
 msgid "Additional Information"
 msgstr ""
@@ -719,6 +715,10 @@ msgstr ""
 
 #: ckanext/dcatapit/templates/package/resource_read.html:49
 msgid "Created"
+msgstr ""
+
+#: ckanext/dcatapit/templates/package/resource_read.html:53
+msgid "Format"
 msgstr ""
 
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:2
