@@ -87,7 +87,7 @@
                   }}
 
             {% elif field.element == 'rights_holder' %}
-                  {% if not data.get('owner_org') and not data.get(field.name) %}
+                  {% if (not data.get('owner_org') and not data.get(field.name) and not data.has_key('dataset_is_local')) %}
                         {{ dform.rights_holder_create(field.name, label=field.label, help=field.help_create) }}
                   {% else %}
                         {{ 

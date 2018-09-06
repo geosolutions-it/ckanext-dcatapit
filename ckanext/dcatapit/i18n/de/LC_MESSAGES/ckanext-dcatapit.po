@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dcatapit 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-08-28 16:16+0200\n"
+"POT-Creation-Date: 2018-09-06 14:36+0200\n"
 "PO-Revision-Date: 2016-11-28 12:06+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -18,23 +18,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ckanext/dcatapit/plugin.py:514
+#: ckanext/dcatapit/plugin.py:522
 msgid "Resources licenses"
 msgstr "Ressourcenlizenzen"
 
-#: ckanext/dcatapit/plugin.py:515 ckanext/dcatapit/schema.py:146
+#: ckanext/dcatapit/plugin.py:523 ckanext/dcatapit/schema.py:146
 msgid "Subthemes"
 msgstr "Unter Thema"
 
-#: ckanext/dcatapit/plugin.py:739
+#: ckanext/dcatapit/plugin.py:747
 msgid "Source catalogs"
 msgstr "Quellkataloge"
 
-#: ckanext/dcatapit/plugin.py:740
+#: ckanext/dcatapit/plugin.py:748
 msgid "Organization regions"
 msgstr "Organisationsregionen"
 
-#: ckanext/dcatapit/plugin.py:746 ckanext/dcatapit/schema.py:97
+#: ckanext/dcatapit/plugin.py:754 ckanext/dcatapit/schema.py:97
 msgid "Region"
 msgstr "Region"
 
@@ -398,6 +398,7 @@ msgstr ""
 "werden der Name der Organisation und deren Identifikator eingegeben."
 
 #: ckanext/dcatapit/schema.py:362
+#: ckanext/dcatapit/templates/package/resource_read.html:20
 msgid "Distribution Format"
 msgstr "Verteilungsformat"
 
@@ -673,7 +674,7 @@ msgstr "Brauch"
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:73
 msgid "Select organization"
-msgstr "Organisation E-Mail"
+msgstr "Wird automatisch der Organisation zugewiesen, der das Dataset gehört."
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:190
 msgid "Add a Theme"
@@ -782,11 +783,6 @@ msgstr "Feld"
 msgid "Value"
 msgstr "Wert"
 
-#: ckanext/dcatapit/templates/package/resource_read.html:20
-#: ckanext/dcatapit/templates/package/resource_read.html:53
-msgid "Format"
-msgstr "Format"
-
 #: ckanext/dcatapit/templates/package/resource_read.html:35
 msgid "Additional Information"
 msgstr "zusätzliche Information"
@@ -804,6 +800,10 @@ msgstr "unbekannte"
 #: ckanext/dcatapit/templates/package/resource_read.html:49
 msgid "Created"
 msgstr "Erstellt"
+
+#: ckanext/dcatapit/templates/package/resource_read.html:53
+msgid "Format"
+msgstr "Format"
 
 #: ckanext/dcatapit/templates/package/snippets/dcatapit_additional_info.html:2
 msgid "Dataset Metadata"
