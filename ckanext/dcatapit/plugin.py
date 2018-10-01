@@ -366,7 +366,14 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         org_id = dataset_dict['owner_org']
         organization_show = plugins.toolkit.get_action('organization_show')
         if org_id:
-            org = organization_show(get_org_context(), {'id': org_id})
+            org = organization_show(get_org_context(), {'id': org_id,
+                                                        'include_tags': False,
+                                                        'include_users': False,
+                                                        'include_groups': False,
+                                                        'include_extras': True,
+                                                        'include_followers': False,
+                                                        'include_datasets': False,
+                                                        })
         else:
             org = {}
         if org.get('region'):
@@ -503,7 +510,14 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                 ctx = get_org_context()
                 # force multilang use
                 ctx['for_view'] = True
-                org = get_org(ctx, {'id': pkg_dict['owner_org']})
+                org = get_org(ctx, {'id': pkg_dict['owner_org'],
+                                    'include_tags': False,
+                                    'include_users': False,
+                                    'include_groups': False,
+                                    'include_extras': True,
+                                    'include_followers': False,
+                                    'include_datasets': False,
+                                    })
             pkg_dict['holder_name'] = org['title']
             pkg_dict['holder_identifier'] = org.get('identifier') or None
         return pkg_dict

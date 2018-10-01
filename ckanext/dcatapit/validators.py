@@ -288,6 +288,8 @@ DATE_FORMATS = ['%Y-%m-%d',
                 '%d-%m-%Y',
                 '%Y%m%d',
                 '%Y-%m-%dT%H:%M:%S',
+                '%Y-%m-%dT%H:%M:%S %z',
+                '%Y-%m-%dT%H:%M:%S %Z',
                 '%Y-%m-%d %H:%M:%S',
                 '%Y-%m-%d %H:%M',
                 # faulty ones, but still can be used
@@ -300,6 +302,8 @@ DATE_FORMATS = ['%Y-%m-%d',
                 '%m/%Y',
                 '%d.%m.%Y',
                 '%d/%m/%Y',
+                # some timestamps have invalid tz offset (without a sign)
+                '%Y-%m-%dT%H:%M:%S 01:00',
                 ]
 
 def parse_date(val):
