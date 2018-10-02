@@ -302,6 +302,7 @@ DATE_FORMATS = ['%Y-%m-%d',
                 '%m/%Y',
                 '%d.%m.%Y',
                 '%d/%m/%Y',
+                '%m/%d/%Y',
                 # some timestamps have invalid tz offset (without a sign)
                 '%Y-%m-%dT%H:%M:%S 0100',
                 '%Y-%m-%dT%H:%M:%S 01:00',
