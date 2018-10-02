@@ -465,6 +465,12 @@ In order to update an old installation (from 1.0.0 to 1.1.0 version):
         paster --plugin=ckanext-dcatapit vocabulary migrate_data --config=/etc/ckan/default/production.ini > migration.log
 
 You can review migration results by viewing `migration.log` file. It will contain list of messages generated during migration. 
+There are additional command switches that can be used to optimize processing:
+
+* `-l`/`--limit` - limit processing packages to given count of packages
+* `-o`/`--offset` - start processing packages from given count offset
+* `-s`/`--skip-orgs` - do not process organizations
+
 
 Migration script will:
  * update all organizations and assign temporary identifier in form of `tmp_ipa_code_X` (where `X` is a number in sequence). Organization identifier is required field now, and thus temporary value is created to avoid errors in validation. Script will report each organization which have updated identifier in log with message similar to following: `org: [pab-foreste] PAB: Foreste : setting temporal identifier: tmp_ipa_code_1`
