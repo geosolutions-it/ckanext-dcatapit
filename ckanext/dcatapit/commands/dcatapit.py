@@ -20,7 +20,7 @@ from ckanext.dcatapit.model.license import (
 from ckanext.dcatapit.model.subtheme import (
     load_subthemes, clear_subthemes)
 from ckan.model.meta import Session
-from ckan.model import Package, Group, GroupExtra, Tag, PackageExtra, PackageTag
+from ckan.model import Package, Group, GroupExtra, Tag, PackageExtra, PackageTag, repo
 from ckan.logic import ValidationError
 from ckan.lib.navl.dictization_functions import Invalid
 
@@ -74,6 +74,17 @@ class DCATAPITCommands(CkanCommand):
      If you use subthemes, additional argument is required, path to EUROVOC rdf file:
 
      paster --plugin=ckanext-dcatapit vocabulary load --filename EUROVOC_TO_THEMES_MAPPING_FILE --name subthemes --config=PATH_TO_INI_FILE  PATH_TO_EUROVOC
+
+
+     To run data migration on database with data from older dcatapit installation, run
+
+     paster --plugin=ckanext-dcatapit vocabulary migrate_data [--limit=X] [--offset=Y] [--skip-orgs]
+
+     additional switches:
+      -l/--limit - limit processing packages to given count of packages
+      -o/--offset - start processing packages from given count offset
+      -s/--skip-orgs - do not process organizations
+
     '''
 
     summary = __doc__.split('\n')[0]
@@ -117,7 +128,13 @@ class DCATAPITCommands(CkanCommand):
                                 help="Use specific graph format (xml, turtle..), default: xml")
         self.parser.add_option('--name', dest='name', default=None,
                                help='Name of the vocabulary to work with')
-
+        self.parser.add_option('-o', '--offset', default=None, type=int,
+                               help="Start from dataset at offset during data migration")
+        self.parser.add_option('-l', '--limit', default=None, type=int,
+                               help="Limit number of processed datasets during data migration")
+        self.parser.add_option('-s', '--skip-orgs', default=False, action='store_true',
+                               dest='skip_orgs', help="Skip organizations in data migration")
+        
     def command(self):
         '''
         Parse command line arguments and call appropriate method.
@@ -135,7 +152,9 @@ class DCATAPITCommands(CkanCommand):
         elif cmd == 'initdb':
             self.initdb()
         elif cmd == 'migrate_data':
-            self.migrate_data()
+            self.migrate_data(offset=self.options.offset,
+                              limit=self.options.limit,
+                              skip_orgs=self.options.skip_orgs)
         else:
             print self.usage
             log.error('ERROR: Command "%s" not recognized' % (cmd,))
@@ -148,8 +167,8 @@ class DCATAPITCommands(CkanCommand):
         setup_license_models()
         setup_subtheme_models()
 
-    def migrate_data(self):
-        do_migrate_data()
+    def migrate_data(self, limit=None, offset=None, skip_orgs=False):
+        do_migrate_data(limit=limit, offset=offset, skip_orgs=skip_orgs)
 
     def load(self):
         ##
@@ -348,7 +367,7 @@ def do_load(vocab_name, url=None, filename=None, format=None):
 
     print 'Vocabulary successfully loaded ({0})'.format(vocab_name)
 
-def do_migrate_data():
+def do_migrate_data(limit=None, offset=None, skip_orgs=False):
 
     user = toolkit.get_action('get_site_user')({'ignore_auth': True}, {})
     context = {'user': user['name'],
@@ -361,40 +380,54 @@ def do_migrate_data():
     oupdate = toolkit.get_action('organization_patch')
     pupdate_schema = DCATAPITPackagePlugin().update_package_schema()
     pupdate_schema['tags']['name'].remove(tag_name_validator)
+    org_list = get_organization_list()
+    ocount = org_list.count()
+    oidx = 0
+    if not skip_orgs:
+        print (u'processing {} organizations'.format(ocount)).encode('utf-8')
+        for oidx, oname in enumerate(org_list):
+            odata = oshow(context, {'id': oname, 'include_extras': True,
+                                                 'include_tags': False,
+                                                 'include_users': False,
+                                                 })
+            
+            oidentifier = odata.get('identifier')
+            print (u'processing {}/{} organization: {}'.format(oidx+1, ocount, odata['name']))
+            # we require identifier for org now.
+            if not oidentifier:
+                odata.pop('identifier', None)
+                tmp_identifier = get_temp_org_identifier()
+                print (u"org: [{}] {} : setting temporal identifier: {}".format(odata['name'],
+                                                                               odata['title'],
+                                                                               tmp_identifier)).encode('utf-8')
+                ocontext = context.copy()
 
-    for oname in get_organization_list():
-        odata = oshow(context, {'id': oname, 'include_extras': True,
-                                             'include_tags': True,
-                                             'include_users': False,
-                                             })
-        
-        oidentifier = odata.get('identifier')
-
-        # we require identifier for org now.
-        if not oidentifier:
-            odata.pop('identifier', None)
-            tmp_identifier = get_temp_org_identifier()
-            print (u"org: [{}] {} : setting temporal identifier: {}".format(odata['name'],
-                                                                           odata['title'],
-                                                                           tmp_identifier)).encode('utf-8')
-            context['allow_partial_update'] = True
-            oupdate(context, {'id': odata['id'],
-                              'identifier': tmp_identifier})
-
-            out = oshow(context, {'id': oname,
-                                  'include_extras': True,
-                                  'include_tags': True,
-                                  'include_users': True})
-
+                ocontext['allow_partial_update'] = True
+                #oupdate(ocontext, {'id': odata['id'],
+                #                  'identifier': tmp_identifier})
+                update_organization_identifier(odata['id'], tmp_identifier)
+    else:
+        print (u'Skipping organizations processing').encode('utf-8')
     pcontext = context.copy()
-    for pname in get_package_list():
+    pkg_list = get_package_list()
+    pcount = pkg_list.count()
+    print (u'processing {} packages'.format(pcount)).encode('utf-8')
+    errored = []
+
+    if offset:
+        pkg_list = pkg_list.offset(offset)
+    if limit:
+        pkg_list = pkg_list.limit(limit)
+
+    # pidx may be not initialized for empty slice, need separate counter
+    # to count actually processed datasets
+    pidx_count = 0
+    for pidx, pname in enumerate(pkg_list):
         pcontext['schema'] = pupdate_schema
         pname = pname[0]
-        
+        print (u'processing {}/{} package: {}'.format(pidx+1, pcount, pname)).encode('utf-8')
         pdata = pshow(context, {'name_or_id': pname}) #, 'use_default_schema': True})
 
-        if pdata['type'] != 'dataset':
-            continue
 
         # remove empty conforms_to to avoid silly validation errors
         if not pdata.get('conforms_to'):
@@ -416,11 +449,13 @@ def do_migrate_data():
         print 'updating', pdata['id'], pdata['name']
         try:
            out = pupdate(pcontext, pdata)
+           pidx_count += 1
         except ValidationError, err:
             print (u'Cannot update due to validation error {}'.format(pdata['name'])).encode('utf-8')
             print err
             print (pdata)
             print
+            errored.append((pidx, pdata['name'],err,))
             continue
 
         except Exception, err:
@@ -428,8 +463,25 @@ def do_migrate_data():
             print err
             print (pdata)
             print
+            errored.append((pidx, pdata['name'], err,))
             continue
         print '---' * 3
+
+    if not skip_orgs:
+        print (u'processed {} out of {} organizations'.format(oidx, ocount)).encode('utf-8')
+    print (u'processed {} out of {} packages in total'.format(pidx_count, pcount)).encode('utf-8')
+    if errored:
+        print (u'Following {} datasets failed:'.format(len(errored))).encode('utf-8')
+        for position, ptitile, err in errored:
+            err_summary = getattr(err, 'error', None) or err
+
+            # this is a hack on dumb override in __str__() in some exception subclasses
+            # stringified exception raises itself otherwise.
+            try:
+                print (u' {} at position {}: {}{}'.format(ptitile, position, err.__class__, err_summary)).format('utf-8')
+            except Exception, perr:
+                err_summary = perr
+                print (u' {} at position {}: {}{}'.format(ptitile, position, err.__class__, err_summary)).format('utf-8')
 
 def get_package_list():
     return Session.query(Package.name).filter(Package.state=='active',
@@ -452,7 +504,6 @@ def update_holder_info(pdata):
 
 def update_conforms_to(pdata):
     cname = pdata.pop('conforms_to', None)
-
     to_delete = []
     if not cname:
         for idx, ex in enumerate(pdata.get('extras') or []):
@@ -470,6 +521,16 @@ def update_conforms_to(pdata):
         except KeyError:
             ml_conforms_to = {}
     if cname:
+        validator = toolkit.get_validator('dcatapit_conforms_to')
+        try:
+            # do not update conforms_to if it's already present
+            conforms_to = json.loads(cname)
+            if isinstance(conforms_to, list) and len(conforms_to):
+                pdata['conforms_to'] = validator(cname, {})
+                return
+        except (ValueError, TypeError, Invalid,), err:
+            print (u'dataset {}: conforms_to present, but invalid: {}'.format(pdata['name'], err)).encode('utf-8')
+
         standard = {'identifier': None, 'description': {}}
         if not ml_conforms_to:
             standard['identifier'] = cname
@@ -484,6 +545,8 @@ def update_conforms_to(pdata):
 
 
 def update_creator(pdata):
+    if pdata.get('creator'):
+        return
     cname = pdata.pop('creator_name', None)
     cident = pdata.pop('creator_identifier', None)
 
@@ -533,6 +596,10 @@ def update_theme(pdata):
     pdata['theme'] = theme
 
 def update_temporal_coverage(pdata):
+    # do not process if tempcov is already present
+    if pdata.get('temporal_coverage'):
+        return
+
     tstart = pdata.pop('temporal_start', None)
     tend = pdata.pop('temporal_end', None)
 
@@ -551,11 +618,17 @@ def update_temporal_coverage(pdata):
 
     try:
         tstart = validators.parse_date(tstart).strftime(DATE_FORMAT)
-    except Invalid:
+    except (Invalid, ValueError, TypeError,), err:
+        if tstart is not None:
+            print (u"dataset {}: can't use {} as temporal coverage start: {}"
+                    .format(pdata['name'], tstart, err)).encode('utf-8')
         tstart = None
     try:
         tend = validators.parse_date(tend).strftime(DATE_FORMAT)
-    except Invalid:
+    except (Invalid, ValueError, TypeError,), err:
+        if tend is not None:
+            print (u"dataset {}: can't use {} as temporal coverage end: {}"
+                    .format(pdata['name'], tend, err)).encode('utf-8')
         tend = None
     ## handle 2010-01-01 to 2010-01-01 case, use whole year 
     # if tstart == tend and tstart.day == 1 and tstart.month == 1:
@@ -592,7 +665,6 @@ def update_frequency(pdata):
         print (u'dataset {}: no frequency. Using default, UNKNOWN.'.format(pdata['name'])).encode('utf-8')
         frequency = 'UNKNOWN'
     pdata['frequency'] = frequency
-
 
 
 def update_identifier(pdata):
@@ -659,3 +731,14 @@ def group_temp_code_count(BASE_CODE):
                                  .group_by(GroupExtra.value)\
                                  .count()
     return q
+
+
+def update_organization_identifier(org_id, org_identifier):
+    s = Session
+    s.revision = getattr(s, 'revision', None) or repo.new_revision()
+    g = s.query(Group).filter(Group.id == org_id).one()
+    g.extras['identifier'] = org_identifier
+    s.add(g)
+    s.flush()
+    
+
