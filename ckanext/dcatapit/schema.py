@@ -237,13 +237,13 @@ def get_custom_package_schema():
             'label': _('Temporal Coverage'),
             'validator': ['ignore_missing', 'dcatapit_temporal_coverage'],
             'is_required': False,
+            'format': '%d-%m-%Y',
             '_couples': [
                 {
                     'name': 'temporal_start',
                     'label': _('Start Date'),
                     'validator': ['ignore_missing'],
                     'type': 'date',
-                    'format': '%d-%m-%Y',
                     'placeholder': _('temporal coverage')
                 },
                 {
@@ -251,7 +251,6 @@ def get_custom_package_schema():
                     'label': _('End Date'),
                     'validator': ['ignore_missing'],
                     'type': 'date',
-                    'format': '%d-%m-%Y',
                     'placeholder': _('temporal coverage')
                 }
             ],
