@@ -481,14 +481,12 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             if df_value:
                 tmp_value = validators.parse_date(df_value, df_value)
                 if isinstance(tmp_value, datetime.date):
-                    # there are values that are noted as 17 or 0017
-                    # this may come from short date notation used with long year format
-                    # parsed in. Anyway, it's simply wrong value. This can be fixed by
-                    # increasing year by 2000 (we assume those values come from recent years)
-                    # see https://github.com/geosolutions-it/ckanext-datitrentinoit/issues/36
-                    if tmp_value.year < 1900:
-                        tmp_value = tmp_value.replace(year=2000+tmp_value.year)
-                    tmp_value = tmp_value.strftime(fdef.get('format') or '%d-%m-%Y')
+                    try:
+                        tmp_value = tmp_value.strftime(fdef.get('format') or '%d-%m-%Y')
+                    except ValueError, err:
+                        log.warning("dataset %s, field %s: cannot reformat date for %s (from input %s): %s", 
+                                    pkg_dict['name'], fname, tmp_value, df_value, err, exc_info=err)
+                        tmp_value = df_value
                 pkg_dict[fname] = tmp_value
 
         # in some cases (automatic solr indexing after update)
