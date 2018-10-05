@@ -1,3 +1,4 @@
+import datetime
 import logging
 import json
 
@@ -470,7 +471,19 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         return self._update_pkg_rights_holder(pkg_dict)
     
     def after_show(self, context, pkg_dict):
-        
+        schema = dcatapit_schema.get_custom_package_schema()
+        # quick hack on date fields that are in wrong format
+        for fdef in schema:
+            if fdef.get('type') != 'date':
+                continue
+            fname = fdef['name']
+            df_value = pkg_dict.get(fname)
+            if df_value:
+                tmp_value = validators.parse_date(df_value, df_value)
+                if isinstance(tmp_value, datetime.date):
+                    tmp_value = tmp_value.strftime(fdef.get('format') or '%d-%m-%Y')
+                pkg_dict[fname] = tmp_value
+
         # in some cases (automatic solr indexing after update)
         # pkg_dict may come without validation and thus
         # without extras converted to main dict.

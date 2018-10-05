@@ -309,13 +309,14 @@ DATE_FORMATS = ['%Y-%m-%d',
                 '%Y-%m-%dT%H:%M:%S 01:00',
                 ]
 
-def parse_date(val):
+def parse_date(val, default=None):
     for format in DATE_FORMATS:
         try:
             return datetime.strptime(val, format).date()
         except (ValueError, TypeError,):
             pass
-
+    if default is not None:
+        return default
     raise Invalid(_(u"Invalid date input: {}").format(val))
 
 def serialize_date(val):

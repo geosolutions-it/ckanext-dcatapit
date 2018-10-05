@@ -71,9 +71,9 @@
                     <tr>
                         <th scope="row" class="dataset-label">{{ _(field.label) }}</th>
                         <td class="dataset-details">
-                            <span class="bold">{{_('From')}}: </span><span>{{ temp.temporal_start }}</span>
+                            <span class="bold">{{_('From')}}: </span><span>{{ h.format(temp.temporal_start, field.format, 'date') }}</span>
                             {% if temp.temporal_end %}
-                                     <span class="bold">    {{_('Until')}}: </span><span>{{ temp.temporal_end }}</span>
+                                     <span class="bold">    {{_('Until')}}: </span><span>{{ h.format(temp.temporal_end, field.format, 'date') }}</span>
                             {% endif %}
                         </td>
                     </tr>

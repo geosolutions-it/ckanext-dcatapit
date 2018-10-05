@@ -11,7 +11,7 @@
                                  id='field-' + field.name,
                                  placeholder=field.placeholder,
                                  type=field.type,
-                                 value=data[field.name],
+                                 value=h.format((data[field.name] or ''), '%Y-%m-%d', field.type),
                                  error=errors[field.name],
                                  classes=['control-medium'],
                                  is_required=field.is_required,
