@@ -481,7 +481,12 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             if df_value:
                 tmp_value = validators.parse_date(df_value, df_value)
                 if isinstance(tmp_value, datetime.date):
-                    tmp_value = tmp_value.strftime(fdef.get('format') or '%d-%m-%Y')
+                    try:
+                        tmp_value = tmp_value.strftime(fdef.get('format') or '%d-%m-%Y')
+                    except ValueError, err:
+                        log.warning("dataset %s, field %s: cannot reformat date for %s (from input %s): %s", 
+                                    pkg_dict['name'], fname, tmp_value, df_value, err, exc_info=err)
+                        tmp_value = df_value
                 pkg_dict[fname] = tmp_value
 
         # in some cases (automatic solr indexing after update)

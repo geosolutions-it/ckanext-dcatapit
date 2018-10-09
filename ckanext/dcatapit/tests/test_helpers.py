@@ -47,6 +47,10 @@ def test_list_to_string():
 def test_format():
     value = helpers.format('14-11-2011', '%Y-%m-%d', 'date')
     eq_(value, '2011-11-14')
+    # invalid value, but valid format
+    value = helpers.format('14-11-0011', '%Y-%m-%d', 'date')
+    eq_(value, '14-11-0011')
+
 
 def test_org_context():
     # ensure ctx are separated, and no data is leaked between them

@@ -102,3 +102,14 @@ def test_config_update_config_schema():
 def test_config_get_helpers():
     helpers = configuration_plugin.get_helpers()
     ok_(helpers.get('get_dcatapit_configuration_schema', None))
+
+
+def test_package_after_show():
+    data = {'id': 'none',
+            'issued': '2000-00-00',
+            'modified': '2013-02-01'}
+    out = package_plugin.after_show({}, data)
+    eq_(out['issued'], '2000-00-00')
+    eq_(out['modified'], '01-02-2013')
+
+
