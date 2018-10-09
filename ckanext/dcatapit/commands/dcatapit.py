@@ -11,7 +11,7 @@ from pprint import pprint
 
 import ckan.plugins.toolkit as toolkit
 from ckan.lib.munge import munge_tag
-from ckan.logic.schema import tag_name_validator
+from ckan.logic.validators import tag_name_validator
 import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit.model.license import (
     load_from_graph as load_licenses_from_graph,
