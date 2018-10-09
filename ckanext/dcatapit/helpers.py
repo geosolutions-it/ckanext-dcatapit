@@ -198,10 +198,11 @@ def format(value, _format='%d-%m-%Y', _type=None):
                 if date and isinstance(date, datetime.date):
                     try:
                         date = date.strftime(_format)
+                        return date
                     except ValueError, err:
                         log.warning("cannot reformat %s value (from %s) to %s format: %s",
                                     date, value, _format, err, exc_info=err)
-                    return date
+                    return value
         if _type == 'text':
             return value
 
