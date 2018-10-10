@@ -243,6 +243,7 @@ def _add_groups(package_id, groups):
         member = Member(state='active',
                         table_id=package_id,
                         group_id=g.id,
+                        group=g,
                         table_name='package')
         Session.add(member)
 
