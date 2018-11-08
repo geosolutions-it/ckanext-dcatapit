@@ -1,5 +1,11 @@
 var dcatapit = window.dcatapit || {};
 
+if (!String.prototype.startsWith) {
+	String.prototype.startsWith = function(search, pos) {
+    		return this.substr(!pos || pos < 0 ? 0 : +pos, search.length) === search;
+    };
+}
+
 dcatapit.templated_input = {
         initialize: function(){
             $.proxyAll(this, /_on/);
@@ -448,13 +454,13 @@ ckan.module('dcatapit-temporal-coverage', function($){
                 return null;
             }
             // remove empty rows, or rows with no temporal_start
-            for (var row of values){
+            $.each(values, function(rowidx, row) {
                 var tstart = _qualifies(row['temporal_start']);
                 var tend = _qualifies(row['temporal_end']);
                 if (! (tstart == null && tend == null)){
                     out.push(row);
                 }
-            }
+            });
             return out;
         }
 
