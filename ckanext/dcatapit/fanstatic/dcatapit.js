@@ -6,6 +6,7 @@ if (!String.prototype.startsWith) {
     };
 }
 
+
 dcatapit.templated_input = {
         initialize: function(){
             $.proxyAll(this, /_on/);
@@ -543,7 +544,7 @@ ckan.module('geonames', function($){
                 id = val;
             }
             if ($.isNumeric(id)){
-                return 'http://geonames.org/' + Number.parseInt(id);
+                return 'http://geonames.org/' + parseInt(id);
             }
             return null;
         },
