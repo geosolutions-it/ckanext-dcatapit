@@ -134,6 +134,11 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
       * `geonames.username`: (mandatory) the username you registered in geonames;
       * `geonames.limits.countries`: (optional) limits the results to the requested country; use the ISO-3166 code (e.g. "IT" for Italy).
 
+    By default the HTTP APIs service of geonames is configured (``http://api.geonames.org``). In order to set it to HTTPS the related [javascript configuration](https://github.com/geosolutions-it/ckanext-dcatapit/blob/4c8ec92baf1d8051c9e03f03c522b11026a09724/ckanext/dcatapit/fanstatic/jeoquery.js#L18) needs to be changed with the following:
+    
+        my.geoNamesApiServer = 'secure.geonames.org';
+        my.geoNamesProtocol = 'https';
+    
 11. Initialize the CKAN DB with the mandatory table needed for localized vocabulary voices:
 
         paster --plugin=ckanext-dcatapit vocabulary initdb --config=/etc/ckan/default/production.ini
