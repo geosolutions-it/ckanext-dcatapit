@@ -120,7 +120,7 @@ msgstr "Identificativo del dataset"
 msgid "package_identifier_help"
 msgstr ""
 "E’ un codice identificativo univoco che si deve assegnare al dataset.Si "
-"genera associando il codice IPA dell’organizzazione ad un codice "
+"genera associando il codice IPA dell’organizzazione titolare ad un codice "
 "identificativo unico (UUID) generato sul sito "
 "https://www.uuidgenerator.net/ . Questo sito genera, ogni volta che viene"
 " aperto, un codice alfanumerico unico e irripetibile. E’ pertanto "
@@ -155,8 +155,8 @@ msgid "package_theme_help"
 msgstr ""
 "Assegnare al dataset uno o più temi che descrivano l'ambito in cui si "
 "colloca, scegliendo tra quelli proposti nel menù a tendina. I temi "
-"proposti sono quelli definiti nel vocabolario Europeo sui Temi per i "
-"cataloghi che contengono dataset."
+"proposti sono quelli definiti nel vocabolario europeo sui temi per i "
+"cataloghi."
 
 #: ckanext/dcatapit/schema.py:161 ckanext/dcatapit/schema.py:271
 #: ckanext/dcatapit/schema.py:332
@@ -176,12 +176,10 @@ msgstr "identificativo dell'editore"
 #: ckanext/dcatapit/schema.py:174
 msgid "package_publisher_help"
 msgstr ""
-"L’organizzazione (o pubblica amministrazione) che rende disponibile il "
+"L’organizzazione che rende disponibile il "
 "dataset, pubblicandolo. Vanno indicati sia il nome che il codice "
-"identificativo dell'organizzazione. Non inserire nomi di singole persone."
-" Nel caso della Provincia autonoma di Trento andrà indicato il codice IPA"
-" della PAT associato al codice dell’ufficio/servizio/dipartimento che "
-"rende disponibile il dataset."
+"identificativo dell'organizzazione (per le PA il codice IPA). " 
+"Non inserire nomi di singole persone."
 
 #: ckanext/dcatapit/schema.py:181
 msgid "Release Date"
@@ -300,8 +298,9 @@ msgstr "Titolare del dataset"
 msgid "package_rights_holder_name_help"
 msgstr ""
 "E' l'organizzazione (o pubblica amministrazione) che detiene la "
-"titolarità del dato ovvero quella che ha originariamente formato per uso "
-"proprio o commissionato ad altro soggetto pubblico o privato il dato."
+"titolarità del dato ovvero quella che è responsabile " 
+"della gestione complessiva del dataset in virtù dei propri compiti istituzionali. "
+"Si raccomanda di evitare l’inserimento di nomi di singole persone. "
 
 #: ckanext/dcatapit/schema.py:287
 msgid "package_rights_holder_name_create_help"
@@ -317,7 +316,7 @@ msgstr ""
 
 #: ckanext/dcatapit/schema.py:295
 msgid "Frequency"
-msgstr "Frequenza"
+msgstr "Frequenza di aggiornamento"
 
 #: ckanext/dcatapit/schema.py:296
 msgid "accrual periodicity"
@@ -327,7 +326,7 @@ msgstr "frequenza di aggiornamento"
 msgid "package_frequency_help"
 msgstr ""
 "Frequenza temporale con cui il dataset viene aggiornato; scegliere tra "
-"quelle proposte che fanno riferimento al vocabolario Europeo sulle "
+"quelle proposte che fanno riferimento al vocabolario europeo sulle "
 "frequenze"
 
 #: ckanext/dcatapit/schema.py:306
@@ -349,7 +348,7 @@ msgstr ""
 "di creare nuovi dataset per piccoli cambiamenti. E’ invece consigliato "
 "definire nuovi dataset solo in presenza di cambiamenti significativi "
 "rispetto a precedenti versioni (e.g., nuovi elementi inclusi, adattamenti"
-" significativi di alcuni elementi, ecc). Perr fare riferimento al dataset"
+" significativi di alcuni elementi, ecc). Per fare riferimento al dataset"
 " di riferimento, inserire l'identificativo del dataset stesso."
 
 #: ckanext/dcatapit/schema.py:316
@@ -383,9 +382,9 @@ msgstr ""
 "Questa proprietà si riferisce a una o più entità (organizzazione) che "
 "hanno materialmente creato il dataset. Se l'editore non l’ha prodotto, si"
 " può indicare l’organizzazione (o pubblica amministrazione) che ha "
-"materialmente prodotto il dataset come creatore. Si raccomanda di evitare"
-" l’inserimento di nomi di singole persone.Nel caso in cui editore e "
-"creatore del dataset coincidano, allora si può omettere questa  "
+"materialmente prodotto il dataset. Si raccomanda di evitare"
+" l’inserimento di nomi di singole persone. Nel caso in cui editore e "
+"autore del dataset coincidano, allora si può omettere questa  "
 "proprietà. Vanno inseriti il nome dell'organizzazione e il suo codice "
 "identificativo."
 
