@@ -851,7 +851,7 @@ msgstr "Classificazioni"
 
 #: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:36
 msgid "Organizations"
-msgstr "Referenti del Dataset"
+msgstr "Soggetti"
 
 #: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:45
 msgid "Temporal"
