@@ -842,15 +842,15 @@ msgstr "Ultimo aggiornamento"
 
 #: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:15
 msgid "Information"
-msgstr "Informazioni"
+msgstr "Informazioni Generali"
 
 #: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:30
 msgid "Classification"
-msgstr "Classificazione"
+msgstr "Classificazioni"
 
 #: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:36
 msgid "Organizations"
-msgstr "Organizzazioni"
+msgstr "Soggetti"
 
 #: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:45
 msgid "Temporal"
@@ -858,7 +858,7 @@ msgstr "Riferimenti Temporali"
 
 #: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:54
 msgid "Spatial"
-msgstr "Riferimenti Spaziali"
+msgstr "Riferimenti Geografici"
 
 #: ckanext/dcatapit/templates/package/snippets/package_basic_fields.html:60
 msgid "Standards"
