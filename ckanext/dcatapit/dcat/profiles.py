@@ -743,7 +743,7 @@ class ItalianDCATAPProfile(RDFProfile):
                 self.g.add((node, DCT.creator, agent))
                 if adata.get('agent_name'):
                     for alang, aname in adata['agent_name'].items():
-                        self.g.add((agent, FOAF.name, Literal(aname, lang=alang)))
+                        self.g.add((agent, FOAF.name, Literal(aname, lang=lang_mapping_ckan_to_xmllang.get(alang, alang))))
 
                 if adata.get('agent_identifier'):
                     self.g.add((agent, DCT.identifier, Literal(adata['agent_identifier'])))
