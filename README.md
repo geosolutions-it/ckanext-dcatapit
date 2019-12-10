@@ -160,15 +160,15 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
      
 15. The EU controlled vocabularies must be populated before start using the dcatapit plugin. Execute in sequence these commands:
 
-        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf --name languages --config=/etc/ckan/default/production.ini
+        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/resource/distribution/language/rdf/skos_core/languages-skos.rdf --name languages --config=/etc/ckan/default/production.ini
     
-        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/data-theme/skos/data-theme-skos.rdf --name eu_themes --config=/etc/ckan/default/production.ini
+        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/resource/distribution/data-theme/rdf/skos_core/data-theme-skos.rdf --name eu_themes --config=/etc/ckan/default/production.ini
     
-        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/place/skos/places-skos.rdf --name places --config=/etc/ckan/default/production.ini
+        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/resource/distribution/place/rdf/skos_core/places-skos.rdf --name places --config=/etc/ckan/default/production.ini
     
-        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf --name frequencies --config=/etc/ckan/default/production.ini
+        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/resource/distribution/frequency/rdf/skos_core/frequencies-skos.rdf --name frequencies --config=/etc/ckan/default/production.ini
     
-        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf  --name filetype --config=/etc/ckan/default/production.ini
+        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/resource/distribution/file-type/rdf/skos_core/filetypes-skos.rdf  --name filetype --config=/etc/ckan/default/production.ini
         
         curl https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/territorial-classifications/regions/regions.rdf > regions.rdf
         paster --plugin=ckanext-dcatapit vocabulary load --filename regions.rdf --name regions --config=/etc/ckan/default/production.ini
