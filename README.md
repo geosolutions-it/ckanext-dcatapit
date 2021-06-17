@@ -36,7 +36,7 @@ A demo instance can be found [here](http://dcatapit.geo-solutions.it/).
 
 ## Overview 
 
-This extension provides plugins that allow CKAN to expose and consume metadata from other catalogs using RDF documents serialized according to the [Italian DCAT Application Profile](http://www.dati.gov.it/content/dcat-ap_it_v10). The Data Catalog Vocabulary (DCAT) is "an RDF vocabulary designed to facilitate interoperability between data catalogs published on the Web".
+This extension provides plugins that allow CKAN to expose and consume metadata from other catalogs using RDF documents serialized according to the [Italian DCAT Application Profile](https://www.dati.gov.it/content/dcat-ap-it-v10-profilo-italiano-dcat-ap-0). The Data Catalog Vocabulary (DCAT) is "an RDF vocabulary designed to facilitate interoperability between data catalogs published on the Web".
 
 Also, if enabled, this extension improves dataset form look'n'feel. See [Dataset form](#dataset-form)
 
