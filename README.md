@@ -141,7 +141,7 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
     
 11. Initialize the CKAN DB with the mandatory table needed for localized vocabulary voices:
 
-        paster --plugin=ckanext-dcatapit vocabulary initdb --config=/etc/ckan/default/production.ini
+        ckan --config=/etc/ckan/default/production.ini dcatapit initdb
 
 12. Update the Solr schema.xml file used by CKAN introducing the following element:
 
@@ -160,18 +160,35 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
      
 15. The EU controlled vocabularies must be populated before start using the dcatapit plugin. Execute in sequence these commands:
 
-        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/language/skos/languages-skos.rdf --name languages --config=/etc/ckan/default/production.ini
-    
-        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/data-theme/skos/data-theme-skos.rdf --name eu_themes --config=/etc/ckan/default/production.ini
-    
-        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/place/skos/places-skos.rdf --name places --config=/etc/ckan/default/production.ini
-    
-        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/frequency/skos/frequencies-skos.rdf --name frequencies --config=/etc/ckan/default/production.ini
-    
-        paster --plugin=ckanext-dcatapit vocabulary load --url http://publications.europa.eu/mdr/resource/authority/file-type/skos/filetypes-skos.rdf  --name filetype --config=/etc/ckan/default/production.ini
-        
-        curl https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/territorial-classifications/regions/regions.rdf > regions.rdf
-        paster --plugin=ckanext-dcatapit vocabulary load --filename regions.rdf --name regions --config=/etc/ckan/default/production.ini
+        export CKAN_CONFIG=/etc/ckan/default/production.ini
+
+        ckan --config=/etc/ckan/default/ckan.ini dcatapit load \
+        --name=languages \
+        --eurovoc=languages \
+        --filename=vocabularies/languages-skos.rdf
+
+        ckan --config=/etc/ckan/default/ckan.ini dcatapit load \
+        --name=eu_themes \
+        --eurovoc=eu_themes \
+        --filename=vocabularies/data-theme-skos.rdf
+
+        ckan --config=/etc/ckan/default/ckan.ini dcatapit load \
+        --name=places \
+        --eurovoc=places \
+        --filename=vocabularies/places-skos.rdf
+
+        ckan --config=/etc/ckan/default/ckan.ini dcatapit load \
+        --name=frequencies \
+        --eurovoc=frequencies \
+        --filename=vocabularies/frequencies-skos.rdf
+
+        ckan --config=/etc/ckan/default/ckan.ini dcatapit load \
+        --name=filetype \
+        --eurovoc=filetype \
+        --filename=vocabularies/filetypes-skos.rdf
+
+        # curl https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/territorial-classifications/regions/regions.rdf > regions.rdf
+        # paster --plugin=ckanext-dcatapit vocabulary load --filename regions.rdf --name regions --config=/etc/ckan/default/production.ini
 
 16. DCATAPIT themes and subthemes vocabularues must be popolated:
 

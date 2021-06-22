@@ -70,7 +70,7 @@ sudo -u postgres psql -d ckan_test -c 'ALTER VIEW geometry_columns OWNER TO ckan
 sudo -u postgres psql -d ckan_test -c 'ALTER TABLE spatial_ref_sys OWNER TO ckan_default;'
 
 echo "Install other libraries required..."
-sudo apt-get install python-dev libxml2-dev libxslt1-dev libgeos-c1
+sudo apt-get install python3-dev libxml2-dev libxslt1-dev libgeos-c1
 
 echo "Initialising the database..."
 cd ckan

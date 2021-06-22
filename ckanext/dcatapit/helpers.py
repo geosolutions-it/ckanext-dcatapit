@@ -1,32 +1,29 @@
+import datetime
 import json
 import logging
 
-from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
-from ckan.model import GroupExtra, Session
 import ckan.lib.helpers as h
 import ckan.plugins.toolkit as toolkit
+from ckan.lib.base import config
+from ckan.model import GroupExtra, Session
 from ckan.plugins import PluginImplementations
 from ckanext.harvest.model import HarvestObject
-
-import ckanext.dcatapit.schema as dcatapit_schema
+from markupsafe import Markup
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 import ckanext.dcatapit.interfaces as interfaces
-from ckanext.dcatapit.model.license import License
-from ckan.lib.base import config
+import ckanext.dcatapit.schema as dcatapit_schema
 from ckanext.dcatapit.model.subtheme import Subtheme
-
-import datetime
-from webhelpers.html import escape, HTML, literal, url_escape
 
 log = logging.getLogger(__file__)
 
 dateformats = [
-    "%d-%m-%Y",
-    "%Y-%m-%d",
-    "%d-%m-%y",
-    "%Y-%m-%d %H:%M:%S",
-    "%d-%m-%Y %H:%M:%S",
-    "%Y-%m-%dT%H:%M:%S"
+    '%d-%m-%Y',
+    '%Y-%m-%d',
+    '%d-%m-%y',
+    '%Y-%m-%d %H:%M:%S',
+    '%d-%m-%Y %H:%M:%S',
+    '%Y-%m-%dT%H:%M:%S'
 ]
 
 # config param names
@@ -41,21 +38,26 @@ DEFAULT_ORG_CTX.update(dict((k, False) for k in ('include_tags',
                                                  'include_extras',
                                                  'include_followers',)))
 
+
 def get_dcatapit_package_schema():
     log.debug('Retrieving DCAT-AP_IT package schema fields...')
     return dcatapit_schema.get_custom_package_schema()
+
 
 def get_dcatapit_organization_schema():
     log.debug('Retrieving DCAT-AP_IT organization schema fields...')
     return dcatapit_schema.get_custom_organization_schema()
 
+
 def get_dcatapit_configuration_schema():
     log.debug('Retrieving DCAT-AP_IT configuration schema fields...')
     return dcatapit_schema.get_custom_config_schema()
 
+
 def get_dcatapit_resource_schema():
     log.debug('Retrieving DCAT-AP_IT resource schema fields...')
     return dcatapit_schema.get_custom_resource_schema()
+
 
 def get_vocabulary_items(vocabulary_name, keys=None):
     try:
@@ -77,11 +79,14 @@ def get_vocabulary_items(vocabulary_name, keys=None):
     except toolkit.ObjectNotFound:
         return []
 
+
 def get_vocabulary_item(vocabulary_name, key):
     return interfaces.get_localized_tag_name(key)
 
+
 def get_dcatapit_license(license_type):
     return interfaces.get_license_for_dcat(license_type)
+
 
 def get_package_resource_dcatapit_format_list(pkg_resources, fallback_lang=None):
     resources = []
@@ -96,9 +101,11 @@ def get_package_resource_dcatapit_format_list(pkg_resources, fallback_lang=None)
     resources = package_res
     return resources
 
+
 def get_localized_field_value(field=None, pkg_id=None, field_type='extra'):
     log.debug('Retrieving localized package field...')
     return interfaces.get_localized_field_value(field, pkg_id, field_type)
+
 
 def get_resource_licenses_tree(value=None, lang=None):
     return interfaces.get_resource_licenses_tree(value, lang)
@@ -128,6 +135,7 @@ def list_to_string(_list, _format=None):
 
         return _string
 
+
 def couple_to_string(field_couples, pkg_dict):
     if field_couples and pkg_dict:
         _string = ''
@@ -139,6 +147,7 @@ def couple_to_string(field_couples, pkg_dict):
 
         return _string
     return None
+
 
 def couple_to_html(field_couples, pkg_dict):
     if field_couples and pkg_dict:
@@ -156,7 +165,7 @@ def couple_to_html(field_couples, pkg_dict):
 
                 couple_label = couple.get('label', None)
                 if field_value and couple_label:
-                    html_elements.append(literal(('<span style="font-weight:bold">%s: </span><span>%s</span>') % (couple_label, field_value)))
+                    html_elements.append(Markup(('<span style="font-weight:bold">%s: </span><span>%s</span>') % (couple_label, field_value)))
 
         return html_elements if len(html_elements) > 0 else []
     return []
@@ -180,7 +189,7 @@ def couple_to_dict(field_couples, pkg_dict):
                 if field_value and couple_label:
                     c = {'label': couple_label, 'value': field_value}
                     ret.append(c)
- 
+
     return ret
 
 
@@ -199,8 +208,8 @@ def format(value, _format='%d-%m-%Y', _type=None):
                     try:
                         date = date.strftime(_format)
                         return date
-                    except ValueError, err:
-                        log.warning("cannot reformat %s value (from %s) to %s format: %s",
+                    except ValueError as err:
+                        log.warning('cannot reformat %s value (from %s) to %s format: %s',
                                     date, value, _format, err, exc_info=err)
                     return value
         if _type == 'text':
@@ -208,30 +217,34 @@ def format(value, _format='%d-%m-%Y', _type=None):
 
     return value
 
+
 def validate_dateformat(date_string, date_format):
     try:
         date = datetime.datetime.strptime(date_string, date_format)
         return date
     except ValueError:
-        log.debug(u'Incorrect date format {0} for date string {1}'.format(date_format, date_string))
+        log.debug('Incorrect date format {0} for date string {1}'.format(date_format, date_string))
         return None
+
 
 def json_load(val):
     try:
         return json.loads(val)
-    except (TypeError, ValueError,):
+    except (TypeError, ValueError):
         pass
+
 
 def json_dump(val):
     try:
         return json.dumps(val)
-    except (TypeError, ValueError,), err:
+    except (TypeError, ValueError) as err:
         pass
+
 
 def load_json_or_list(val):
     try:
         return json.loads(val)
-    except (TypeError, ValueError,):
+    except (TypeError, ValueError):
         if val:
             return [{'identifier': v} for v in val.split(',')]
 
@@ -246,19 +259,20 @@ def get_geonames_config():
         out['limit_to'] = limit_to
     return out
 
-  
+
 def get_localized_subtheme(subtheme_id, lang):
     return interfaces.get_localized_subtheme(subtheme_id, lang) or subtheme_id
 
 
 def get_dcatapit_subthemes(lang):
     """
-    Dump subthemes tree with localized lables for all themes 
+    Dump subthemes tree with localized lables for all themes
     """
     out = {}
+
     def _get_name(opt_val, depth):
-        return u'{} {}'.format('-'*depth, opt_val)
-      
+        return '{} {}'.format('-' * depth, opt_val)
+
     for theme in Subtheme.get_theme_names():
         out[theme] = theme_l = []
         for opt, label in Subtheme.for_theme(theme, lang):
@@ -276,10 +290,11 @@ def dump_dcatapit_subthemes(value):
     try:
         data = json.loads(value)
     except (ValueError, TypeError):
-        if isinstance(value, (str, unicode,)):
+        if isinstance(value, str):
             data = [{'theme': s, 'subthemes': []} for s in value.strip('{}').split(',')]
     out.extend(data)
     return out
+
 
 def load_dcatapit_subthemes(value, lang):
     """
@@ -287,7 +302,7 @@ def load_dcatapit_subthemes(value, lang):
     """
     data = dump_dcatapit_subthemes(value)
     out = []
-    
+
     for item in data:
         localized_theme = interfaces.get_localized_tag_name(item['theme'], lang=lang)
         outitem = {'theme': localized_theme,
@@ -299,6 +314,7 @@ def load_dcatapit_subthemes(value, lang):
         out.append(outitem)
     return out
 
+
 def get_organization_by_identifier(context, identifier):
     """
     quick'n'dirty way to get organization by rights holder's identifer
@@ -306,9 +322,9 @@ def get_organization_by_identifier(context, identifier):
     """
     try:
         ge = Session.query(GroupExtra).filter_by(key='identifier',
-                                            value=identifier,
-                                            state='active')\
-                                 .one()
+                                                 value=identifier,
+                                                 state='active')\
+            .one()
     except MultipleResultsFound:
         raise
     except NoResultFound:
@@ -329,8 +345,10 @@ def get_enable_form_tabs():
     # default
     return True
 
+
 def get_org_context():
     return DEFAULT_ORG_CTX.copy()
+
 
 def get_icustomschema_fields():
     out = []
@@ -341,6 +359,7 @@ def get_icustomschema_fields():
             extra['external'] = True
         out.extend(extra_schema)
     return out
+
 
 def dataset_is_local(pkg_id):
     q = Session.query(HarvestObject).filter(HarvestObject.package_id == pkg_id).exists()

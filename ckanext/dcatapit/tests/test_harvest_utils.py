@@ -1,56 +1,57 @@
 
 import nose
+
 import ckanext.dcatapit.harvesters.utils as utils
 
 eq_ = nose.tools.eq_
 ok_ = nose.tools.ok_
 
 csw_harvester_config = {
-    "dataset_themes":"OP_DATPRO",
-    "dataset_places":"ITA_BZO",
-    "dataset_languages":"{ITA,DEU}",
-    "frequency":"UNKNOWN",
-    "agents":{
-        "publisher":{
-            "code":"p_bz",
-            "role":"publisher",
-            "code_regex":{
-                "regex":"\\(([^)]+)\\:([^)]+)\\)",
-                "groups":[2]
+    'dataset_themes': 'OP_DATPRO',
+    'dataset_places': 'ITA_BZO',
+    'dataset_languages': '{ITA,DEU}',
+    'frequency': 'UNKNOWN',
+    'agents': {
+        'publisher': {
+            'code': 'p_bz',
+            'role': 'publisher',
+            'code_regex': {
+                'regex': '\\(([^)]+)\\:([^)]+)\\)',
+                'groups': [2]
             },
-            "name_regex":{
-                "regex":"([^(]*)(\\(IPa[^)]*\\))(.+)",
-                "groups":[1, 3]
+            'name_regex': {
+                'regex': '([^(]*)(\\(IPa[^)]*\\))(.+)',
+                'groups': [1, 3]
             }
         },
-        "owner":{
-            "code":"p_bz",
-            "role":"owner",
-            "code_regex":{
-                "regex":"\\(([^)]+)\\:([^)]+)\\)",
-                "groups":[2]
+        'owner': {
+            'code': 'p_bz',
+            'role': 'owner',
+            'code_regex': {
+                'regex': '\\(([^)]+)\\:([^)]+)\\)',
+                'groups': [2]
             },
-            "name_regex":{
-                "regex":"([^(]*)(\\(IPa[^)]*\\))(.+)",
-                "groups":[1, 3]
+            'name_regex': {
+                'regex': '([^(]*)(\\(IPa[^)]*\\))(.+)',
+                'groups': [1, 3]
             }
         },
-        "author":{
-            "code":"p_bz",
-            "role":"author",
-            "code_regex":{
-                "regex":"\\(([^)]+)\\:([^)]+)\\)",
-                "groups":[2]
+        'author': {
+            'code': 'p_bz',
+            'role': 'author',
+            'code_regex': {
+                'regex': '\\(([^)]+)\\:([^)]+)\\)',
+                'groups': [2]
             },
-            "name_regex":{
-                "regex":"([^(]*)(\\(IPa[^)]*\\))(.+)",
-                "groups":[1, 3]
+            'name_regex': {
+                'regex': '([^(]*)(\\(IPa[^)]*\\))(.+)',
+                'groups': [1, 3]
             }
         }
     },
-    "controlled_vocabularies":{
-        "dcatapit_skos_theme_id":"theme.data-theme-skos",
-        "dcatapit_skos_places_id":"theme.places-skos"
+    'controlled_vocabularies': {
+        'dcatapit_skos_theme_id': 'theme.data-theme-skos',
+        'dcatapit_skos_places_id': 'theme.places-skos'
     }
 }
 
@@ -67,6 +68,7 @@ responsiblePartys = [
     }
 ]
 
+
 def test_get_responsible_party():
     name, code = utils.get_responsible_party(responsiblePartys, csw_harvester_config.get('agents').get('publisher'))
 
@@ -82,4 +84,3 @@ def test_get_responsible_party():
 
     eq_(name, 'Comune di Bolzano  - Ufficio Sistema Informativo Territoriale')
     eq_(code, 'c_a952')
-

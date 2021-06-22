@@ -1,7 +1,7 @@
 {% ckan_extends %}
     {% block footer_links %}
      {{ super() }}
-      <li><a href="{{ h.url_for('harvest_list') }}">{{ _('Harvest list') }}</a></li>
+      <li><a href="{{ h.url_for('harvest.search') }}">{{ _('Harvest list') }}</a></li>
     {% endblock %}
 
     {% block footer_attribution %}

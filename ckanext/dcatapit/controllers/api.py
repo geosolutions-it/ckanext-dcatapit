@@ -1,23 +1,25 @@
 
 import logging
-
 import urllib
-import ckan.model as model
-import ckan.logic as logic
 
-from ckan.controllers.api import ApiController
+import ckan.logic as logic
+import ckan.model as model
 from ckan.common import c, request
+from ckan.views.api import _finish
+from flask.views import MethodView
 
 log = logging.getLogger(__file__)
 
 # shortcuts
 get_action = logic.get_action
 
-class DCATAPITApiController(ApiController):
 
-    def vocabulary_autocomplete(self):
+class DCATAPITApiController(MethodView):
+    methods = ['GET', ]
+
+    def get(self):
         q = request.str_params.get('incomplete', '')
-        q = unicode(urllib.unquote(q), 'utf-8')
+        q = urllib.unquote(q)
 
         vocab = request.params.get('vocabulary_id', None)
 
@@ -39,4 +41,4 @@ class DCATAPITApiController(ApiController):
             }
         }
 
-        return super(DCATAPITApiController, self)._finish_ok(resultSet)
+        return _finish(200, resultSet, 'json')

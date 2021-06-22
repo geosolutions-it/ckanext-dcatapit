@@ -1,8 +1,8 @@
 <section class="additional-info">
   <h3>{{ _('Dataset Metadata') }}</h3>
 
-    {% resource 'ckanext-dcatapit/dcatapit.css' %}
-    
+    {% asset 'ckanext-dcatapit/dcatapit.css' %}
+
   <table class="table table-striped table-bordered table-condensed">
     <tbody>
     {% block dcatapit_additional_info %}
@@ -18,7 +18,7 @@
                 <th scope="row" class="dataset-label">{{ field.label }}</th>
                 <td class="dataset-details">
                 {% if couples %}
-                    {% for couple in couples %}									
+                    {% for couple in couples %}
                         {% if couple %}
                     <span style="font-weight:bold">{{couple.label}}: </span><span>{{couple.value}}</span><br/>
                         {% else %}
@@ -150,7 +150,7 @@
                         {% endif %}
                         {% for ref in std['referenceDocumentation'] %}
                     <span style="font-weight:bold">{{_('Std Reference documentation')}}: </span><span><a href="{{ ref }}">{{ ref }}</a></span><br/>
-                        {% endfor %}										
+                        {% endfor %}
                 </td>
             </tr>
                     {% endfor %}
@@ -163,7 +163,7 @@
                     <th scope="row" class="dataset-label">{{ field.label }}</th>
                     <td class="dataset-details">
                     {% if couples %}
-                        {% for couple in couples %}									
+                        {% for couple in couples %}
                             {% if couple %}
                         <span style="font-weight:bold">{{couple.label}}: </span><span>{{couple.value}}</span><br/>
                             {% else %}

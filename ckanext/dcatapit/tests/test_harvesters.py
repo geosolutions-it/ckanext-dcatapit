@@ -1,30 +1,57 @@
-import os
 import json
-
+import os
 import unittest
-import nose
 
-from ckan.model import Session, Package
+import pytest
 from ckan import model
-from ckan.plugins import toolkit
 from ckan.lib.munge import munge_name
+from ckan.model import User, Group, Session
 
 try:
     from ckan.tests import helpers
 except ImportError:
     from ckan.new_tests import helpers
 
-from ckanext.harvest.model import HarvestObject
-from ckanext.dcatapit.model.license import (load_from_graph, 
-    License, LocalizedLicenseName, _get_graph, SKOS)
-
-from ckanext.dcatapit.harvesters.ckanharvester import CKANMappingHarvester
-from ckanext.dcatapit.model.license import load_from_graph, License
 from ckanext.dcat.harvesters.rdf import DCATRDFHarvester
+from ckanext.dcatapit.harvesters.ckanharvester import CKANMappingHarvester
+from ckanext.dcatapit.model.license import (
+    License,
+    load_from_graph,
+)
+from ckanext.harvest.model import HarvestObject
+from ckan.tests.helpers import call_action
 
 
+@pytest.mark.usefixtures('with_request_context', 'clean_postgis', 'spatial_setup')
 class HarvestersTestCase(unittest.TestCase):
-    
+
+    def setUp(self):
+        def get_path(fname):
+            return os.path.join(os.path.dirname(__file__),
+                                '..', '..', '..', 'examples', fname)
+        licenses = get_path('licenses.rdf')
+        load_from_graph(path=licenses)
+        Session.flush()
+
+        user = User.get('dummy')
+
+        if not user:
+            user = call_action('user_create',
+                               name='dummy',
+                               password='dummydummy',
+                               email='dummy@dummy.com')
+            user_name = user['name']
+        else:
+            user_name = user.name
+        org = Group.by_name('dummy')
+        if org:
+            self.org = org.__dict__
+        else:
+            self.org = call_action('organization_create',
+                              context={'user': user_name},
+                              name='dummy',
+                              identifier='aaaaaa')
+
     def _create_harvest_source(self, ctx, mock_url, **kwargs):
 
         source_dict = {
@@ -35,28 +62,28 @@ class HarvestersTestCase(unittest.TestCase):
         }
         source_dict.update(**kwargs)
         harvest_source = helpers.call_action('harvest_source_create',
-                                       context=ctx, **source_dict)
+                                             context=ctx, **source_dict)
         return harvest_source
 
     def _create_harvest_job(self, ctx, harvest_source_id):
 
         harvest_job = helpers.call_action('harvest_job_create',
-                                    context=ctx, source_id=harvest_source_id)
+                                          context=ctx, source_id=harvest_source_id)
         return harvest_job
 
     def _create_harvest_obj(self, mock_url, **kwargs):
         ctx = {'session': Session,
-               'model': model}
+               'model': model,
+               }
         s = self._create_harvest_source(ctx, mock_url, **kwargs)
         Session.flush()
         j = self._create_harvest_job(ctx, s['id'])
         Session.flush()
         h = helpers.call_action('harvest_object_create',
-                                context=ctx, 
-                                job_id = j['id'],
-                                source_id = s['id'])
+                                context=ctx,
+                                job_id=j['id'],
+                                source_id=s['id'])
         return h
-
 
     def test_ckan_harvester_license(self):
 
@@ -68,16 +95,16 @@ class HarvestersTestCase(unittest.TestCase):
                                 'url': 'http://resource/1111',
                                 'license_type': 'invalid',
                             },
-                            {
+                       {
                                 'id': 'resource/2222',
                                 'url': 'http://resource/2222',
                                 'license_type': 'https://w3id.org/italia/controlled-vocabulary/licences/A311_GFDL13'
                             }
-                        ]
-                    }
-       
+                   ]
+                   }
+
         data = json.dumps(dataset)
-        harvest_dict = self._create_harvest_obj('http://mock/source/', name='testpkg')
+        harvest_dict = self._create_harvest_obj('http://mock/source/', name='testpkg', owner_org=self.org['id'])
         harvest_obj = HarvestObject.get(harvest_dict['id'])
         harvest_obj.content = data
         h = CKANMappingHarvester()
@@ -97,6 +124,7 @@ class HarvestersTestCase(unittest.TestCase):
 
     def test_remote_orgs(self):
         dataset = {'title': 'some title 2',
+                   'owner_id': self.org['id'],
                    'id': 'sometitle2',
                    'name': 'somename',
                    'holder_name': 'test holder',
@@ -108,23 +136,24 @@ class HarvestersTestCase(unittest.TestCase):
                    'publisher_name': 'publisher',
                    'identifier': 'identifier2',
                    'publisher_identifier': 'publisher',
-                    }
-       
+                   }
 
         # no org creation, holder_identifier should be assigned to dataset
         data = json.dumps(dataset)
         harvest_dict = self._create_harvest_obj('http://mock/source/a',
                                                 name='testpkg_2',
-                                                config=json.dumps({'remote_orgs': 'no-create'}))
+                                                config=json.dumps({'remote_orgs': 'no-create'}),
+                                                owner_org=self.org['id'],
+                                                )
         harvest_obj = HarvestObject.get(harvest_dict['id'])
         harvest_obj.content = data
-        
+
         h = DCATRDFHarvester()
         out = h.import_stage(harvest_obj)
         self.assertTrue(out, harvest_obj.errors)
 
         pkg = helpers.call_action('package_show', context={}, name_or_id='some-title-2')
-        
+
         for k in ('holder_name', 'holder_identifier',):
             self.assertEqual(pkg.get(k), dataset[k])
 
@@ -132,17 +161,19 @@ class HarvestersTestCase(unittest.TestCase):
         dataset.update({'id': 'sometitle3',
                         'name': munge_name('some title 3'),
                         'title': 'some title 3',
-                        'holder_name': 'test test holder' ,
+                        'holder_name': 'test test holder',
                         'holder_identifier': 'abcdefg',
                         'identifier': 'identifier3',
                         })
 
         harvest_dict = self._create_harvest_obj('http://mock/source/b',
                                                 name='testpkg_3',
-                                                config=json.dumps({'remote_orgs': 'create'}))
+                                                config=json.dumps({'remote_orgs': 'create'}),
+                                                owner_org=self.org['id'],
+                                                )
         harvest_obj = HarvestObject.get(harvest_dict['id'])
         harvest_obj.content = json.dumps(dataset)
-        
+
         out = h.import_stage(harvest_obj)
         self.assertTrue(out, harvest_obj.errors)
         pkg = helpers.call_action('package_show', context={}, name_or_id='testpkg_3')
@@ -157,8 +188,8 @@ class HarvestersTestCase(unittest.TestCase):
         self.assertEqual(org['identifier'], dataset['holder_identifier'])
 
         # package's holder should be updated with organization's data
-        for k in (('holder_name', 'title',), ('holder_identifier','identifier',)):
-            self.assertEqual(pkg.get(k[0]), org[k[1]] )
+        for k in (('holder_name', 'title',), ('holder_identifier', 'identifier',)):
+            self.assertEqual(pkg.get(k[0]), org[k[1]])
 
         # check for existing org
 
@@ -170,10 +201,12 @@ class HarvestersTestCase(unittest.TestCase):
 
         harvest_dict = self._create_harvest_obj('http://mock/source/c',
                                                 name='testpkg_4',
-                                                config=json.dumps({'remote_orgs': 'create'}))
+                                                config=json.dumps({'remote_orgs': 'create'}),
+                                                owner_org=self.org['id'],
+                                                )
         harvest_obj = HarvestObject.get(harvest_dict['id'])
         harvest_obj.content = json.dumps(dataset)
-        
+
         out = h.import_stage(harvest_obj)
         self.assertTrue(out, harvest_obj.errors)
         pkg = helpers.call_action('package_show', context={}, name_or_id='testpkg_4')
@@ -186,30 +219,32 @@ class HarvestersTestCase(unittest.TestCase):
         org = helpers.call_action('organization_show', context={}, id=org_id)
         self.assertEqual(org['identifier'], dataset['holder_identifier'])
 
-
-
     def test_ckan_duplicated_name(self):
+        dataset0 = {
+            'owner_org': self.org['id'],
+            'holder_name': 'test holder',
+            'holder_identifier': 'abcdef',
+            'notes': 'some notes',
+            'modified': '2000-01-01',
+            'theme': 'AGRI',
+            'frequency': 'UNKNOWN',
+            'publisher_name': 'publisher',
+            'identifier': 'aasdfa',
+            'publisher_identifier': 'publisher',
+            'resources': [],
+            'extras': [],
+        }
 
-        dataset0 = {'holder_name': 'test holder',
-                   'holder_identifier': 'abcdef',
-                   'notes': 'some notes',
-                   'modified': '2000-01-01',
-                   'theme': 'AGRI',
-                   'frequency': 'UNKNOWN',
-                   'publisher_name': 'publisher',
-                   'identifier': 'aasdfa',
-                   'publisher_identifier': 'publisher',
-                   'resources': [],
-                   'extras': [],
-                    }
-        
-        dataset1 = {'title': 'duplicated title',
-                    'name': 'duplicated-title',
-                   'id': 'dummyid'}
+        dataset1 = {
+            'owner_org': self.org['id'],
+            'title': 'duplicated title',
+            'name': 'duplicated-title',
+            'id': 'dummyid'
+        }
         dataset1.update(dataset0)
         data = json.dumps(dataset1)
 
-        harvest_dict = self._create_harvest_obj('http://mock/source/', name='dupname1')
+        harvest_dict = self._create_harvest_obj('http://mock/source/', name='dupname1', owner_org=self.org['id'])
         harvest_obj = HarvestObject.get(harvest_dict['id'])
         harvest_obj.content = data
         h = DCATRDFHarvester()
@@ -226,7 +261,7 @@ class HarvestersTestCase(unittest.TestCase):
         dataset2['identifier'] = 'otherid'
         data = json.dumps(dataset2)
 
-        harvest_dict = self._create_harvest_obj('http://mock/source/', name='dupname2')
+        harvest_dict = self._create_harvest_obj('http://mock/source/', name='dupname2', owner_org=self.org['id'])
         harvest_obj = HarvestObject.get(harvest_dict['id'])
         harvest_obj.content = data
         h = DCATRDFHarvester()
@@ -244,12 +279,3 @@ class HarvestersTestCase(unittest.TestCase):
         self.assertEqual(pkg_dict['title'], dataset2['title'])
         self.assertEqual(pkg_dict['name'], 'duplicated-title1')
 
-
-
-    def setUp(self):
-        def get_path(fname):
-            return os.path.join(os.path.dirname(__file__),
-                        '..', '..', '..', 'examples', fname)
-        licenses = get_path('licenses.rdf')
-        load_from_graph(path=licenses)
-        Session.flush()

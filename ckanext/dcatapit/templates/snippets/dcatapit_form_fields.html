@@ -18,7 +18,7 @@
                                  help=field.help) }}
 
             {% elif field.element == 'select' %}
-            
+
                   {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
 
                   {{ dform.select(field.name,
@@ -54,7 +54,7 @@
                     var dcatapit = window.dcatapit || {};
                     dcatapit.subthemes = {{ h.json_dump(all_subthemes)|safe }};
                    </script>
-                  {{ 
+                  {{
                         dform.themes(
                               field.name,
                               id='field-' + field.name,
@@ -72,7 +72,7 @@
 
             {% elif field.element == 'vocabulary' or field.element == 'region' %}
                   {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
-                  {{ 
+                  {{
                         dform.vocabulary(
                               field.name,
                               id='field-' + field.name,
@@ -87,15 +87,15 @@
                   }}
 
             {% elif field.element == 'rights_holder' %}
-                  {% if (not data.get('owner_org') and not data.get(field.name) and not data.has_key('dataset_is_local')) %}
+                  {% if (not data.get('owner_org') and not data.get(field.name) and 'dataset_is_local' not in data) %}
                         {{ dform.rights_holder_create(field.name, label=field.label, help=field.help_create) }}
                   {% else %}
-                        {{ 
+                        {{
                             dform.couple(
                               field.name,
                               labels=(field.couples[0].label, field.couples[1].label),
                               names=(field.couples[0].name, field.couples[1].name),
-                              id='field-range-' + field.name, 
+                              id='field-range-' + field.name,
                               label=field.label,
                               read_only=(field.read_only or False),
                               modify_fields=not data.get('dataset_is_local'),
@@ -111,12 +111,12 @@
 
                   {# -------------------------------------------------------------------------------
                   {% set couple_values = data[field.name].split(',') if data[field.name] else ['', ''] %}
-                  {{ 
+                  {{
                         dform.couple(
                               field.name,
                               labels=(field.couples[0].label, field.couples[1].label),
                               names=(field.couples[0].name, field.couples[1].name),
-                              id='field-range-' + field.name, 
+                              id='field-range-' + field.name,
                               label=field.label,
                               values=(couple_values[0], couple_values[1], False),
                               error=errors[field.couples[0].name] or errors[field.couples[1].name],
@@ -126,12 +126,12 @@
                   }}
 
                   ------------------------------------------------------------------------------- #}
-                  {{ 
+                  {{
                         dform.couple(
                               field.name,
                               labels=(field.couples[0].label, field.couples[1].label),
                               names=(field.couples[0].name, field.couples[1].name),
-                              id='field-range-' + field.name, 
+                              id='field-range-' + field.name,
                               label=field.label,
                               read_only=(field.read_only or False),
                               values=(data[field.couples[0].name], data[field.couples[1].name], False),
