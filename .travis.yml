@@ -2,8 +2,6 @@ sudo: required
 group: deprecated-2017Q4
 language: python
 python:
-    - "3.10"
-    - "3.9"
     - "3.8"
 env:
     - CKANVERSION=2.9
@@ -13,7 +11,7 @@ addons:
   postgresql: 9.6
   apt:
     packages:
-    - postgresql-9.6-postgis-2.3
+    - postgresql-9.6-postgis-2.4
 services:
     - redis-server
     - postgresql

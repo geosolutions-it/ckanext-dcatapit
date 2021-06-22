@@ -193,7 +193,7 @@ def couple_to_dict(field_couples, pkg_dict):
     return ret
 
 
-def format(value, _format='%d-%m-%Y', _type=None):
+def format(value, _format='%d-%m-%4Y', _type=None):
     # #################################################
     # TODO: manage here other formats if needed
     #      (ie. for type text, other date formats etc)
@@ -204,7 +204,7 @@ def format(value, _format='%d-%m-%Y', _type=None):
             for dateformat in dateformats:
                 date = validate_dateformat(value, dateformat)
 
-                if date and isinstance(date, datetime.date):
+                if isinstance(date, datetime.date):
                     try:
                         date = date.strftime(_format)
                         return date

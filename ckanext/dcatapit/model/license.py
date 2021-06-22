@@ -133,7 +133,8 @@ class License(_Base, DeclarativeBase):
         if self.default_name:
             dn = self.default_name.lower()
             out.append(dn)
-            s = CC_LICENSE_NAME.search(dn)
+            decoded_dn = dn.decode('utf-8') if type(dn) == bytes else dn
+            s = CC_LICENSE_NAME.search(decoded_dn)
             if s:
                 out.append(s.groups()[0])
         return out

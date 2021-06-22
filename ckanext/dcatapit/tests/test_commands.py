@@ -1,24 +1,11 @@
 import os
+import pytest
 import unittest
-
-import nose
 
 import ckanext.dcatapit.interfaces as interfaces
 
-eq_ = nose.tools.eq_
-ok_ = nose.tools.ok_
 
-
-class BaseOptions(object):
-
-    def __init__(self, options):
-        self.url = options.get('url', None)
-        self.name = options.get('name', None)
-        self.format = options.get('format', None)
-        self.filename = options.get('filename', None)
-
-
-class BaseCommandTest(object):
+class BaseCommandTest(unittest.TestCase):
 
     def _get_file_contents(self, file_name):
         path = os.path.join(os.path.dirname(__file__),
@@ -29,22 +16,13 @@ class BaseCommandTest(object):
 
 class TestDCATAPITCommand(BaseCommandTest):
 
-    @unittest.skip('API changed')
+    @pytest.mark.usefixtures('with_request_context')
     def test_vocabulary_command(self):
-        from ckanext.dcatapit.tests.utils import themes_loader
-        dcatapit_commands = themes_loader
+        from ckanext.dcatapit.commands.dcatapit import do_load
+        from ckanext.dcatapit.tests.utils import load_themes
 
         vocab_file_path = self._get_file_contents('data-theme-skos.rdf')
-
-        options = BaseOptions({
-            'filename': vocab_file_path,
-            'name': 'eu_themes',
-        })
-
-        setattr(dcatapit_commands, 'options', options)
-
-        dcatapit_commands.initdb()
-        dcatapit_commands.load()
+        do_load('eu_themes', url=None, filename=vocab_file_path, format='xml')
 
         tag_localized = interfaces.get_localized_tag_name('ECON')
-        ok_(tag_localized)
+        self.assertTrue(tag_localized)

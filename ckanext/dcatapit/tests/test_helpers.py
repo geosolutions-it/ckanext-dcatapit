@@ -58,7 +58,8 @@ def test_format():
     value = helpers.format('14-11-2011', '%Y-%m-%d', 'date')
     eq_(value, '2011-11-14')
     # invalid value, but valid format
-    value = helpers.format('14-11-0011', '%Y-%m-%d', 'date')
+    # Python on linux has different behavior with year less than 1000
+    value = helpers.format('14-11-0011', '%2Y-%m-%d', 'date')
     eq_(value, '11-11-14')
 
 

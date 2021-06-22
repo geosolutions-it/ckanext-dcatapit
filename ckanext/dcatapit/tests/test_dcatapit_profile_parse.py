@@ -173,7 +173,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         url = 'http://some.test.harvest.url'
 
         groups_non_mappable = [{'name': 'non-mappable', 'display_name': 'non-mappable'}], []
-        groups_mappable = [{'name': 'agriculture', 'display_name': 'agricoltura-e-allevamento'}],\
+        groups_mappable = [{'name': 'agriculture', 'display_name': 'agricoltura-e-allevamento', 'identifier': 'dummy'}],\
             [{'key': 'theme', 'value': 'AGRI'}]
 
         harvest_obj = self._make_harvest_object(url, groups_non_mappable[0])
@@ -207,7 +207,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         self.assertEqual([t for t in hdata.get('extras', []) if t['key'] == 'theme'], groups_mappable[1])
 
     def _make_harvest_object(self, mock_url, groups):
-        org = factories.Organization()
+        org = factories.Organization(identifier=uuid.uuid4())
         source_dict = {
             'owner_org': org['id'],
             'title': 'Test RDF DCAT Source',
@@ -448,7 +448,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         assert license_ref is not None
 
         assert str(license_ref) == gpl.document_uri
-        assert str(license_type) == gpl.license_type
+        assert str(license_type) == str(gpl.license_type)
 
         serialized = s.serialize_dataset(dataset)
 

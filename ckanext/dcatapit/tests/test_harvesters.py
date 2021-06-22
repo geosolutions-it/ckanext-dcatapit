@@ -22,7 +22,8 @@ from ckanext.harvest.model import HarvestObject
 from ckan.tests.helpers import call_action
 
 
-@pytest.mark.usefixtures('with_request_context', 'clean_postgis', 'spatial_setup')
+# @pytest.mark.usefixtures('with_request_context', 'clean_postgis', 'spatial_setup')
+@pytest.mark.usefixtures('with_request_context')
 class HarvestersTestCase(unittest.TestCase):
 
     def setUp(self):
