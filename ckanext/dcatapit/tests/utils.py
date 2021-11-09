@@ -1,33 +1,32 @@
 
 import os
-from ckanext.dcatapit import interfaces
-from ckanext.dcatapit.commands.dcatapit import DCATAPITCommands
-from ckanext.dcatapit.model.subtheme import clear_subthemes, load_subthemes, Subtheme
 
 from ckan.model import Session, Tag, Vocabulary
+from ckanext.dcatapit import interfaces
+from ckanext.dcatapit.commands.dcatapit import DCATAPITCommands, do_load
+from ckanext.dcatapit.model.subtheme import (
+    Subtheme,
+    clear_subthemes,
+    load_subthemes,
+)
 
 MAPPING_FILE = 'eurovoc_mapping.rdf'
 EUROVOC_FILE = 'eurovoc.rdf'
 
+
 def _get_path(fname, dir_name='examples'):
     return os.path.join(os.path.dirname(__file__),
                         '..', '..', '..', dir_name, fname)
-themes_loader = DCATAPITCommands('eu_themes')
 
 def load_themes():
-    vocab_file_path = _get_path('data-theme-skos.rdf', 'vocabularies')
-
-    class Opts(object):
-        def __init__(self, filename, name, format):
-            self.filename = filename
-            self.url = None #filename
-            self.name = name
-            self.format = format
-    
-
-    themes_loader.options = Opts(vocab_file_path, 'eu_themes', None)
-    themes_loader.load()
-    
+    filename = _get_path('data-theme-skos.rdf', 'vocabularies')
+    # load_subthemes(filename, 'eu_themes')
+    do_load(
+        vocab_name='eu_themes',
+        url=None,
+        filename=filename,
+        format='xml'
+    )
     tag_localized = interfaces.get_localized_tag_name('ECON')
     Session.flush()
     assert tag_localized

@@ -6,6 +6,6 @@ except ImportError:
     import pkgutil
     __path__ = pkgutil.extend_path(__path__, __name__)
 
-from dcatapit_model import *
-from license import *
-from subtheme import *
+from ckanext.dcatapit.model.dcatapit_model import *
+from ckanext.dcatapit.model.license import *
+from ckanext.dcatapit.model.subtheme import *

@@ -1,37 +1,36 @@
 import logging
 
-import urllib
-import ckan.model as model
 import ckan.logic as logic
+import ckan.model as model
+from ckan import common as _
 from ckan import plugins as p
+from ckan.lib.base import abort, c, render
+from flask.views import View
 
-from ckan.controllers.api import ApiController
-
-from ckan.lib.base import BaseController, c, \
-                          request, response, render, abort
 log = logging.getLogger(__file__)
 
 # shortcuts
 get_action = logic.get_action
 
-class HarvesterController(BaseController):
 
-    def list(self):
+class HarvesterController(View):
+
+    def get(self):
         try:
-            context = {'model':model,
-                       'user':c.user}
+            context = {'model': model,
+                       'user': c.user}
             harvest_sources = p.toolkit.get_action('harvest_source_list')(context, {'only_active': True})
             c.harvest_sources = harvest_sources
 
             return render('harvest/sources_list.html')
 
         except p.toolkit.ObjectNotFound:
-            abort(404,_('Harvest source not found'))
-        except p.toolkit.NotAuthorized, e:
-            abort(401,self.not_auth_message)
-        except Exception, e:
-            msg = 'An error occurred: [%s]' % str(e)
+            abort(404, _('Harvest source not found'))
+        except p.toolkit.NotAuthorized as err:
+            abort(401, self.not_auth_message)
+        except Exception as err:
+            msg = 'An error occurred: [%s]' % str(err)
             import traceback
-            traceback.print_exc(e)
+            traceback.print_exc(err)
 
             abort(500, msg)

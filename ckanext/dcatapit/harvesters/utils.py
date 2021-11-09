@@ -2,28 +2,27 @@ import json
 import logging
 import re
 
-from ckan.model import Session
-from ckan.model import Tag
+from ckan.model import Session, Tag
 
 from ckanext.dcatapit.model import DCATAPITTagVocabulary
 from ckanext.dcatapit.model.license import License
 
 log = logging.getLogger(__name__)
 
-## Mapping between ISO frequencies and DCAT_AP-IT frequencies
+# Mapping between ISO frequencies and DCAT_AP-IT frequencies
 _mapping_frequencies_to_mdr_vocabulary = {
-    'biannually' : 'BIENNIAL',
-    'asNeeded' : 'IRREG',
-    'quarterly' : 'QUARTERLY',
-    'fortnightly' : 'BIWEEKLY',
-    'annually' : 'ANNUAL',
-    'monthly' : 'MONTHLY',
-    'weekly' : 'WEEKLY',
-    'daily' : 'DAILY',
-    'continual' : 'CONT',
-    'notPlanned' : 'UNKNOWN',
-    'irregular' : 'IRREG',
-    'unknown' : 'UNKNOWN'
+    'biannually': 'BIENNIAL',
+    'asNeeded': 'IRREG',
+    'quarterly': 'QUARTERLY',
+    'fortnightly': 'BIWEEKLY',
+    'annually': 'ANNUAL',
+    'monthly': 'MONTHLY',
+    'weekly': 'WEEKLY',
+    'daily': 'DAILY',
+    'continual': 'CONT',
+    'notPlanned': 'UNKNOWN',
+    'irregular': 'IRREG',
+    'unknown': 'UNKNOWN'
 }
 
 _mapping_languages_to_mdr_vocabulary = {
@@ -33,19 +32,20 @@ _mapping_languages_to_mdr_vocabulary = {
 }
 
 _ckan_locales_mapping = {
-        'ita': 'it',
-        'ger': 'de',
-        'eng': 'en_GB'
-    }
+    'ita': 'it',
+    'ger': 'de',
+    'eng': 'en_GB'
+}
+
 
 def get_responsible_party(citedResponsiblePartys, agent_config):
     for party in citedResponsiblePartys:
         role = agent_config.get('role', None)
         if not role:
-            log.warning("Warning: Agent role missing in harvest configuration ...")
+            log.warning('Warning: Agent role missing in harvest configuration ...')
 
-        if party["role"] == role:
-            publisher_name = party["organisation-name"]
+        if party['role'] == role:
+            publisher_name = party['organisation-name']
             agent_code, agent_name = get_agent(publisher_name, agent_config)
 
             name = agent_name or publisher_name
@@ -55,6 +55,7 @@ def get_responsible_party(citedResponsiblePartys, agent_config):
 
             return [name, code]
     return [None, None]
+
 
 def get_controlled_vocabulary_values(vocabulary_id, thesaurus_id, keywords):
     log.debug('::::: Collecting thesaurus data for dcatapit skos {0} from the metadata keywords :::::'.format(vocabulary_id))
@@ -71,7 +72,7 @@ def get_controlled_vocabulary_values(vocabulary_id, thesaurus_id, keywords):
             if thesaurus_id and (thesaurus_id in key['thesaurus-identifier'] or thesaurus_id in key['thesaurus-title']):
                 for k in key['keyword']:
                     query = Session.query(DCATAPITTagVocabulary) \
-                        .filter(DCATAPITTagVocabulary.text==k, DCATAPITTagVocabulary.tag_name.in_(tag_names_list))
+                        .filter(DCATAPITTagVocabulary.text == k, DCATAPITTagVocabulary.tag_name.in_(tag_names_list))
                     query = query.autoflush(True)
                     theme = query.first()
 
@@ -79,26 +80,28 @@ def get_controlled_vocabulary_values(vocabulary_id, thesaurus_id, keywords):
                         values.append(theme.tag_name)
     return values
 
+
 def get_vocabulary_tag_names(vocab_id_or_name):
     tag_names_list = []
 
     try:
-        log.debug("Finding tag names by vocabulary \
-            id or name for vocabulary {0}".format(vocab_id_or_name))
+        log.debug('Finding tag names by vocabulary \
+            id or name for vocabulary {0}'.format(vocab_id_or_name))
         tags = Tag.all(vocab_id_or_name)
 
         if tags:
             for tag in tags:
                 tag_names_list.append(tag.name)
-                log.debug("Tag name for tag {0} collected".format(tag.name))
+                log.debug('Tag name for tag {0} collected'.format(tag.name))
         pass
-    except Exception, e:
-        log.error('Exception occurred while finding eu_themes tag names: %s', e)
+    except Exception as err:
+        log.error('Exception occurred while finding eu_themes tag names: %s', err)
 
     return tag_names_list
 
+
 def get_agent(agent_string, agent_config):
-    ## Agent Code
+    # Agent Code
     code_regex = agent_config.get('code_regex', None)
     agent_code = re.search(code_regex.get('regex'), agent_string) if code_regex and code_regex.get('regex') else None
 
@@ -117,7 +120,7 @@ def get_agent(agent_string, agent_config):
 
         agent_code = agent_code.lower().strip()
 
-    ## Agent Name
+    # Agent Name
     name_regex = agent_config.get('name_regex', None)
     agent_name = re.search(name_regex.get('regex'), agent_string) if name_regex and name_regex.get('regex') else None
 
@@ -138,6 +141,7 @@ def get_agent(agent_string, agent_config):
 
     return [agent_code, agent_name]
 
+
 def get_license_from_package(pkg_dict):
     """
     Returns license from package
@@ -146,7 +150,7 @@ def get_license_from_package(pkg_dict):
     for_license = pkg_dict.get('license_title')
     license, fallback = License.find_by_token(for_license or 'Unknown')
     if fallback:
-        log.warning("Got fallback license for %s", for_license)
+        log.warning('Got fallback license for %s', for_license)
     return license
 
 
@@ -165,8 +169,8 @@ def map_ckan_license(harvest_object=None, pkg_dict=None):
     :rtype: dict with dictized dataset
     """
     if not (harvest_object or pkg_dict) or (harvest_object and pkg_dict):
-        raise ValueError("You should provide either harvest_object or pkg_dict")
-    
+        raise ValueError('You should provide either harvest_object or pkg_dict')
+
     if harvest_object:
         data = json.loads(harvest_object.content)
     else:

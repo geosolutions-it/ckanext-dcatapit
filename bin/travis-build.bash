@@ -17,7 +17,7 @@ sudo apt-get -qq --fix-missing update
 sudo apt-get install solr-jetty libcommons-fileupload-java
 
 
-# PostGIS 2.1 already installed on Travis
+# PostGIS 2.4 already installed on Travis
 
 echo "Installing CKAN and its Python dependencies..."
 git clone https://github.com/ckan/ckan
@@ -35,10 +35,11 @@ fi
 # https://stackoverflow.com/questions/47044854/error-installing-psycopg2-2-6-2
 sed -i '/psycopg2/c\psycopg2' requirements.txt
 
+pip install setuptools==45  # Fixes: ImportError: cannot import name 'Feature' from 'setuptools'
 python setup.py develop
 
-pip install -r requirements.txt --allow-all-external
-pip install -r dev-requirements.txt --allow-all-external
+pip install -r requirements.txt
+pip install -r dev-requirements.txt
 cd -
 
 echo
@@ -52,7 +53,8 @@ sudo sed -i -e 's-</fields>-<field name="organization_region_*" type="string" in
 sudo sed -i -e 's-</fields>-<field name="resource_license_*" type="string" indexed="true" stored="false" multiValued="true"/>\n</fields>-g' /etc/solr/conf/schema.xml
 sudo sed -i -e 's-</fields>-<field name="resource_license" type="string" indexed="true" stored="false" multiValued="true"/>\n</fields>-g' /etc/solr/conf/schema.xml
 
-sudo service jetty restart
+sudo service --status-all
+sudo service jetty8 restart
 
 echo
 echo "Creating the PostgreSQL user and database..."
@@ -70,47 +72,47 @@ sudo -u postgres psql -d ckan_test -c 'ALTER VIEW geometry_columns OWNER TO ckan
 sudo -u postgres psql -d ckan_test -c 'ALTER TABLE spatial_ref_sys OWNER TO ckan_default;'
 
 echo "Install other libraries required..."
-sudo apt-get install python-dev libxml2-dev libxslt1-dev libgeos-c1
+sudo apt-get install python3-dev libxml2-dev libxslt1-dev libgeos-c1v5
 
 echo "Initialising the database..."
 cd ckan
-paster db init -c test-core.ini
+ckan -c ../ckan/test-core.ini db init
 cd -
 
 echo "Installing ckanext-harvest and its requirements..."
 git clone https://github.com/ckan/ckanext-harvest
 cd ckanext-harvest
 python setup.py develop
-pip install -r pip-requirements.txt --allow-all-external
-paster harvester initdb -c ../ckan/test-core.ini
+pip install -r pip-requirements.txt
+ckan -c ../ckan/test-core.ini harvester initdb
 cd -
 
 echo "Installing ckanext-dcat and its requirements..."
 git clone https://github.com/ckan/ckanext-dcat
 cd ckanext-dcat
 python setup.py develop
-pip install -r requirements.txt --allow-all-external
+pip install -r requirements.txt
 cd -
 
 echo "Installing ckanext-spatial and its requirements..."
 git clone https://github.com/ckan/ckanext-spatial
 cd ckanext-spatial
 python setup.py develop
-pip install -r pip-requirements.txt --allow-all-external
-paster spatial initdb -c ../ckan/test-core.ini
+pip install -r pip-requirements.txt
+ckan -c ../ckan/test-core.ini spatial initdb
 cd -
 
 echo "Installing ckanext-multilang and its requirements..."
 git clone https://github.com/geosolutions-it/ckanext-multilang
 cd ckanext-multilang
 python setup.py develop
-paster multilangdb initdb -c ../ckan/test-core.ini
+ckan -c ../ckan/test-core.ini multilangdb initdb
 cd -
 
 echo "Installing ckanext-dcatapit and its requirements..."
 python setup.py develop
 pip install -r dev-requirements.txt
-paster vocabulary initdb -c ckan/test-core.ini
+ckan -c ../ckan/test-core.ini vocabulary initdb
 
 echo "Moving test.ini into a subdir..."
 mkdir subdir

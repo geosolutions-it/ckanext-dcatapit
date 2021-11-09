@@ -1,14 +1,17 @@
 import json
 import logging
+
 import ckan.lib.search as search
-
-from pylons import config
+from ckan.common import config
 from ckan.lib.base import model
-from ckan.model import Session
 from ckan.lib.i18n import get_lang
-
+from ckan.model import Session
 from ckan.plugins.interfaces import Interface
-from ckanext.dcatapit.model import DCATAPITTagVocabulary, License, Subtheme, SubthemeLabel
+from ckanext.dcatapit.model import (
+    DCATAPITTagVocabulary,
+    License,
+    Subtheme,
+)
 
 log = logging.getLogger(__name__)
 
@@ -17,6 +20,7 @@ class ICustomSchema(Interface):
     '''
     Allows extensions to provide their own schema fields.
     '''
+
     def get_custom_schema(self):
         '''gets the array containing the custom schema fields'''
         return []
@@ -32,7 +36,7 @@ def get_language():
 def update_solr_package_indexes(package_dict):
     # Updating Solr Index
     if package_dict:
-        log.debug("::: UPDATING SOLR INDEX :::")
+        log.debug('::: UPDATING SOLR INDEX :::')
 
         # solr update here
         psi = search.PackageSearchIndex()
@@ -70,40 +74,43 @@ def update_solr_package_indexes(package_dict):
         # finally commit the changes
         psi.commit()
     else:
-        log.warning("::: package_dict is None: SOLR INDEX CANNOT BE UPDATED! :::")
+        log.warning('::: package_dict is None: SOLR INDEX CANNOT BE UPDATED! :::')
+
 
 def save_extra_package_multilang(pkg, lang, field_type):
     try:
         from ckanext.multilang.model import PackageMultilang
     except ImportError:
-        log.warn('DCAT-AP_IT: multilang extension not available.')
+        log.warning('DCAT-AP_IT: multilang extension not available.')
         return
 
     log.debug('Creating create_loc_field for package ID: %r', str(pkg.get('id')))
     PackageMultilang.persist(pkg, lang, field_type)
     log.info('Localized field created successfully')
 
+
 def upsert_package_multilang(pkg_id, field_name, field_type, lang, text):
     try:
         from ckanext.multilang.model import PackageMultilang
     except ImportError:
-        log.warn('DCAT-AP_IT: multilang extension not available.')
+        log.warning('DCAT-AP_IT: multilang extension not available.')
         return
 
     pml = PackageMultilang.get(pkg_id, field_name, lang, field_type)
     if not pml and text:
-        PackageMultilang.persist({'id':pkg_id, 'field':field_name, 'text':text}, lang, field_type)
+        PackageMultilang.persist({'id': pkg_id, 'field': field_name, 'text': text}, lang, field_type)
     elif pml and not text:
         pml.purge()
     elif pml and not pml.text == text:
         pml.text = text
         pml.save()
 
+
 def upsert_resource_multilang(res_id, field_name, lang, text):
     try:
         from ckanext.multilang.model import ResourceMultilang
     except ImportError:
-        log.warn('DCAT-AP_IT: multilang extension not available.')
+        log.warning('DCAT-AP_IT: multilang extension not available.')
         return
 
     ml = ResourceMultilang.get_for_pk(res_id, field_name, lang)
@@ -115,11 +122,12 @@ def upsert_resource_multilang(res_id, field_name, lang, text):
         ml.text = text
         ml.save()
 
+
 def update_extra_package_multilang(extra, pkg_id, field, lang, field_type='extra'):
     try:
         from ckanext.multilang.model import PackageMultilang
     except ImportError:
-        log.warn('DCAT-AP_IT: multilang extension not available.')
+        log.warning('DCAT-AP_IT: multilang extension not available.')
         return
 
     if extra.get('key') == field.get('name', None) and field.get('localized', False) == True:
@@ -140,11 +148,12 @@ def update_extra_package_multilang(extra, pkg_id, field, lang, field_type='extra
             # Create the localized field record
             save_extra_package_multilang({'id': pkg_id, 'text': extra.get('value'), 'field': extra.get('key')}, lang, 'extra')
 
+
 def get_localized_field_value(field=None, pkg_id=None, field_type='extra'):
     try:
         from ckanext.multilang.model import PackageMultilang
     except ImportError:
-        log.warn('DCAT-AP_IT: multilang extension not available.')
+        log.warning('DCAT-AP_IT: multilang extension not available.')
         return
 
     if field and pkg_id:
@@ -160,6 +169,7 @@ def get_localized_field_value(field=None, pkg_id=None, field_type='extra'):
     else:
         return None
 
+
 def get_for_package(pkg_id):
     '''
     Returns all the localized fields of a dataset, in a dict of dicts, i.e.:
@@ -171,13 +181,14 @@ def get_for_package(pkg_id):
     try:
         from ckanext.multilang.model import PackageMultilang
     except ImportError:
-        log.warn('DCAT-AP_IT: multilang extension not available.')
+        log.warning('DCAT-AP_IT: multilang extension not available.')
 
         # TODO: if no multilang, return the dataset in a single language in the same format of the multilang data
         return None
 
     records = PackageMultilang.get_for_package(pkg_id)
     return _multilang_to_dict(records)
+
 
 def get_for_group_or_organization(pkg_id):
     '''
@@ -190,7 +201,7 @@ def get_for_group_or_organization(pkg_id):
     try:
         from ckanext.multilang.model import GroupMultilang
     except ImportError:
-        log.warn('DCAT-AP_IT: multilang extension not available.')
+        log.warning('DCAT-AP_IT: multilang extension not available.')
 
         # TODO: if no multilang, return the dataset in a single language in the same format of the multilang data
         return None
@@ -209,12 +220,13 @@ def get_for_resource(res_id):
     try:
         from ckanext.multilang.model import ResourceMultilang
     except ImportError:
-        log.warn('DCAT-AP_IT: multilang extension not available.')
+        log.warning('DCAT-AP_IT: multilang extension not available.')
 
         return None
 
     records = ResourceMultilang.get_for_resource_id(res_id)
     return _multilang_to_dict(records)
+
 
 def _multilang_to_dict(records):
     fields_dict = {}
@@ -232,6 +244,7 @@ def _multilang_to_dict(records):
 
     return fields_dict
 
+
 def persist_tag_multilang(name, lang, localized_text, vocab_name):
     log.info('DCAT-AP_IT: persisting tag multilang for tag %r ...', name)
 
@@ -246,12 +259,12 @@ def persist_tag_multilang(name, lang, localized_text, vocab_name):
                 tag.save()
                 log.info('::::::::: OBJECT TAG UPDATED SUCCESSFULLY :::::::::')
                 pass
-            except Exception, e:
+            except Exception as err:
                 # on rollback, the same closure of state
                 # as that of commit proceeds.
                 Session.rollback()
 
-                log.error('Exception occurred while persisting DB objects: %s', e)
+                log.error('Exception occurred while persisting DB objects: %s', err)
                 raise
     else:
         # Create a new localized record
@@ -261,6 +274,7 @@ def persist_tag_multilang(name, lang, localized_text, vocab_name):
         if existing_tag:
             DCATAPITTagVocabulary.persist({'id': existing_tag.id, 'name': name, 'text': localized_text}, lang)
             log.info('::::::::: OBJECT TAG PERSISTED SUCCESSFULLY :::::::::')
+
 
 def get_localized_tag_name(tag_name=None, fallback_lang=None, lang=None):
     if tag_name:
@@ -285,8 +299,10 @@ def get_localized_tag_name(tag_name=None, fallback_lang=None, lang=None):
     else:
         return None
 
+
 def get_all_localized_tag_labels(tag_name):
     return DCATAPITTagVocabulary.all_by_name(tag_name)
+
 
 def get_resource_licenses_tree(value, lang):
     options = License.for_select(lang)
@@ -297,10 +313,11 @@ def get_resource_licenses_tree(value, lang):
                     'value': license.uri,
                     # let's do indentation
                     'text': label,
-                    'depth': license.rank_order -1,
-                    'depth_str': '&nbsp;&nbsp;'*(license.rank_order-1) or '',
+                    'depth': license.rank_order - 1,
+                    'depth_str': '&nbsp;&nbsp;' * (license.rank_order - 1) or '',
                     'level': license.rank_order})
     return out
+
 
 def get_license_for_dcat(license_type):
     l = License.get(license_type or License.DEFAULT_LICENSE)
@@ -309,10 +326,11 @@ def get_license_for_dcat(license_type):
     names = dict((k['lang'], k['name']) for k in l.get_names())
     return l.license_type, l.default_name, l.document_uri, l.version, l.uri, names
 
+
 def get_license_from_dcat(license_uri, license_dct, prefname, **license_names):
     # First try dcatapit info
     l = License.get(license_uri)
-    
+
     if not l and prefname:
         l = License.get(prefname)
 
@@ -334,17 +352,19 @@ def get_localized_subtheme(subtheme, lang):
         return
     return localized.get_name(lang)
 
+
 def get_localized_subthemes(subthemes):
 
     q = Subtheme.get_localized(*subthemes)
     out = {}
     for item in q:
-        lang, label = item # .lang, item.label
+        lang, label = item  # .lang, item.label
         try:
             out[lang].append(label)
         except KeyError:
             out[lang] = [label]
     return out
+
 
 def populate_resource_license(package_dict):
     license_id = package_dict.get('license_id')
@@ -364,7 +384,7 @@ def populate_resource_license(package_dict):
 
     else:
         l, default = License.find_by_token(access_constraints, license, license_id, license_url)
-    
+
     for res in package_dict['resources']:
         res['license_type'] = l.uri
     return package_dict
