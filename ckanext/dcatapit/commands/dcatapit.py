@@ -31,6 +31,7 @@ from sqlalchemy import and_
 import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcat.profiles import namespaces
 from ckanext.dcatapit import validators
+from ckanext.dcatapit.model import DCATAPITTagVocabulary
 from ckanext.dcatapit.model.license import clear_licenses
 from ckanext.dcatapit.model.license import \
     load_from_graph as load_licenses_from_graph
@@ -146,7 +147,7 @@ def migrate_data(offset, limit, skip_orgs=False):
 )
 @click.option(
     '--eurovoc',
-    required=True,
+    required=False,
     type=click.Choice(DCATAPITCommands._controlled_vocabularies_allowed),
     help=f'Name of the eurovoc file. Allowed',
 )
@@ -169,7 +170,8 @@ def load(filename, url, format, name, eurovoc, *args, **kwargs):
         load_subthemes(theme_map, eurovoc)
         Session.commit()
         return
-    do_load(name, url=url, filename=filename, format=format)
+    created, updated, deleted = do_load(name, url=url, filename=filename, format=format)
+    return created, updated, deleted
 
 
 def do_load_regions(g, vocab_name):
@@ -233,7 +235,6 @@ def do_load_vocab(g, vocab_name):
 
 
 def do_load(vocab_name, url=None, filename=None, format=None):
-
     if vocab_name == LANGUAGE_THEME_NAME:
         ckan_offered_languages = config.get('ckan.locales_offered', 'it').split(' ')
         for offered_language in ckan_offered_languages:
@@ -308,7 +309,10 @@ def do_load(vocab_name, url=None, filename=None, format=None):
     # Persisting Multilag Tags or updating existing
     ##
     log.info('Creating the corresponding multilang tags for vocab: {0} ...'.format(vocab_name))
-
+    ids = []
+    created_count = 0
+    updated = 0
+    deleted_count = 0
     for pref_label in pref_labels:
         if pref_label['lang'] in DCATAPITCommands._locales_ckan_mapping:
             tag_name = pref_label['name']
@@ -321,9 +325,20 @@ def do_load(vocab_name, url=None, filename=None, format=None):
             except UnicodeEncodeError:
                 log.error(f'Storing tag: name[{tag_name}] lang[{tag_lang}]')
 
-            interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
+            created, id = interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
+            if created:
+                created_count += 1
+            else:
+                updated += 1
+            ids.append(id)
 
+    tags = DCATAPITTagVocabulary.nin_tags_ids(ids)
+    deleted_count = len(tags)
+    for tag in tags:
+        tag.delete()
     log.info(f'Vocabulary successfully loaded ({vocab_name})')
+
+    return created_count, updated, deleted_count
 
 
 def do_migrate_data(limit=None, offset=None, skip_orgs=False):
@@ -347,8 +362,8 @@ def do_migrate_data(limit=None, offset=None, skip_orgs=False):
         log.info(f'processing {ocount} organizations')
         for oidx, oname in enumerate(org_list):
             odata = oshow(context, {'id': oname, 'include_extras': True,
-                                                 'include_tags': False,
-                                                 'include_users': False,
+                                    'include_tags': False,
+                                    'include_users': False,
                                     })
 
             oidentifier = odata.get('identifier')
@@ -450,13 +465,13 @@ def do_migrate_data(limit=None, offset=None, skip_orgs=False):
 
 def get_package_list():
     return Session.query(Package.name).filter(Package.state == 'active',
-                                              Package.type == 'dataset')\
+                                              Package.type == 'dataset') \
         .order_by(Package.title)
 
 
 def get_organization_list():
     return Session.query(Group.name).filter(Group.state == 'active',
-                                            Group.type == 'organization')\
+                                            Group.type == 'organization') \
         .order_by(Group.title)
 
 
@@ -707,12 +722,12 @@ def get_temp_org_identifier():
 def package_temp_code_count(BASE_CODE):
     s = Session
     q = s.query(PackageExtra.value).join(Package, and_(Package.id == PackageExtra.package_id,
-                                                       PackageExtra.state == 'active'))\
+                                                       PackageExtra.state == 'active')) \
         .filter(Package.type == 'organization',
                 Package.state == 'active',
                 PackageExtra.key == 'identifier',
-                PackageExtra.value.startswith(BASE_CODE))\
-        .group_by(PackageExtra.value)\
+                PackageExtra.value.startswith(BASE_CODE)) \
+        .group_by(PackageExtra.value) \
         .count()
     return q
 
@@ -720,12 +735,12 @@ def package_temp_code_count(BASE_CODE):
 def group_temp_code_count(BASE_CODE):
     s = Session
     q = s.query(GroupExtra.value).join(Group, and_(Group.id == GroupExtra.group_id,
-                                                   GroupExtra.state == 'active'))\
+                                                   GroupExtra.state == 'active')) \
         .filter(Group.type == 'organization',
                 Group.state == 'active',
                 GroupExtra.key == 'identifier',
-                GroupExtra.value.startswith(BASE_CODE))\
-        .group_by(GroupExtra.value)\
+                GroupExtra.value.startswith(BASE_CODE)) \
+        .group_by(GroupExtra.value) \
         .count()
     return q
 

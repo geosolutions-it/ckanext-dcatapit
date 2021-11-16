@@ -1,0 +1,41 @@
+{% extends "admin/base.html" %}
+
+
+{% block primary_content_inner %}
+  <h1 class="page-heading">
+    {% block page_heading %}{{  _('Thesaurus Result') }}{% endblock %}
+  </h1>
+  {% block form %}
+    <form class="dataset-form add-member-form" method='post' action="{{ h.url_for('dcatapit_core.thesaurus_save') }}" enctype="multipart/form-data">
+      <div class="row-fluid">
+        <div class="control-group control-medium">
+            <label class="control-label" for="vocabulary_type">
+            {{ _('Created') }}
+            </label>
+            {{ created }}
+        </div>
+        <div class="control-group control-medium">
+            <label class="control-label" for="vocabulary_type">
+            {{ _('Updated') }}
+            </label>
+            {{ updated }}
+        </div>
+        <div class="control-group control-medium">
+            <label class="control-label" for="vocabulary_type">
+            {{ _('Deleted') }}
+            </label>
+            {{ deleted }}
+        </div>
+
+    </form>
+  {% endblock %}
+
+{% endblock %}
+
+
+
+
+
+
+
+

@@ -246,6 +246,8 @@ def _multilang_to_dict(records):
 
 
 def persist_tag_multilang(name, lang, localized_text, vocab_name):
+    created = False
+    id = None
     log.info('DCAT-AP_IT: persisting tag multilang for tag %r ...', name)
 
     tag = DCATAPITTagVocabulary.by_name(name, lang)
@@ -257,6 +259,7 @@ def persist_tag_multilang(name, lang, localized_text, vocab_name):
 
             try:
                 tag.save()
+                id = tag.id
                 log.info('::::::::: OBJECT TAG UPDATED SUCCESSFULLY :::::::::')
                 pass
             except Exception as err:
@@ -268,12 +271,16 @@ def persist_tag_multilang(name, lang, localized_text, vocab_name):
                 raise
     else:
         # Create a new localized record
+        created = True
         vocab = model.Vocabulary.get(vocab_name)
         existing_tag = model.Tag.by_name(name, vocab)
 
         if existing_tag:
             DCATAPITTagVocabulary.persist({'id': existing_tag.id, 'name': name, 'text': localized_text}, lang)
+            id = existing_tag.id
             log.info('::::::::: OBJECT TAG PERSISTED SUCCESSFULLY :::::::::')
+
+    return created, id
 
 
 def get_localized_tag_name(tag_name=None, fallback_lang=None, lang=None):

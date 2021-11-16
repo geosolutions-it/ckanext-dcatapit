@@ -10,12 +10,13 @@ log = logging.getLogger(__name__)
 __all__ = ['DCATAPITTagVocabulary', 'dcatapit_vocabulary_table', 'setup']
 
 dcatapit_vocabulary_table = Table('dcatapit_vocabulary', meta.metadata,
-    Column('id', types.Integer, primary_key=True),
-    Column('tag_id', types.UnicodeText, ForeignKey('tag.id', ondelete='CASCADE'), nullable=False),
-    Column('tag_name', types.UnicodeText, nullable=False, index=True),
-    Column('lang', types.UnicodeText, nullable=False, index=True),
-    Column('text', types.UnicodeText, nullable=False, index=True)
-)
+                                  Column('id', types.Integer, primary_key=True),
+                                  Column('tag_id', types.UnicodeText, ForeignKey('tag.id', ondelete='CASCADE'),
+                                         nullable=False),
+                                  Column('tag_name', types.UnicodeText, nullable=False, index=True),
+                                  Column('lang', types.UnicodeText, nullable=False, index=True),
+                                  Column('text', types.UnicodeText, nullable=False, index=True)
+                                  )
 
 
 def setup():
@@ -46,7 +47,8 @@ class DCATAPITTagVocabulary(DomainObject):
 
     @classmethod
     def by_name(self, tag_name, tag_lang, autoflush=True):
-        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_name == tag_name, DCATAPITTagVocabulary.lang == tag_lang)
+        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_name == tag_name,
+                                                                 DCATAPITTagVocabulary.lang == tag_lang)
         query = query.autoflush(autoflush)
         tag = query.first()
         return tag
@@ -65,10 +67,18 @@ class DCATAPITTagVocabulary(DomainObject):
 
     @classmethod
     def by_tag_id(self, tag_id, tag_lang, autoflush=True):
-        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_id == tag_id, DCATAPITTagVocabulary.lang == tag_lang)
+        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_id == tag_id,
+                                                                 DCATAPITTagVocabulary.lang == tag_lang)
         query = query.autoflush(autoflush)
         tag = query.first()
         return tag
+
+    @classmethod
+    def nin_tags_ids(self, ids, autoflush=True):
+        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_id.notin_(ids))
+        query = query.autoflush(autoflush)
+        tags = query.all()
+        return tags
 
     @classmethod
     def persist(self, tag, lang):

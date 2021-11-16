@@ -15,6 +15,7 @@ import ckanext.dcatapit.schema as dcatapit_schema
 import ckanext.dcatapit.validators as validators
 from ckanext.dcatapit.commands import dcatapit as dcatapit_cli
 from ckanext.dcatapit.controllers.harvest import HarvesterController
+from ckanext.dcatapit.controllers.thesaurus import ThesaurusController, get_thesaurus_admin_page, update_vocab_admin
 from ckanext.dcatapit.helpers import get_org_context
 from ckanext.dcatapit.mapping import populate_theme_groups
 from ckanext.dcatapit.model.license import License
@@ -61,6 +62,25 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
     plugins.implements(plugins.IFacets, inherit=True)
 
+    plugins.implements(plugins.IBlueprint, inherit=True)
+
+    def get_blueprint(self):
+        blueprint = Blueprint('dcatapit_core', self.__module__)
+
+        blueprint.add_url_rule(
+            rule='/ckan-admin/thesaurus',
+            endpoint='thesaurus',
+            view_func=get_thesaurus_admin_page,
+        )
+        blueprint.add_url_rule(
+            rule='/ckan-admin/thesaurus/save',
+            endpoint='thesaurus_save',
+            view_func=update_vocab_admin,
+            methods=[u'POST']
+        )
+
+        return blueprint
+
     # ITranslation
     if toolkit.check_ckan_version(min_version='2.5.0'):
         plugins.implements(plugins.ITranslation, inherit=True)
@@ -96,6 +116,8 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         toolkit.add_template_directory(config_, 'templates')
         toolkit.add_public_directory(config_, 'public')
         toolkit.add_resource('fanstatic', 'ckanext-dcatapit')
+        toolkit.add_ckan_admin_tab(config_, 'dcatapit_core.thesaurus', 'Thesaurus File Uploader', icon='file')
+
 
     # ------------- IDatasetForm ---------------#
 
@@ -800,4 +822,5 @@ class DCATAPITHarvestListPlugin(plugins.SingletonPlugin):
             rule='/harvest/list',
             view_func=HarvesterController.as_view('harvest_list'),
         )
+
         return blueprint

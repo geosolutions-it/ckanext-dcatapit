@@ -117,15 +117,19 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
 
    * `dcatapit_csw_harvester`: enhances the CSW harvester to be able to import some more fields related to DCAT.
 
-8. Enable the dcatapit profile adding the following configuration property in the ``production.ini`` file:
+8. Add eurovoc local file path to  ``ckan.dcatapit.eurovoc_location`` setting in your CKAN config file 
+  (by default the config file is located at ``/etc/ckan/default/production.ini``).
+
+
+9. Enable the dcatapit profile adding the following configuration property in the ``production.ini`` file:
 
        ckanext.dcat.rdf.profiles = euro_dcat_ap it_dcat_ap
 
-9. Configure the CKAN base URI as reported in the [dcat documentation](https://github.com/ckan/ckanext-dcat/blob/master/README.md#uris):
+10. Configure the CKAN base URI as reported in the [dcat documentation](https://github.com/ckan/ckanext-dcat/blob/master/README.md#uris):
 
-        ckanext.dcat.base_uri = YOUR_BASE_URI
+         ckanext.dcat.base_uri = YOUR_BASE_URI
 
-10. Configure the geonames integration:
+11. Configure the geonames integration:
     
     * Create a geonames account (if you don't have one) at http://www.geonames.org/login ;
     * Enable the web services at http://www.geonames.org/manageaccount ;
@@ -139,11 +143,11 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
         my.geoNamesApiServer = 'secure.geonames.org';
         my.geoNamesProtocol = 'https';
     
-11. Initialize the CKAN DB with the mandatory table needed for localized vocabulary voices:
+12. Initialize the CKAN DB with the mandatory table needed for localized vocabulary voices:
 
         ckan --config=/etc/ckan/default/production.ini dcatapit initdb
 
-12. Update the Solr schema.xml file used by CKAN introducing the following element:
+13. Update the Solr schema.xml file used by CKAN introducing the following element:
 
         <field name="dcat_theme" type="string" indexed="true" stored="false" multiValued="true"/>
         <field name="dcat_subtheme" type="string" indexed="true" stored="false" multiValued="true"/>
@@ -152,13 +156,13 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
         <dynamicField name="resource_license_*" type="string" indexed="true" stored="false" multiValued="true"/>
         <field name="resource_license" type="string" indexed="true" stored="false" multiValued="true"/>
         
-13. Restart Solr.
+14. Restart Solr.
 
-14. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu:
+15. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu:
 
      `sudo service apache2 reload`
      
-15. The EU controlled vocabularies must be populated before start using the dcatapit plugin. Execute in sequence these commands:
+16. The EU controlled vocabularies must be populated before start using the dcatapit plugin. Execute in sequence these commands:
 
         export CKAN_CONFIG=/etc/ckan/default/production.ini
 
@@ -190,16 +194,16 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
         # curl https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/territorial-classifications/regions/regions.rdf > regions.rdf
         # paster --plugin=ckanext-dcatapit vocabulary load --filename regions.rdf --name regions --config=/etc/ckan/default/production.ini
 
-16. DCATAPIT themes and subthemes vocabularues must be popolated:
+17. DCATAPIT themes and subthemes vocabularues must be popolated:
 
         paster --plugin=ckanext-dcatapit vocabulary load --filename EUROVOC_TO_THEMES_MAPPING_FILE --name subthemes --config=PATH_TO_INI_FILE  PATH_TO_EUROVOC
     
     Sample `eurovoc.rdf` and `eurovoc_mapping.rdf` can be found in the examples directory.
     You may want to download more recent files.
     
- 17. DCATAPIT license tree. Download [license mapping file](https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/licences/licences.rdf). Alternatively you can use ``examples/licenses.rdf``, but mind that it may be outdated. Import `license.rdf` it with command:
+18. DCATAPIT license tree. Download [license mapping file](https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/licences/licences.rdf). Alternatively you can use ``examples/licenses.rdf``, but mind that it may be outdated. Import `license.rdf` it with command:
 
-         paster --plugin=ckanext-dcatapit vocabulary load --filename path/to/license.rdf --name licenses --config=/etc/ckan/default/production.ini
+        paster --plugin=ckanext-dcatapit vocabulary load --filename path/to/license.rdf --name licenses --config=/etc/ckan/default/production.ini
 
 
 ### Dataset reindexing after Organization change
