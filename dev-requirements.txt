@@ -1,0 +1,4 @@
+-r requirements.txt
+crudini==0.9.3
+pyOpenSSL==18.0.0
+pytest-ckan==0.0.12

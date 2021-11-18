@@ -1,11 +1,9 @@
 import logging
 
-from sqlalchemy import types, Column, Table, ForeignKey
+from sqlalchemy import Column, ForeignKey, Table, types
 
-from ckan.model import Session
-from ckan.model import meta
+from ckan.model import Session, meta
 from ckan.model.domain_object import DomainObject
-
 
 log = logging.getLogger(__name__)
 
@@ -13,26 +11,26 @@ __all__ = ['DCATAPITTagVocabulary', 'dcatapit_vocabulary_table', 'setup']
 
 dcatapit_vocabulary_table = Table('dcatapit_vocabulary', meta.metadata,
     Column('id', types.Integer, primary_key=True),
-    Column('tag_id', types.UnicodeText, ForeignKey("tag.id", ondelete="CASCADE"), nullable=False),
+    Column('tag_id', types.UnicodeText, ForeignKey('tag.id', ondelete='CASCADE'), nullable=False),
     Column('tag_name', types.UnicodeText, nullable=False, index=True),
     Column('lang', types.UnicodeText, nullable=False, index=True),
-    Column('text', types.UnicodeText, nullable=False, index=True))
+    Column('text', types.UnicodeText, nullable=False, index=True)
+)
 
 
 def setup():
     log.debug('DCAT_AP-IT tables defined in memory')
 
-    #Setting up tag multilang table
+    # Setting up tag multilang table
     if not dcatapit_vocabulary_table.exists():
         try:
             dcatapit_vocabulary_table.create()
-        except Exception, e:
+        except Exception as err:
             # Make sure the table does not remain incorrectly created
             if dcatapit_vocabulary_table.exists():
                 Session.execute('DROP TABLE dcatapit_vocabulary')
                 Session.commit()
-
-            raise e
+            raise err
 
         log.info('DCATAPIT Tag Vocabulary table created')
     else:
@@ -48,14 +46,14 @@ class DCATAPITTagVocabulary(DomainObject):
 
     @classmethod
     def by_name(self, tag_name, tag_lang, autoflush=True):
-        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_name==tag_name, DCATAPITTagVocabulary.lang==tag_lang)
+        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_name == tag_name, DCATAPITTagVocabulary.lang == tag_lang)
         query = query.autoflush(autoflush)
         tag = query.first()
         return tag
 
     @classmethod
     def all_by_name(self, tag_name, autoflush=True):
-        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_name==tag_name)
+        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_name == tag_name)
         query = query.autoflush(autoflush)
         tags = query.all()
 
@@ -67,7 +65,7 @@ class DCATAPITTagVocabulary(DomainObject):
 
     @classmethod
     def by_tag_id(self, tag_id, tag_lang, autoflush=True):
-        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_id==tag_id, DCATAPITTagVocabulary.lang==tag_lang)
+        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_id == tag_id, DCATAPITTagVocabulary.lang == tag_lang)
         query = query.autoflush(autoflush)
         tag = query.first()
         return tag
@@ -81,12 +79,12 @@ class DCATAPITTagVocabulary(DomainObject):
             ])
 
             session.commit()
-        except Exception, e:
+        except Exception as err:
             # on rollback, the same closure of state
-            # as that of commit proceeds. 
+            # as that of commit proceeds.
             session.rollback()
 
-            log.error('Exception occurred while persisting DB objects: %s', e)
+            log.error('Exception occurred while persisting DB objects: %s', err)
             raise
 
 

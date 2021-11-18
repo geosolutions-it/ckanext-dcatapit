@@ -58,8 +58,8 @@
                ]},
     {'id': 'standards',
      'name': _('Standards'),
-     'fields': [ 
-                {'name': 'conforms_to', 'parent': '.conforms-to-wrap'} 
+     'fields': [
+                {'name': 'conforms_to', 'parent': '.conforms-to-wrap'}
                ]},
     {'id': 'related',
      'name': _('Related Datasets'),
@@ -77,18 +77,18 @@
      'use_extra': true},
     ]}) }}
     </div>
-    
-    {% resource 'ckanext-dcatapit/dcatapit.css' %}
 
-    {% resource 'vendor/jquery.ui.core.js' %}
-    {% resource 'vendor/jquery.ui.widget.js' %}
-    {% resource 'ckanext-dcatapit/jquery.ui.position.js' %}
-    {% resource 'ckanext-dcatapit/jquery.ui.menu.js' %}
-    {% resource 'ckanext-dcatapit/jquery.ui.autocomplete.js' %}
-    {% resource 'ckanext-dcatapit/jquery.ui.tooltip.js' %}
-    {% resource 'ckanext-dcatapit/jquery.ui.tabs.js' %}
-    {% resource 'ckanext-dcatapit/jeoquery.js' %}
-    {% resource 'ckanext-dcatapit/dcatapit.js' %}
+    {% asset 'ckanext-dcatapit/dcatapit.css' %}
+
+    {% asset 'vendor/jquery.ui.core.js' %}
+    {% asset 'vendor/jquery.ui.widget.js' %}
+    {% asset 'ckanext-dcatapit/jquery.ui.position.js' %}
+    {% asset 'ckanext-dcatapit/jquery.ui.menu.js' %}
+    {% asset 'ckanext-dcatapit/jquery.ui.autocomplete.js' %}
+    {% asset 'ckanext-dcatapit/jquery.ui.tooltip.js' %}
+    {% asset 'ckanext-dcatapit/jquery.ui.tabs.js' %}
+    {% asset 'ckanext-dcatapit/jeoquery.js' %}
+    {% asset 'ckanext-dcatapit/dcatapit.js' %}
 	{% snippet 'snippets/dcatapit_form_fields.html', data=data, errors=errors, schema_fields=pkg_fields %}
     {% if h.dcatapit_enable_form_tabs() %}
     <div class="dcatapit-form" data-module="dcatapit-edit-form" data-module-settings-container="#dcatapit-edit-form-settings" data-module-form-container="#dataset-edit">

@@ -6,7 +6,7 @@
   {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
     <input id="{{ id or name }}" type="{{ type }}" name="{{ name }}" value="{{ value | empty_and_escape }}" placeholder="{{ placeholder }}" {{ attributes(attrs) }} />
     {{ help_block(help) }}
-    
+
   {% endcall %}
 {% endmacro %}
 
@@ -29,7 +29,7 @@ Old implementation of the couple element (one element with comma separated value
   {%- set classes = (classes|list) -%}
   {%- set label_id = (id) ~ "-key" -%}
   {%- set extra_html = caller() if caller -%}
-  {%- do classes.append('control-custom') -%}
+  {% do classes.append('control-medium') %}
 
   {% call input_block(label_id, label or name, error, classes, control_classes=["editor"], extra_html=extra_html, is_required=is_required) %}
     <div class="input-prepend" {{ form.attributes(attrs) }}>
@@ -37,11 +37,11 @@ Old implementation of the couple element (one element with comma separated value
       <input id="{{name}}-hidden" type="hidden" name="{{ name }}" value="{{ values[0] + ',' + values[1] if values[0] and values[1] else ''}}" />
 
       <label for="{{ names[0] }}-label" class="add-on">{{ _(labels[0]) }}</label>
-      <input id="{{ names[0] }}-value" 
-             type="{{ type }}" 
-             name="{{ names[0] }}" 
-             value="{{ values[0] | empty_and_escape }}" 
-             placeholder="{{ placeholders[0] }}" 
+      <input id="{{ names[0] }}-value"
+             type="{{ type }}"
+             name="{{ names[0] }}"
+             value="{{ values[0] | empty_and_escape }}"
+             placeholder="{{ placeholders[0] }}"
              onchange="if($('#{{ names[0] }}-value').val() || $('#{{ names[1] }}-value').val()){
                 $('#{{name}}-hidden').val($('#{{ names[0] }}-value').val() + ',' + $('#{{ names[1] }}-value').val())
               } else {
@@ -49,11 +49,11 @@ Old implementation of the couple element (one element with comma separated value
               } " />
 
       <label for="{{ names[1] }}-label" class="add-on">{{ _(labels[1]) }}</label>
-      <input id="{{ names[1] }}-value" 
-             type="{{ type }}" 
-             name="{{ names[1] }}" 
-             value="{{ values[1] | empty_and_escape }}" 
-             placeholder="{{ placeholders[1] }}" 
+      <input id="{{ names[1] }}-value"
+             type="{{ type }}"
+             name="{{ names[1] }}"
+             value="{{ values[1] | empty_and_escape }}"
+             placeholder="{{ placeholders[1] }}"
              onchange="if($('#{{ names[0] }}-value').val() || $('#{{ names[1] }}-value').val()){
                 $('#{{name}}-hidden').val($('#{{ names[0] }}-value').val() + ',' + $('#{{ names[1] }}-value').val())
               } else {
@@ -81,7 +81,7 @@ Old implementation of the couple element (one element with comma separated value
   {%- set classes = (classes|list) -%}
   {%- set label_id = (id) ~ "-key" -%}
   {%- set extra_html = caller() if caller -%}
-  {%- do classes.append('control-custom') -%}
+  {% do classes.append('control-medium') %}
 
   {% call input_block(label_id, label or name, error, classes, control_classes=["editor"], extra_html=extra_html, is_required=is_required) %}
 
@@ -98,15 +98,15 @@ Old implementation of the couple element (one element with comma separated value
           </div>
         </div>
        {% if modify_fields %}
-      <input id="{{ names[0] }}-value" 
-             type="hidden" 
-             name="{{ names[0] }}" 
-             value="{{ values[0] | empty_and_escape }}" 
+      <input id="{{ names[0] }}-value"
+             type="hidden"
+             name="{{ names[0] }}"
+             value="{{ values[0] | empty_and_escape }}"
              placeholder="{{ placeholders[0] }}" />
-      <input id="{{ names[1] }}-value" 
-             type="hidden" 
-             name="{{ names[1] }}" 
-             value="{{ values[1] | empty_and_escape }}" 
+      <input id="{{ names[1] }}-value"
+             type="hidden"
+             name="{{ names[1] }}"
+             value="{{ values[1] | empty_and_escape }}"
              placeholder="{{ placeholders[1] }}" />
         {% endif %}
       {% else %}
@@ -114,17 +114,17 @@ Old implementation of the couple element (one element with comma separated value
     <div class="input-prepend" {{ form.attributes(attrs) }}>
 
       <label for="{{ names[0] }}-label" class="add-on">{{ _(labels[0]) }}</label>
-      <input id="{{ names[0] }}-value" 
-             type="{{ types[0] }}" 
-             name="{{ names[0] }}" 
-             value="{{ values[0] | empty_and_escape }}" 
+      <input id="{{ names[0] }}-value"
+             type="{{ types[0] }}"
+             name="{{ names[0] }}"
+             value="{{ values[0] | empty_and_escape }}"
              placeholder="{{ placeholders[0] }}" />
 
       <label for="{{ names[1] }}-label" class="add-on">{{ _(labels[1]) }}</label>
-      <input id="{{ names[1] }}-value" 
-             type="{{ types[1] }}" 
-             name="{{ names[1] }}" 
-             value="{{ values[1] | empty_and_escape }}" 
+      <input id="{{ names[1] }}-value"
+             type="{{ types[1] }}"
+             name="{{ names[1] }}"
+             value="{{ values[1] | empty_and_escape }}"
              placeholder="{{ placeholders[1] }}" />
 
     </div>
@@ -259,7 +259,7 @@ Old implementation of the couple element (one element with comma separated value
 
 
         <input type="hidden" name="temporal_coverage" value="{{ value or dict()| safe}}" data-module="dcatapit-temporal-coverage" data-module-template=".temporal-coverage" data-module-container=".temporal-coverage_container" data-module-lang="{{ lang }}" data-module-input_prefix="" data-module-data_name="temporal-coverage" data-module-error="{{ error|join(',') }}" />
-    
+
         {% if error and error is iterable %}
         <div class="errors">
             {% for err in error %}
@@ -285,8 +285,8 @@ Old implementation of the couple element (one element with comma separated value
                <label for="alt_agent_name" class="add-on">{% trans %}OthId Organization{% endtrans %}</label>
                <input name="alt_agent_name" type="text" value="" placeholder="{% trans %}OthId organization name{% endtrans %}"/>
             </div>
-       
-            <div class="input-prepend">     
+
+            <div class="input-prepend">
                 <label for="alt_agent_identifier" class="add-on">{% trans %}OthId Organization ID{% endtrans %}</label>
                 <input name="alt_agent_identifier" type="text" value="" placeholder="{% trans %}OthId organization identifier{% endtrans %}"/>
             </div>
@@ -319,7 +319,7 @@ Old implementation of the couple element (one element with comma separated value
                 </label>
                     <input type="text" name="conforms_to_title" value="" type="text" placeholder="{% trans %}Std Title sample{% endtrans %}"/>
             </div>
-            
+
             <div class="input-prepend">
                 <label for="conforms_to_description" class="add-on">{% trans %}Std Description{% endtrans %}
                 </label>
@@ -351,7 +351,7 @@ Old implementation of the couple element (one element with comma separated value
     </div>
 {% endmacro %}
 
-{% macro geonames(name, label, id, value, error, lang, username, limit_to, 
+{% macro geonames(name, label, id, value, error, lang, username, limit_to,
                   placeholder_name='',
                   placeholder_url='',
                   classes=[],
@@ -398,7 +398,7 @@ Old implementation of the couple element (one element with comma separated value
         <option value="{{ option.value }}"{% if option.value == selected %} selected{% endif %}>{{ option.depth_str|safe }}{{ option.text or option.value }}</option>
       {% endfor %}
     </select>
-    
+
     {{ help_block(help) }}
   {% endcall %}
 {% endmacro %}

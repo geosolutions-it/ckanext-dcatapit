@@ -1,24 +1,26 @@
 import os
-import json
-
 import unittest
-import nose
-
-from rdflib import Graph, RDF
 
 from ckan.model import Session
-from ckan.plugins import toolkit
+from rdflib import RDF, Graph
 
 try:
     from ckan.tests import helpers
 except ImportError:
     from ckan.new_tests import helpers
 
-from ckanext.dcatapit.model.license import (load_from_graph, 
-    License, LocalizedLicenseName, _get_graph, SKOS)
-
-from ckanext.dcatapit.model.subtheme import (load_subthemes,
-    Subtheme, SubthemeLabel, clear_subthemes)
+from ckanext.dcatapit.model.license import (
+    SKOS,
+    License,
+    LocalizedLicenseName,
+    _get_graph,
+    load_from_graph,
+)
+from ckanext.dcatapit.model.subtheme import (
+    Subtheme,
+    clear_subthemes,
+    load_subthemes,
+)
 
 
 def get_path(fname):
@@ -40,14 +42,14 @@ class LicenseTestCase(unittest.TestCase):
 
         all_licenses = License.q()
         count = all_licenses.count()
-        self.assertTrue(count> 0)
+        self.assertTrue(count > 0)
         self.assertTrue(count == len(list(self.g.subjects(None, SKOS.Concept))))
-        
+
         all_localized = LocalizedLicenseName.q()
         self.assertTrue(all_localized.count() > 0)
 
         for_select = License.for_select('it')
-        
+
         # check license type
         self.assertTrue(all([s[0] for s in for_select]))
 
@@ -56,20 +58,20 @@ class LicenseTestCase(unittest.TestCase):
         load_from_graph(path=self.licenses)
         Session.flush()
         tokens = License.get_as_tokens()
-        self.assertTrue(len(tokens.keys())>0)
+        self.assertTrue(len(tokens.keys()) > 0)
 
         from_token, default = License.find_by_token('cc-by-sa')
         self.assertFalse(default)
         self.assertTrue(from_token)
         self.assertTrue('ccbysa' in from_token.uri.lower())
 
-        from_token, default = License.find_by_token('cc-zero') #http://opendefinition.org/licenses/cc-zero/')
+        from_token, default = License.find_by_token('cc-zero')  # http://opendefinition.org/licenses/cc-zero/')
         self.assertFalse(default)
         self.assertTrue(from_token)
 
         self.assertTrue('PublicDomain' in from_token.license_type)
-        
-        from_token, default = License.find_by_token('Creative Commons Attribuzione') #http://opendefinition.org/licenses/cc-zero/')
+
+        from_token, default = License.find_by_token('Creative Commons Attribuzione')  # http://opendefinition.org/licenses/cc-zero/')
         self.assertFalse(default)
         self.assertTrue(from_token)
 
@@ -80,7 +82,7 @@ class LicenseTestCase(unittest.TestCase):
         from_token, default = License.find_by_token(odbl, 'other')
         self.assertFalse(default)
         self.assertTrue(from_token)
-        self.assertTrue('odbl' in from_token.default_name.lower())
+        self.assertTrue('odbl' in from_token.default_name.decode('utf-8').lower())
 
     def tearDown(self):
         Session.rollback()
@@ -103,17 +105,17 @@ class SubthemeTestCase(unittest.TestCase):
         g.parse(self.map_f)
 
         refs = list(g.objects(None, SKOS.narrowMatch))
-        self.assertTrue(len(refs)> 0)
+        self.assertTrue(len(refs) > 0)
 
         load_subthemes(self.map_f, self.voc_f)
         all_subthemes = Subtheme.q()
-        self.assertTrue(all_subthemes.count()> 0)
+        self.assertTrue(all_subthemes.count() > 0)
         for ref in refs:
             try:
                 subtheme = Subtheme.q().filter_by(uri=str(ref)).one()
                 self.assertIsNotNone(subtheme)
-            except Exception, err:
-                self.assertIsNone(err, "No results for {}: {}".format(ref, err))
+            except Exception as err:
+                self.assertIsNone(err, 'No results for {}: {}'.format(ref, err))
         themes = g.subjects(RDF.type, SKOS.Concept)
         for theme in themes:
             theme_len = g.objects(theme, SKOS.narrowMatch)

@@ -1,27 +1,23 @@
 import datetime
-import logging
 import json
-
-from ckan import logic
-from ckan import lib
-from ckan.lib.base import config
+import logging
 
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
+from ckan import lib, logic
+from ckan.common import config
+from flask import Blueprint
+from routes.mapper import SubMapper
 
-import ckanext.dcatapit.validators as validators
-import ckanext.dcatapit.schema as dcatapit_schema
 import ckanext.dcatapit.helpers as helpers
 import ckanext.dcatapit.interfaces as interfaces
-from   ckanext.dcatapit.dcat.harvester import map_nonconformant_groups
-from   ckanext.dcatapit.mapping import populate_theme_groups
-from   ckanext.dcatapit.helpers import get_org_context
-from   ckanext.dcatapit.model.license import License
-
-from ckan.model.package import Package
-from ckan.model import Session, repo
-
-from routes.mapper import SubMapper, Mapper as _Mapper
+import ckanext.dcatapit.schema as dcatapit_schema
+import ckanext.dcatapit.validators as validators
+from ckanext.dcatapit.commands import dcatapit as dcatapit_cli
+from ckanext.dcatapit.controllers.harvest import HarvesterController
+from ckanext.dcatapit.helpers import get_org_context
+from ckanext.dcatapit.mapping import populate_theme_groups
+from ckanext.dcatapit.model.license import License
 
 log = logging.getLogger(__file__)
 
@@ -32,41 +28,48 @@ except ImportError:
         pass
 
 LOCALIZED_RESOURCES_KEY = 'ckanext.dcatapit.localized_resources'
-LOCALIZED_RESOURCES_ENABLED = toolkit.asbool(config.get(LOCALIZED_RESOURCES_KEY, "False"))
+LOCALIZED_RESOURCES_ENABLED = toolkit.asbool(config.get(LOCALIZED_RESOURCES_KEY, 'False'))
 MLR = None
 if LOCALIZED_RESOURCES_ENABLED:
     from ckanext.multilang.plugin import MultilangResourcesAux
     MLR = MultilangResourcesAux()
-    # admin chose to enable the localized resource, so let the ImportError out 
+    # admin chose to enable the localized resource, so let the ImportError out
 
 
 class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm, DefaultTranslation):
 
+    # Cli commands
+    plugins.implements(plugins.IClick)
+
     # IDatasetForm
     plugins.implements(plugins.IDatasetForm)
-    
+
     # IConfigurer
     plugins.implements(plugins.IConfigurer)
-    
+
     # IValidators
     plugins.implements(plugins.IValidators)
-   
+
     # ITemplateHelpers
     plugins.implements(plugins.ITemplateHelpers)
-    
+
     # IRoutes
     plugins.implements(plugins.IRoutes, inherit=True)
-    
+
     # IPackageController
     plugins.implements(plugins.IPackageController, inherit=True)
 
     plugins.implements(plugins.IFacets, inherit=True)
-    
+
     # ITranslation
     if toolkit.check_ckan_version(min_version='2.5.0'):
         plugins.implements(plugins.ITranslation, inherit=True)
 
-    # ------------- ITranslation ---------------#
+
+    def get_commands(self):
+        return dcatapit_cli.get_commands()
+
+    # ------------- ITranslation -------------4--#
 
     def i18n_domain(self):
         '''Change the gettext domain handled by this plugin
@@ -76,7 +79,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         return 'ckanext-{name}'.format(name='dcatapit')
 
     # ------------- IRoutes ---------------#
-    
+
     def before_map(self, map):
         GET = dict(method=['GET'])
 
@@ -86,7 +89,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             m.connect('/util/vocabulary/autocomplete', action='vocabulary_autocomplete',
                       conditions=GET)
         return map
-    
+
     # ------------- IConfigurer ---------------#
 
     def update_config(self, config_):
@@ -100,7 +103,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         validators = []
         for validator in field['validator']:
             validators.append(toolkit.get_validator(validator))
-        
+
         converters = [toolkit.get_converter('convert_to_extras')]
 
         schema.update({
@@ -148,8 +151,8 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         # conditionally include schema fields from MultilangResourcesPlugin
         if MLR:
             schema = MLR.update_schema(schema)
-        
-        log.debug("Schema updated for DCAT_AP-TI:  %r", schema)
+
+        log.debug('Schema updated for DCAT_AP-TI:  %r', schema)
         return schema
 
     def create_package_schema(self):
@@ -175,7 +178,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
     def show_package_schema(self):
         schema = super(DCATAPITPackagePlugin, self).show_package_schema()
-        
+
         ##
         # Getting custom package schema
         ##
@@ -212,11 +215,10 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                 field['name']: validators
             })
 
-
         # conditionally include schema fields from MultilangResourcesPlugin
         if MLR:
             schema = MLR.update_schema(schema)
-        log.debug("Schema updated for DCAT_AP-TI:  %r", schema)
+        log.debug('Schema updated for DCAT_AP-TI:  %r', schema)
 
         return schema
 
@@ -224,7 +226,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         # Return True to register this plugin as the default handler for
         # package types not handled by any other IDatasetForm plugin.
         return True
-        
+
     def package_types(self):
         # This plugin doesn't handle any special package types, it just
         # registers itself as the default (above).
@@ -233,7 +235,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     if MLR:
         def read_template(self):
             return MLR.read_template()
-    
+
         def edit_template(self):
             return MLR.edit_template()
 
@@ -308,14 +310,13 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                             log.debug(':::::::::::::::Localizing custom schema field: %r', field['name'])
                             # Create the localized field record
                             self.create_loc_field(extra, lang, pkg_dict.get('id'))
-            
 
     def after_update(self, context, pkg_dict):
         # During the harvest the get_lang() is not defined
         lang = interfaces.get_language()
         otype = pkg_dict.get('type')
 
-        if lang and otype == 'dataset':             
+        if lang and otype == 'dataset':
             for extra in pkg_dict.get('extras') or []:
                 for field in dcatapit_schema.get_custom_package_schema():
                     couples = field.get('couples', [])
@@ -329,9 +330,9 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         '''
         Insert `dcat_theme` into solr
         '''
-        
-        extra_theme = dataset_dict.get("extras_theme" , None) or ''
-        themes =  helpers.dump_dcatapit_subthemes(extra_theme)
+
+        extra_theme = dataset_dict.get('extras_theme', None) or ''
+        themes = helpers.dump_dcatapit_subthemes(extra_theme)
         search_terms = [t['theme'] for t in themes]
         if search_terms:
             dataset_dict['dcat_theme'] = search_terms
@@ -361,7 +362,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                     if lname:
                         dataset_dict['resource_license_{}'.format(lang)] = lname
             else:
-                log.warn('Bad license: license not found: %r ', l)
+                log.warning('Bad license: license not found: %r ', l)
         dataset_dict['resource_license'] = _licenses
 
         org_id = dataset_dict['owner_org']
@@ -382,7 +383,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             # multilang values
             # note region can be in {val1,val2} notation for multiple values
             region_base = org['region']
-            if not isinstance(region_base, (list,tuple,)):
+            if not isinstance(region_base, (list, tuple,)):
                 region_base = region_base.strip('{}').split(',')
             tags = {}
 
@@ -393,20 +394,20 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                         tags[tlang].append(tvalue)
                     except KeyError:
                         tags[tlang] = [tvalue]
-            
+
             for lang, region in tags.items():
                 dataset_dict['organization_region_{}'.format(lang)] = region
-            
+
         self._update_pkg_rights_holder(dataset_dict, org=org)
         return dataset_dict
 
     def before_search(self, search_params):
         '''
         # this code may be needed with different versions of solr
-        
-        fq_all = [] 
-       
-        if isinstance(search_params['fq'], (str,unicode,)):
+
+        fq_all = []
+
+        if isinstance(search_params['fq'], str):
             fq = [search_params['fq']]
         else:
             fq = search_params['fq']
@@ -414,16 +415,16 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             fq[0] = u'+{}'.format(fq[0])
         search_params['fq'] = ' '.join(fq)
         '''
-        
+
         return search_params
 
     def after_search(self, search_results, search_params):
-        ## ##################################################################### 
+        ## #####################################################################
         # This method moves the dcatapit fields into the extras array (needed for
         # the CKAN harvester).
         # Basically it dynamically reverts what is done by the
         # 'convert_from_extras' to allow harvesting this plugin's custom fields.
-        ## ##################################################################### 
+        ## #####################################################################
         search_dicts = search_results.get('results', [])
 
         dcatapit_schema_fields = dcatapit_schema.get_custom_package_schema()
@@ -442,7 +443,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                         self.manage_extras_for_search(couple, _dict, _dict_extras)
                 else:
                     self.manage_extras_for_search(field, _dict, _dict_extras)
-        
+
             # remove holder info if pkg is local, use org as a source
             # see https://github.com/geosolutions-it/ckanext-dcatapit/pull/213#issuecomment-410668740
             _dict['dataset_is_local'] = helpers.dataset_is_local(_dict['id'])
@@ -464,12 +465,12 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     def update_loc_field(self, extra, pkg_id, field, lang):
         interfaces.update_extra_package_multilang(extra, pkg_id, field, lang)
 
-    def create_loc_field(self, extra, lang, pkg_id): 
+    def create_loc_field(self, extra, lang, pkg_id):
         interfaces.save_extra_package_multilang({'id': pkg_id, 'text': extra.get('value'), 'field': extra.get('key')}, lang, 'extra')
 
     def before_view(self, pkg_dict):
         return self._update_pkg_rights_holder(pkg_dict)
-    
+
     def after_show(self, context, pkg_dict):
         schema = dcatapit_schema.get_custom_package_schema()
         # quick hack on date fields that are in wrong format
@@ -483,8 +484,8 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                 if isinstance(tmp_value, datetime.date):
                     try:
                         tmp_value = tmp_value.strftime(fdef.get('format') or '%d-%m-%Y')
-                    except ValueError, err:
-                        log.warning("dataset %s, field %s: cannot reformat date for %s (from input %s): %s", 
+                    except ValueError as err:
+                        log.warning('dataset %s, field %s: cannot reformat date for %s (from input %s): %s',
                                     pkg_dict['name'], fname, tmp_value, df_value, err, exc_info=err)
                         tmp_value = df_value
                 pkg_dict[fname] = tmp_value
@@ -502,7 +503,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
         for k in pkg_update.keys():
             if k in pkg_dict:
-                raise KeyError("Duplicated key in pkg_dict: {}: {} in extras vs {} in pkg"
+                raise KeyError('Duplicated key in pkg_dict: {}: {} in extras vs {} in pkg'
                                .format(k, pkg_update[k], pkg_dict[k]))
         for tr in reversed(to_remove):
             val = pkg_dict['extras'].pop(tr)
@@ -539,7 +540,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             pkg_dict['holder_name'] = org['title']
             pkg_dict['holder_identifier'] = org.get('identifier') or None
         return pkg_dict
- 
+
     def edit_template(self):
         return 'package/dcatapit_edit.html'
 
@@ -551,9 +552,10 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         # remove dataset license facet
         facets_dict.pop('license_id', None)
         lang = interfaces.get_language() or validators.DEFAULT_LANG
-        facets_dict['resource_license_{}'.format(lang)] = plugins.toolkit._("Resources licenses")
-        facets_dict['dcat_subtheme_{}'.format(lang)] = plugins.toolkit._("Subthemes")
+        facets_dict['resource_license_{}'.format(lang)] = plugins.toolkit._('Resources licenses')
+        facets_dict['dcat_subtheme_{}'.format(lang)] = plugins.toolkit._('Subthemes')
         return facets_dict
+
 
 class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupForm):
 
@@ -565,7 +567,7 @@ class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupFo
 
     # IGroupForm
     plugins.implements(plugins.IGroupForm, inherit=True)
-    
+
     # ------------- IConfigurer ---------------#
 
     def update_config(self, config_):
@@ -584,7 +586,7 @@ class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupFo
 
     def group_controller(self):
         return 'organization'
-        
+
     def group_form(self):
         return 'organization/new_organization_form.html'
 
@@ -712,6 +714,7 @@ class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupFo
 
         return schema
 
+
 class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
 
     # IConfigurer
@@ -719,7 +722,7 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
 
     # ITemplateHelpers
     plugins.implements(plugins.ITemplateHelpers)
-    
+
     # ------------- IConfigurer ---------------#
 
     def update_config(self, config):
@@ -728,7 +731,7 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
         toolkit.add_public_directory(config, 'public')
         toolkit.add_resource('fanstatic', 'ckanext-dcatapit')
 
-    def update_config_schema(self, schema):        
+    def update_config_schema(self, schema):
         for field in dcatapit_schema.get_custom_config_schema(False):
 
             validators = []
@@ -771,25 +774,30 @@ class DCATAPITFacetsPlugin(plugins.SingletonPlugin, DefaultTranslation):
 
     # IFacets
     def dataset_facets(self, facets_dict, package_type):
-        
+
         # remove dataset license facet
         facets_dict.pop('license_id', None)
-        
+
         lang = interfaces.get_language() or validators.DEFAULT_LANG
-        facets_dict['source_catalog_title'] = plugins.toolkit._("Source catalogs")
-        facets_dict['organization_region_{}'.format(lang)] = plugins.toolkit._("Organization regions")
+        facets_dict['source_catalog_title'] = plugins.toolkit._('Source catalogs')
+        facets_dict['organization_region_{}'.format(lang)] = plugins.toolkit._('Organization regions')
 
         return facets_dict
 
     def organization_facets(self, facets_dict, organization_type, package_type):
         lang = interfaces.get_language() or validators.DEFAULT_LANG
-        facets_dict['organization_region_{}'.format(lang)] = plugins.toolkit._("Region")
+        facets_dict['organization_region_{}'.format(lang)] = plugins.toolkit._('Region')
         return facets_dict
 
-class DCATAPITHarvestListPlugin(plugins.SingletonPlugin):
-    plugins.implements(plugins.IRoutes, inherit=True)
 
-    def before_map(self, map):
-        controller = 'ckanext.dcatapit.controllers.harvest:HarvesterController'
-        map.connect('harvest_list', '/harvest/list', controller=controller, action='list')
-        return map
+class DCATAPITHarvestListPlugin(plugins.SingletonPlugin):
+    plugins.implements(plugins.IBlueprint, inherit=True)
+
+    def get_blueprint(self):
+        blueprint = Blueprint(self.name, self.__module__)
+        # blueprint.template_folder = 'templates'
+        blueprint.add_url_rule(
+            rule='/harvest/list',
+            view_func=HarvesterController.as_view('harvest_list'),
+        )
+        return blueprint
