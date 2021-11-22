@@ -751,6 +751,7 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
             'get_dcatapit_configuration_schema': helpers.get_dcatapit_configuration_schema,
             'json_load': helpers.json_load,
             'json_dump': helpers.json_dump,
+
         }
 
 

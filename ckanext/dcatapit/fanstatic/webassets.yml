@@ -1,0 +1,19 @@
+dcatapit_script:  # name of the asset
+  filters: rjsmin
+  output: ckanext-dcatapit/dcatapit.js  # actual path, where the generated file will be stored
+  extra:
+    preload:
+      - vendor/reorder
+      - base/main
+  contents: # list of files that are included in the asset
+    - dcatapit.js
+    - jeoquery.js
+    - jquery.ui.autocomplete.js
+    - jquery.ui.menu.js
+    - jquery.ui.position.js
+    - jquery.ui.tabs.js
+    - jquery.ui.tooltip.js
+dcatapit_style:  # name of asset
+  output: ckanext-dcatapit/dcatapit.css  # actual path, where generated file will be stored
+  contents: # list of files that are included into asset
+    - dcatapit.css

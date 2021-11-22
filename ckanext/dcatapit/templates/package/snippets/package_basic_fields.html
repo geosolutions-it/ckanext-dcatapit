@@ -1,5 +1,4 @@
 {% ckan_extends %}
-
 {% set pkg_fields = h.get_dcatapit_package_schema() %}
 {% set icustom_fields = [] %}
 {% for custom_field in h.dcatapit_get_icustomschema_fields() %}
@@ -7,8 +6,9 @@
         {% set tmp=icustom_fields.append({'name': custom_field['name']}) %}
     {% endif %}
 {% endfor %}
-{% block package_basic_fields_custom %}
 
+{% block package_basic_fields_custom %}
+    {{ super() }}
 
     <div id="dcatapit-edit-form-settings" class="hidden">{{ h.json_dump({'tabs': [
     {'id': 'information',
@@ -77,23 +77,12 @@
      'use_extra': true},
     ]}) }}
     </div>
-
-    {% asset 'ckanext-dcatapit/dcatapit.css' %}
-
-    {% asset 'vendor/jquery.ui.core.js' %}
-    {% asset 'vendor/jquery.ui.widget.js' %}
-    {% asset 'ckanext-dcatapit/jquery.ui.position.js' %}
-    {% asset 'ckanext-dcatapit/jquery.ui.menu.js' %}
-    {% asset 'ckanext-dcatapit/jquery.ui.autocomplete.js' %}
-    {% asset 'ckanext-dcatapit/jquery.ui.tooltip.js' %}
-    {% asset 'ckanext-dcatapit/jquery.ui.tabs.js' %}
-    {% asset 'ckanext-dcatapit/jeoquery.js' %}
-    {% asset 'ckanext-dcatapit/dcatapit.js' %}
+    {% asset 'ckanext-dcatapit/dcatapit_style' %}
+    {% asset 'ckanext-dcatapit/dcatapit_script' %}
 	{% snippet 'snippets/dcatapit_form_fields.html', data=data, errors=errors, schema_fields=pkg_fields %}
     {% if h.dcatapit_enable_form_tabs() %}
     <div class="dcatapit-form" data-module="dcatapit-edit-form" data-module-settings-container="#dcatapit-edit-form-settings" data-module-form-container="#dataset-edit">
     </div>
     {% endif %}
-
-
 {% endblock %}
+

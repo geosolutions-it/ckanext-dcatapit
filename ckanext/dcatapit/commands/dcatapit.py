@@ -146,7 +146,7 @@ def migrate_data(offset, limit, skip_orgs=False):
 )
 @click.option(
     '--eurovoc',
-    required=True,
+    required=False,
     type=click.Choice(DCATAPITCommands._controlled_vocabularies_allowed),
     help=f'Name of the eurovoc file. Allowed',
 )
