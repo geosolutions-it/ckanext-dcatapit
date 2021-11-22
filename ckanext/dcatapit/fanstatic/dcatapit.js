@@ -856,6 +856,11 @@ ckan.module('dcatapit-edit-form', function($){
                 var field_container = field.parents(parent_name);
                 if  (field_container.length > 0){
                     form_p.append(field_container);
+                }else{
+                    field_container = field.parents('.form-group');
+                    if  (field_container.length > 0){
+                        form_p.append(field_container);
+                    }
                 }
             });
             return {'tab': tab, 'form': form_p}
