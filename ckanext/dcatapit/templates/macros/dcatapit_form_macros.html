@@ -430,7 +430,7 @@ Old implementation of the couple element (one element with comma separated value
 {% macro remove_button(classes, parent=None) %}
     <span class="remove {{ classes }}" {% if parent %}data-remove-parent="{{ parent }}"{% endif %}>
         <span class="button">
-            <i class="icon-remove"></i>
+            <i class="fa fa-trash" style="font-size: 20px;text-align: center"></i>
             {% trans %}Remove{% endtrans %}
         </span>
     </span>
@@ -439,12 +439,12 @@ Old implementation of the couple element (one element with comma separated value
 
 {# reenders add button markup #}
 {% macro add_button(label, classes, help=None, is_required=False) %}
-    <span class="add_new {{ classes }}">
-        <i class="icon-plus"></i>
+    <button class="btn btn-outline-primary add_new {{ classes }}" type="button">
+        <i class="fa fa-plus-circle" style="font-size: 20px;text-align: center"></i>
         {% if is_required %}<span title="{{ _("This field is required") }}" class="control-required">*</span> {% endif %}
         {{ label }}
         {% if help %}
             {{ help_block(help) }}
         {% endif %}
-    </span>
+    </button>
 {% endmacro %}
