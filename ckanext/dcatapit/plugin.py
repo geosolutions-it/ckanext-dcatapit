@@ -503,8 +503,12 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
         for k in pkg_update.keys():
             if k in pkg_dict:
-                raise KeyError('Duplicated key in pkg_dict: {}: {} in extras vs {} in pkg'
-                               .format(k, pkg_update[k], pkg_dict[k]))
+                if pkg_update[k] == pkg_dict[k]:
+                    log.warning(f'Ignoring duplicated key {k} with same value {pkg_update[k]}')
+                else:
+                    raise KeyError(f'Duplicated key in pkg_dict: {k}: {pkg_update[k]} in extras'
+                                   f' vs {pkg_dict[k]} in pkg')
+
         for tr in reversed(to_remove):
             val = pkg_dict['extras'].pop(tr)
             assert val['key'].startswith('holder_'), val
