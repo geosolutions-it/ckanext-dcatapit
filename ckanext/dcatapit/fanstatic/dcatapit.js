@@ -799,17 +799,17 @@ ckan.module('dcatapit-edit-form', function($){
         },
 
         add_nav: function(prev_tab, next_tab, panel){
-            var nav = $('<div class="form-nav"></div>');
+            var nav = $('<div class="form-nav" style="margin-bottom: 5%;"></div>');
             if (prev_tab !== null){
                 var title = prev_tab.find('a span').html();
-                var prev = $('<span class="prev-item form-nav-item btn btn-small"><a title="prev: '+ title +'" href="#">'+ title +'</a></span>');
+                var prev = $('<button class="prev-item form-nav-item btn btn-small" type="button"><a title="prev: '+ title +'" href="#">'+ title +'</a></button>');
                 nav.append(prev);
                 prev.find('a').click(function(){ prev_tab.find('a').click()});
             }
             if (next_tab !== null){
                 var title = next_tab.find('a span').html();
                 if (title !== undefined){
-                    var next = $('<span class="next-item form-nav-item btn btn-small"><a title="next: '+ title +'" href="#">'+ title +'</a></span>');
+                    var next = $('<button class="next-item form-nav-item btn btn-small" style="margin-bottom: 5px" type="button"><a title="next: '+ title +'" href="#">'+ title +'</a></button>');
                     nav.append(next);
                     next.find('a').click(function(){ next_tab.find('a').click()});
                 }
