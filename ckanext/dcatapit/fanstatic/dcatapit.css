@@ -614,3 +614,8 @@ ul.ui-tabs-nav {
     border-radius: 50%;
     margin-right: 5px;
 }
+
+.select2-search-choice-close,
+.select2-container-multi .select2-search-choice-close {
+  top: 4px!important;
+}
