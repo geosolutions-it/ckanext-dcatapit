@@ -589,7 +589,7 @@ msgid "Custom"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:73
-msgid "Select organization"
+msgid "The organization selected above will be used as rights holder"
 msgstr ""
 
 #: ckanext/dcatapit/templates/macros/dcatapit_form_macros.html:190
