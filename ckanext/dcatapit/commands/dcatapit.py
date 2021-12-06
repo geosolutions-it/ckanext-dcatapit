@@ -147,7 +147,6 @@ def migrate_data(offset, limit, skip_orgs=False):
 @click.option(
     '--eurovoc',
     required=False,
-    type=click.Choice(DCATAPITCommands._controlled_vocabularies_allowed),
     help=f'Name of the eurovoc file. Allowed',
 )
 def load(filename, url, format, name, eurovoc, *args, **kwargs):
@@ -164,10 +163,12 @@ def load(filename, url, format, name, eurovoc, *args, **kwargs):
     if name == SUBTHEME_NAME:
         clear_subthemes()
         theme_map = filename
+        print(eurovoc)
         if eurovoc is None:
             log.error('ERROR: Missing eurovoc file')
-        load_subthemes(theme_map, eurovoc)
-        Session.commit()
+        else:
+            load_subthemes(theme_map, eurovoc)
+            Session.commit()
         return
     do_load(name, url=url, filename=filename, format=format)
 

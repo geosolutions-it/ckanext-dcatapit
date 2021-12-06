@@ -23,7 +23,7 @@
                {'name': 'language'},
                {'name': 'is_version_of'},
                {'name': 'license_id'},
-               {'name': 'private', 'parent': '[data-module="dataset-visibility"]'},
+               {'name': 'private', 'parent': '[data-module="dataset-visibility"]', 'class': 'form-control', 'style':'width:50%'},
                {'name': 'version'}
               ]},
     {'id': 'classification',
@@ -35,7 +35,7 @@
     {'id': 'organization',
      'name': _('Subjects'),
      'fields': [
-               {'name': 'owner_org'},
+               {'name': 'owner_org', 'style': 'width:50%;margin-bottom:10px'},
                {'name': 'publisher_name'},
                {'name': 'creator', 'parent': '.creator-wrap'},
                {'name': None, 'selector': '[for="field-range-rights_holder-key"]'},
@@ -65,7 +65,7 @@
      'name': _('Related Datasets'),
      'fields': [
                 {'name': 'is_version_of'},
-                {'name': 'url'}
+                {'name': 'url', 'class': 'form-control', 'style':'width:50%'}
               ]},
     {'id': 'extra',
      'name': _('Additional Info'),

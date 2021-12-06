@@ -562,14 +562,6 @@ ul.ui-tabs-nav {
   margin-left: 5px;
 }
 
-.removable .control-group .controls .span11 .reference_documentation .remove .button,
-.removable.control-group  .controls .span11 .reference_documentation .remove .button {
-    width: 30px;
-    margin: auto;
-    top: auto;
-    left: auto;
-}
-
 .removable .control-group .controls .span11 .reference_documentation input,
 .removable.control-group  .controls .span11 .reference_documentation input {
     flex: 1;
