@@ -118,7 +118,6 @@ def get_custom_package_schema():
             'validator': ['not_empty', 'dcatapit_id_unique'],
             'element': 'input',
             'type': 'text',
-            'attrs': {'class': 'form-control'},
             'label': _('Dataset Identifier'),
             'placeholder': _('dataset identifier'),
             'is_required': True,
@@ -180,7 +179,6 @@ def get_custom_package_schema():
             'format': '%d-%m-%Y',
             'placeholder': _('release date'),
             'is_required': False,
-            'attrs': {'class': 'form-control', 'style': 'width:50%'},
             'help': _('package_issued_help'),
         },
         {
@@ -192,7 +190,6 @@ def get_custom_package_schema():
             'format': '%d-%m-%Y',
             'placeholder': _('modification date'),
             'is_required': True,
-            'attrs': {'class': 'form-control', 'style': 'width:50%'},
             'help': _('package_modified_help')
         },
         {
@@ -217,7 +214,6 @@ def get_custom_package_schema():
             'placeholder_url': _('Enter geonames URL'),
             'placeholder_name': _('Enter name of place'),
             'is_required': False,
-            'attrs': {'class': 'form-control'},
             'help': _('package_geographical_geonames_url_help')
         },
         {
@@ -306,7 +302,6 @@ def get_custom_package_schema():
             'label': _('Version Of'),
             'placeholder': _('is version of a related dataset URI'),
             'is_required': False,
-            'attrs': {'class': 'form-control', 'style': 'width:50%'},
             'help': _('package_is_version_of_help')
         },
         {
@@ -364,7 +359,6 @@ def get_custom_resource_schema():
             'label': _('Distribution Format'),
             'placeholder': _('distribution format'),
             'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=filetype&incomplete=?',
-            'attrs': {'class': 'form-control', 'style': 'width:50%'},
             'is_required': False
         },
         {
@@ -374,7 +368,6 @@ def get_custom_resource_schema():
             'label': _('License'),
             'placeholder': _('license type'),
             'is_required': True,
-            'attrs': {'class': 'form-control', 'style': 'width:50%'},
             'help': _(u"""Questa proprietà si riferisce alla licenza con cui viene """
                       u"""pubblicato il dataset. Scegliere una delle due licenze """
                       u"""Creative Commons proposte.""")

@@ -19,6 +19,10 @@
                                  help=field.help) }}
 
             {% elif field.element == 'select' %}
+                  {% set attrs =  {} %}
+                  {% if field.name == "distribution_format" %}
+                      {% set attrs =  {'class': 'form-control', 'style': 'width:50%'} %}
+                  {% endif %}
                   {% set attrs = field.attrs or {} %}
                   {% set options = h.get_vocabulary_items(field.vocabulary_name) if field.type == 'vocabulary' else field.options %}
 
@@ -165,7 +169,7 @@
                                      help=field.help,
                                      classes=[]) }}
             {% elif field.element == 'licenses_tree' %}
-                {% set attrs = field.attrs or {} %}
+                {% set attrs = {'class': 'form-control', 'style': 'width:50%'} %}
                 {% set licenses = h.get_resource_licenses_tree(data[field.name], lang=h.lang()) %}
 
                     {{ dform.select(field.name,

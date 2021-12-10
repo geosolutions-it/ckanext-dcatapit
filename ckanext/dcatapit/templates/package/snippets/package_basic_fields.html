@@ -18,7 +18,7 @@
                {'name': 'notes'},
                {'name': None, 'selector': '.slug-preview-value', 'parent': '.slug-preview'},
                {'name': 'description'},
-               {'name': 'identifier'},
+               {'name': 'identifier', 'class': 'form-control',},
                {'name': 'alternate_identifier', 'parent': '.alternate-identifier-wrap'},
                {'name': 'language'},
                {'name': 'is_version_of'},
@@ -44,8 +44,8 @@
     {'id': 'temporal',
      'name': _('Temporal'),
      'fields': [
-                {'name': 'issued'},
-                {'name': 'modified'},
+                {'name': 'issued', 'class': 'form-control', 'style': 'width:50%'},
+                {'name': 'modified', 'class': 'form-control', 'style': 'width:50%'},
                 {'name': 'frequency'},
                 {'name': 'released'},
                 {'name': 'temporal_coverage', 'parent': '.temporal-coverage-wrap'},
@@ -64,7 +64,7 @@
     {'id': 'related',
      'name': _('Related Datasets'),
      'fields': [
-                {'name': 'is_version_of'},
+                {'name': 'is_version_of', 'class': 'form-control', 'style': 'width:50%'},
                 {'name': 'url', 'class': 'form-control', 'style':'width:50%'}
               ]},
     {'id': 'extra',
