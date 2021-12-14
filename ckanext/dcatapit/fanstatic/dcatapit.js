@@ -851,9 +851,16 @@ ckan.module('dcatapit-edit-form', function($){
                 } else {
                     var field = $('[name="' + elm['name'] +'"]');
                 }
+                if (elm['class'] !== undefined){
+                    $(field).addClass(elm['class'])
+                }
+                if (elm['style'] !== undefined){
+                    $(field).attr('style', elm['style'])
+                }
                 // customized parent lookup
                 var parent_name  = elm['parent'] || '.control-group';
                 var field_container = field.parents(parent_name);
+
                 if  (field_container.length > 0){
                     form_p.append(field_container);
                 }else{

@@ -147,7 +147,6 @@ def migrate_data(offset, limit, skip_orgs=False):
 @click.option(
     '--eurovoc',
     required=False,
-    type=click.Choice(DCATAPITCommands._controlled_vocabularies_allowed),
     help=f'Name of the eurovoc file. Allowed',
 )
 def load(filename, url, format, name, eurovoc, *args, **kwargs):
@@ -164,10 +163,12 @@ def load(filename, url, format, name, eurovoc, *args, **kwargs):
     if name == SUBTHEME_NAME:
         clear_subthemes()
         theme_map = filename
+        log.debug(eurovoc)  # path to eurovoc file
         if eurovoc is None:
             log.error('ERROR: Missing eurovoc file')
-        load_subthemes(theme_map, eurovoc)
-        Session.commit()
+        else:
+            load_subthemes(theme_map, eurovoc)
+            Session.commit()
         return
     do_load(name, url=url, filename=filename, format=format)
 
@@ -233,7 +234,6 @@ def do_load_vocab(g, vocab_name):
 
 
 def do_load(vocab_name, url=None, filename=None, format=None):
-
     if vocab_name == LANGUAGE_THEME_NAME:
         ckan_offered_languages = config.get('ckan.locales_offered', 'it').split(' ')
         for offered_language in ckan_offered_languages:
@@ -347,8 +347,8 @@ def do_migrate_data(limit=None, offset=None, skip_orgs=False):
         log.info(f'processing {ocount} organizations')
         for oidx, oname in enumerate(org_list):
             odata = oshow(context, {'id': oname, 'include_extras': True,
-                                                 'include_tags': False,
-                                                 'include_users': False,
+                                    'include_tags': False,
+                                    'include_users': False,
                                     })
 
             oidentifier = odata.get('identifier')
@@ -450,13 +450,13 @@ def do_migrate_data(limit=None, offset=None, skip_orgs=False):
 
 def get_package_list():
     return Session.query(Package.name).filter(Package.state == 'active',
-                                              Package.type == 'dataset')\
+                                              Package.type == 'dataset') \
         .order_by(Package.title)
 
 
 def get_organization_list():
     return Session.query(Group.name).filter(Group.state == 'active',
-                                            Group.type == 'organization')\
+                                            Group.type == 'organization') \
         .order_by(Group.title)
 
 
@@ -707,12 +707,12 @@ def get_temp_org_identifier():
 def package_temp_code_count(BASE_CODE):
     s = Session
     q = s.query(PackageExtra.value).join(Package, and_(Package.id == PackageExtra.package_id,
-                                                       PackageExtra.state == 'active'))\
+                                                       PackageExtra.state == 'active')) \
         .filter(Package.type == 'organization',
                 Package.state == 'active',
                 PackageExtra.key == 'identifier',
-                PackageExtra.value.startswith(BASE_CODE))\
-        .group_by(PackageExtra.value)\
+                PackageExtra.value.startswith(BASE_CODE)) \
+        .group_by(PackageExtra.value) \
         .count()
     return q
 
@@ -720,12 +720,12 @@ def package_temp_code_count(BASE_CODE):
 def group_temp_code_count(BASE_CODE):
     s = Session
     q = s.query(GroupExtra.value).join(Group, and_(Group.id == GroupExtra.group_id,
-                                                   GroupExtra.state == 'active'))\
+                                                   GroupExtra.state == 'active')) \
         .filter(Group.type == 'organization',
                 Group.state == 'active',
                 GroupExtra.key == 'identifier',
-                GroupExtra.value.startswith(BASE_CODE))\
-        .group_by(GroupExtra.value)\
+                GroupExtra.value.startswith(BASE_CODE)) \
+        .group_by(GroupExtra.value) \
         .count()
     return q
 

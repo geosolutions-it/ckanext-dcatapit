@@ -400,13 +400,19 @@ ul.ui-tabs-nav {
 	width: 100%;
 	height: 100%;
 }
+.autocomplete {
+  /*the container must be positioned relative:*/
+  position: relative;
+  display: inline-block;
+}
+
 .ui-autocomplete {
 	position: absolute;
-	top: 0;
-	left: 0;
 	cursor: default;
     background: #fff;
     border: solid 1px #343;
+	width: 375px !important;
+
 }
 .ui-menu {
 	list-style: none;
@@ -560,14 +566,6 @@ ul.ui-tabs-nav {
   margin: 0;
   display: flex;
   margin-left: 5px;
-}
-
-.removable .control-group .controls .span11 .reference_documentation .remove .button,
-.removable.control-group  .controls .span11 .reference_documentation .remove .button {
-    width: 30px;
-    margin: auto;
-    top: auto;
-    left: auto;
 }
 
 .removable .control-group .controls .span11 .reference_documentation input,

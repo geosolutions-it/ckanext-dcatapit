@@ -143,15 +143,12 @@ class Subtheme(_Base, DeclarativeBase):
         existing = cls.q().filter_by(uri=str(subtheme_ref)).first()
         theme_tag = ThemeToSubtheme.get_tag(theme)
 
-        revision = getattr(Session, 'revision', None) or repo.new_revision()
-
         # several themes may refer to this subtheme, so we'll just return
         # exising instance
         if existing:
             if not theme_tag in existing.themes:
                 existing.themes.append(theme_tag)
             Session.flush()
-            Session.revision = revision
             log.error(f'Subtheme {subtheme_ref} already exists. Skipping')
             return existing
 
@@ -173,7 +170,6 @@ class Subtheme(_Base, DeclarativeBase):
         inst.update_path()
         Session.add(inst)
         Session.flush()
-        Session.revision = revision
 
         if parent is None:
             inst.parent_id = inst.id
@@ -187,7 +183,6 @@ class Subtheme(_Base, DeclarativeBase):
                               label=label)
             Session.add(l)
         Session.flush()
-        Session.revision = revision
         # handle children
 
         for child in g.objects(subtheme_ref, SKOS.hasTopConcept):
