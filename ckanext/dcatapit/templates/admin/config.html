@@ -5,18 +5,15 @@
 {% set config_fields = h.get_dcatapit_configuration_schema() %}
 
 {% block admin_form %}
-
   {{ super() }}
 
   {% snippet 'snippets/dcatapit_form_fields.html', data=data, errors=errors, schema_fields=config_fields %}
-
 {% endblock %}
 
 
 {% block admin_form_help %}
 
   {{ super() }}
-
   {% for field in config_fields %}
   	<p><strong>{{ field['label'] }}:</strong> {{ field['description'] }}</p>
   {% endfor %}

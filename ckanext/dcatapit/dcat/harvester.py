@@ -1,16 +1,16 @@
-import logging
 import json
+import logging
 
 import ckan.plugins as p
-from ckan.lib.munge import munge_name
-
-from ckanext.dcat.interfaces import IDCATRDFHarvester
-from ckanext.harvest.harvesters.base import HarvesterBase
-from ckanext.dcatapit.dcat.profiles import (LOCALISED_DICT_NAME_BASE,
-                                            LOCALISED_DICT_NAME_RESOURCES)
 import ckanext.dcatapit.interfaces as interfaces
-from ckanext.dcatapit.mapping import map_nonconformant_groups
+from ckan.lib.munge import munge_name
+from ckanext.dcat.interfaces import IDCATRDFHarvester
 from ckanext.dcatapit import helpers as dcatapit_helpers
+from ckanext.dcatapit.dcat.profiles import (
+    LOCALISED_DICT_NAME_BASE,
+    LOCALISED_DICT_NAME_RESOURCES,
+)
+from ckanext.harvest.harvesters.base import HarvesterBase
 
 log = logging.getLogger(__name__)
 
@@ -65,8 +65,8 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
     def _handle_rights_holder(self, dataset_dict, temp_dict, job):
         try:
             config = json.loads(job.source.config) if job.source.config else {}
-        except (TypeError, ValueError,), err:
-            log.warning("Cannot parse job config to get rights holder: %s",
+        except (TypeError, ValueError) as err:
+            log.warning('Cannot parse job config to get rights holder: %s',
                         err, exc_info=err)
             config = {}
 
@@ -81,8 +81,8 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
             if holder_identifier and holder_name:
 
                 org = dcatapit_helpers\
-                        .get_organization_by_identifier(ctx,
-                                                        holder_identifier)
+                    .get_organization_by_identifier(ctx,
+                                                    holder_identifier)
                 if not org:
                     org_dict = {'identifier': holder_identifier,
                                 'name': munge_name(holder_name),
@@ -122,16 +122,16 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
 
     def _save_package_multilang(self, pkg_id, base_dict):
         try:
-            for field, lang_dict in base_dict.iteritems():
-                for lang, text in lang_dict.iteritems():
+            for field, lang_dict in base_dict.items():
+                for lang, text in lang_dict.items():
                     interfaces.upsert_package_multilang(pkg_id,
                                                         field,
                                                         'package',
                                                         lang,
                                                         text)
 
-        except Exception, e:
-            return str(e)
+        except Exception as err:
+            return str(err)
 
         return None
 
@@ -139,20 +139,20 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
         try:
             uri_id_mapping = self._get_resource_uri_id_mapping(pkg_id)
 
-            for res_uri, res_dict in resources_dict.iteritems():
+            for res_uri, res_dict in resources_dict.items():
                 res_id = uri_id_mapping.get(res_uri, None)
                 if not res_id:
-                    log.warn("Could not find resource id for URI %s", res_uri)
+                    log.warning('Could not find resource id for URI %s', res_uri)
                     continue
-                for field, lang_dict in res_dict.iteritems():
-                    for lang, text in lang_dict.iteritems():
+                for field, lang_dict in res_dict.items():
+                    for lang, text in lang_dict.items():
                         interfaces.upsert_resource_multilang(res_id,
                                                              field,
                                                              lang,
                                                              text)
 
-        except Exception, e:
-            return str(e)
+        except Exception as err:
+            return str(err)
 
         return None
 
@@ -170,8 +170,8 @@ class DCATAPITHarvesterPlugin(p.SingletonPlugin):
                           res_uri)
                 ret[res_uri] = res_id
             else:
-                log.warn("Can't map URI for resource \"%s\"",
-                         resource.get('name', '---'))
+                log.warning("Can't map URI for resource \"%s\"",
+                            resource.get('name', '---'))
 
         return ret
 

@@ -1,21 +1,12 @@
-import re
 import logging
-from urlparse import urlparse
+import re
 
-from sqlalchemy import types, Column, Table, ForeignKey
-from sqlalchemy import orm
-from sqlalchemy.ext.declarative import declarative_base
-
-from rdflib.namespace import Namespace, RDF, XSD, SKOS, RDFS
+from ckan.common import _
+from ckan.model import Session, meta
 from rdflib import Graph
-
-from ckan.lib.base import config
-from ckan import model
-from ckan.model import Session
-from ckan.model import meta
-from ckan.model.domain_object import DomainObject
-
-from ckan import model
+from rdflib.namespace import SKOS, Namespace
+from sqlalchemy import Column, ForeignKey, orm, types
+from sqlalchemy.ext.declarative import declarative_base
 
 log = logging.getLogger(__name__)
 
@@ -60,6 +51,7 @@ class _Base(object):
         """
         return Session.query(cls)
 
+
 class License(_Base, DeclarativeBase):
     __tablename__ = 'dcatapit_license'
     id = Column(types.Integer, primary_key=True)
@@ -72,11 +64,11 @@ class License(_Base, DeclarativeBase):
     default_name = Column(types.Unicode, nullable=False)
     parent_id = Column(types.Integer, ForeignKey('dcatapit_license.id'), nullable=True)
     parent = orm.relationship('License',
-                              backref=orm.backref("children",
+                              backref=orm.backref('children',
                                                   remote_side=[id]),
                               lazy=True)
-    
-    DEFAULT_LICENSE = "https://w3id.org/italia/controlled-vocabulary/licences/C1_Unknown"
+
+    DEFAULT_LICENSE = 'https://w3id.org/italia/controlled-vocabulary/licences/C1_Unknown'
 
     @classmethod
     def get(cls, id_or_uri):
@@ -101,11 +93,11 @@ class License(_Base, DeclarativeBase):
             inst = cls.q().filter_by(default_name=id_or_uri).first()
         if not inst:
             inst = cls.q().filter_by(license_type=id_or_uri).first()
-        
+
         return inst
 
     def __str__(self):
-        return "License({}/version {}: {}{})".format(self.license_type, self.version, self.default_name, ' [doc: {}]'.format(self.document_uri) if self.document_uri else '')
+        return 'License({}/version {}: {}{})'.format(self.license_type, self.version, self.default_name, ' [doc: {}]'.format(self.document_uri) if self.document_uri else '')
 
     def generate_tokens(self):
         """
@@ -118,7 +110,7 @@ class License(_Base, DeclarativeBase):
             # <skos:exactMatch rdf:resource="http://purl.org/adms/licencetype/NonCommercialUseOnly"/>
             # -> NonCommercialUseOnly
             out.extend([self.license_type, self.license_type.lower(), license_type, license_type.lower()])
-    
+
         if self.uri:
             # <rdf:Description rdf:about="http://dati.gov.it/onto/controlledvocabulary/License/B1_NonCommercial">
             # B1_NonCommercial
@@ -141,7 +133,8 @@ class License(_Base, DeclarativeBase):
         if self.default_name:
             dn = self.default_name.lower()
             out.append(dn)
-            s = CC_LICENSE_NAME.search(dn)
+            decoded_dn = dn.decode('utf-8') if type(dn) == bytes else dn
+            s = CC_LICENSE_NAME.search(decoded_dn)
             if s:
                 out.append(s.groups()[0])
         return out
@@ -152,7 +145,7 @@ class License(_Base, DeclarativeBase):
         """
         parent = License.get(parent_uri)
         if not parent:
-            raise ValueError("No parent %s object" % parent_uri)
+            raise ValueError('No parent %s object' % parent_uri)
         self.parent_id = parent.id
         Session.add(self)
         try:
@@ -169,8 +162,8 @@ class License(_Base, DeclarativeBase):
         self.names = []
         for lang_name, label in langs.items():
             localized = LocalizedLicenseName(license_id=self.id,
-                                             lang = lang_name,
-                                             label = label)
+                                             lang=lang_name,
+                                             label=label)
             Session.add(localized)
 
     def get_name(self, lang):
@@ -186,22 +179,21 @@ class License(_Base, DeclarativeBase):
     def get_by_lang(cls, lang, label):
         q = cls.q().join(LocalizedLicenseName,
                          LocalizedLicenseName.license_id == cls.id)\
-                   .filter(LocalizedLicenseName.lang == lang,
-                          LocalizedLicenseName.label == label)
+            .filter(LocalizedLicenseName.lang == lang,
+                    LocalizedLicenseName.label == label)
         return q.first()
 
     @classmethod
     def clear(cls):
         Session.query(LocalizedLicenseName).delete()
         Session.query(cls).delete()
-        
+
         try:
             rev = Session.revision
         except AttributeError:
             rev = None
         Session.flush()
         Session.revision = rev
-
 
     @classmethod
     def for_license_uri(cls, uri, lang):
@@ -216,7 +208,7 @@ class License(_Base, DeclarativeBase):
         if license:
             return license
         return cls.get(cls.DEFAULT_LICENSE)
-    
+
     @classmethod
     def get_as_tokens(cls):
         out = {}
@@ -241,8 +233,8 @@ class License(_Base, DeclarativeBase):
             and used in order provided
         :type *search_for: list of str
 
-        :return: Returns tuple of License and fallback marker as boolean. 
-            Fallback set to True means that no license could be found for 
+        :return: Returns tuple of License and fallback marker as boolean.
+            Fallback set to True means that no license could be found for
             given token, and license returned is a default one.
 
         :rtype: (License, bool,)
@@ -259,7 +251,7 @@ class License(_Base, DeclarativeBase):
                 # return latest version
                 license = from_tokenized[-1]
                 return license, False
-            except KeyError, err:
+            except KeyError:
                 pass
         # return default if nothing was found
         license = cls.get(cls.DEFAULT_LICENSE)
@@ -280,7 +272,7 @@ class License(_Base, DeclarativeBase):
                 subs = s.split(' ')[-1]
                 # cc-zero
                 yield subs
-                if subs.startswith('cc') and len(subs)> 2:
+                if subs.startswith('cc') and len(subs) > 2:
                     yield subs[2:]
                 yield s.split('-')[-1]
             if 'odbl' in s:
@@ -289,7 +281,6 @@ class License(_Base, DeclarativeBase):
             yield s.replace(' ', '')
             yield s.replace('-', '')
             yield s.replace(' ', '').replace('-', '')
-
 
     @classmethod
     def from_data(cls,
@@ -336,8 +327,8 @@ class License(_Base, DeclarativeBase):
     def for_select(cls, lang):
         q = Session.query(cls, LocalizedLicenseName.label)\
                    .join(LocalizedLicenseName)\
-                   .filter(LocalizedLicenseName.lang==lang,
-                           cls.rank_order>1)\
+                   .filter(LocalizedLicenseName.lang == lang,
+                           cls.rank_order > 1)\
                    .order_by(cls.path)
         return list(q)
 
@@ -349,7 +340,7 @@ class LocalizedLicenseName(_Base, DeclarativeBase):
     lang = Column(types.Unicode, nullable=False)
     label = Column(types.Unicode, nullable=False)
 
-    license = orm.relationship(License, backref="names")
+    license = orm.relationship(License, backref='names')
 
 
 def setup_license_models():
@@ -358,16 +349,16 @@ def setup_license_models():
             t.create()
 
 
-ADMS=Namespace("http://www.w3.org/ns/adms#")
-CLVAPIT=Namespace("https://w3id.org/italia/onto/CLV/")
-DCATAPIT=Namespace("http://dati.gov.it/onto/dcatapit#")
-DCT=Namespace("http://purl.org/dc/terms/")
-FOAF=Namespace("http://xmlns.com/foaf/0.1/")
-OWL=Namespace("http://www.w3.org/2002/07/owl#")
-RDF=Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-RDFS=Namespace("http://www.w3.org/2000/01/rdf-schema#")
-SKOS=Namespace("http://www.w3.org/2004/02/skos/core#")
-XKOS=Namespace("http://rdf-vocabulary.ddialliance.org/xkos#")
+ADMS = Namespace('http://www.w3.org/ns/adms#')
+CLVAPIT = Namespace('https://w3id.org/italia/onto/CLV/')
+DCATAPIT = Namespace('http://dati.gov.it/onto/dcatapit#')
+DCT = Namespace('http://purl.org/dc/terms/')
+FOAF = Namespace('http://xmlns.com/foaf/0.1/')
+OWL = Namespace('http://www.w3.org/2002/07/owl#')
+RDF = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+RDFS = Namespace('http://www.w3.org/2000/01/rdf-schema#')
+SKOS = Namespace('http://www.w3.org/2004/02/skos/core#')
+XKOS = Namespace('http://rdf-vocabulary.ddialliance.org/xkos#')
 
 namespaces = {
     'adms': ADMS,
@@ -385,9 +376,9 @@ namespaces = {
 
 def _get_graph(path=None, url=None):
     if (not path and not url) or (path and url):
-        raise ValueError("You should provide either path or url")
+        raise ValueError(_('You should provide either path or url'))
     g = Graph()
-    for prefix, namespace in namespaces.iteritems():
+    for prefix, namespace in namespaces.items():
         g.bind(prefix, namespace)
 
     if url:
@@ -419,10 +410,10 @@ def load_from_graph(path=None, url=None):
             license_type = g.value(parent, SKOS.exactMatch)
 
         _labels = g.objects(license, SKOS.prefLabel)
-        labels = dict((l.language, unicode(l),) for l in _labels)
-        license_path=str(license).split('/')[-1].split('_')[0]
-        print "Adding license [%s] [%s]" % (license, labels.get('it', None))
-        l = License.from_data(unicode(license_type or ''),
+        labels = dict([(l.language, l.encode(u'utf-8')) for l in _labels])
+        license_path = str(license).split('/')[-1].split('_')[0]
+        log.debug('Adding license [%r] [%s]', license, labels.get('it', None))
+        l = License.from_data(license_type or '',
                               str(version) if version else None,
                               uri=str(license),
                               path=license_path,

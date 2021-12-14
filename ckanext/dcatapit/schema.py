@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import ckanext.dcatapit.interfaces as interfaces
-
-from ckan.common import _, ungettext
-from ckan.plugins import PluginImplementations
+from ckan.common import _
 
 
 def get_custom_config_schema(show=True):
@@ -60,46 +57,46 @@ def get_custom_config_schema(show=True):
 
 
 def get_custom_organization_schema():
-	return [
-	    {
-		    'name': 'email',
-		    'validator': ['ignore_missing'],
-		    'element': 'input',
-		    'type': 'email',
-		    'label': _('EMail'),
-		    'placeholder': _('organization email'),
-		    'is_required': True
-	    },
-	    {
-		    'name': 'telephone',
-		    'validator': ['ignore_missing'],
-		    'element': 'input',
-		    'type': 'text',
-		    'label': _('Telephone'),
-		    'placeholder': _('organization telephone'),
-		    'is_required': False
-	    },
-	    {
-		    'name': 'site',
-		    'validator': ['ignore_missing'],
-		    'element': 'input',
-		    'type': 'url',
-		    'label': _('Site URL'),
-		    'placeholder': _('organization site url'),
-		    'is_required': False
-	    },
-	    {
-		    'name': 'region',
-		    'validator': ['ignore_missing', 'not_empty'],
-		    'element': 'region',
-		    'type': 'vocabulary',
-		    'vocabulary_name': 'regions',
-		    'label': _('Region'),
+    return [
+        {
+            'name': 'email',
+            'validator': ['ignore_missing'],
+            'element': 'input',
+            'type': 'email',
+            'label': _('EMail'),
+            'placeholder': _('organization email'),
+            'is_required': True
+        },
+        {
+            'name': 'telephone',
+            'validator': ['ignore_missing'],
+            'element': 'input',
+            'type': 'text',
+            'label': _('Telephone'),
+            'placeholder': _('organization telephone'),
+            'is_required': False
+        },
+        {
+            'name': 'site',
+            'validator': ['ignore_missing'],
+            'element': 'input',
+            'type': 'url',
+            'label': _('Site URL'),
+            'placeholder': _('organization site url'),
+            'is_required': False
+        },
+        {
+            'name': 'region',
+            'validator': ['ignore_missing', 'not_empty'],
+            'element': 'region',
+            'type': 'vocabulary',
+            'vocabulary_name': 'regions',
+            'label': _('Region'),
             'multiple': False,
-		    'placeholder': _('region name'),
-		    'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=regions&incomplete=?',
-		    'is_required': False
-	    },
+            'placeholder': _('region name'),
+            'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=regions&incomplete=?',
+            'is_required': False
+        },
         {
 
             # field become required by https://github.com/geosolutions-it/ckanext-dcatapit/pull/213#pullrequestreview-139966344
@@ -108,7 +105,7 @@ def get_custom_organization_schema():
             'validator': ['not_empty'],
             'element': 'input',
             'type': 'text',
-            'is_required': True, 
+            'is_required': True,
             'placeholder': _('organization IPA/IVA code')
         }
     ]
@@ -143,7 +140,7 @@ def get_custom_package_schema():
             'type': 'vocabulary',
             'vocabulary_name': 'eu_themes',
             'label': _('Dataset Themes'),
-            'sublabel': _("Subthemes"),
+            'sublabel': _('Subthemes'),
             'placeholder': _('eg. education, agriculture, energy'),
             'data_module_source': '/api/2/util/vocabulary/autocomplete?vocabulary_id=eu_themes&incomplete=?',
             'is_required': True,
@@ -317,10 +314,10 @@ def get_custom_package_schema():
             'is_required': False,
             'help': _('package_conforms_to_help')
         },
-	    {
-		    'name': 'creator',
-		    'element': 'creator',
-		    'label': _('Creator'),
+        {
+            'name': 'creator',
+                    'element': 'creator',
+                    'label': _('Creator'),
             'type': 'creator',
             'placeholder': '-',
             'validator': ['ignore_missing', 'dcatapit_creator'],
@@ -341,18 +338,19 @@ def get_custom_package_schema():
                     'type': 'text',
                     'placeholder': _('creator of the dataset')
                 }
-            ],
+                    ],
             'help': _('package_creator_help')
         }
     ]
 
     from ckanext.dcatapit.helpers import get_icustomschema_fields
-    package_schema.extend(get_icustomschema_fields()) 
+    package_schema.extend(get_icustomschema_fields())
     return package_schema
+
 
 def get_custom_resource_schema():
     return [
-         {
+        {
             'name': 'distribution_format',
             'validator': ['ignore_missing'],
             'element': 'select',

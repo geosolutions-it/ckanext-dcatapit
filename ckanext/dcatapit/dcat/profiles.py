@@ -1,26 +1,29 @@
-
 import json
-import ast
 import logging
-import datetime
-
-from ckan.lib.base import config
-
-from rdflib.namespace import Namespace, RDF, SKOS
-from rdflib import URIRef, BNode, Literal
 
 import ckan.logic as logic
+from ckan.common import config
+from ckan.lib.i18n import get_lang, get_locales
+from rdflib import BNode, Literal, URIRef
+from rdflib.namespace import RDF, SKOS, Namespace
 
-from ckan.lib.i18n import get_locales, get_lang
-from ckanext.dcat.profiles import RDFProfile, DCAT, LOCN, VCARD, DCT, FOAF, ADMS, OWL, SCHEMA, TIME
-from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
-
-import ckanext.dcatapit.interfaces as interfaces
 import ckanext.dcatapit.helpers as helpers
-from ckanext.dcatapit import validators
-from ckanext.dcatapit import schema
+import ckanext.dcatapit.interfaces as interfaces
+from ckanext.dcat.profiles import (
+    ADMS,
+    DCAT,
+    DCT,
+    FOAF,
+    LOCN,
+    OWL,
+    SCHEMA,
+    TIME,
+    VCARD,
+    RDFProfile,
+)
+from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
+from ckanext.dcatapit import schema, validators
 from ckanext.dcatapit.model.subtheme import Subtheme
-
 
 DCATAPIT = Namespace('http://dati.gov.it/onto/dcatapit#')
 
@@ -60,18 +63,18 @@ lang_mapping_ckan_to_voc = {
 }
 
 lang_mapping_xmllang_to_ckan = {
-    'it' : 'it',
-    'de' : 'de',
-    'en' : 'en_GB' ,
-    'fr' : 'fr',
+    'it': 'it',
+    'de': 'de',
+    'en': 'en_GB',
+    'fr': 'fr',
 }
 
 lang_mapping_ckan_to_xmllang = {
-    'en_GB' : 'en' ,
+    'en_GB': 'en',
     'uk_UA': 'ua',
     'en_AU': 'en',
     'es_AR': 'es',
-} 
+}
 
 format_mapping = {
     'WMS': 'MAP_SRVC',
@@ -79,12 +82,13 @@ format_mapping = {
     'CSV': 'CSV',
     'XLS': 'XLS',
     'ODS': 'ODS',
-    'ZIP': 'OP_DATPRO', # requires to be more specific, can't infer
+    'ZIP': 'OP_DATPRO',  # requires to be more specific, can't infer
 
 }
 
 
 log = logging.getLogger(__name__)
+
 
 class ItalianDCATAPProfile(RDFProfile):
     '''
@@ -103,7 +107,7 @@ class ItalianDCATAPProfile(RDFProfile):
         for predicate, key, logf in (
                 (DCT.issued, 'issued', log.debug),
                 (DCT.modified, 'modified', log.warn),
-                ):
+        ):
             value = self._object_value(dataset_ref, predicate)
             if value:
                 self._remove_from_extra(dataset_dict, key)
@@ -116,7 +120,7 @@ class ItalianDCATAPProfile(RDFProfile):
         # 0..1 predicates
         for predicate, key, logf in (
                 (DCT.identifier, 'identifier', log.warn),
-                ):
+        ):
             value = self._object_value(dataset_ref, predicate)
             if value:
                 self._remove_from_extra(dataset_dict, key)
@@ -127,7 +131,7 @@ class ItalianDCATAPProfile(RDFProfile):
         # 0..n predicates list
         for predicate, key, logf in (
                 (DCT.isVersionOf, 'is_version_of', log.debug),
-                ):
+        ):
             valueList = self._object_value_list(dataset_ref, predicate)
             if valueList:
                 self._remove_from_extra(dataset_dict, key)
@@ -156,11 +160,11 @@ class ItalianDCATAPProfile(RDFProfile):
             if alternate_id:
                 alt_ids.append(alternate_id)
         if extras_alt_identifiers and alt_ids:
-            log.warn("Two separate alternate identifers got for %s: %s and %s",
-                             dataset_dict.get('id'),
-                             alt_ids,
-                             extras_alt_identifiers)
-        # let's reuse 
+            log.warning('Two separate alternate identifers got for %s: %s and %s',
+                        dataset_dict.get('id'),
+                        alt_ids,
+                        extras_alt_identifiers)
+        # let's reuse
         if extras_alt_identifiers and not alt_ids:
             try:
                 validators.dcatapit_alternate_identifier(extras_alt_identifiers, {})
@@ -184,31 +188,31 @@ class ItalianDCATAPProfile(RDFProfile):
         temporal_coverage = self._get_temporal_coverage(dataset_ref)
         if temporal_coverage:
             dataset_dict['temporal_coverage'] = json.dumps(temporal_coverage)
-        
-        #start, end = self._time_interval(dataset_ref, DCT.temporal)
+
+        # start, end = self._time_interval(dataset_ref, DCT.temporal)
 
         # URI 0..1
         for predicate, key, base_uri in (
                 (DCT.accrualPeriodicity, 'frequency', FREQ_BASE_URI),
-                ):
+        ):
             valueRef = self._object_value(dataset_ref, predicate)
             if valueRef:
                 self._remove_from_extra(dataset_dict, key)
                 value = self._strip_uri(valueRef, base_uri)
                 dataset_dict[key] = value
             else:
-                log.warn('No %s found for dataset "%s"', predicate, dataset_dict.get('title', '---'))
+                log.warning('No %s found for dataset "%s"', predicate, dataset_dict.get('title', '---'))
 
         # URI lists
         for predicate, key, base_uri in (
                 (DCT.language, 'language', LANG_BASE_URI),
-                ):
+        ):
             self._remove_from_extra(dataset_dict, key)
             valueRefList = self._object_value_list(dataset_ref, predicate)
             valueList = [self._strip_uri(valueRef, base_uri) for valueRef in valueRefList]
             value = ','.join(valueList)
             if len(valueList) > 1:
-                value = '{'+value+'}'
+                value = '{' + value + '}'
             dataset_dict[key] = value
 
         self._parse_themes(dataset_dict, dataset_ref)
@@ -218,26 +222,26 @@ class ItalianDCATAPProfile(RDFProfile):
         geonames_url = None
 
         for spatial in self.g.objects(dataset_ref, DCT.spatial):
-           for spatial_literal in self.g.objects(spatial, DCATAPIT.geographicalIdentifier):
-               spatial_value = spatial_literal.value
-               if GEO_BASE_URI in spatial_value:
-                   spatial_tags.append(self._strip_uri(spatial_value, GEO_BASE_URI))
-               else:
-                   if geonames_url:
-                       log.warn("GeoName URL is already set to %s, value %s will not be imported", geonames_url, spatial_value)
-                   else:
-                       geonames_url = spatial_value
+            for spatial_literal in self.g.objects(spatial, DCATAPIT.geographicalIdentifier):
+                spatial_value = spatial_literal.value
+                if GEO_BASE_URI in spatial_value:
+                    spatial_tags.append(self._strip_uri(spatial_value, GEO_BASE_URI))
+                else:
+                    if geonames_url:
+                        log.warning('GeoName URL is already set to %s, value %s will not be imported', geonames_url, spatial_value)
+                    else:
+                        geonames_url = spatial_value
 
         if len(spatial_tags) > 0:
             value = ','.join(spatial_tags)
             if len(spatial_tags) > 1:
-                value = '{'+value+'}'
+                value = '{' + value + '}'
             dataset_dict['geographical_name'] = value
 
         if geonames_url:
             dataset_dict['geographical_geonames_url'] = geonames_url
 
-        ### Collect strings from multilang fields
+        # Collect strings from multilang fields
 
         # { 'field_name': {'it': 'italian loc', 'de': 'german loc', ...}, ...}
         localized_dict = {}
@@ -245,7 +249,7 @@ class ItalianDCATAPProfile(RDFProfile):
         for key, predicate in (
                 ('title', DCT.title),
                 ('notes', DCT.description),
-                ):
+        ):
             self._collect_multilang_strings(dataset_dict, key, dataset_ref, predicate, localized_dict)
 
         # Agents
@@ -255,9 +259,9 @@ class ItalianDCATAPProfile(RDFProfile):
                 # for backward compatibility only,
                 # new format is handled with self._parse_creators() below
                 (DCT.creator, 'creator'),
-                ):
+        ):
             agent_dict, agent_loc_dict = self._parse_agent(dataset_ref, predicate, basekey)
-            for key,v in agent_dict.iteritems():
+            for key, v in agent_dict.items():
                 self._remove_from_extra(dataset_dict, key)
                 dataset_dict[key] = v
             localized_dict.update(agent_loc_dict)
@@ -270,7 +274,7 @@ class ItalianDCATAPProfile(RDFProfile):
             from_old['creator_name'] = {DEFAULT_LANG: dataset_dict['creator_name']}
         if dataset_dict.get('creator_identifier'):
             from_old['creator_identifier'] = dataset_dict['creator_identifier']
-    
+
         # do not add old format if the same identifier is in new data
         # this will avoid duplicates in re-harvesting
         from_old_add = False
@@ -293,23 +297,23 @@ class ItalianDCATAPProfile(RDFProfile):
             log.debug('Found multilang metadata')
             dataset_dict[LOCALISED_DICT_NAME_BASE] = localized_dict
 
-        ### Resources
+        # Resources
 
         resources_loc_dict = {}
 
         # In ckan, the license is a dataset property, not resource's
         # We'll collect all of the resources' licenses, then we will postprocess them
-        licenses = [] #  contains tuples (url, name)
+        licenses = []  # contains tuples (url, name)
 
         for resource_dict in dataset_dict.get('resources', []):
             resource_uri = resource_dict['uri']
             if not resource_uri:
-                log.warn("URI not defined for resource %s", resource_dict['name'])
+                log.warning('URI not defined for resource %s', resource_dict['name'])
                 continue
 
             distribution = URIRef(resource_uri)
             if not (dataset_ref, DCAT.distribution, distribution) in self.g:
-                log.warn("Distribution not found in dataset %s", resource_uri)
+                log.warning('Distribution not found in dataset %s', resource_uri)
                 continue
 
             # fix the CKAN resource's url set by the dcat extension
@@ -318,42 +322,46 @@ class ItalianDCATAPProfile(RDFProfile):
 
             # URI 0..1
             for predicate, key, base_uri in (
-                    (DCT['format'], 'format', FORMAT_BASE_URI), # Format
-                    ):
+                    (DCT['format'], 'format', FORMAT_BASE_URI),  # Format
+            ):
                 valueRef = self._object_value(distribution, predicate)
                 if valueRef:
                     value = self._strip_uri(valueRef, base_uri)
                     resource_dict[key] = value
                 else:
-                    log.warn('No %s found for resource "%s"::"%s"',
-                             predicate,
-                             dataset_dict.get('title', '---'),
-                             resource_dict.get('name', '---'))
+                    log.warning('No %s found for resource "%s"::"%s"',
+                                predicate,
+                                dataset_dict.get('title', '---'),
+                                resource_dict.get('name', '---'))
 
             # License
             license = self._object(distribution, DCT.license)
             if license:
 
-                license_uri = unicode(license)
+                license_uri = str(license)
                 license_dct = self._object_value(license, DCT.type)
-                license_names = self.g.objects(license, FOAF.name) # may be either the title or the id
+                license_names = self.g.objects(license, FOAF.name)  # may be either the title or the id
                 license_version = self._object_value(license, FOAF.versionInfo)
 
                 names = {}
                 prefname = None
                 for l in license_names:
                     if l.language:
-                        names[l.language] = unicode(l)
+                        names[l.language] = str(l)
                     else:
-                        prefname = unicode(l)
-                
+                        prefname = str(l)
+
                 license_type = interfaces.get_license_from_dcat(license_uri,
                                                                 license_dct,
                                                                 prefname,
                                                                 **names)
-                if license_version and unicode(license_version) != license_type.version:
-                    log.warn("License version mismatch between %s and %s", license_versions, license_type.version)
-                    
+                if license_version and str(license_version) != license_type.version:
+                    log.warning(
+                        'License version mismatch between %s and %s',
+                        license_version,
+                        license_type.version
+                    )
+
                 resource_dict['license_type'] = license_type.uri
                 try:
                     license_name = names['it']
@@ -362,14 +370,14 @@ class ItalianDCATAPProfile(RDFProfile):
                         license_name = names['en']
                     except KeyError:
                         license_name = names.values()[0] if names else license_type.default_name
-                    
-                log.info("Setting lincense %s %s %s", license_type.uri, license_name, license_type.document_uri)
-                    
+
+                log.info('Setting lincense %s %s %s', license_type.uri, license_name, license_type.document_uri)
+
                 licenses.append((license_type.uri, license_name, license_type.document_uri))
             else:
-                log.warn('No license found for resource "%s"::"%s"',
-                         dataset_dict.get('title', '---'),
-                         resource_dict.get('name', '---'))
+                log.warning('No license found for resource "%s"::"%s"',
+                            dataset_dict.get('title', '---'),
+                            resource_dict.get('name', '---'))
 
             # Multilang
             loc_dict = {}
@@ -377,7 +385,7 @@ class ItalianDCATAPProfile(RDFProfile):
             for key, predicate in (
                     ('name', DCT.title),
                     ('description', DCT.description),
-                    ):
+            ):
                 self._collect_multilang_strings(resource_dict, key, distribution, predicate, loc_dict)
 
             if len(loc_dict) > 0:
@@ -392,13 +400,17 @@ class ItalianDCATAPProfile(RDFProfile):
         # license_ids = {id for url,id in licenses}  # does not work in python 2.6
         license_ids = set()
         for lic_uri, id, doc_uri in licenses:
-           license_ids.add(id)
+            license_ids.add(id)
 
         if len(license_ids) == 1:
             dataset_dict['license_id'] = license_ids.pop()
             # TODO Map to internally defined licenses
-        else:            
-            log.warn('%d licenses found for dataset "%s"', len(license_ids), dataset_dict.get('title', '---'))
+        else:
+            log.warning(
+                '%d licenses found for dataset "%s"',
+                len(license_ids),
+                dataset_dict.get('title', '---')
+            )
             dataset_dict['license_id'] = 'notspecified'
 
         return dataset_dict
@@ -427,7 +439,7 @@ class ItalianDCATAPProfile(RDFProfile):
             # use as fallback
             if not base_dict.get(key):
                 base_dict[key] = value
-                
+
     def _parse_themes(self, dataset, ref):
         self._remove_from_extra(dataset, 'theme')
         themes = list(self.g.objects(ref, DCAT.theme))
@@ -437,7 +449,7 @@ class ItalianDCATAPProfile(RDFProfile):
             theme_name = str(t).split('/')[-1]
             try:
                 subthemes_for_theme = Subtheme.for_theme_values(theme_name)
-            except ValueError, err:
+            except ValueError as err:
                 subthemes_for_theme = []
 
             row = {'theme': theme_name,
@@ -449,7 +461,6 @@ class ItalianDCATAPProfile(RDFProfile):
             out.append(row)
 
         dataset['theme'] = json.dumps(out)
-
 
     def _remove_from_extra(self, dataset_dict, key):
 
@@ -473,7 +484,7 @@ class ItalianDCATAPProfile(RDFProfile):
     def _set_temporal_coverage(self, graph, dataset_dict, dataset_ref):
         g = graph
         d = dataset_dict
-        
+
         # clean from dcat's data, to avoid duplicates
         for obj in g.objects(dataset_ref, DCT.temporal):
             g.remove((dataset_ref, DCT.temporal, obj,))
@@ -484,7 +495,7 @@ class ItalianDCATAPProfile(RDFProfile):
             temp_cov = json.loads(temp_cov)
         else:
             temp_cov = []
-        
+
         if d.get('temporal_start'):
             temporal_coverage_item = {'temporal_start': d['temporal_start']}
             if d.get('temporal_end'):
@@ -511,7 +522,7 @@ class ItalianDCATAPProfile(RDFProfile):
     def _get_temporal_coverage(self, dataset_ref):
         pred = DCT.temporal
         out = []
-        
+
         for interval in self.g.objects(dataset_ref, pred):
             # Fist try the schema.org way
             start = self._object_value(interval, SCHEMA.startDate)
@@ -526,10 +537,10 @@ class ItalianDCATAPProfile(RDFProfile):
                                                    TIME.hasEnd)]
             if start_nodes:
                 start = self._object_value(start_nodes[0],
-                                                TIME.inXSDDateTime)
+                                           TIME.inXSDDateTime)
             if end_nodes:
                 end = self._object_value(end_nodes[0],
-                                              TIME.inXSDDateTime)
+                                         TIME.inXSDDateTime)
 
             if start or end:
                 out.append({'temporal_start': start,
@@ -538,20 +549,20 @@ class ItalianDCATAPProfile(RDFProfile):
         return out
 
     def _conforms_to(self, conforms_id):
-        ref_docs = [ unicode(val) for val in self.g.objects(conforms_id, DCATAPIT.referenceDocumentation)]
+        ref_docs = [str(val) for val in self.g.objects(conforms_id, DCATAPIT.referenceDocumentation)]
 
-        out = {'identifier': unicode(self.g.value(conforms_id, DCT.identifier)),
+        out = {'identifier': str(self.g.value(conforms_id, DCT.identifier)),
                'title': {},
                'description': {},
                'referenceDocumentation': ref_docs}
         if isinstance(conforms_id, (URIRef, Literal,)):
-            out['uri'] = unicode(conforms_id)
+            out['uri'] = str(conforms_id)
 
         for t in self.g.objects(conforms_id, DCT.title):
-            out['title'][t.language] = unicode(t)
+            out['title'][t.language] = str(t)
 
         for t in self.g.objects(conforms_id, DCT.description):
-            out['description'][t.language] = unicode(t)
+            out['description'][t.language] = str(t)
 
         return out
 
@@ -562,20 +573,21 @@ class ItalianDCATAPProfile(RDFProfile):
         if not identifier:
             return out
 
-        out['identifier'] = unicode(identifier)
+        out['identifier'] = str(identifier)
 
         predicate, basekey = DCT.creator, 'creator'
         agent_dict, agent_loc_dict = self._parse_agent(alt_id, predicate, basekey)
         agent = {}
         for k, v in agent_dict.items():
-            new_k = 'agent_{}'.format(k[len(basekey)+1:])
+            new_k = 'agent_{}'.format(k[len(basekey) + 1:])
             agent[new_k] = v
-        
+
         out['agent'] = agent
         if agent_loc_dict.get('creator_name'):
             out['agent']['agent_name'] = agent_loc_dict['creator_name']
-        
+
         return out
+
     def _parse_creators(self, dataset_ref):
         out = []
         for cref in self.g.objects(dataset_ref, DCT.creator):
@@ -584,17 +596,17 @@ class ItalianDCATAPProfile(RDFProfile):
             creator_name = {}
             for obj in self.g.objects(cref, FOAF.name):
                 if obj.language:
-                    creator_name[unicode(obj.language)] = unicode(obj)
+                    creator_name[str(obj.language)] = str(obj)
                 else:
-                    creator_name[DEFAULT_LANG] = unicode(obj)
+                    creator_name[DEFAULT_LANG] = str(obj)
             creator['creator_name'] = creator_name
-            out.append(creator) 
+            out.append(creator)
         return out
 
     def _parse_agent(self, subject, predicate, base_name):
 
         agent_dict = {}
-        loc_dict= {}
+        loc_dict = {}
 
         for agent in self.g.objects(subject, predicate):
             agent_dict[base_name + '_identifier'] = self._object_value(agent, DCT.identifier)
@@ -610,40 +622,40 @@ class ItalianDCATAPProfile(RDFProfile):
         title = dataset_dict.get('title')
 
         # extract fields from extras, just in case
-        schema_fields = schema.get_custom_package_schema() 
+        schema_fields = schema.get_custom_package_schema()
         for fdef in schema_fields:
             for eidx, ex in enumerate(dataset_dict.get('extras') or []):
                 if ex['key'] == fdef['name']:
                     dataset_dict['extras'].pop(eidx)
                     dataset_dict[fdef['name']] = ex['value']
                     break
-        
+
         g = self.g
 
-        for prefix, namespace in it_namespaces.iteritems():
+        for prefix, namespace in it_namespaces.items():
             g.bind(prefix, namespace)
 
-        ### add a further type for the Dataset node
+        # add a further type for the Dataset node
         g.add((dataset_ref, RDF.type, DCATAPIT.Dataset))
 
-        ### replace themes
+        # replace themes
         value = self._get_dict_value(dataset_dict, 'theme')
         self._add_themes(dataset_ref, value)
 
-        ### replace languages
+        # replace languages
         value = self._get_dict_value(dataset_dict, 'language')
         if value:
             for lang in value.split(','):
                 self.g.remove((dataset_ref, DCT.language, Literal(lang)))
-                lang = lang.replace('{','').replace('}','')
+                lang = lang.replace('{', '').replace('}', '')
                 self.g.add((dataset_ref, DCT.language, URIRef(LANG_BASE_URI + lang)))
                 # self._add_concept(LANG_CONCEPTS, lang)
 
-        ### add spatial (EU URI)
+        # add spatial (EU URI)
         value = self._get_dict_value(dataset_dict, 'geographical_name')
         if value:
             for gname in value.split(','):
-                gname = gname.replace('{','').replace('}','')
+                gname = gname.replace('{', '').replace('}', '')
 
                 dct_location = BNode()
                 self.g.add((dataset_ref, DCT.spatial, dct_location))
@@ -663,7 +675,7 @@ class ItalianDCATAPProfile(RDFProfile):
                     self.g.add((concept, SKOS.prefLabel, Literal(gname)))
                     self.g.add((dct_location, LOCN.geographicalName, concept))
 
-        ### add spatial (GeoNames)
+        # add spatial (GeoNames)
         value = self._get_dict_value(dataset_dict, 'geographical_geonames_url')
         if value:
             dct_location = BNode()
@@ -672,13 +684,13 @@ class ItalianDCATAPProfile(RDFProfile):
             self.g.add((dct_location, RDF['type'], DCT.Location))
             self.g.add((dct_location, DCATAPIT.geographicalIdentifier, Literal(value)))
 
-        ### replace periodicity
-        self._remove_node(dataset_dict, dataset_ref,  ('frequency', DCT.accrualPeriodicity, None, Literal))
+        # replace periodicity
+        self._remove_node(dataset_dict, dataset_ref, ('frequency', DCT.accrualPeriodicity, None, Literal))
         self._add_uri_node(dataset_dict, dataset_ref, ('frequency', DCT.accrualPeriodicity, DEFAULT_FREQ_CODE, URIRef), FREQ_BASE_URI)
         # self._add_concept(FREQ_CONCEPTS, dataset_dict.get('frequency', DEFAULT_VOCABULARY_KEY))
 
-        ### replace landing page
-        self._remove_node(dataset_dict, dataset_ref,  ('url', DCAT.landingPage, None, URIRef))
+        # replace landing page
+        self._remove_node(dataset_dict, dataset_ref, ('url', DCAT.landingPage, None, URIRef))
         landing_page_uri = None
         if dataset_dict.get('name'):
             landing_page_uri = '{0}/dataset/{1}'.format(catalog_uri().rstrip('/'), dataset_dict['name'])
@@ -687,19 +699,19 @@ class ItalianDCATAPProfile(RDFProfile):
 
         self.g.add((dataset_ref, DCAT.landingPage, URIRef(landing_page_uri)))
 
-        ### conformsTo
+        # conformsTo
         self.g.remove((dataset_ref, DCT.conformsTo, None))
         value = self._get_dict_value(dataset_dict, 'conforms_to')
         if value:
             try:
                 conforms_to = json.loads(value)
-            except (TypeError, ValueError,):
-                log.warn("Cannot deserialize DCATAPIT:conformsTo value: %s", value)
+            except (TypeError, ValueError):
+                log.warning('Cannot deserialize DCATAPIT:conformsTo value: %s', value)
                 conforms_to = []
 
             for item in conforms_to:
                 standard = URIRef(item['uri']) if item.get('uri') else BNode()
-                
+
                 self.g.add((dataset_ref, DCT.conformsTo, standard))
                 self.g.add((standard, RDF['type'], DCT.Standard))
                 self.g.add((standard, RDF['type'], DCATAPIT.Standard))
@@ -717,14 +729,14 @@ class ItalianDCATAPProfile(RDFProfile):
                 for reference_document in (item.get('referenceDocumentation') or []):
                     self.g.add((standard, DCATAPIT.referenceDocumentation, URIRef(reference_document)))
 
-        ### ADMS:identifier alternative identifiers
+        # ADMS:identifier alternative identifiers
         self.g.remove((dataset_ref, ADMS.identifier, None,))
 
         # alternate_identifier sometimes resides in extras
 
         try:
             alt_ids = json.loads(dataset_dict['alternate_identifier'])
-        except (KeyError, TypeError, ValueError,):
+        except (KeyError, TypeError, ValueError):
             alt_ids = []
 
         for alt_identifier in alt_ids:
@@ -750,7 +762,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
         self._set_temporal_coverage(self.g, dataset_dict, dataset_ref)
 
-        ### publisher
+        # publisher
 
         # DCAT by default creates this node
         # <dct:publisher>
@@ -759,18 +771,16 @@ class ItalianDCATAPProfile(RDFProfile):
         #   </foaf:Organization>
         # </dct:publisher>
 
-        for s,p,o in g.triples( (dataset_ref, DCT.publisher, None) ):
-            #log.info("Removing publisher %r", o)
+        for s, p, o in g.triples((dataset_ref, DCT.publisher, None)):
+            # log.info("Removing publisher %r", o)
             g.remove((s, p, o))
 
         publisher_ref = self._add_agent(dataset_dict, dataset_ref, 'publisher', DCT.publisher, use_default_lang=True)
 
-
-        ### Autore : Agent
+        # Autore : Agent
         self._add_creators(dataset_dict, dataset_ref)
 
-
-        ### Point of Contact
+        # Point of Contact
 
         # <dcat:contactPoint rdf:resource="http://dati.gov.it/resource/PuntoContatto/contactPointRegione_r_liguri"/>
 
@@ -781,7 +791,6 @@ class ItalianDCATAPProfile(RDFProfile):
         #    <vcard:hasEmail rdf:resource="mailto:infoter@regione.liguria.it"/>
         #    <vcard:fn>Regione Liguria - Sportello Cartografico</vcard:fn>
         # </dcatapit:Organization>
-
 
         # TODO: preserve original info if harvested
 
@@ -816,8 +825,8 @@ class ItalianDCATAPProfile(RDFProfile):
                                      'include_extras': True,
                                      'include_followers': False}
                                     )
-            except Exception, err:
-                log.warning("Cannot get org for %s: %s", org_id, err, exc_info=err)
+            except Exception as err:
+                log.warning('Cannot get org for %s: %s', org_id, err, exc_info=err)
 
         org_uri = organization_uri(org_dict)
 
@@ -836,13 +845,12 @@ class ItalianDCATAPProfile(RDFProfile):
         if 'site' in org_dict.keys():
             g.add((poc, VCARD.hasURL, Literal(org_dict.get('site'))))
 
-
-        ### Rights holder : Agent,
-        ### holder_ref keeps graph reference to holder subject
-        ### holder_use_dataset is a flag if holder info is taken from dataset (or organization)
+        # Rights holder : Agent,
+        # holder_ref keeps graph reference to holder subject
+        # holder_use_dataset is a flag if holder info is taken from dataset (or organization)
         holder_ref, holder_use_dataset = self._add_right_holder(dataset_dict, org_dict, dataset_ref)
 
-        ### Multilingual
+        # Multilingual
         # Add localized entries in dataset
         # TODO: should we remove the non-localized nodes?
 
@@ -859,10 +867,10 @@ class ItalianDCATAPProfile(RDFProfile):
             _org_name = interfaces.get_for_group_or_organization(dataset_dict['owner_org'])
             if _org_name.get('title'):
                 loc_dict['holder_name'] = _org_name['title']
-            
+
         # rights holder should use special trick to avoid duplicated foaf:name entries
         if holder_use_dataset and holder_ref:
-            self._add_multilang_values(loc_dict, {'holder_name':(holder_ref, FOAF.name)}, exclude_default_lang=dataset_is_local)
+            self._add_multilang_values(loc_dict, {'holder_name': (holder_ref, FOAF.name)}, exclude_default_lang=dataset_is_local)
 
         self._add_multilang_values(loc_dict, loc_package_mapping)
         if not holder_use_dataset and holder_ref:
@@ -870,7 +878,7 @@ class ItalianDCATAPProfile(RDFProfile):
             loc_package_mapping = {'name': (holder_ref, FOAF.name)}
             self._add_multilang_values(loc_dict, loc_package_mapping)
 
-        ### Resources
+        # Resources
         for resource_dict in dataset_dict.get('resources', []):
 
             distribution = URIRef(resource_uri(resource_dict))  # TODO: preserve original info if harvested
@@ -878,19 +886,17 @@ class ItalianDCATAPProfile(RDFProfile):
             # Add the DCATAPIT type
             g.add((distribution, RDF.type, DCATAPIT.Distribution))
 
-            ### format
-            self._remove_node(resource_dict, distribution,  ('format', DCT['format'], None, Literal))
+            # format
+            self._remove_node(resource_dict, distribution, ('format', DCT['format'], None, Literal))
             if not self._add_uri_node(resource_dict, distribution, ('distribution_format', DCT['format'], None, URIRef), FORMAT_BASE_URI):
                 guessed_format = guess_format(resource_dict)
                 if guessed_format:
                     self.g.add((distribution, DCT['format'], URIRef(FORMAT_BASE_URI + guessed_format)))
                 else:
-                    log.warn('No format for resource: %s / %s', dataset_dict.get('title', 'N/A'), resource_dict.get('description', 'N/A') )
+                    log.warning('No format for resource: %s / %s', dataset_dict.get('title', 'N/A'), resource_dict.get('description', 'N/A'))
                     self.g.add((distribution, DCT['format'], URIRef(FORMAT_BASE_URI + DEFAULT_FORMAT_CODE)))
 
-
-            
-            ### license
+            # license
             # <dct:license rdf:resource="http://creativecommons.org/licenses/by/3.0/it/"/>
             #
             # <dcatapit:LicenseDocument rdf:about="http://creativecommons.org/licenses/by/3.0/it/">
@@ -916,10 +922,10 @@ class ItalianDCATAPProfile(RDFProfile):
                 g.add((license, OWL.versionInfo, Literal(license_version)))
             for lang, name in names.items():
                 g.add((license, FOAF.name, Literal(name, lang=lang)))
-            
+
             g.add((distribution, DCT.license, license))
 
-            ### Multilingual
+            # Multilingual
             # Add localized entries in resource
             # TODO: should we remove the not-localized nodes?
 
@@ -936,19 +942,19 @@ class ItalianDCATAPProfile(RDFProfile):
         if loc_dict:
             default_lang = get_lang() or DEFAULT_LANG
             default_lang = default_lang.split('_')[0]
-            for field_name, lang_dict in loc_dict.iteritems():
+            for field_name, lang_dict in loc_dict.items():
                 ref, pred = loc_mapping.get(field_name, (None, None))
                 if not pred:
-                    log.warn('Multilang field not mapped "%s"', field_name)
+                    log.warning('Multilang field not mapped "%s"', field_name)
                     continue
-                for lang, value in lang_dict.iteritems():
+                for lang, value in lang_dict.items():
                     lang = lang.split('_')[0]  # rdflib is quite picky in lang names
-                    
+
                     if exclude_default_lang and lang == default_lang:
                         continue
                     self.g.add((ref, pred, Literal(value, lang=lang)))
         else:
-            log.warn("No mulitlang source data")
+            log.warning('No mulitlang source data')
 
     def _add_right_holder(self, dataset_dict, org_dict, ref):
         basekey = 'holder'
@@ -983,8 +989,8 @@ class ItalianDCATAPProfile(RDFProfile):
         """
         try:
             themes = json.loads(raw_value)
-        except (TypeError, ValueError,):
-            if isinstance(raw_value, (str, unicode,)):
+        except (TypeError, ValueError):
+            if isinstance(raw_value, str):
                 themes = [{'theme': r, 'subthemes': []} for r in raw_value.strip('{}').split(',')]
             elif isinstance(raw_value, (list, tuple,)):
                 themes = raw_value
@@ -998,16 +1004,15 @@ class ItalianDCATAPProfile(RDFProfile):
                 theme_name = theme['theme']
                 subthemes = theme.get('subthemes') or []
                 theme_ref = URIRef(theme_name)
-                               
+
                 self.g.remove((dataset_ref, DCAT.theme, theme_ref))
 
                 self.g.add((dataset_ref, DCAT.theme, URIRef(THEME_BASE_URI + theme_name)))
                 self._add_concept(THEME_CONCEPTS, theme_name)
                 self._add_subthemes(dataset_ref, subthemes)
         else:
-                self.g.add((dataset_ref, DCAT.theme, URIRef(THEME_BASE_URI + DEFAULT_THEME_KEY)))
-                self._add_concept(THEME_CONCEPTS, DEFAULT_THEME_KEY)
-
+            self.g.add((dataset_ref, DCAT.theme, URIRef(THEME_BASE_URI + DEFAULT_THEME_KEY)))
+            self._add_concept(THEME_CONCEPTS, DEFAULT_THEME_KEY)
 
     def _add_subthemes(self, ref, subthemes):
         """
@@ -1018,7 +1023,7 @@ class ItalianDCATAPProfile(RDFProfile):
             sref = URIRef(subtheme)
             sthm = Subtheme.get(subtheme)
             if not sthm:
-                print("No subtheme for {}".format(subtheme))
+                log.info(f'No subtheme for {subtheme}')
                 continue
 
             labels = sthm.get_names_dict()
@@ -1042,7 +1047,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
         try:
             creators = json.loads(creators_data)
-        except (TypeError, ValueError,), err:
+        except (TypeError, ValueError) as err:
             creators = []
         if dataset_dict.get('creator_identifier') or dataset_dict.get('creator_name'):
             old_creator = {}
@@ -1078,7 +1083,7 @@ class ItalianDCATAPProfile(RDFProfile):
             agent_name, agent_id = agent_data
         except (TypeError, ValueError, IndexError,):
             agent_name = self._get_dict_value(_dict, basekey + '_name', 'N/A')
-            agent_id = self._get_dict_value(_dict, basekey + '_identifier','N/A')
+            agent_id = self._get_dict_value(_dict, basekey + '_identifier', 'N/A')
 
         agent = BNode()
         rlang = get_lang() or DEFAULT_LANG
@@ -1091,9 +1096,9 @@ class ItalianDCATAPProfile(RDFProfile):
         def _found_no_lang():
             found_no_lang = False
             for val in self.g.objects(agent, FOAF.name):
-                 if not hasattr(val, 'lang') or not val.lang:
-                     found_no_lang = True
-                     break
+                if not hasattr(val, 'lang') or not val.lang:
+                    found_no_lang = True
+                    break
             return found_no_lang
         if isinstance(agent_name, dict):
             for lang, aname in agent_name.items():
@@ -1154,7 +1159,7 @@ class ItalianDCATAPProfile(RDFProfile):
             concept = URIRef(base_uri + tag)
             self.g.add((concept, RDF['type'], SKOS.Concept))
 
-            for lang, label in loc_dict.iteritems():
+            for lang, label in loc_dict.items():
                 lang = lang.split('_')[0]  # rdflib is quite picky in lang names
                 self.g.add((concept, SKOS.prefLabel, Literal(label, lang=lang)))
 
@@ -1166,18 +1171,18 @@ class ItalianDCATAPProfile(RDFProfile):
 
         g = self.g
 
-        for prefix, namespace in it_namespaces.iteritems():
+        for prefix, namespace in it_namespaces.items():
             g.bind(prefix, namespace)
 
-        ### Add a further type for the Catalog node
+        # Add a further type for the Catalog node
         g.add((catalog_ref, RDF.type, DCATAPIT.Catalog))
 
-        ### Replace homepage
+        # Replace homepage
         # Try to avoid to have the Catalog URIRef identical to the homepage URI
         g.remove((catalog_ref, FOAF.homepage, URIRef(config.get('ckan.site_url'))))
         g.add((catalog_ref, FOAF.homepage, URIRef(catalog_uri() + '/#')))
 
-        ### publisher
+        # publisher
         pub_agent_name = config.get('ckanext.dcatapit_configpublisher_name', 'unknown')
         pub_agent_id = config.get('ckanext.dcatapit_configpublisher_code_identifier', 'unknown')
 
@@ -1188,12 +1193,12 @@ class ItalianDCATAPProfile(RDFProfile):
         self.g.add((agent, FOAF.name, Literal(pub_agent_name)))
         self.g.add((agent, DCT.identifier, Literal(pub_agent_id)))
 
-        ### issued date
+        # issued date
         issued = config.get('ckanext.dcatapit_config.catalog_issued', '1900-01-01')
         if issued:
             self._add_date_triple(catalog_ref, DCT.issued, issued)
 
-        ### theme taxonomy
+        # theme taxonomy
 
         # <dcat:themeTaxonomy rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
 
@@ -1206,7 +1211,7 @@ class ItalianDCATAPProfile(RDFProfile):
         self.g.add((taxonomy, RDF.type, SKOS.ConceptScheme))
         self.g.add((taxonomy, DCT.title, Literal('Il Vocabolario Data Theme', lang='it')))
 
-        ### language
+        # language
         langs = config.get('ckan.locales_offered', 'it')
 
         for lang_offered in langs.split():
@@ -1248,6 +1253,6 @@ def guess_format(resource_dict):
     ret = format_mapping.get(f, None)
 
     if not ret:
-       log.info('Mapping not found for format %s', f)
+        log.info('Mapping not found for format %s', f)
 
     return ret

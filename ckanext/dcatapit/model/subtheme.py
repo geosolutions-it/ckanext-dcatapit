@@ -3,21 +3,16 @@
 
 import logging
 
-from sqlalchemy import types, Column, ForeignKey, Index, Table
-from sqlalchemy import orm, and_, or_
+from ckan.lib.base import config
+from ckan.model import Session, Tag, Vocabulary, meta, repo
+from rdflib import Graph
+from rdflib.namespace import OWL, RDF, SKOS
+from sqlalchemy import Column, ForeignKey, Index, and_, or_, orm, types
 from sqlalchemy.exc import SQLAlchemyError as SAError
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 
-from rdflib.namespace import RDF, SKOS, OWL
-from rdflib import Graph, URIRef
-
 from ckanext.dcat.profiles import DCT
-from ckan.lib.base import config
-from ckan.model import Session, Tag, Vocabulary
-from ckan.model import meta, repo
-
 from ckanext.dcatapit.model.license import _Base
-
 
 log = logging.getLogger(__name__)
 
@@ -48,15 +43,16 @@ class ThemeToSubtheme(_Base, DeclarativeBase):
 
     @declared_attr
     def __table_args__(cls):
-        return (Index('{}_tag_subtheme_idx'.format(cls.__tablename__),
+        return (Index(f'{cls.__tablename__}_tag_subtheme_idx',
                       'subtheme_id', 'tag_id'),)
+
     @classmethod
     def get_vocabulary(cls):
         if cls.vocab is None:
             q = Session.query(Vocabulary).filter_by(name=cls.VOCAB_NAME)
             vocab = q.first()
             if not vocab:
-                raise ValueError("No vocabulary for {}".format(cls.VOCAB_NAME))
+                raise ValueError(f'No vocabulary for {cls.VOCAB_NAME}')
 
             cls.vocab = vocab
         return cls.vocab
@@ -66,7 +62,7 @@ class ThemeToSubtheme(_Base, DeclarativeBase):
         vocab = cls.get_vocabulary()
         tag = Session.query(Tag).filter_by(vocabulary_id=vocab.id, name=name).first()
         if not tag:
-            raise ValueError("No tag for {}".format(name))
+            raise ValueError(f'No tag for {name}')
         return tag
 
     @classmethod
@@ -91,7 +87,7 @@ class Subtheme(_Base, DeclarativeBase):
     @classmethod
     def q(cls):
         return Session.query(cls)
-    
+
     @classmethod
     def get(cls, uri):
         try:
@@ -103,9 +99,9 @@ class Subtheme(_Base, DeclarativeBase):
     def get_any(cls, value):
         q = cls.q()
         try:
-            return q.filter(or_(cls.uri==value,
-                                cls.identifier==value,
-                                cls.default_label==value)).one()
+            return q.filter(or_(cls.uri == value,
+                                cls.identifier == value,
+                                cls.default_label == value)).one()
         except SAError:
             return
 
@@ -137,15 +133,15 @@ class Subtheme(_Base, DeclarativeBase):
         self.path = path
 
     def __str__(self):
-        return "Subtheme {} [{}] for {} themes".format(self.uri, self.default_label, ','.join([t.name for t in self.themes]))
+        return 'Subtheme {} [{}] for {} themes'.format(
+            self.uri, self.default_label, ','.join([t.name for t in self.themes])
+        )
 
     @classmethod
     def add_for_theme(cls, g, theme_ref, subtheme_ref, parent=None):
         theme = cls.normalize_theme(theme_ref)
         existing = cls.q().filter_by(uri=str(subtheme_ref)).first()
         theme_tag = ThemeToSubtheme.get_tag(theme)
-        
-        revision = getattr(Session, 'revision', None) or repo.new_revision()
 
         # several themes may refer to this subtheme, so we'll just return
         # exising instance
@@ -153,15 +149,14 @@ class Subtheme(_Base, DeclarativeBase):
             if not theme_tag in existing.themes:
                 existing.themes.append(theme_tag)
             Session.flush()
-            Session.revision = revision
-            log.error("Subtheme %s already exists. Skipping", subtheme_ref)
+            log.error(f'Subtheme {subtheme_ref} already exists. Skipping')
             return existing
 
         labels = {}
         for l in g.objects(subtheme_ref, SKOS.prefLabel):
-            labels[l.language] = unicode(l)
+            labels[l.language] = str(l)
         if not labels:
-            log.error("NO labels for %s. Skipping", subtheme_ref)
+            log.error(f'NO labels for {subtheme_ref}. Skipping')
             return
         version = g.value(subtheme_ref, OWL.versionInfo) or ''
         identifier = g.value(subtheme_ref, DCT.identifier) or ''
@@ -175,7 +170,6 @@ class Subtheme(_Base, DeclarativeBase):
         inst.update_path()
         Session.add(inst)
         Session.flush()
-        Session.revision = revision
 
         if parent is None:
             inst.parent_id = inst.id
@@ -189,7 +183,6 @@ class Subtheme(_Base, DeclarativeBase):
                               label=label)
             Session.add(l)
         Session.flush()
-        Session.revision = revision
         # handle children
 
         for child in g.objects(subtheme_ref, SKOS.hasTopConcept):
@@ -217,17 +210,17 @@ class Subtheme(_Base, DeclarativeBase):
             q = Session.query(cls, SubthemeLabel.label)\
                        .join(SubthemeLabel,
                              and_(SubthemeLabel.subtheme_id == cls.id,
-                                 SubthemeLabel.lang == lang))\
-                       .join(ThemeToSubtheme, 
-                            and_(ThemeToSubtheme.tag_id == tag.id,
-                                 ThemeToSubtheme.subtheme_id == cls.id))\
+                                  SubthemeLabel.lang == lang))\
+                       .join(ThemeToSubtheme,
+                             and_(ThemeToSubtheme.tag_id == tag.id,
+                                  ThemeToSubtheme.subtheme_id == cls.id))\
                        .order_by(cls.parent_id, cls.path)
 
         else:
-            q = Session.query(cls).join(ThemeToSubtheme, 
+            q = Session.query(cls).join(ThemeToSubtheme,
                                         and_(ThemeToSubtheme.tag_id == tag.id,
-                                        ThemeToSubtheme.subtheme_id == cls.id))\
-                                  .order_by(cls.parent_id, cls.path)
+                                             ThemeToSubtheme.subtheme_id == cls.id))\
+                .order_by(cls.parent_id, cls.path)
         return q
 
     @classmethod
@@ -251,6 +244,7 @@ class Subtheme(_Base, DeclarativeBase):
                                cls.default_label.in_(subthemes)))
         return q
 
+
 class SubthemeLabel(_Base, DeclarativeBase):
     __tablename__ = 'dcatapit_subtheme_labels'
 
@@ -258,11 +252,11 @@ class SubthemeLabel(_Base, DeclarativeBase):
     subtheme_id = Column(types.Integer, ForeignKey(Subtheme.id))
     lang = Column(types.Unicode, nullable=False)
     label = Column(types.Unicode, nullable=False)
-    subtheme = orm.relationship(Subtheme, backref="names")
+    subtheme = orm.relationship(Subtheme, backref='names')
 
     @declared_attr
     def __table_args__(cls):
-        return (Index('{}_label_subtheme_idx'.format(cls.__tablename__),
+        return (Index(f'{cls.__tablename__}_label_subtheme_idx',
                       'subtheme_id', 'lang'),)
 
 

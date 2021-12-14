@@ -1,29 +1,34 @@
-import os
 import json
+
 import nose
+import pytest
+
 import ckanext.dcatapit.validators as validators
-from ckanext.dcatapit.tests.utils import load_themes
 
 eq_ = nose.tools.eq_
 ok_ = nose.tools.ok_
 
+
 def test_is_blank():
-    test_string = validators.is_blank("")
+    test_string = validators.is_blank('')
     eq_(test_string, True)
+
 
 def test_couple_validator():
     test_couple = 'test1,test2'
     values = validators.couple_validator(test_couple, None)
     eq_(len(values), 11)
 
+
 def test_no_number():
-    test_number = "test"
+    test_number = 'test'
 
     try:
         value = validators.no_number(test_number, None)
         ok_(value)
     except Exception:
         eq_(True, True)
+
 
 def test_dcatapit_id_unique():
     '''
@@ -45,15 +50,15 @@ def test_dcatapit_id_unique():
 
 
 def test_conforms_to():
-    
+
     # list of input, valid flag
     test_values = ((None, False,),
                    ('', False,),
-                   ('ABC,DEF', True,), # old notation
+                   ('ABC,DEF', True,),  # old notation
                    (json.dumps({'test': 'fail'}), False,),
                    (json.dumps([]), True,),
                    (json.dumps([{'identifier': 'abc'}, 'fail']), False,),
-                   (json.dumps([{'identifier': None,}]), False,),
+                   (json.dumps([{'identifier': None, }]), False,),
                    (json.dumps([{'identifier': 'abc'}]), True,),
                    (json.dumps([{'identifier': 'abc', 'title': ['some', 'description']}]), False),
                    (json.dumps([{'identifier': 'abc', 'title': 'title', 'referenceDocumentation': 'abc'}]), False,),
@@ -68,27 +73,26 @@ def test_conforms_to():
 
                    (json.dumps([{'identifier': 'abc',
                                  'title': {'en': 'title', 'it': 'title'},
-                                 'referenceDocumentation': ['http://abc.efg/'],},
+                                 'referenceDocumentation': ['http://abc.efg/'], },
                                 {'identifier': 'efg',
                                  'title': {'en': 'title', 'it': 'title'},
-                                 'referenceDocumentation': ['http://abc.efg/'],},
-                                 ]), True,),
+                                 'referenceDocumentation': ['http://abc.efg/'], },
+                                ]), True,),
                    )
-
 
     return _run_checks(test_values, validators.dcatapit_conforms_to)
 
 
 def test_alternate_identifier():
-    
+
     # list of input, valid flag
     test_values = ((None, False,),
                    ('', False,),
-                   ('ABC,DEF', True,), # old notation
+                   ('ABC,DEF', True,),  # old notation
                    (json.dumps({'test': 'fail'}), False,),
                    (json.dumps([]), True,),
                    (json.dumps([{'identifier': 'abc'}, 'fail']), False,),
-                   (json.dumps([{'identifier': None,}]), False,),
+                   (json.dumps([{'identifier': None, }]), False,),
                    (json.dumps([{'identifier': 'abc'}]), False,),
                    (json.dumps([{'identifier': 'abc', 'agent': {}}]), True,),
                    (json.dumps([{'identifier': 'abc', 'agent': {'agent_name': 'abc'}}]), False,),
@@ -101,7 +105,7 @@ def test_alternate_identifier():
                                  },
                                 {'identifier': 'efg',
                                  'agent': {}}
-                                 ]), True,),
+                                ]), True,),
                    )
 
     return _run_checks(test_values, validators.dcatapit_alternate_identifier)
@@ -112,12 +116,12 @@ def test_creators():
     # list of input, valid flag
     test_values = ((None, False,),
                    ('', False,),
-                   ('ABC,DEF', True,), # old notation
+                   ('ABC,DEF', True,),  # old notation
                    (json.dumps({'test': 'fail'}), False,),
                    (json.dumps([]), True,),
                    (json.dumps([{'test': 'fail'}]), False,),
                    (json.dumps([{'creator_identifier': 'abc'}, 'fail']), False,),
-                   (json.dumps([{'creator_identifier': None,}]), False,),
+                   (json.dumps([{'creator_identifier': None, }]), False,),
                    (json.dumps([{'creator_identifier': 'abc'}]), True,),
                    (json.dumps([{'creator_identifier': 'abc', 'creator_name': {}}]), True,),
                    (json.dumps([{'creator_identifier': 'abc', 'creator_name': 'abc'}]), False,),
@@ -130,13 +134,14 @@ def test_creators():
                    )
 
     return _run_checks(test_values, validators.dcatapit_creator)
-   
+
+
 def test_temporal_coverage():
 
     # list of input, valid flag
     test_values = ((None, False,),
                    ('', False,),
-                   ('ABC,DEF', False,), # old notation
+                   ('ABC,DEF', False,),  # old notation
                    (json.dumps({'test': 'fail'}), False,),
                    (json.dumps([]), True,),
                    (json.dumps([{'temporal_start': None, 'temporal_end': None}]), False,),
@@ -152,9 +157,9 @@ def test_temporal_coverage():
 
     return _run_checks(test_values, validators.dcatapit_temporal_coverage)
 
-
+@pytest.mark.usefixtures("with_request_context")
 def test_subthemes():
-
+    from ckanext.dcatapit.tests.utils import load_themes
     load_themes()
 
     test_values = ((None, False,),
@@ -169,8 +174,8 @@ def test_subthemes():
                                 {'theme': 'AGRI'}]), False,),
                    (json.dumps([{'theme': 'AGRI', 'subthemes': ['test', 'invalid']}]), False),
                    (json.dumps([{'theme': 'AGRI', 'subthemes': ['http://eurovoc.europa.eu/100253',
-                                                               'http://eurovoc.europa.eu/100258']}]), True,)
-                  )
+                                                                'http://eurovoc.europa.eu/100258']}]), True,)
+                   )
 
     return _run_checks(test_values, validators.dcatapit_subthemes)
 
@@ -182,6 +187,6 @@ def _run_checks(test_values, validator):
         try:
             value = validator(test_val, None)
             passed = True
-        except validators.Invalid, err:
+        except validators.Invalid as err:
             pass
         assert passed == is_valid, 'failed for {}: {}'.format(test_val, err or 'expected error, but got no validation error')
