@@ -114,8 +114,7 @@ jobs:
 
     - name: Install dependency - ckanext-multilang and its requirements...
       run: |
-        # git clone --branch master https://github.com/geosolutions-it/ckanext-multilang
-        git clone --branch feature/py3 https://github.com/korotkin/ckanext-multilang
+        git clone --branch master https://github.com/geosolutions-it/ckanext-multilang
         cd ckanext-multilang
         python3 setup.py develop
         # paster multilangdb initdb -c ../ckan/test-core.ini
