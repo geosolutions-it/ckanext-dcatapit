@@ -2,7 +2,7 @@ import logging
 import re
 
 from ckan.common import _
-from ckan.model import Session, meta
+from ckan.model import meta, DomainObject
 from rdflib import Graph
 from rdflib.namespace import SKOS, Namespace
 from sqlalchemy import Column, ForeignKey, orm, types
@@ -10,7 +10,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 log = logging.getLogger(__name__)
 
-__all__ = ['License', 'LocalizedLicenseName', 'setup_license_models']
+__all__ = ['License', 'LocalizedLicenseName']
 
 DeclarativeBase = declarative_base(metadata=meta.metadata)
 
@@ -42,17 +42,7 @@ GNU_LICENSE = re.compile(r'https{0,1}://www.gnu.org/licenses/(?P<license>[\w\-\.
 LICENSES = (CC_LICENSE, OPENDATA_LICENSE, DATI_LICENSE, FORMEZ_LICENSE, GNU_LICENSE,)
 
 
-class _Base(object):
-
-    @classmethod
-    def q(cls):
-        """
-        Query object for current class
-        """
-        return Session.query(cls)
-
-
-class License(_Base, DeclarativeBase):
+class License(DeclarativeBase, DomainObject):
     __tablename__ = 'dcatapit_license'
     id = Column(types.Integer, primary_key=True)
     license_type = Column(types.Unicode, nullable=True, unique=False)
@@ -69,6 +59,10 @@ class License(_Base, DeclarativeBase):
                               lazy=True)
 
     DEFAULT_LICENSE = 'https://w3id.org/italia/controlled-vocabulary/licences/C1_Unknown'
+
+    @classmethod
+    def q(cls):
+        return cls.Session.query(cls)
 
     @classmethod
     def get(cls, id_or_uri):
@@ -121,7 +115,8 @@ class License(_Base, DeclarativeBase):
             if noversion != usplit[-1]:
                 out.append(noversion)
         if self.document_uri:
-            # <dcatapit:referenceDoc rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://creativecommons.org/licenses/by-nc/4.0/</dcatapit:referenceDoc>
+            # <dcatapit:referenceDoc rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">
+            # http://creativecommons.org/licenses/by-nc/4.0/</dcatapit:referenceDoc>
             # -> by-nc
             uri = self.document_uri.lower()
             out.append(uri)
@@ -133,8 +128,7 @@ class License(_Base, DeclarativeBase):
         if self.default_name:
             dn = self.default_name.lower()
             out.append(dn)
-            decoded_dn = dn.decode('utf-8') if type(dn) == bytes else dn
-            s = CC_LICENSE_NAME.search(decoded_dn)
+            s = CC_LICENSE_NAME.search(dn)
             if s:
                 out.append(s.groups()[0])
         return out
@@ -147,12 +141,8 @@ class License(_Base, DeclarativeBase):
         if not parent:
             raise ValueError('No parent %s object' % parent_uri)
         self.parent_id = parent.id
-        Session.add(self)
-        try:
-            rev = Session.revision
-        except AttributeError:
-            rev = None
-        Session.flush()
+        self.add()
+        self.Session.flush()
 
     def set_names(self, langs):
         """
@@ -164,7 +154,7 @@ class License(_Base, DeclarativeBase):
             localized = LocalizedLicenseName(license_id=self.id,
                                              lang=lang_name,
                                              label=label)
-            Session.add(localized)
+            localized.add()
 
     def get_name(self, lang):
         for localized in self.names:
@@ -185,15 +175,9 @@ class License(_Base, DeclarativeBase):
 
     @classmethod
     def clear(cls):
-        Session.query(LocalizedLicenseName).delete()
-        Session.query(cls).delete()
-
-        try:
-            rev = Session.revision
-        except AttributeError:
-            rev = None
-        Session.flush()
-        Session.revision = rev
+        cls.Session.query(LocalizedLicenseName).delete()
+        cls.Session.query(cls).delete()
+        cls.Session.flush()
 
     @classmethod
     def for_license_uri(cls, uri, lang):
@@ -247,7 +231,7 @@ class License(_Base, DeclarativeBase):
         for token in normalized_tokens:
             try:
                 from_tokenized = tokenized[token]
-                from_tokenized.sort(key=lambda t: t.version)
+                from_tokenized.sort(key=lambda t: t.version or t.rank_order)
                 # return latest version
                 license = from_tokenized[-1]
                 return license, False
@@ -299,7 +283,7 @@ class License(_Base, DeclarativeBase):
         default_name = names[default_lang]
 
         if parent is not None:
-            parent_inst = Session.query(License).filter_by(uri=str(parent)).first()
+            parent_inst = cls.Session.query(License).filter_by(uri=str(parent)).first()
             if parent_inst:
                 parent = parent_inst.id
 
@@ -311,21 +295,15 @@ class License(_Base, DeclarativeBase):
                    rank_order=rank_order,
                    parent_id=parent,
                    default_name=default_name)
-        Session.add(inst)
-        try:
-            rev = Session.revision
-        except AttributeError:
-            rev = None
-        Session.flush()
-        Session.revision = rev
+        inst.add()
+        cls.Session.flush()
         inst.set_names(names)
-        Session.flush()
-        Session.revision = rev
+        cls.Session.flush()
         return inst
 
     @classmethod
     def for_select(cls, lang):
-        q = Session.query(cls, LocalizedLicenseName.label)\
+        q = cls.Session.query(cls, LocalizedLicenseName.label)\
                    .join(LocalizedLicenseName)\
                    .filter(LocalizedLicenseName.lang == lang,
                            cls.rank_order > 1)\
@@ -333,7 +311,7 @@ class License(_Base, DeclarativeBase):
         return list(q)
 
 
-class LocalizedLicenseName(_Base, DeclarativeBase):
+class LocalizedLicenseName(DeclarativeBase, DomainObject):
     __tablename__ = 'dcatapit_localized_license_name'
     id = Column(types.Integer, primary_key=True)
     license_id = Column(types.Integer, ForeignKey(License.id))
@@ -342,11 +320,9 @@ class LocalizedLicenseName(_Base, DeclarativeBase):
 
     license = orm.relationship(License, backref='names')
 
-
-def setup_license_models():
-    for t in (License.__table__, LocalizedLicenseName.__table__,):
-        if not t.exists():
-            t.create()
+    @classmethod
+    def q(cls):
+        return cls.Session.query(cls)
 
 
 ADMS = Namespace('http://www.w3.org/ns/adms#')
@@ -410,7 +386,7 @@ def load_from_graph(path=None, url=None):
             license_type = g.value(parent, SKOS.exactMatch)
 
         _labels = g.objects(license, SKOS.prefLabel)
-        labels = dict([(l.language, l.encode(u'utf-8')) for l in _labels])
+        labels = dict([(l.language, l) for l in _labels])
         license_path = str(license).split('/')[-1].split('_')[0]
         log.debug('Adding license [%r] [%s]', license, labels.get('it', None))
         l = License.from_data(license_type or '',

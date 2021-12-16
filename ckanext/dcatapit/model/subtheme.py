@@ -4,7 +4,7 @@
 import logging
 
 from ckan.lib.base import config
-from ckan.model import Session, Tag, Vocabulary, meta, repo
+from ckan.model import Tag, Vocabulary, meta, DomainObject
 from rdflib import Graph
 from rdflib.namespace import OWL, RDF, SKOS
 from sqlalchemy import Column, ForeignKey, Index, and_, or_, orm, types
@@ -12,12 +12,10 @@ from sqlalchemy.exc import SQLAlchemyError as SAError
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 
 from ckanext.dcat.profiles import DCT
-from ckanext.dcatapit.model.license import _Base
 
 log = logging.getLogger(__name__)
 
 __all__ = ['Subtheme', 'SubthemeLabel',
-           'setup_subtheme_models',
            'load_subthemes', 'clear_subthemes']
 
 DeclarativeBase = declarative_base(metadata=meta.metadata)
@@ -27,7 +25,7 @@ THEME_LANGS = (config.get(CONFIG_THEME_LANGS) or '').split(' ')
 DEFAULT_LANG = config.get('ckan.locale_default', 'en')
 
 
-class ThemeToSubtheme(_Base, DeclarativeBase):
+class ThemeToSubtheme(DeclarativeBase, DomainObject):
     __tablename__ = 'dcatapit_theme_to_subtheme'
 
     VOCAB_NAME = 'eu_themes'
@@ -39,7 +37,7 @@ class ThemeToSubtheme(_Base, DeclarativeBase):
     subtheme = orm.relationship('Subtheme')
     tag = orm.relationship(Tag)
 
-    vocab = None
+    vocab_id = None  # used as a cache in get_vocabulary_id
 
     @declared_attr
     def __table_args__(cls):
@@ -47,30 +45,29 @@ class ThemeToSubtheme(_Base, DeclarativeBase):
                       'subtheme_id', 'tag_id'),)
 
     @classmethod
-    def get_vocabulary(cls):
-        if cls.vocab is None:
-            q = Session.query(Vocabulary).filter_by(name=cls.VOCAB_NAME)
+    def get_vocabulary_id(cls):
+        if cls.vocab_id is None:
+            q = cls.Session.query(Vocabulary).filter_by(name=cls.VOCAB_NAME)
             vocab = q.first()
             if not vocab:
                 raise ValueError(f'No vocabulary for {cls.VOCAB_NAME}')
-
-            cls.vocab = vocab
-        return cls.vocab
+            cls.vocab_id = vocab.id
+        return cls.vocab_id
 
     @classmethod
     def get_tag(cls, name):
-        vocab = cls.get_vocabulary()
-        tag = Session.query(Tag).filter_by(vocabulary_id=vocab.id, name=name).first()
+        vid = cls.get_vocabulary_id()
+        tag = cls.Session.query(Tag).filter_by(vocabulary_id=vid, name=name).first()
         if not tag:
             raise ValueError(f'No tag for {name}')
         return tag
 
     @classmethod
     def q(cls):
-        return Session.query(cls)
+        return cls.Session.query(cls)
 
 
-class Subtheme(_Base, DeclarativeBase):
+class Subtheme(DeclarativeBase, DomainObject):
     __tablename__ = 'dcatapit_subtheme'
 
     id = Column(types.Integer, primary_key=True)
@@ -86,7 +83,7 @@ class Subtheme(_Base, DeclarativeBase):
 
     @classmethod
     def q(cls):
-        return Session.query(cls)
+        return cls.Session.query(cls)
 
     @classmethod
     def get(cls, uri):
@@ -148,7 +145,7 @@ class Subtheme(_Base, DeclarativeBase):
         if existing:
             if not theme_tag in existing.themes:
                 existing.themes.append(theme_tag)
-            Session.flush()
+            cls.Session.flush()
             log.error(f'Subtheme {subtheme_ref} already exists. Skipping')
             return existing
 
@@ -168,21 +165,21 @@ class Subtheme(_Base, DeclarativeBase):
                    parent_id=parent.id if parent else None,
                    depth=parent.depth + 1 if parent else 0)
         inst.update_path()
-        Session.add(inst)
-        Session.flush()
+        inst.add()
+        cls.Session.flush()
 
         if parent is None:
             inst.parent_id = inst.id
 
         theme_m = ThemeToSubtheme(tag_id=theme_tag.id, subtheme_id=inst.id)
-        Session.add(theme_m)
+        theme_m.add()
 
         for lang, label in labels.items():
             l = SubthemeLabel(subtheme_id=inst.id,
                               lang=lang,
                               label=label)
-            Session.add(l)
-        Session.flush()
+            l.add()
+        cls.Session.flush()
         # handle children
 
         for child in g.objects(subtheme_ref, SKOS.hasTopConcept):
@@ -207,7 +204,7 @@ class Subtheme(_Base, DeclarativeBase):
     def for_theme(cls, theme, lang=None):
         tag = ThemeToSubtheme.get_tag(theme)
         if lang:
-            q = Session.query(cls, SubthemeLabel.label)\
+            q = cls.Session.query(cls, SubthemeLabel.label)\
                        .join(SubthemeLabel,
                              and_(SubthemeLabel.subtheme_id == cls.id,
                                   SubthemeLabel.lang == lang))\
@@ -217,7 +214,7 @@ class Subtheme(_Base, DeclarativeBase):
                        .order_by(cls.parent_id, cls.path)
 
         else:
-            q = Session.query(cls).join(ThemeToSubtheme,
+            q = cls.Session.query(cls).join(ThemeToSubtheme,
                                         and_(ThemeToSubtheme.tag_id == tag.id,
                                              ThemeToSubtheme.subtheme_id == cls.id))\
                 .order_by(cls.parent_id, cls.path)
@@ -230,7 +227,7 @@ class Subtheme(_Base, DeclarativeBase):
 
     @classmethod
     def get_theme_names(cls):
-        q = Session.query(Tag.name)\
+        q = cls.Session.query(Tag.name)\
                    .join(ThemeToSubtheme,
                          ThemeToSubtheme.tag_id == Tag.id)\
                    .order_by(Tag.name)
@@ -238,14 +235,14 @@ class Subtheme(_Base, DeclarativeBase):
 
     @classmethod
     def get_localized(cls, *subthemes):
-        q = Session.query(SubthemeLabel.lang, SubthemeLabel.label)\
+        q = cls.Session.query(SubthemeLabel.lang, SubthemeLabel.label)\
                    .join(cls, cls.id == SubthemeLabel.subtheme_id)\
                    .filter(or_(cls.uri.in_(subthemes),
                                cls.default_label.in_(subthemes)))
         return q
 
 
-class SubthemeLabel(_Base, DeclarativeBase):
+class SubthemeLabel(DeclarativeBase, DomainObject):
     __tablename__ = 'dcatapit_subtheme_labels'
 
     id = Column(types.Integer, primary_key=True)
@@ -253,6 +250,10 @@ class SubthemeLabel(_Base, DeclarativeBase):
     lang = Column(types.Unicode, nullable=False)
     label = Column(types.Unicode, nullable=False)
     subtheme = orm.relationship(Subtheme, backref='names')
+
+    @classmethod
+    def q(cls):
+        return cls.Session.query(cls)
 
     @declared_attr
     def __table_args__(cls):
@@ -269,14 +270,8 @@ def clear_subthemes():
 def load_subthemes(themes, eurovoc):
     themes_g = Graph()
     eurovoc_g = Graph()
-    # reset vocabulary attached to mapping
-    ThemeToSubtheme.vocab = None
+
+    ThemeToSubtheme.vocab_id = None  # reset vocabulary attached to mapping
     themes_g.parse(themes)
     eurovoc_g.parse(eurovoc)
     Subtheme.map_themes(themes_g, eurovoc_g)
-
-
-def setup_subtheme_models():
-    for t in (Subtheme.__table__, SubthemeLabel.__table__, ThemeToSubtheme.__table__):
-        if not t.exists():
-            t.create()

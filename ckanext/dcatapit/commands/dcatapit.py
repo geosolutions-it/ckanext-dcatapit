@@ -1,14 +1,19 @@
 #!/usr/bin/env python3
 
 import json
+import click
 import logging
 import re
 import traceback
 import uuid
 from datetime import datetime
 
+from rdflib import Graph
+from rdflib.namespace import DC, SKOS
+from rdflib.term import URIRef
+from sqlalchemy import and_
+
 import ckan.plugins.toolkit as toolkit
-import click
 from ckan.lib.base import config
 from ckan.lib.munge import munge_tag
 from ckan.lib.navl.dictization_functions import Invalid
@@ -22,18 +27,15 @@ from ckan.model import (
     repo,
 )
 from ckan.model.meta import Session
-from ckanext.multilang.model import PackageMultilang as ML_PM
-from rdflib import Graph
-from rdflib.namespace import DC, SKOS
-from rdflib.term import URIRef
-from sqlalchemy import and_
 
-import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcat.profiles import namespaces
+
+from ckanext.multilang.model import PackageMultilang as ML_PM
+
 from ckanext.dcatapit import validators
+import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit.model.license import clear_licenses
-from ckanext.dcatapit.model.license import \
-    load_from_graph as load_licenses_from_graph
+from ckanext.dcatapit.model.license import load_from_graph as load_licenses_from_graph
 from ckanext.dcatapit.model.subtheme import clear_subthemes, load_subthemes
 
 REGION_TYPE = 'https://w3id.org/italia/onto/CLV/Region'
@@ -47,6 +49,7 @@ FILETYPE_THEME_NAME = 'filetype'
 LICENSES_NAME = 'licenses'
 REGIONS_NAME = 'regions'
 SUBTHEME_NAME = 'subthemes'
+
 DEFAULT_LANG = config.get('ckan.locale_default', 'en')
 DATE_FORMAT = '%d-%m-%Y'
 
@@ -97,6 +100,7 @@ class DCATAPITCommands:
         'it': 'ITA',
         'de': 'DEU',
         'en_GB': 'ENG',
+        'en': 'ENG',
         'fr': 'FRA',
         'es': 'SPA'
     }
@@ -113,15 +117,12 @@ class DCATAPITCommands:
 
 @dcatapit.command()
 def initdb():
-    from ckanext.dcatapit.model import setup as db_setup
-    from ckanext.dcatapit.model import (
-        setup_license_models,
-        setup_subtheme_models,
-    )
-
-    db_setup()
-    setup_license_models()
-    setup_subtheme_models()
+    from ckanext.dcatapit.model import setup_db
+    created = setup_db()
+    if created:
+        click.secho('DCATAPIT DB tables created', fg=u"green")
+    else:
+        click.secho('DCATAPIT DB tables not created', fg=u"yellow")
 
 
 @dcatapit.command()

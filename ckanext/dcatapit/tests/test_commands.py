@@ -16,7 +16,7 @@ class BaseCommandTest(unittest.TestCase):
 
 class TestDCATAPITCommand(BaseCommandTest):
 
-    @pytest.mark.usefixtures('with_request_context')
+    @pytest.mark.usefixtures('with_request_context', 'clean_dcatapit_db')
     def test_vocabulary_command(self):
         from ckanext.dcatapit.commands.dcatapit import do_load
         from ckanext.dcatapit.tests.utils import load_themes

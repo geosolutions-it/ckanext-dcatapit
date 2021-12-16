@@ -65,7 +65,8 @@ lang_mapping_ckan_to_voc = {
 lang_mapping_xmllang_to_ckan = {
     'it': 'it',
     'de': 'de',
-    'en': 'en_GB',
+    # 'en': 'en_GB',
+    'en': 'en',
     'fr': 'fr',
 }
 
@@ -443,17 +444,18 @@ class ItalianDCATAPProfile(RDFProfile):
     def _parse_themes(self, dataset, ref):
         self._remove_from_extra(dataset, 'theme')
         themes = list(self.g.objects(ref, DCAT.theme))
-        subthemes = list(self.g.objects(ref, DCT.subject))
+        subthemes = list(self.g.objects(ref, DCATAPIT.subTheme))
+
         out = []
         for t in themes:
             theme_name = str(t).split('/')[-1]
+            row = {'theme': theme_name, 'subthemes': []}
+
             try:
                 subthemes_for_theme = Subtheme.for_theme_values(theme_name)
             except ValueError as err:
                 subthemes_for_theme = []
 
-            row = {'theme': theme_name,
-                   'subthemes': []}
             for subtheme in subthemes:
                 s = str(subtheme)
                 if s in subthemes_for_theme:

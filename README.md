@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/geosolutions-it/ckanext-dcatapit.svg?branch=master)](https://travis-ci.org/geosolutions-it/ckanext-dcatapit)
+[![Build status](https://github.com/geosolutions-it/ckanext-dcatapit/actions/workflows/test.yml/badge.svg)](https://github.com/geosolutions-it/ckanext-dcatapit/actions/workflows/test.yml)
 [![Code Coverage](https://codecov.io/github/geosolutions-it/ckanext-dcatapit/coverage.svg?branch=master)](https://codecov.io/github/geosolutions-it/ckanext-dcatapit?branch=master)
 
 # ckanext-dcatapit
@@ -218,14 +218,14 @@ To prepare the environment for running tests, follow instructions reported [here
 Then initialize the test database:
 
     cd /usr/lib/ckan/default/src/ckan
-    ckan --config=PATH_TO_INI_FILE db init -c test-core.ini
+    ckan -c test-core.ini db init && ckan -c test.ini multilang initdb && ckan -c test.ini dcatapit initdb
 
 Finally to run tests, do:
 
     cd /usr/lib/ckan/default/src/ckanext-dcatapit
     . /usr/lib/ckan/default/bin/activate
     
-    nosetests --ckan --nologcapture --with-pylons=test.ini --with-coverage --cover-package=ckanext.dcatapit --cover-inclusive --cover-erase --cover-tests ckanext/dcatapit
+    pytest --ckan-ini=test.ini --cov=ckanext.dcatapit --cov-report=xml --cov-append --disable-warnings ckanext/dcatapit/tests
 
 ## DCAT_AP-IT CSW Harvester
 

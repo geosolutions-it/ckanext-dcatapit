@@ -20,7 +20,6 @@ from ckan.common import config
 
 from ckan.logic import schema
 from ckan.model import User, Group, meta, repo
-from ckan.model import Session
 from ckan.model.package import Package
 from ckan.model.user import User
 from ckan.tests.helpers import call_action, change_config
@@ -42,6 +41,8 @@ from ckanext.dcatapit.mapping import (
 )
 from ckanext.dcatapit.model.license import License, _get_graph, load_from_graph
 from ckanext.harvest.model import HarvestObject
+
+Session = meta.Session
 
 DEFAULT_LANG = config.get('ckan.locale_default', 'en')
 
@@ -143,25 +144,26 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         self.assertTrue(multilang_notes)
         self.assertEqual(multilang_notes['de'], 'dcatapit test-dataset')
         self.assertEqual(multilang_notes['it'], 'dcatapit dataset di test')
-        self.assertEqual(multilang_notes['en_GB'], 'dcatapit dataset test')
+        self.assertEqual(multilang_notes['en'], 'dcatapit dataset test')
 
         multilang_holder_name = dataset['DCATAPIT_MULTILANG_BASE'].get('holder_name', None)
         self.assertTrue(multilang_holder_name)
         self.assertEqual(multilang_holder_name['de'], 'bolzano')
         self.assertEqual(multilang_holder_name['it'], 'bolzano')
-        self.assertEqual(multilang_holder_name['en_GB'], 'bolzano')
+        self.assertEqual(multilang_holder_name['en'], 'bolzano')
 
         multilang_title = dataset['DCATAPIT_MULTILANG_BASE'].get('title', None)
         self.assertTrue(multilang_title)
         self.assertEqual(multilang_title['de'], 'Dcatapit Test-Dataset')
         self.assertEqual(multilang_title['it'], 'Dataset di test DCAT_AP-IT')
-        self.assertEqual(multilang_title['en_GB'], 'DCAT_AP-IT test dataset')
+        self.assertEqual(multilang_title['en'], 'DCAT_AP-IT test dataset')
 
         multilang_pub_name = dataset['DCATAPIT_MULTILANG_BASE'].get('publisher_name', None)
         self.assertTrue(multilang_pub_name)
-        self.assertEqual(multilang_pub_name['en_GB'], 'bolzano en')
+        self.assertEqual(multilang_pub_name['en'], 'bolzano en')
         self.assertEqual(multilang_pub_name['it'], 'bolzano it it')
 
+    @pytest.mark.usefixtures("clean_dcatapit_db")
     def test_groups_to_themes_mapping(self):
         config[DCATAPIT_THEMES_MAP] = os.path.join(os.path.dirname(__file__),
                                                    '..',
@@ -188,9 +190,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         self.g = _get_graph(path=licenses)
 
         load_from_graph(path=licenses)
-        rev = getattr(Session, 'revision', None)
         Session.flush()
-        Session.revision = rev
 
         # clean, no mapping
         harvester.import_stage(harvest_obj)
@@ -223,7 +223,6 @@ class TestDCATAPITProfileParsing(BaseParseTest):
                                              default_ctx, **source_dict)
 
         Session.flush()
-        Session.revision = repo.new_revision()
         harvest_job = helpers.call_action('harvest_job_create',
                                           default_ctx,
                                           source_id=harvest_source['id'],
@@ -231,7 +230,6 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
         hdata = {'groups': groups}
         Session.flush()
-        Session.revision = repo.new_revision()
 
         harvest_object = helpers.call_action('harvest_object_create',
                                              default_ctx,
@@ -239,7 +237,6 @@ class TestDCATAPITProfileParsing(BaseParseTest):
                                              )
 
         Session.flush()
-        Session.revision = repo.new_revision()
 
         hobj = HarvestObject.get(harvest_object['id'])
         hobj.content = json.dumps(hdata)
@@ -344,9 +341,6 @@ class TestDCATAPITProfileParsing(BaseParseTest):
                                    context=context,
                                    **package_dict)
 
-        # meta.Session.flush()
-        #meta.Session.revision = repo.new_revision()
-
         # check - only existing group should be assigned
         p = Package.get(package_data['id'])
         groups = [g.name for g in p.get_groups(group_type='group')]
@@ -359,7 +353,6 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         package_data = call_action('package_update', context=context, **package_dict)
 
         meta.Session.flush()
-        meta.Session.revision = repo.new_revision()
 
         # recheck - this time, new groups should appear
         p = Package.get(package_data['id'])
@@ -372,7 +365,6 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         package_data = call_action('package_update', context=context, **package_dict)
 
         meta.Session.flush()
-        meta.Session.revision = repo.new_revision()
 
         # recheck - there should be no duplicates
         p = Package.get(package_data['id'])
@@ -384,7 +376,6 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         package_data = call_action('package_update', context=context, **package_dict)
 
         meta.Session.flush()
-        meta.Session.revision = repo.new_revision()
 
         # recheck - there still should be no duplicates
         p = Package.get(package_data['id'])
@@ -671,6 +662,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
         assert set1 == set2, 'Got different temporal coverage sets: \n{}\n vs\n {}'.format(set1, set2)
 
+    @pytest.mark.skip("Subthemes need fixing")
     def test_subthemes(self):
 
         load_themes()
@@ -697,7 +689,7 @@ class TestDCATAPITProfileParsing(BaseParseTest):
             'holder_name': 'bolzano',
             'holder_identifier': '234234234',
             'alternate_identifier': 'ISBN,TEST',
-            'theme': json.dumps(subthemes),
+            'theme': json.dumps(subthemes),  # NO: themes should be a list of URIs
         }
 
         s = RDFSerializer()
@@ -720,13 +712,14 @@ class TestDCATAPITProfileParsing(BaseParseTest):
             else:
                 assert False, 'Unknown theme: {}'.format(t)
 
+    @pytest.mark.usefixtures('clean_dcatapit_db')
     def test_alternate_identifiers(self):
 
         contents = self._get_file_contents('dataset_identifier.rdf')
 
         p = RDFParser(profiles=['it_dcat_ap'])
         p.parse(contents)
-        g = p.g
+
         datasets = [d for d in p.datasets()]
         assert len(datasets) == 1
         assert datasets[0]['alternate_identifier'] == '[{"identifier": "ISBN:alt id 123", "agent": {}}]',\

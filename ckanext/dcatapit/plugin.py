@@ -490,6 +490,13 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                         tmp_value = df_value
                 pkg_dict[fname] = tmp_value
 
+        # themes are parsed by dcat, which requires a list of URI
+        # we have the format like this:
+        # [{"theme": "AGRI", "subthemes": ["http://eurovoc.europa.eu/100253", "http://eurovoc.europa.eu/100258"]},
+        # {"theme": "ENVI", "subthemes": []}]
+        # We need to fix this.
+        log.warning(f'**** THEME {pkg_dict["theme"] if "theme" in pkg_dict else "None"}')
+
         # in some cases (automatic solr indexing after update)
         # pkg_dict may come without validation and thus
         # without extras converted to main dict.

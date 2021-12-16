@@ -7,34 +7,16 @@ from ckan.model.domain_object import DomainObject
 
 log = logging.getLogger(__name__)
 
-__all__ = ['DCATAPITTagVocabulary', 'dcatapit_vocabulary_table', 'setup']
+__all__ = ['DCATAPITTagVocabulary', 'dcatapit_vocabulary_table', ]
 
-dcatapit_vocabulary_table = Table('dcatapit_vocabulary', meta.metadata,
+dcatapit_vocabulary_table = Table(
+    'dcatapit_vocabulary', meta.metadata,
     Column('id', types.Integer, primary_key=True),
     Column('tag_id', types.UnicodeText, ForeignKey('tag.id', ondelete='CASCADE'), nullable=False),
     Column('tag_name', types.UnicodeText, nullable=False, index=True),
     Column('lang', types.UnicodeText, nullable=False, index=True),
     Column('text', types.UnicodeText, nullable=False, index=True)
 )
-
-
-def setup():
-    log.debug('DCAT_AP-IT tables defined in memory')
-
-    # Setting up tag multilang table
-    if not dcatapit_vocabulary_table.exists():
-        try:
-            dcatapit_vocabulary_table.create()
-        except Exception as err:
-            # Make sure the table does not remain incorrectly created
-            if dcatapit_vocabulary_table.exists():
-                Session.execute('DROP TABLE dcatapit_vocabulary')
-                Session.commit()
-            raise err
-
-        log.info('DCATAPIT Tag Vocabulary table created')
-    else:
-        log.info('DCATAPIT Tag Vocabulary table already exist')
 
 
 class DCATAPITTagVocabulary(DomainObject):
@@ -46,14 +28,17 @@ class DCATAPITTagVocabulary(DomainObject):
 
     @classmethod
     def by_name(self, tag_name, tag_lang, autoflush=True):
-        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_name == tag_name, DCATAPITTagVocabulary.lang == tag_lang)
+        query = meta.Session.query(DCATAPITTagVocabulary)\
+            .filter(DCATAPITTagVocabulary.tag_name == tag_name,
+                    DCATAPITTagVocabulary.lang == tag_lang)
         query = query.autoflush(autoflush)
         tag = query.first()
         return tag
 
     @classmethod
     def all_by_name(self, tag_name, autoflush=True):
-        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_name == tag_name)
+        query = meta.Session.query(DCATAPITTagVocabulary)\
+            .filter(DCATAPITTagVocabulary.tag_name == tag_name)
         query = query.autoflush(autoflush)
         tags = query.all()
 
@@ -65,7 +50,9 @@ class DCATAPITTagVocabulary(DomainObject):
 
     @classmethod
     def by_tag_id(self, tag_id, tag_lang, autoflush=True):
-        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_id == tag_id, DCATAPITTagVocabulary.lang == tag_lang)
+        query = meta.Session.query(DCATAPITTagVocabulary)\
+            .filter(DCATAPITTagVocabulary.tag_id == tag_id,
+                    DCATAPITTagVocabulary.lang == tag_lang)
         query = query.autoflush(autoflush)
         tag = query.first()
         return tag

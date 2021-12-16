@@ -123,6 +123,7 @@ class HarvestersTestCase(unittest.TestCase):
             else:
                 self.assertEqual(res['license_type'], r[1]['license_type'])
 
+    @pytest.mark.usefixtures(u"clean_db")
     def test_remote_orgs(self):
         dataset = {'title': 'some title 2',
                    'owner_id': self.org['id'],

@@ -137,7 +137,7 @@ jobs:
     - name: Setup extensions
       run: |
         crudini --set --verbose --list --list-sep=\  test.ini app:main ckan.plugins multilang_resources ckan_harvester multilang multilang_harvester dcat harvest spatial_metadata spatial_query spatial_harvest_metadata_api dcat_rdf_harvester dcatapit_pkg dcatapit_org dcatapit_config dcatapit_harvester dcatapit_csw_harvester dcatapit_theme_group_mapper dcatapit_ckan_harvester
-        crudini --set --verbose test.ini app:main ckanext.dcat.expose_subcatalogs True
+        crudini --set --verbose test.ini app:main ckanext.dcat.expose_subcatalogs False
         crudini --set --verbose test.ini app:main ckanext.dcatapit.localized_resources True
         crudini --set --verbose --list --list-sep=\  test.ini app:main ckanext.dcat.rdf.profiles euro_dcat_ap it_dcat_ap
 
@@ -154,7 +154,7 @@ jobs:
     - name: Run tests
       run: pytest --ckan-ini=test.ini --cov=ckanext.dcatapit --cov-report=xml --cov-append --disable-warnings ckanext/dcatapit/tests
 
-#    - name: Upload coverage report to codecov
-#      uses: codecov/codecov-action@v1
-#      with:
-#        file: ./coverage.xml
+    - name: Upload coverage report to codecov
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
