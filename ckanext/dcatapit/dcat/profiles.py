@@ -869,17 +869,22 @@ class ItalianDCATAPProfile(RDFProfile):
             license_info = interfaces.get_license_for_dcat(resource_dict.get('license_type'))
             dcat_license, license_title, license_url, license_version, dcatapit_license, names = license_info
 
-            license = URIRef(license_url or dcatapit_license)
+            # be lenient about license existence
+            license_maybe = license_url or dcatapit_license
+            if license_maybe:
+                license = URIRef(license_maybe)
 
-            g.add((license, RDF.type, DCATAPIT.LicenseDocument))
-            g.add((license, RDF.type, DCT.LicenseDocument))
-            g.add((license, DCT.type, URIRef(dcat_license)))
-            if license_version:
-                g.add((license, OWL.versionInfo, Literal(license_version)))
-            for lang, name in names.items():
-                g.add((license, FOAF.name, Literal(name, lang=lang)))
+                g.add((license, RDF.type, DCATAPIT.LicenseDocument))
+                g.add((license, RDF.type, DCT.LicenseDocument))
+                g.add((license, DCT.type, URIRef(dcat_license)))
+                if license_version:
+                    g.add((license, OWL.versionInfo, Literal(license_version)))
+                for lang, name in names.items():
+                    g.add((license, FOAF.name, Literal(name, lang=lang)))
 
-            g.add((distribution, DCT.license, license))
+                g.add((distribution, DCT.license, license))
+            else:
+                log.error('*** License not set')
 
             # Multilingual
             # Add localized entries in resource

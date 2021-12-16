@@ -27,9 +27,16 @@ class ICustomSchema(Interface):
 
 
 def get_language():
-    lang = get_lang()
-    if lang and isinstance(lang, (list, tuple,)):
-        return lang[0]
+    try:
+        lang = get_lang()
+    except Exception as e:
+        lang = config.get(u'ckan.locale_default', u'en')
+        log.warning(f'Exception while retrieving lang. Using [{lang}]')
+        # log.warning(f'Exception while retrieving lang. Using [{lang}]', exc_info=e, stack_info=True)
+
+    if lang is not None:
+        if isinstance(lang, list):
+            lang = lang[0]
     return lang
 
 
@@ -323,6 +330,9 @@ def get_license_for_dcat(license_type):
     l = License.get(license_type or License.DEFAULT_LICENSE)
     if not l or not l.license_type:
         l = License.get(License.DEFAULT_LICENSE)
+    if not l:
+        log.error('*** Licenses vocabulary has not been loaded ***')
+        return None, '-', None, None, None, None
     names = dict((k['lang'], k['name']) for k in l.get_names())
     return l.license_type, l.default_name, l.document_uri, l.version, l.uri, names
 
