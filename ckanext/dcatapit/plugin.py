@@ -15,9 +15,9 @@ import ckanext.dcatapit.schema as dcatapit_schema
 import ckanext.dcatapit.validators as validators
 from ckanext.dcatapit.commands import dcatapit as dcatapit_cli
 from ckanext.dcatapit.controllers.harvest import HarvesterController
-from ckanext.dcatapit.controllers.thesaurus import ThesaurusController, get_thesaurus_admin_page, update_vocab_admin
 from ckanext.dcatapit.helpers import get_org_context
 from ckanext.dcatapit.mapping import populate_theme_groups
+from ckanext.dcatapit.controllers.thesaurus import ThesaurusController, get_thesaurus_admin_page, update_vocab_admin
 from ckanext.dcatapit.model.license import License
 
 log = logging.getLogger(__file__)
@@ -64,6 +64,11 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
     plugins.implements(plugins.IBlueprint, inherit=True)
 
+
+    # ITranslation
+    if toolkit.check_ckan_version(min_version='2.5.0'):
+        plugins.implements(plugins.ITranslation, inherit=True)
+
     def get_blueprint(self):
         blueprint = Blueprint('dcatapit_core', self.__module__)
 
@@ -80,11 +85,6 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         )
 
         return blueprint
-
-    # ITranslation
-    if toolkit.check_ckan_version(min_version='2.5.0'):
-        plugins.implements(plugins.ITranslation, inherit=True)
-
 
     def get_commands(self):
         return dcatapit_cli.get_commands()
@@ -117,7 +117,6 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         toolkit.add_public_directory(config_, 'public')
         toolkit.add_resource('fanstatic', 'ckanext-dcatapit')
         toolkit.add_ckan_admin_tab(config_, 'dcatapit_core.thesaurus', 'Thesaurus File Uploader', icon='file')
-
 
     # ------------- IDatasetForm ---------------#
 
@@ -512,6 +511,13 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                         tmp_value = df_value
                 pkg_dict[fname] = tmp_value
 
+        # themes are parsed by dcat, which requires a list of URI
+        # we have the format like this:
+        # [{"theme": "AGRI", "subthemes": ["http://eurovoc.europa.eu/100253", "http://eurovoc.europa.eu/100258"]},
+        # {"theme": "ENVI", "subthemes": []}]
+        # We need to fix this.
+        log.warning(f'**** THEME {pkg_dict["theme"] if "theme" in pkg_dict else "None"}')
+
         # in some cases (automatic solr indexing after update)
         # pkg_dict may come without validation and thus
         # without extras converted to main dict.
@@ -525,8 +531,12 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
         for k in pkg_update.keys():
             if k in pkg_dict:
-                raise KeyError('Duplicated key in pkg_dict: {}: {} in extras vs {} in pkg'
-                               .format(k, pkg_update[k], pkg_dict[k]))
+                if pkg_update[k] == pkg_dict[k]:
+                    log.warning(f'Ignoring duplicated key {k} with same value {pkg_update[k]}')
+                else:
+                    raise KeyError(f'Duplicated key in pkg_dict: {k}: {pkg_update[k]} in extras'
+                                   f' vs {pkg_dict[k]} in pkg')
+
         for tr in reversed(to_remove):
             val = pkg_dict['extras'].pop(tr)
             assert val['key'].startswith('holder_'), val
@@ -773,6 +783,7 @@ class DCATAPITConfigurerPlugin(plugins.SingletonPlugin):
             'get_dcatapit_configuration_schema': helpers.get_dcatapit_configuration_schema,
             'json_load': helpers.json_load,
             'json_dump': helpers.json_dump,
+
         }
 
 
@@ -822,5 +833,4 @@ class DCATAPITHarvestListPlugin(plugins.SingletonPlugin):
             rule='/harvest/list',
             view_func=HarvesterController.as_view('harvest_list'),
         )
-
         return blueprint

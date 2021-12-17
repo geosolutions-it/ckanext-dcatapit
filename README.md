@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/geosolutions-it/ckanext-dcatapit.svg?branch=master)](https://travis-ci.org/geosolutions-it/ckanext-dcatapit)
+[![Build status](https://github.com/geosolutions-it/ckanext-dcatapit/actions/workflows/test.yml/badge.svg)](https://github.com/geosolutions-it/ckanext-dcatapit/actions/workflows/test.yml)
 [![Code Coverage](https://codecov.io/github/geosolutions-it/ckanext-dcatapit/coverage.svg?branch=master)](https://codecov.io/github/geosolutions-it/ckanext-dcatapit?branch=master)
 
 # ckanext-dcatapit
@@ -26,9 +26,8 @@ CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).
 
 ## License
 
-**ckanext-dcatapit** is Free and Open Source software and is licensed under the GNU Affero General Public License (AGPL) v3.0 whose full text may be found at:
+**ckanext-dcatapit** is Free and Open Source software and is licensed under the [GNU Affero General Public License (AGPL) v3.0](http://www.fsf.org/licensing/licenses/agpl-3.0.html).
 
-http://www.fsf.org/licensing/licenses/agpl-3.0.html
 
 ## Demo Instance
 
@@ -42,19 +41,20 @@ Also, if enabled, this extension improves dataset form look'n'feel. See [Dataset
 
 ## Requirements
 
-The ckanext-dcatapit extension has been developed for CKAN 2.4 or later and is based on the [ckanext-dcat plugin](https://github.com/ckan/ckanext-dcat).
+The ckanext-dcatapit extension is compatible with CKAN 2.9 and Python 3.7 (master branch).  
+Previous version ([tagged `dcatapit-1.0.0`](https://github.com/geosolutions-it/ckanext-dcatapit/tree/dcatapit-1.0.0) has been developed for CKAN 2.4 and should be compatible with CKAN upto 2.8.
+
+The dcatap-it plugins extend the functionalities of the [ckanext-dcat plugins](https://github.com/ckan/ckanext-dcat).
 
 In order to use the dcatapit CSW harvester functionalities, you need to install also the [ckanext-spatial](https://github.com/ckan/ckanext-spatial) extension.
 
-If you want to manage localized fields, the ckanext-dcatapit extension requires also the [ckanext-multilang plugin](https://github.com/geosolutions-it/ckanext-multilang/tree/ckan-2.5.2) installed (see the [WIKI](https://github.com/geosolutions-it/ckanext-multilang/wiki) for more details about that).
+If you want to manage localized fields, the ckanext-dcatapit extension requires also the [ckanext-multilang plugin](https://github.com/geosolutions-it/ckanext-multilang) installed (see the [WIKI](https://github.com/geosolutions-it/ckanext-multilang/wiki) for more details about that).
 
 ## Installation
 
-1. (**Optional**) Install the **ckanext-multilang** extension as described [here](https://github.com/geosolutions-it/ckanext-multilang/blob/master/README.rst#installation). Install this extension only if you need to manage multilingual fields for dataset, groups, tags and organizations
+1. (**Optional**) Install the **ckanext-spatial** extension as described [here](https://github.com/ckan/ckanext-spatial). Install this extension only if you need to use the dcatapit CSW harvester (see below).
 
-2. (**Optional**) Install the **ckanext-spatial** extension as described [here](https://github.com/ckan/ckanext-spatial). Install this extension only if you need to use the dcatapit CSW harvester (see below).
-
-3. (**Optional but recommended**) The ckanext-dcatapit extension allows to localize the package fields (eg. title,
+1. (**Optional but recommended**) The ckanext-dcatapit extension allows to localize the package fields (eg. title,
    description etc.) according to the schema definition; in order to be able to do it, you need the **ckanext-multilang** extension installed.
    
    If you also need to use the localized resources feature provided by the
@@ -66,19 +66,19 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
    Also make sure NOT to have the `multilang_resources` directly listed in your `ckan.plugins` line, or it will conflict with the
    internal mechanism of plugin handling.
 
-4. Install the **ckanext-dcat** extension as described [here](https://github.com/ckan/ckanext-dcat/blob/master/README.md#installation).
+1. Install the **ckanext-dcat** extension as described [here](https://github.com/ckan/ckanext-dcat/blob/master/README.md#installation).
 
-5. Activate your CKAN virtual environment, for example:
+1. Activate your CKAN virtual environment, for example:
 
         . /usr/lib/ckan/default/bin/activate
      
-6. Go into your CKAN path for extension (like /usr/lib/ckan/default/src):
+1. Go into your CKAN path for extension (like /usr/lib/ckan/default/src):
 
         git clone https://github.com/geosolutions-it/ckanext-dcatapit.git    
         cd ckanext-dcatapit    
         pip install -e .
 
-7. Add the required plugins to the ``ckan.plugins`` setting in your CKAN config file 
+1. Add the required plugins to the ``ckan.plugins`` setting in your CKAN config file 
   (by default the config file is located at ``/etc/ckan/default/production.ini``).
 
    * `dcatapit_pkg`: extends the package schema allowing to edit and visualize extra fields according to 
@@ -117,19 +117,15 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
 
    * `dcatapit_csw_harvester`: enhances the CSW harvester to be able to import some more fields related to DCAT.
 
-8. Add eurovoc local file path to  ``ckan.dcatapit.eurovoc_location`` setting in your CKAN config file 
-  (by default the config file is located at ``/etc/ckan/default/production.ini``).
-
-
-9. Enable the dcatapit profile adding the following configuration property in the ``production.ini`` file:
+1. Enable the dcatapit profile adding the following configuration property in the ``production.ini`` file:
 
        ckanext.dcat.rdf.profiles = euro_dcat_ap it_dcat_ap
 
-10. Configure the CKAN base URI as reported in the [dcat documentation](https://github.com/ckan/ckanext-dcat/blob/master/README.md#uris):
+1. Configure the CKAN base URI as reported in the [dcat documentation](https://github.com/ckan/ckanext-dcat/blob/master/README.md#uris):
 
-         ckanext.dcat.base_uri = YOUR_BASE_URI
+        ckanext.dcat.base_uri = YOUR_BASE_URI
 
-11. Configure the geonames integration:
+1. Configure the geonames integration:
     
     * Create a geonames account (if you don't have one) at http://www.geonames.org/login ;
     * Enable the web services at http://www.geonames.org/manageaccount ;
@@ -143,11 +139,11 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
         my.geoNamesApiServer = 'secure.geonames.org';
         my.geoNamesProtocol = 'https';
     
-12. Initialize the CKAN DB with the mandatory table needed for localized vocabulary voices:
+1. Initialize the CKAN DB with the mandatory table needed for localized vocabulary voices:
 
         ckan --config=/etc/ckan/default/production.ini dcatapit initdb
 
-13. Update the Solr schema.xml file used by CKAN introducing the following element:
+1. Update the Solr schema.xml file used by CKAN introducing the following element:
 
         <field name="dcat_theme" type="string" indexed="true" stored="false" multiValued="true"/>
         <field name="dcat_subtheme" type="string" indexed="true" stored="false" multiValued="true"/>
@@ -156,61 +152,46 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
         <dynamicField name="resource_license_*" type="string" indexed="true" stored="false" multiValued="true"/>
         <field name="resource_license" type="string" indexed="true" stored="false" multiValued="true"/>
         
-14. Restart Solr.
+1. Restart Solr.
 
-15. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu:
+1. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu:
 
      `sudo service apache2 reload`
      
-16. The EU controlled vocabularies must be populated before start using the dcatapit plugin. Execute in sequence these commands:
+1. The EU controlled vocabularies must be populated before start using the dcatapit plugin. Execute in sequence these commands:
 
         export CKAN_CONFIG=/etc/ckan/default/production.ini
 
-        ckan --config=/etc/ckan/default/ckan.ini dcatapit load \
-        --name=languages \
-        --eurovoc=languages \
-        --filename=vocabularies/languages-skos.rdf
+        ckan --config=/etc/ckan/default/ckan.ini dcatapit load --name=languages   --filename=vocabularies/languages-skos.rdf
 
-        ckan --config=/etc/ckan/default/ckan.ini dcatapit load \
-        --name=eu_themes \
-        --eurovoc=eu_themes \
-        --filename=vocabularies/data-theme-skos.rdf
+        ckan --config=/etc/ckan/default/ckan.ini dcatapit load --name=eu_themes   --filename=vocabularies/data-theme-skos.rdf
 
-        ckan --config=/etc/ckan/default/ckan.ini dcatapit load \
-        --name=places \
-        --eurovoc=places \
-        --filename=vocabularies/places-skos.rdf
+        ckan --config=/etc/ckan/default/ckan.ini dcatapit load --name=places      --filename=vocabularies/places-skos.rdf
 
-        ckan --config=/etc/ckan/default/ckan.ini dcatapit load \
-        --name=frequencies \
-        --eurovoc=frequencies \
-        --filename=vocabularies/frequencies-skos.rdf
+        ckan --config=/etc/ckan/default/ckan.ini dcatapit load --name=frequencies --filename=vocabularies/frequencies-skos.rdf
 
-        ckan --config=/etc/ckan/default/ckan.ini dcatapit load \
-        --name=filetype \
-        --eurovoc=filetype \
-        --filename=vocabularies/filetypes-skos.rdf
+        ckan --config=/etc/ckan/default/ckan.ini dcatapit load --name=filetype    --filename=vocabularies/filetypes-skos.rdf
 
         # curl https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/territorial-classifications/regions/regions.rdf > regions.rdf
         # paster --plugin=ckanext-dcatapit vocabulary load --filename regions.rdf --name regions --config=/etc/ckan/default/production.ini
 
-17. DCATAPIT themes and subthemes vocabularues must be popolated:
+1. DCATAPIT themes and subthemes vocabularues must be popolated:
 
-        paster --plugin=ckanext-dcatapit vocabulary load --filename EUROVOC_TO_THEMES_MAPPING_FILE --name subthemes --config=PATH_TO_INI_FILE  PATH_TO_EUROVOC
+        ckan --config=PATH_TO_INI_FILE           dcatapit load --name subthemes   --filename EUROVOC_TO_THEMES_MAPPING_FILE --eurovoc PATH_TO_EUROVOC
     
     Sample `eurovoc.rdf` and `eurovoc_mapping.rdf` can be found in the examples directory.
     You may want to download more recent files.
     
-18. DCATAPIT license tree. Download [license mapping file](https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/licences/licences.rdf). Alternatively you can use ``examples/licenses.rdf``, but mind that it may be outdated. Import `license.rdf` it with command:
+ 1. DCATAPIT license tree. Download [license mapping file](https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/licences/licences.rdf). Alternatively you can use ``examples/licenses.rdf``, but mind that it may be outdated. Import `license.rdf` it with command:
 
-        paster --plugin=ckanext-dcatapit vocabulary load --filename path/to/license.rdf --name licenses --config=/etc/ckan/default/production.ini
+         ckan --config=PATH_TO_INI_FILE          dcatapit load  --name licenses   --filename path/to/license.rdf
 
 
 ### Dataset reindexing after Organization change
 
 Due to use of Organization's *region* field in dataset search facet, the catalogue should be reindexed in Solr if a *region* field value is changed for an organization (this is only needed if the `dcatapit_subcatalog_facets` plugin is enabled in order to have the Region facet updated and aligned to the Organization's setting in *region* fields)
 
-        paster --plugin=ckan search-index rebuild --config=/etc/ckan/default/production.ini
+        ckan --config=PATH_TO_INI_FILE search-index rebuild
 
 ### Dataset form
 
@@ -228,7 +209,7 @@ To install `ckanext-dcatapit` for development, activate your CKAN virtualenv and
 
     git clone https://github.com/geosolutions-it/ckanext-dcatapit.git
     cd ckanext-dcatapit
-    python setup.py develop
+    pip install -e .
     pip install -r dev-requirements.txt
     
 ## Running the Tests
@@ -237,14 +218,14 @@ To prepare the environment for running tests, follow instructions reported [here
 Then initialize the test database:
 
     cd /usr/lib/ckan/default/src/ckan
-    paster db init -c test-core.ini
+    ckan -c test-core.ini db init && ckan -c test.ini multilang initdb && ckan -c test.ini dcatapit initdb
 
 Finally to run tests, do:
 
     cd /usr/lib/ckan/default/src/ckanext-dcatapit
     . /usr/lib/ckan/default/bin/activate
     
-    nosetests --ckan --nologcapture --with-pylons=test.ini --with-coverage --cover-package=ckanext.dcatapit --cover-inclusive --cover-erase --cover-tests ckanext/dcatapit
+    pytest --ckan-ini=test.ini --cov=ckanext.dcatapit --cov-report=xml --cov-append --disable-warnings ckanext/dcatapit/tests
 
 ## DCAT_AP-IT CSW Harvester
 

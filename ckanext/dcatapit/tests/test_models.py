@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from ckan.model import Session
+from ckan.model.meta import Session
 from rdflib import RDF, Graph
 
 try:
@@ -82,7 +82,7 @@ class LicenseTestCase(unittest.TestCase):
         from_token, default = License.find_by_token(odbl, 'other')
         self.assertFalse(default)
         self.assertTrue(from_token)
-        self.assertTrue('odbl' in from_token.default_name.decode('utf-8').lower())
+        self.assertTrue('odbl' in from_token.default_name.lower())
 
     def tearDown(self):
         Session.rollback()
@@ -109,19 +109,19 @@ class SubthemeTestCase(unittest.TestCase):
 
         load_subthemes(self.map_f, self.voc_f)
         all_subthemes = Subtheme.q()
-        self.assertTrue(all_subthemes.count() > 0)
+        self.assertGreater(all_subthemes.count(), 0)
         for ref in refs:
             try:
                 subtheme = Subtheme.q().filter_by(uri=str(ref)).one()
                 self.assertIsNotNone(subtheme)
             except Exception as err:
-                self.assertIsNone(err, 'No results for {}: {}'.format(ref, err))
+                self.fail(f'No results for {ref}: {err}')
         themes = g.subjects(RDF.type, SKOS.Concept)
         for theme in themes:
             theme_len = g.objects(theme, SKOS.narrowMatch)
             theme_name = Subtheme.normalize_theme(theme)
             q = Subtheme.for_theme(theme_name)
-            self.assertTrue(q.count() >= len(list(theme_len)))
+            self.assertGreaterEqual(q.count(), len(list(theme_len)))
 
     def tearDown(self):
         Session.rollback()

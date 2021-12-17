@@ -1,14 +1,19 @@
 #!/usr/bin/env python3
 
 import json
+import click
 import logging
 import re
 import traceback
 import uuid
 from datetime import datetime
 
+from rdflib import Graph
+from rdflib.namespace import DC, SKOS
+from rdflib.term import URIRef
+from sqlalchemy import and_
+
 import ckan.plugins.toolkit as toolkit
-import click
 from ckan.lib.base import config
 from ckan.lib.munge import munge_tag
 from ckan.lib.navl.dictization_functions import Invalid
@@ -22,19 +27,15 @@ from ckan.model import (
     repo,
 )
 from ckan.model.meta import Session
-from ckanext.multilang.model import PackageMultilang as ML_PM
-from rdflib import Graph
-from rdflib.namespace import DC, SKOS
-from rdflib.term import URIRef
-from sqlalchemy import and_
 
-import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcat.profiles import namespaces
+
+from ckanext.multilang.model import PackageMultilang as ML_PM
+
 from ckanext.dcatapit import validators
-from ckanext.dcatapit.model import DCATAPITTagVocabulary
+import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit.model.license import clear_licenses
-from ckanext.dcatapit.model.license import \
-    load_from_graph as load_licenses_from_graph
+from ckanext.dcatapit.model.license import load_from_graph as load_licenses_from_graph
 from ckanext.dcatapit.model.subtheme import clear_subthemes, load_subthemes
 
 REGION_TYPE = 'https://w3id.org/italia/onto/CLV/Region'
@@ -48,6 +49,7 @@ FILETYPE_THEME_NAME = 'filetype'
 LICENSES_NAME = 'licenses'
 REGIONS_NAME = 'regions'
 SUBTHEME_NAME = 'subthemes'
+
 DEFAULT_LANG = config.get('ckan.locale_default', 'en')
 DATE_FORMAT = '%d-%m-%Y'
 
@@ -98,6 +100,7 @@ class DCATAPITCommands:
         'it': 'ITA',
         'de': 'DEU',
         'en_GB': 'ENG',
+        'en': 'ENG',
         'fr': 'FRA',
         'es': 'SPA'
     }
@@ -114,15 +117,12 @@ class DCATAPITCommands:
 
 @dcatapit.command()
 def initdb():
-    from ckanext.dcatapit.model import setup as db_setup
-    from ckanext.dcatapit.model import (
-        setup_license_models,
-        setup_subtheme_models,
-    )
-
-    db_setup()
-    setup_license_models()
-    setup_subtheme_models()
+    from ckanext.dcatapit.model import setup_db
+    created = setup_db()
+    if created:
+        click.secho('DCATAPIT DB tables created', fg=u"green")
+    else:
+        click.secho('DCATAPIT DB tables not created', fg=u"yellow")
 
 
 @dcatapit.command()
@@ -148,7 +148,6 @@ def migrate_data(offset, limit, skip_orgs=False):
 @click.option(
     '--eurovoc',
     required=False,
-    type=click.Choice(DCATAPITCommands._controlled_vocabularies_allowed),
     help=f'Name of the eurovoc file. Allowed',
 )
 def load(filename, url, format, name, eurovoc, *args, **kwargs):
@@ -165,13 +164,14 @@ def load(filename, url, format, name, eurovoc, *args, **kwargs):
     if name == SUBTHEME_NAME:
         clear_subthemes()
         theme_map = filename
+        log.debug(eurovoc)  # path to eurovoc file
         if eurovoc is None:
             log.error('ERROR: Missing eurovoc file')
-        load_subthemes(theme_map, eurovoc)
-        Session.commit()
+        else:
+            load_subthemes(theme_map, eurovoc)
+            Session.commit()
         return
-    created, updated, deleted = do_load(name, url=url, filename=filename, format=format)
-    return created, updated, deleted
+    do_load(name, url=url, filename=filename, format=format)
 
 
 def do_load_regions(g, vocab_name):
@@ -309,10 +309,7 @@ def do_load(vocab_name, url=None, filename=None, format=None):
     # Persisting Multilag Tags or updating existing
     ##
     log.info('Creating the corresponding multilang tags for vocab: {0} ...'.format(vocab_name))
-    ids = []
-    created_count = 0
-    updated = 0
-    deleted_count = 0
+
     for pref_label in pref_labels:
         if pref_label['lang'] in DCATAPITCommands._locales_ckan_mapping:
             tag_name = pref_label['name']
@@ -325,20 +322,9 @@ def do_load(vocab_name, url=None, filename=None, format=None):
             except UnicodeEncodeError:
                 log.error(f'Storing tag: name[{tag_name}] lang[{tag_lang}]')
 
-            created, id = interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
-            if created:
-                created_count += 1
-            else:
-                updated += 1
-            ids.append(id)
+            interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
 
-    tags = DCATAPITTagVocabulary.nin_tags_ids(ids)
-    deleted_count = len(tags)
-    for tag in tags:
-        tag.delete()
     log.info(f'Vocabulary successfully loaded ({vocab_name})')
-
-    return created_count, updated, deleted_count
 
 
 def do_migrate_data(limit=None, offset=None, skip_orgs=False):

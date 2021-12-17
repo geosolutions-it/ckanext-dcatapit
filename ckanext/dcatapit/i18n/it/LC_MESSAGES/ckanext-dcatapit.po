@@ -885,6 +885,9 @@ msgstr "Dimensione del file"
 msgid "eg. 1024"
 msgstr "es. 1024"
 
+msgid "The organization selected above will be used as rights holder"
+msgstr "L'organizzazione proprietaria del dataset, selezionabile nel campo precedente, sarà indicata come titolare."
+
 #~ msgid "Organizations"
 #~ msgstr "Soggetti"
 

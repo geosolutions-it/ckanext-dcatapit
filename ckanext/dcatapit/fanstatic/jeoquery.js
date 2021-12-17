@@ -152,6 +152,8 @@ var jeoquery = (function ($) {
                     maxRows: 12,
                     name_startsWith: request.term
                 }, function (data) {
+                    $(".ui-autocomplete").css("top", $("#geographical_geonames_url-view").offset().top + $("#geographical_geonames_url-view").height() + 10);
+                    $(".ui-autocomplete").css("left",  $("#geographical_geonames_url-view").offset().left);
                     response(
                         $.map(data.geonames, 
                             function (item) {
