@@ -34,6 +34,7 @@ from ckanext.multilang.model import PackageMultilang as ML_PM
 
 from ckanext.dcatapit import validators
 import ckanext.dcatapit.interfaces as interfaces
+from ckanext.dcatapit.model import DCATAPITTagVocabulary
 from ckanext.dcatapit.model.license import clear_licenses
 from ckanext.dcatapit.model.license import load_from_graph as load_licenses_from_graph
 from ckanext.dcatapit.model.subtheme import clear_subthemes, load_subthemes
@@ -171,7 +172,9 @@ def load(filename, url, format, name, eurovoc, *args, **kwargs):
             load_subthemes(theme_map, eurovoc)
             Session.commit()
         return
-    do_load(name, url=url, filename=filename, format=format)
+
+    created, updated, deleted = do_load(name, url=url, filename=filename, format=format)
+    return created, updated, deleted
 
 
 def do_load_regions(g, vocab_name):
@@ -278,6 +281,10 @@ def do_load(vocab_name, url=None, filename=None, format=None):
     else:
         vocab_load = do_load_vocab
 
+    ids = []
+    created_count = 0
+    updated = 0
+    deleted_count = 0
     pref_labels, concepts = vocab_load(g, vocab_name)
     ##
     # Creating the Tag Vocabulary using the given name
@@ -322,9 +329,20 @@ def do_load(vocab_name, url=None, filename=None, format=None):
             except UnicodeEncodeError:
                 log.error(f'Storing tag: name[{tag_name}] lang[{tag_lang}]')
 
-            interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
+            created, id = interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
+            if created:
+                created_count += 1
+            else:
+                updated += 1
+            ids.append(id)
 
+            tags = DCATAPITTagVocabulary.nin_tags_ids(ids)
+            deleted_count = len(tags)
+            for tag in tags:
+                tag.delete()
     log.info(f'Vocabulary successfully loaded ({vocab_name})')
+
+    return created_count, updated, deleted_count
 
 
 def do_migrate_data(limit=None, offset=None, skip_orgs=False):
