@@ -54,8 +54,7 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
 
 1. (**Optional**) Install the **ckanext-spatial** extension as described [here](https://github.com/ckan/ckanext-spatial). Install this extension only if you need to use the dcatapit CSW harvester (see below).
 
-1. (**Optional but recommended**) The ckanext-dcatapit extension allows to localize the package fields (eg. title,
-   description etc.) according to the schema definition; in order to be able to do it, you need the **ckanext-multilang** extension installed.
+1. The ckanext-dcatapit extension allows to localize the package fields (eg. title, description etc.) according to the schema definition; in order to be able to do it, you need the **ckanext-multilang** extension installed.
    
    If you also need to use the localized resources feature provided by the
    [multilang_resources](https://github.com/geosolutions-it/ckanext-multilang/wiki/Plugin-multilang_resources) plugin in the `ckanext-multilang` extension,
