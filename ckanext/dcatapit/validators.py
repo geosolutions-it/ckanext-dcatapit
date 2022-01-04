@@ -8,6 +8,7 @@ from ckan.logic.validators import url_validator
 from ckan.plugins.toolkit import Invalid
 from sqlalchemy import and_
 
+from ckanext.dcatapit.mapping import themes_to_aggr_json, themes_parse_to_uris
 from ckanext.dcatapit.model.subtheme import Subtheme
 
 DEFAULT_LANG = config.get('ckan.locale_default', 'en')
@@ -125,7 +126,7 @@ def dcatapit_conforms_to(value, context):
         if not isinstance(elm, dict):
             raise Invalid(_('Each conforms_to element should be a dict'))
 
-        # rewrite _ref to uri for older data
+        # LEGACY: rewrite _ref to uri for older data
         _ref = elm.pop('_ref', None)
         if _ref and not elm.get('uri'):
             elm['uri'] = _ref
@@ -161,7 +162,7 @@ def dcatapit_conforms_to(value, context):
                         raise Invalid(_('conforms_to property {} should have {} value as string').format(prop_name, k))
                     if v is None:
                         raise Invalid(_('conforms_to property {} for {} lang should not be empty').format(prop_name, k))
-                _populate_multilang_dict(prop_val)
+                _populate_multilang_dict(prop_val)  # TODO: do we really want to forge entries for all languages?
 
             if prop_name == 'uri' and prop_val == '':
                 continue
@@ -369,28 +370,50 @@ def dcatapit_temporal_coverage(value, context):
     return json.dumps(new_data)
 
 
-def dcatapit_subthemes(value, context):
+def dcatapit_subthemes(key, flattened_data, errors, context):
     """
     Expects [{'theme': THEME_CODE,
               'subthemes': ['subtheme uri', 'subtheme uri']},
              ..
              ]
     """
+    def _get_flattened_theme():
+        for tkey in flattened_data:
+            if len(tkey) == 3:
+                x, idx, k = tkey
+                if x == 'extras' and k == 'key' and flattened_data[tkey] == 'theme':
+                    return flattened_data[('extras', idx, 'value')]
+        return None
+
+    def _do_return(value):
+        flattened_data[key] = value
+
+    value = flattened_data.get(key)
     if not value:
-        raise Invalid(_('Theme data should not be empty'))
+        theme = _get_flattened_theme()
+        if theme:
+            log.warning('Aggregate theme is missing, trying setting values from extra theme key')
+            theme_list = themes_parse_to_uris(theme)
+            _do_return(themes_to_aggr_json(theme_list))
+        else:
+            log.warning('Aggregate theme is missing, setting undefined value')
+            _do_return(themes_to_aggr_json(['OP_DATPRO']))
+        return
+        # raise Invalid(_('Theme data should not be empty'))
+
     try:
-        data = json.loads(value)
+        aggr_list = json.loads(value)
     except (TypeError, ValueError):
         # handle old '{THEME1,THEME2}' notation
         if isinstance(value, str):
             _v = value.rstrip('}').lstrip('{').split(',')
-            data = [{'theme': v, 'subthemes': []} for v in _v]
+            aggr_list = [{'theme': v, 'subthemes': []} for v in _v]
         elif isinstance(value, (list, tuple,)):
-            data = [{'theme': v, 'subthemes': []} for v in value]
+            aggr_list = [{'theme': v, 'subthemes': []} for v in value]
         else:
             raise Invalid(_('Theme data is not valid, expected json, got {}'.format(type(value))))
-    if not isinstance(data, list):
-        raise Invalid(_('Theme data should be a list, got {}'.format(type(data))))
+    if not isinstance(aggr_list, list):
+        raise Invalid(_('Theme data should be a list, got {}'.format(type(aggr_list))))
 
     allowed_keys = {'theme': str,
                     'subthemes': list}
@@ -398,21 +421,22 @@ def dcatapit_subthemes(value, context):
     allowed_keys_set = set(allowed_keys.keys())
     check_with_db = context.get('dcatapit_subthemes_check_in_db') if context else True
 
-    if not data:
+    if not aggr_list:
         raise Invalid(_('Theme data should not be empty'))
 
-    for item in data:
-        if not isinstance(item, dict):
-            raise Invalid(_('Invalid theme item, should be a dict, got {}'.format(type(item))))
-        keys_set = set(item.keys())
+    for aggr in aggr_list:
+        if not isinstance(aggr, dict):
+            raise Invalid(_('Invalid theme aggr item, should be a dict, got {}'.format(type(aggr))))
+        keys_set = set(aggr.keys())
         if keys_set - allowed_keys_set:
-            raise Invalid(_('Theme item contains invalid keys: {}'.format(keys_set - allowed_keys_set)))
-        if not item.get('theme'):
+            raise Invalid(_('Theme aggr contains invalid keys: {}'.format(keys_set - allowed_keys_set)))
+        if not aggr.get('theme'):
             raise Invalid(_('Theme data should not be empty'))
 
-        for k, v in item.items():
+        for k, v in aggr.items():
             allowed_type = allowed_keys[k]
-            if not isinstance(v, allowed_type):
+            if (k == 'theme' and not isinstance(v, str)) or \
+                    (k == 'subthemes' and not isinstance(v, list)):
                 raise Invalid(_('Theme item {} value: {} should be {}, got {}'.format(k, v, allowed_type, type(v))))
             if k == 'subthemes':
                 for subtheme in v:
@@ -420,8 +444,8 @@ def dcatapit_subthemes(value, context):
                         raise Invalid(_('Subtheme {} value should be string'.format(subtheme)))
         if not check_with_db:
             continue
-        theme_name = item['theme']
-        subthemes = item.get('subthemes') or []
+        theme_name = aggr['theme']
+        subthemes = aggr.get('subthemes') or []
         try:
             slist = [s.uri for s in Subtheme.for_theme(theme_name)]
         except ValueError:
@@ -431,8 +455,10 @@ def dcatapit_subthemes(value, context):
             if s not in slist:
                 raise Invalid(_('Invalid subtheme: {}'.format(s)))
 
-    reduced_themes = set([s.get('theme') for s in data if s.get('theme')])
-    if len(data) != len(reduced_themes):
-        raise Invalid(_('There are duplicate themes. Expected {} items, got {}'.format(len(data), len(reduced_themes))))
+    reduced_themes = set([s.get('theme') for s in aggr_list if s.get('theme')])
+    if len(aggr_list) != len(reduced_themes):
+        raise Invalid(_('There are duplicate themes. Expected {} items, got {}'.format(len(aggr_list), len(reduced_themes))))
 
-    return json.dumps(data)
+    _do_return(json.dumps(aggr_list))
+    # return json.dumps(data)
+

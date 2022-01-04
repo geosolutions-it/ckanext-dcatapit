@@ -281,7 +281,7 @@ def get_dcatapit_subthemes(lang):
     return out
 
 
-def dump_dcatapit_subthemes(value):
+def dcatapit_string_to_aggregated_themes(value):
     """
     Dump subthemes from dataset dict, handle old format as well
     """
@@ -290,17 +290,19 @@ def dump_dcatapit_subthemes(value):
     try:
         data = json.loads(value)
     except (ValueError, TypeError):
+        # old format: '{themecode1, themecode2, ...}'
+        # no subthemes provided in the old format
         if isinstance(value, str):
             data = [{'theme': s, 'subthemes': []} for s in value.strip('{}').split(',')]
     out.extend(data)
     return out
 
 
-def load_dcatapit_subthemes(value, lang):
+def dcatapit_string_to_localized_aggregated_themes(value, lang):
     """
     Load json with subthemes and get localized subtheme names. Used in template
     """
-    data = dump_dcatapit_subthemes(value)
+    data = dcatapit_string_to_aggregated_themes(value)
     out = []
 
     for item in data:

@@ -602,7 +602,7 @@ ckan.module('dcatapit-theme', function($){
                 function(){
                         var inputs = $('select', elm);
                         inputs.attr('disabled', true);
-                        $('input[name=theme]', elm).attr('disabled', false);
+                        $('input[name=themes_aggregate]', elm).attr('disabled', false);
                         that.extract_values();
                    }
                  )

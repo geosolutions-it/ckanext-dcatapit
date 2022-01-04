@@ -1,23 +1,19 @@
 import json
 import os
-import unittest
 import uuid
 from datetime import datetime
+from uuid import uuid4
+
+from rdflib import Literal, URIRef
 
 import pytest
-
-from ckanext.dcatapit.tests.utils import load_themes
-
+import unittest
 try:
     from unittest import mock
 except ImportError:
     import mock
 
-from rdflib import Literal, URIRef
-
 from ckan.common import config
-
-
 from ckan.logic import schema
 from ckan.model import User, Group, meta, repo
 from ckan.model.package import Package
@@ -30,17 +26,22 @@ try:
 except ImportError:
     from ckan.new_tests import helpers
 
+from ckanext.harvest.model import HarvestObject
+
 from ckanext.dcat.processors import RDFParser, RDFSerializer
 from ckanext.dcat.profiles import DCT, FOAF
+
 from ckanext.dcatapit import validators
+from ckanext.dcatapit.schema import FIELD_THEMES_AGGREGATE
+from ckanext.dcatapit.tests.utils import load_themes, get_example_file
 from ckanext.dcatapit.harvesters.ckanharvester import CKANMappingHarvester
 from ckanext.dcatapit.mapping import (
     DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS,
     DCATAPIT_THEME_TO_MAPPING_SOURCE,
     DCATAPIT_THEMES_MAP,
+    theme_aggr_to_theme_uris, _get_extra, theme_name_to_uri, theme_names_to_uris, _get_extra_value
 )
 from ckanext.dcatapit.model.license import License, _get_graph, load_from_graph
-from ckanext.harvest.model import HarvestObject
 
 Session = meta.Session
 
@@ -54,13 +55,6 @@ class BaseParseTest(unittest.TestCase):
         for extra in dataset.get('extras'):
             extras[extra['key']] = extra['value']
         return extras
-
-    def _get_file_contents(self, file_name):
-        path = os.path.join(os.path.dirname(__file__),
-                            '..', '..', '..', 'examples',
-                            file_name)
-        with open(path, 'r') as f:
-            return f.read()
 
 
 # @pytest.mark.usefixtures('with_plugins', 'clean_db', 'clean_index')
@@ -79,7 +73,8 @@ class TestDCATAPITProfileParsing(BaseParseTest):
     def test_graph_to_dataset(self):
         Session.expunge_all()
 
-        contents = self._get_file_contents('dataset.rdf')
+        with open(get_example_file('dataset.rdf'), 'r') as f:
+            contents = f.read()
 
         p = RDFParser(profiles=['it_dcat_ap'])
 
@@ -117,10 +112,9 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         alternate_identifier = set([i['identifier'] for i in json.loads(dataset['alternate_identifier'])])
         self.assertEqual(alternate_identifier, set(['ISBN:123', 'TEST']))
 
-        theme = dataset['theme']
-        theme = json.loads(dataset['theme'])
+        theme = json.loads(dataset[FIELD_THEMES_AGGREGATE])
         allowed_themes = ('ECON', 'ENVI',)
-        assert theme, 'got {}'.format(dataset['theme'])
+        assert theme, 'got {}'.format(dataset[FIELD_THEMES_AGGREGATE])
         for t in theme:
             assert t.get('theme') in allowed_themes, 'themes {} not in {}'.format(theme, allowed_themes)
 
@@ -177,16 +171,13 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         groups_non_mappable = [{'name': 'non-mappable', 'display_name': 'non-mappable'}], []
         groups_mappable = [{'name': 'agriculture', 'display_name': 'agricoltura-e-allevamento', 'identifier': 'dummy'}],\
             [{'key': 'theme', 'value': 'AGRI'}]
+        mapped_theme_name = 'AGRI'
 
         harvest_obj = self._make_harvest_object(url, groups_non_mappable[0])
 
         harvester = CKANMappingHarvester()
 
-        def get_path(fname):
-            return os.path.join(os.path.dirname(__file__),
-                                '..', '..', '..', 'examples', fname)
-
-        licenses = get_path('licenses.rdf')
+        licenses = get_example_file('licenses.rdf')
         self.g = _get_graph(path=licenses)
 
         load_from_graph(path=licenses)
@@ -204,7 +195,19 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
         harvester.import_stage(harvest_obj)
         hdata = json.loads(harvest_obj.content)
-        self.assertEqual([t for t in hdata.get('extras', []) if t['key'] == 'theme'], groups_mappable[1])
+        extras = hdata.get('extras', [])
+        # self.assertEqual([t for t in hdata.get('extras', []) if t['key'] == 'theme'], groups_mappable[1])
+
+        theme_uri_list_extra = _get_extra(extras, 'theme')
+        self.assertIsNotNone(theme_uri_list_extra)
+        theme_uri_list = json.loads(theme_uri_list_extra['value'])
+        expected_theme_uri_list = [theme_name_to_uri(mapped_theme_name)]
+        self.assertListEqual(expected_theme_uri_list, theme_uri_list)
+
+        aggr_extra = _get_extra(extras, FIELD_THEMES_AGGREGATE)
+        self.assertIsNotNone(aggr_extra)
+        aggr = json.loads(aggr_extra['value'])
+        self.assertEqual(mapped_theme_name, aggr[0]['theme'])
 
     def _make_harvest_object(self, mock_url, groups):
         org = factories.Organization(identifier=uuid.uuid4())
@@ -243,8 +246,8 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         return hobj
 
 
-    @pytest.mark.usefixtures('with_request_context',)
-    def test_mapping(self):
+    @pytest.mark.usefixtures('with_request_context', 'remove_dataset_groups')
+    def test_theme_to_group_mapping(self):
         # multilang requires lang to be set
         # class dummyreq(object):
         #     class p(object):
@@ -258,7 +261,9 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         #set_lang('en_GB')
         #assert get_lang() == ['en_GB']
         assert 'dcatapit_theme_group_mapper' in config['ckan.plugins'], 'No dcatapit_theme_group_mapper plugin in config'
-        contents = self._get_file_contents('dataset.rdf')
+
+        with open(get_example_file('dataset.rdf'), 'r') as f:
+            contents = f.read()
 
         p = RDFParser(profiles=['it_dcat_ap'])
 
@@ -297,11 +302,12 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         _p = {'frequency': 'manual',
               'publisher_name': 'dummy',
               'extras': [{'key': 'theme', 'value': ['non-mappable', 'thememap1']}],
-              'groups': [],
+              'groups': [] , #  [{'name':existing_g.name}],
               'title': 'dummy',
               'holder_name': 'dummy',
               'holder_identifier': 'dummy',
-              'name': 'dummy',
+              'name': 'dummy-' + uuid4().hex,
+              'identifier': 'dummy' + uuid4().hex,
               'notes': 'dummy',
               'owner_org': 'dummy',
               'modified': datetime.now(),
@@ -309,10 +315,13 @@ class TestDCATAPITProfileParsing(BaseParseTest):
               'metadata_created': datetime.now(),
               'metadata_modified': datetime.now(),
               'guid': str(uuid.uuid4),
-              'identifier': 'dummy'}
+              }
 
         package_dict.update(_p)
+
         config[DCATAPIT_THEME_TO_MAPPING_SOURCE] = ''
+        config[DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS] = 'false'
+
         package_data = call_action('package_create', context=context, **package_dict)
 
         p = Package.get(package_data['id'])
@@ -325,13 +334,11 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
         # use test mapping, which replaces thememap1 to thememap2 and thememap3
         test_map_file = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'examples', 'test_map.ini')
+
         config[DCATAPIT_THEME_TO_MAPPING_SOURCE] = test_map_file
+        config[DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS] = 'false'
 
-        package_dict['theme'] = ['non-mappable', 'thememap1']
-
-        expected_groups_existing = ['existing-group']
-        expected_groups_new = expected_groups_existing + ['somegroup1', 'somegroup2']
-        expected_groups_multi = expected_groups_new + ['othergroup']
+        # package_dict['theme'] = ['non-mappable', 'thememap1']
 
         package_dict.pop('extras', None)
         p = Package.get(package_data['id'])
@@ -345,11 +352,14 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         p = Package.get(package_data['id'])
         groups = [g.name for g in p.get_groups(group_type='group')]
 
-        assert expected_groups_existing == groups, (expected_groups_existing, 'vs', groups,)
+        # the map file maps ECON to existing group, and 2 other unexisting groups that will not be created
+        expected_groups = ['existing-group']
+        self.assertSetEqual(set(expected_groups), set(groups), 'Error in assigned groups')
 
+        config[DCATAPIT_THEME_TO_MAPPING_SOURCE] = test_map_file
         config[DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS] = 'true'
 
-        package_dict['theme'] = ['non-mappable', 'thememap1']
+        # package_dict['theme'] = ['non-mappable', 'thememap1']
         package_data = call_action('package_update', context=context, **package_dict)
 
         meta.Session.flush()
@@ -358,10 +368,15 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         p = Package.get(package_data['id'])
         groups = [g.name for g in p.get_groups(group_type='group')]
 
-        assert len(expected_groups_new) == len(groups), (expected_groups_new, 'vs', groups,)
-        assert set(expected_groups_new) == set(groups), (expected_groups_new, 'vs', groups,)
+        # the map file maps ECON to existing group and 2 other groups that have been automatically created
+        expected_groups = expected_groups + ['somegroup1', 'somegroup2']
+        self.assertSetEqual(set(expected_groups), set(groups), 'Groups differ')
 
-        package_dict['theme'] = ['non-mappable', 'thememap1', 'thememap-multi']
+        # package_dict['theme'] = ['non-mappable', 'thememap1', 'thememap-multi']
+        aggr = json.loads(package_dict[FIELD_THEMES_AGGREGATE])
+        aggr.append({'theme':'thememap-multi', 'subthemes':[]})
+        package_dict[FIELD_THEMES_AGGREGATE] = json.dumps(aggr)
+
         package_data = call_action('package_update', context=context, **package_dict)
 
         meta.Session.flush()
@@ -370,8 +385,10 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         p = Package.get(package_data['id'])
         groups = [g.name for g in p.get_groups(group_type='group')]
 
-        assert len(expected_groups_multi) == len(groups), (expected_groups_multi, 'vs', groups,)
-        assert set(expected_groups_multi) == set(groups), (expected_groups_multi, 'vs', groups,)
+        # added theme 'thememap-multi', that maps to 'othergroup' and other already exisintg groups
+        expected_groups = expected_groups + ['othergroup']
+        self.assertEqual(len(expected_groups), len(groups), 'New groups differ - there may be duplicated groups')
+        self.assertSetEqual(set(expected_groups), set(groups), 'New groups differ')
 
         package_data = call_action('package_update', context=context, **package_dict)
 
@@ -381,18 +398,13 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         p = Package.get(package_data['id'])
         groups = [g.name for g in p.get_groups(group_type='group')]
 
-        assert len(expected_groups_multi) == len(groups), (expected_groups_multi, 'vs', groups,)
-        assert set(expected_groups_multi) == set(groups), (expected_groups_multi, 'vs', groups,)
+        self.assertEqual(len(expected_groups), len(groups), 'New groups differ - there may be duplicated groups')
+        self.assertSetEqual(set(expected_groups), set(groups), 'New groups differ')
 
         meta.Session.rollback()
 
     def test_license(self):
-
-        def get_path(fname):
-            return os.path.join(os.path.dirname(__file__),
-                                '..', '..', '..', 'examples', fname)
-        licenses = get_path('licenses.rdf')
-        load_from_graph(path=licenses)
+        load_from_graph(path=get_example_file('licenses.rdf'))
         Session.flush()
 
         dataset = {'title': 'some title',
@@ -662,7 +674,6 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
         assert set1 == set2, 'Got different temporal coverage sets: \n{}\n vs\n {}'.format(set1, set2)
 
-    @pytest.mark.skip("Subthemes need fixing")
     def test_subthemes(self):
 
         load_themes()
@@ -689,7 +700,8 @@ class TestDCATAPITProfileParsing(BaseParseTest):
             'holder_name': 'bolzano',
             'holder_identifier': '234234234',
             'alternate_identifier': 'ISBN,TEST',
-            'theme': json.dumps(subthemes),  # NO: themes should be a list of URIs
+            FIELD_THEMES_AGGREGATE: json.dumps(subthemes),
+            'theme': theme_aggr_to_theme_uris(subthemes)  # this is added dinamically when retrieving datasets from the db
         }
 
         s = RDFSerializer()
@@ -701,21 +713,34 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         datasets = list(p.datasets())
 
         assert len(datasets) == 1
-        d = datasets[0]
-        themes = json.loads(dataset['theme'])
-        assert(len(themes) == len(subthemes) == 2)
-        for t in themes:
+        parsed_dataset = datasets[0]
+
+        # test themes
+        parsed_themes_raw = _get_extra_value(parsed_dataset.get('extras'), 'theme')
+        self.assertIsNotNone(parsed_themes_raw, f'Themes not found in parsed dataset {parsed_dataset}')
+        parsed_themes = json.loads(parsed_themes_raw)
+        self.assertEqual(2, len(parsed_themes))
+        self.assertSetEqual(set(theme_names_to_uris(['AGRI','ENVI'])), set(parsed_themes))
+
+        # test aggregated themes
+        parsed_aggr_raw = parsed_dataset.get(FIELD_THEMES_AGGREGATE, None)
+        self.assertIsNotNone(parsed_aggr_raw, f'Aggregated themes not found in parsed dataset {parsed_dataset}')
+        parsed_aggr = json.loads(parsed_aggr_raw)
+        self.assertIsNotNone(parsed_aggr, 'Aggregate is None')
+        self.assertEquals(2, len(parsed_aggr))
+        for t in parsed_aggr:
             if t['theme'] == 'ENVI':
-                assert t['subthemes'] == []
+                self.assertSetEqual(set([]), set(t['subthemes']))
             elif t['theme'] == 'AGRI':
-                assert set(t['subthemes']) == set(subthemes[0]['subthemes'])
+                self.assertSetEqual(set(subthemes[0]['subthemes']), set(t['subthemes']))
             else:
-                assert False, 'Unknown theme: {}'.format(t)
+                self.fail(f'Unknown theme: {t}')
 
     @pytest.mark.usefixtures('clean_dcatapit_db')
     def test_alternate_identifiers(self):
 
-        contents = self._get_file_contents('dataset_identifier.rdf')
+        with open(get_example_file('dataset_identifier.rdf'), 'r') as f:
+            contents = f.read()
 
         p = RDFParser(profiles=['it_dcat_ap'])
         p.parse(contents)
@@ -727,7 +752,8 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
     def test_publisher(self):
 
-        contents = self._get_file_contents('catalog_dati_unibo.rdf')
+        with open(get_example_file('catalog_dati_unibo.rdf'), 'r') as f:
+            contents = f.read()
 
         p = RDFParser(profiles=['it_dcat_ap'])
 

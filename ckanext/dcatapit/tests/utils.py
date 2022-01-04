@@ -12,21 +12,30 @@ from ckanext.dcatapit.model.subtheme import (
 
 Session = meta.Session
 
-MAPPING_FILE = 'eurovoc_mapping.rdf'
-EUROVOC_FILE = 'eurovoc.rdf'
+SKOS_THEME_FILE = 'data-theme-skos.rdf'
+MAPPING_FILE = 'theme-subtheme-mapping.rdf'
+EUROVOC_FILE = 'eurovoc_filtered.rdf'
 
 
-def _get_path(fname, dir_name='examples'):
+def _get_base_file(fname, dir_name):
     return os.path.join(os.path.dirname(__file__),
                         '..', '..', '..', dir_name, fname)
 
 
-def _get_test_file(fname):
+def get_example_file(fname):
+    return _get_base_file(fname, 'examples')
+
+
+def get_voc_file(fname):
+    return _get_base_file(fname, 'vocabularies')
+
+
+def get_test_file(fname):
     return os.path.join(os.path.dirname(__file__), 'files', fname)
 
 
 def load_themes():
-    filename = _get_test_file('data-theme-skos.rdf')
+    filename = get_test_file(SKOS_THEME_FILE)
     # load_subthemes(filename, 'eu_themes')
     do_load(
         vocab_name='eu_themes',
@@ -41,8 +50,8 @@ def load_themes():
     vocab = q.first()
     assert vocab
 
-    map_f = _get_path(MAPPING_FILE)
-    voc_f = _get_path(EUROVOC_FILE)
+    map_f = get_voc_file(MAPPING_FILE)
+    voc_f = get_test_file(EUROVOC_FILE)
     clear_subthemes()
     load_subthemes(map_f, voc_f)
     assert Subtheme.q().first()

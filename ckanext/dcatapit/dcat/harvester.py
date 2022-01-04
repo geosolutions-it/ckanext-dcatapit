@@ -6,10 +6,7 @@ import ckanext.dcatapit.interfaces as interfaces
 from ckan.lib.munge import munge_name
 from ckanext.dcat.interfaces import IDCATRDFHarvester
 from ckanext.dcatapit import helpers as dcatapit_helpers
-from ckanext.dcatapit.dcat.profiles import (
-    LOCALISED_DICT_NAME_BASE,
-    LOCALISED_DICT_NAME_RESOURCES,
-)
+from ckanext.dcatapit.dcat.const import LOCALISED_DICT_NAME_BASE, LOCALISED_DICT_NAME_RESOURCES
 from ckanext.harvest.harvesters.base import HarvesterBase
 
 log = logging.getLogger(__name__)

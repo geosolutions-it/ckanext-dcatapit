@@ -4,6 +4,8 @@ import unittest
 from ckan.model.meta import Session
 from rdflib import RDF, Graph
 
+from ckanext.dcatapit.tests.utils import get_example_file, MAPPING_FILE, get_test_file, EUROVOC_FILE, get_voc_file
+
 try:
     from ckan.tests import helpers
 except ImportError:
@@ -23,16 +25,11 @@ from ckanext.dcatapit.model.subtheme import (
 )
 
 
-def get_path(fname):
-    return os.path.join(os.path.dirname(__file__),
-                        '..', '..', '..', 'examples', fname)
-
-
 class LicenseTestCase(unittest.TestCase):
 
     def setUp(self):
 
-        self.licenses = get_path('licenses.rdf')
+        self.licenses = get_example_file('licenses.rdf')
         self.g = _get_graph(path=self.licenses)
 
     def test_licenses(self):
@@ -89,15 +86,15 @@ class LicenseTestCase(unittest.TestCase):
 
 
 class SubthemeTestCase(unittest.TestCase):
-    MAPPING_FILE = 'eurovoc_mapping.rdf'
+
     EUROVOC_FILE = 'eurovoc.rdf'
 
     def setUp(self):
         self._load_mapping()
 
     def _load_mapping(self):
-        self.map_f = get_path(self.MAPPING_FILE)
-        self.voc_f = get_path(self.EUROVOC_FILE)
+        self.map_f = get_voc_file(MAPPING_FILE)
+        self.voc_f = get_test_file(EUROVOC_FILE)
 
     def test_subthemes(self):
         clear_subthemes()

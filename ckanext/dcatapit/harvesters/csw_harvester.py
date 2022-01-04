@@ -15,6 +15,8 @@ from ckanext.spatial.model import (
     ISOResponsibleParty,
 )
 
+from ckanext.dcatapit.schema import FIELD_THEMES_AGGREGATE
+
 log = logging.getLogger(__name__)
 
 
@@ -170,7 +172,7 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
             dataset_themes = [{'theme': dt} for dt in dataset_themes.strip('{}').split(',')]
 
         log.info('Medatata harvested dataset themes: %r', dataset_themes)
-        package_dict['extras'].append({'key': 'theme', 'value': json.dumps(dataset_themes)})
+        package_dict['extras'].append({'key': FIELD_THEMES_AGGREGATE, 'value': json.dumps(dataset_themes)})
 
         #  -- publisher -- #
         citedResponsiblePartys = iso_values['cited-responsible-party']

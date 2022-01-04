@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rdf:RDF xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:atold="http://publications.europa.eu/resource/authority/" xmlns:at="http://publications.europa.eu/ontology/authority/">
-  <skos:ConceptScheme rdf:about="http://publications.europa.eu/resource/authority/data-theme" at:table.id="data-theme" at:table.version.number="20160921-0">
-    <owl:versionInfo>20160921-0</owl:versionInfo>
-    <rdfs:label xml:lang="en">Dataset types Named Authority List</rdfs:label>
-    <at:prefLabel xml:lang="en">Dataset types Named Authority List</at:prefLabel>
+  <skos:ConceptScheme rdf:about="http://publications.europa.eu/resource/authority/data-theme" at:table.id="data-theme" at:table.version.number="20200923-0">
+    <owl:versionInfo>20200923-0</owl:versionInfo>
+    <rdfs:label xml:lang="en">Data theme</rdfs:label>
+    <at:prefLabel xml:lang="en">Data theme</at:prefLabel>
+    <skos:prefLabel xml:lang="en">Data theme</skos:prefLabel>
   </skos:ConceptScheme>
   <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/AGRI" at:deprecated="false">
     <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
@@ -29,6 +30,8 @@
     <skos:prefLabel xml:lang="lt">Žemės ūkis, žuvininkystė, miškininkystė ir maistas</skos:prefLabel>
     <skos:prefLabel xml:lang="mt">Agrikoltura, sajd, forestrija u ikel</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Landbouw, visserij, bosbouw en voeding</skos:prefLabel>
+    <skos:prefLabel xml:lang="nn">Jordbruk, fiskeri, skogbruk og mat</skos:prefLabel>
+    <skos:prefLabel xml:lang="nb">Jordbruk, fiskeri, skogbruk og mat</skos:prefLabel>
     <skos:prefLabel xml:lang="no">Jordbruk, fiskeri, skogbruk og mat</skos:prefLabel>
     <skos:prefLabel xml:lang="pl">Rolnictwo, rybołówstwo, leśnictwo i żywność</skos:prefLabel>
     <skos:prefLabel xml:lang="pt">Agricultura, pesca, silvicultura e alimentação</skos:prefLabel>
@@ -62,6 +65,8 @@
     <skos:prefLabel xml:lang="lt">Švietimas, kultūra ir sportas</skos:prefLabel>
     <skos:prefLabel xml:lang="mt">Edukazzjoni, kultura u sport</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Onderwijs, cultuur en sport</skos:prefLabel>
+    <skos:prefLabel xml:lang="nn">Utdanning, kultur og sport</skos:prefLabel>
+    <skos:prefLabel xml:lang="nb">Utdanning, kultur og sport</skos:prefLabel>
     <skos:prefLabel xml:lang="no">Utdanning, kultur og sport</skos:prefLabel>
     <skos:prefLabel xml:lang="pl">Edukacja, kultura i sport</skos:prefLabel>
     <skos:prefLabel xml:lang="pt">Educação, cultura e desporto</skos:prefLabel>
@@ -95,6 +100,8 @@
     <skos:prefLabel xml:lang="lt">Aplinka</skos:prefLabel>
     <skos:prefLabel xml:lang="mt">Ambjent</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Milieu</skos:prefLabel>
+    <skos:prefLabel xml:lang="nn">Miljø</skos:prefLabel>
+    <skos:prefLabel xml:lang="nb">Miljø</skos:prefLabel>
     <skos:prefLabel xml:lang="no">Miljø</skos:prefLabel>
     <skos:prefLabel xml:lang="pl">Środowisko</skos:prefLabel>
     <skos:prefLabel xml:lang="pt">Ambiente</skos:prefLabel>
@@ -128,6 +135,8 @@
     <skos:prefLabel xml:lang="lt">Energetika</skos:prefLabel>
     <skos:prefLabel xml:lang="mt">Enerġija</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Energie</skos:prefLabel>
+    <skos:prefLabel xml:lang="nn">Energi</skos:prefLabel>
+    <skos:prefLabel xml:lang="nb">Energi</skos:prefLabel>
     <skos:prefLabel xml:lang="no">Energi</skos:prefLabel>
     <skos:prefLabel xml:lang="pl">Energia</skos:prefLabel>
     <skos:prefLabel xml:lang="pt">Energia</skos:prefLabel>
@@ -161,6 +170,8 @@
     <skos:prefLabel xml:lang="lt">Transportas</skos:prefLabel>
     <skos:prefLabel xml:lang="mt">Trasport</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Vervoer</skos:prefLabel>
+    <skos:prefLabel xml:lang="nn">Transport</skos:prefLabel>
+    <skos:prefLabel xml:lang="nb">Transport</skos:prefLabel>
     <skos:prefLabel xml:lang="no">Transport</skos:prefLabel>
     <skos:prefLabel xml:lang="pl">Transport</skos:prefLabel>
     <skos:prefLabel xml:lang="pt">Transportes</skos:prefLabel>
@@ -194,6 +205,8 @@
     <skos:prefLabel xml:lang="lt">Mokslas ir technologijos</skos:prefLabel>
     <skos:prefLabel xml:lang="mt">Xjenza u teknoloġija</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Wetenschap en technologie</skos:prefLabel>
+    <skos:prefLabel xml:lang="nn">Vitskap og teknologi</skos:prefLabel>
+    <skos:prefLabel xml:lang="nb">Vitenskap og teknologi</skos:prefLabel>
     <skos:prefLabel xml:lang="no">Vitenskap og teknologi</skos:prefLabel>
     <skos:prefLabel xml:lang="pl">Nauka i technologia</skos:prefLabel>
     <skos:prefLabel xml:lang="pt">Ciência e tecnologia</skos:prefLabel>
@@ -227,6 +240,8 @@
     <skos:prefLabel xml:lang="lt">Ekonomika ir finansai</skos:prefLabel>
     <skos:prefLabel xml:lang="mt">Ekonomija u finanzi</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Economie en financiën</skos:prefLabel>
+    <skos:prefLabel xml:lang="nn">Økonomi og finans</skos:prefLabel>
+    <skos:prefLabel xml:lang="nb">Økonomi og finans</skos:prefLabel>
     <skos:prefLabel xml:lang="no">Økonomi og finans</skos:prefLabel>
     <skos:prefLabel xml:lang="pl">Gospodarka i finanse</skos:prefLabel>
     <skos:prefLabel xml:lang="pt">Economia e finanças</skos:prefLabel>
@@ -260,6 +275,8 @@
     <skos:prefLabel xml:lang="lt">Gyventojų skaičius ir visuomenė</skos:prefLabel>
     <skos:prefLabel xml:lang="mt">Popolazzjoni u soċjetà</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Bevolking en samenleving</skos:prefLabel>
+    <skos:prefLabel xml:lang="nn">Befolkning og samfunn</skos:prefLabel>
+    <skos:prefLabel xml:lang="nb">Befolkning og samfunn</skos:prefLabel>
     <skos:prefLabel xml:lang="no">Befolkning og samfunn</skos:prefLabel>
     <skos:prefLabel xml:lang="pl">Ludność i społeczeństwo</skos:prefLabel>
     <skos:prefLabel xml:lang="pt">População e sociedade</skos:prefLabel>
@@ -293,6 +310,8 @@
     <skos:prefLabel xml:lang="lt">Sveikata</skos:prefLabel>
     <skos:prefLabel xml:lang="mt">Saħħa</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Gezondheid</skos:prefLabel>
+    <skos:prefLabel xml:lang="nn">Helse</skos:prefLabel>
+    <skos:prefLabel xml:lang="nb">Helse</skos:prefLabel>
     <skos:prefLabel xml:lang="no">Helse</skos:prefLabel>
     <skos:prefLabel xml:lang="pl">Zdrowie</skos:prefLabel>
     <skos:prefLabel xml:lang="pt">Saúde</skos:prefLabel>
@@ -326,6 +345,8 @@
     <skos:prefLabel xml:lang="lt">Vyriausybė ir viešasis sektorius</skos:prefLabel>
     <skos:prefLabel xml:lang="mt">Gvern u settur pubbliku</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Overheid en publieke sector</skos:prefLabel>
+    <skos:prefLabel xml:lang="nn">Forvaltning og offentleg sektor</skos:prefLabel>
+    <skos:prefLabel xml:lang="nb">Forvaltning og offentlig sektor</skos:prefLabel>
     <skos:prefLabel xml:lang="no">Forvaltning og offentlig sektor</skos:prefLabel>
     <skos:prefLabel xml:lang="pl">Rząd i sektor publiczny</skos:prefLabel>
     <skos:prefLabel xml:lang="pt">Governo e setor público</skos:prefLabel>
@@ -359,6 +380,8 @@
     <skos:prefLabel xml:lang="lt">Regionai ir miestai</skos:prefLabel>
     <skos:prefLabel xml:lang="mt">Reġjuni u bliet</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Regio's en steden</skos:prefLabel>
+    <skos:prefLabel xml:lang="nn">Regionar og byar</skos:prefLabel>
+    <skos:prefLabel xml:lang="nb">Regioner og byer</skos:prefLabel>
     <skos:prefLabel xml:lang="no">Regioner og byer</skos:prefLabel>
     <skos:prefLabel xml:lang="pl">Regiony i miasta</skos:prefLabel>
     <skos:prefLabel xml:lang="pt">Regiões e cidades</skos:prefLabel>
@@ -392,6 +415,8 @@
     <skos:prefLabel xml:lang="lt">Teisingumas, teisės sistema ir visuomenės sauga</skos:prefLabel>
     <skos:prefLabel xml:lang="mt">Ġustizzja, sistema legali u sigurtà pubblika</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Justitie, rechtsstelsel en openbare veiligheid</skos:prefLabel>
+    <skos:prefLabel xml:lang="nn">Justis, rettssystem og allmenn tryggleik</skos:prefLabel>
+    <skos:prefLabel xml:lang="nb">Justis, rettssystem og allmenn sikkerhet</skos:prefLabel>
     <skos:prefLabel xml:lang="no">Justis, rettssystem og allmenn sikkerhet</skos:prefLabel>
     <skos:prefLabel xml:lang="pl">Sprawiedliwość, ustrój sądów i bezpieczeństwo publiczne</skos:prefLabel>
     <skos:prefLabel xml:lang="pt">Justiça, sistema judiciário e segurança pública</skos:prefLabel>
@@ -425,6 +450,8 @@
     <skos:prefLabel xml:lang="lt">Tarptautiniai klausimai</skos:prefLabel>
     <skos:prefLabel xml:lang="mt">Kwistjonijiet internazzjonali</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Internationale vraagstukken</skos:prefLabel>
+    <skos:prefLabel xml:lang="nn">Internasjonale tema</skos:prefLabel>
+    <skos:prefLabel xml:lang="nb">Internasjonale temaer</skos:prefLabel>
     <skos:prefLabel xml:lang="no">Internasjonale temaer</skos:prefLabel>
     <skos:prefLabel xml:lang="pl">Kwestie międzynarodowe</skos:prefLabel>
     <skos:prefLabel xml:lang="pt">Questões internacionais</skos:prefLabel>

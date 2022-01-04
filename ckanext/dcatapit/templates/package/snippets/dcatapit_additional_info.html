@@ -31,7 +31,7 @@
                 </td>
             </tr>
 
-            {% elif field.name == 'theme' %}
+            {% elif field.name == 'themes_aggregate' %}
                 {% set themes = (h.load_dcatapit_subthemes(pkg_dict[field.name], lang) or []) %}
 
                 {% if not themes %}

@@ -3,6 +3,7 @@
 
 from ckan.common import _
 
+FIELD_THEMES_AGGREGATE = 'themes_aggregate'
 
 def get_custom_config_schema(show=True):
     if show:
@@ -134,8 +135,11 @@ def get_custom_package_schema():
             'help': _('package_alternate_identifier_help'),
         },
         {
-            'name': 'theme',
-            'validator': ['not_empty', 'dcatapit_subthemes'],
+            # aggregation of themes and subthemes
+            # Format: [ {'theme' : theme_short_name, 'subthemes': [subthemes URIs...]}, ...]
+            'name': FIELD_THEMES_AGGREGATE,
+            # 'validator': ['not_empty', 'dcatapit_subthemes'],
+            'validator': ['dcatapit_subthemes'],
             'element': 'themes',
             'type': 'vocabulary',
             'vocabulary_name': 'eu_themes',

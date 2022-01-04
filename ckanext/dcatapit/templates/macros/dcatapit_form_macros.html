@@ -115,16 +115,26 @@ Old implementation of the couple element (one element with comma separated value
             <div class="row">
                 <div class="col-md-6">
                     <div class="input-group" style="margin-bottom: 5px" {{ form.attributes(attrs) }}>
-                        <label for="{{ names[0] }}-label" class="input-group-addon">{{ _(labels[0]) }}</label>
-                        <input class="form-control" type="{{ types[0] }}" name="{{ names[0] }}"
-                               value="{{ values[0] | empty_and_escape }}" placeholder="{{ placeholders[0] }}"/>
+                        <label for="{{ names[0] }}-label"
+                               class="input-group-addon">{{ _(labels[0]) }}</label>
+                        <input class="form-control"
+                               id="{{ names[0] }}-value"
+                               type="{{ types[0] }}"
+                               name="{{ names[0] }}"
+                               value="{{ values[0] | empty_and_escape }}"
+                               placeholder="{{ placeholders[0] }}"/>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group" style="margin-bottom: 5px">
-                        <label for="{{ names[1] }}-label" class="input-group-addon">{{ _(labels[1]) }}</label>
-                        <input class="form-control" type="{{ types[1] }}" name="{{ names[1] }}"
-                               value="{{ values[1] | empty_and_escape }}" placeholder="{{ placeholders[1] }}"/>
+                        <label for="{{ names[1] }}-label"
+                               class="input-group-addon">{{ _(labels[1]) }}</label>
+                        <input class="form-control"
+                               id="{{ names[1] }}-value"
+                               type="{{ types[1] }}"
+                               name="{{ names[1] }}"
+                               value="{{ values[1] | empty_and_escape }}"
+                               placeholder="{{ placeholders[1] }}"/>
                     </div>
                 </div>
             </div>
@@ -166,7 +176,8 @@ Old implementation of the couple element (one element with comma separated value
 {% endmacro %}
 
 
-{% macro themes(name, id='', label='', value='', placeholder='', error='', options=(), classes=[], attrs={}, type='', sublabel='', is_required=True, help=None) %}
+{% macro themes(name, id='', label='', value='', placeholder='', error='', options=(), classes=[], attrs={}, type='',
+                sublabel='', is_required=True, help=None) %}
     <div class="theme-wrap{% if error %} error{% endif %}">
         <div class="template theme removable">
 
@@ -196,7 +207,7 @@ Old implementation of the couple element (one element with comma separated value
         {{ add_button(_("Add a Theme"), ' '.join(classes), help, is_required=is_required) }}
 
 
-        <input type="hidden" name="theme" value="{{ value or list()| safe }}" data-module="dcatapit-theme"
+        <input type="hidden" name="themes_aggregate" value="{{ value or list()| safe }}" data-module="dcatapit-theme"
                data-module-template=".theme" data-module-container=".theme_container" data-module-lang="{{ lang }}"
                data-module-input_prefix="" data-module-data_name="theme"/>
 

@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100270">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">6816 metallurgia e siderurgia</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">6816 iron, steel and other metal industries</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">6816 Metallindustrie, Eisen und Stahl</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6816 métallurgie et sidérurgie</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100231">
+    <skos:prefLabel xml:lang="fr">4031 concurrence</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">4031 competition</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">4031 concorrenza</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">4031 Wettbewerb</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100204">
+    <skos:prefLabel xml:lang="en">2436 public finance and budget policy</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">2436 finanze pubbliche e politica di bilancio</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">2436 Öffentliche Finanzen und Haushaltspolitik</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">2436 finances publiques et politique budgétaire</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100269">
+    <skos:prefLabel xml:lang="en">6811 chemistry</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">6811 Chemie</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6811 chimie</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">6811 chimica</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100286">
+    <skos:prefLabel xml:lang="de">7611 Europäische Organisation</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">7611 European organisations</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">7611 organisations européennes</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">7611 organizzazioni europee</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100217">
+    <skos:prefLabel xml:lang="de">3206 Bildung</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">3206 istruzione</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">3206 éducation</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">3206 education</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100174">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">1006 istituzioni dell'Unione europea e funzione pubblica europea</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">1006 institutions de l'Union européenne et fonction publique européenne</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">1006 EU institutions and European civil service</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">1006 Institutionen der Europäischen Union und Europäischer Öffentlicher Dienst</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100241">
+    <skos:prefLabel xml:lang="fr">4826 transports aérien et spatial</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">4826 air and space transport</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">4826 trasporti aerei e spaziali</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">4826 Luftverkehr und Raumfahrt</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100203">
+    <skos:prefLabel xml:lang="it">2431 assicurazioni</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">2431 Versicherungswesen</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2431 insurance</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">2431 assurance</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100200">
+    <skos:prefLabel xml:lang="de">2416 Geld- und Kreditwesen</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">2416 institutions financières et crédit</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2416 financial institutions and credit</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">2416 istituti finanziari e di credito</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100250">
+    <skos:prefLabel xml:lang="en">5631 agricultural activity</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">5631 attività agricola</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">5631 activité agricole</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">5631 Landwirtschaftliche Erwerbstätigkeit</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100196">
+    <skos:prefLabel xml:lang="fr">2031 commercialisation</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">2031 Vermarktung</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2031 marketing</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">2031 commercializzazione</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100169">
+    <skos:prefLabel xml:lang="it">0436 potere esecutivo e amministrazione pubblica</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">0436 exekutive Gewalt und öffentliche Verwaltung</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">0436 pouvoir exécutif et administration publique</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">0436 executive power and public service</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100176">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">1016 europäisches Einigungswerk</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">1016 costruzione europea</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">1016 European construction</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">1016 construction européenne</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100184">
+    <skos:prefLabel xml:lang="fr">1236 droits et libertés</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">1236 Rechte und Freiheiten</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">1236 rights and freedoms</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">1236 diritti e libertà</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100170">
+    <skos:prefLabel xml:lang="en">0806 international affairs</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">0806 politica internazionale</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">0806 Internationale Politik</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">0806 politique internationale</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100175">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">1011 Recht der Europäischen Union</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">1011 diritto dell'Unione europea</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">1011 European Union law</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">1011 droit de l'Union européenne</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100219">
+    <skos:prefLabel xml:lang="fr">3216 organisation de l'enseignement</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">3216 organisation of teaching</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">3216 Organisation des Unterrichtswesens</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">3216 organizzazione scolastica</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100190">
+    <skos:prefLabel xml:lang="en">1631 economic analysis</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">1631 Wirtschaftsanalyse</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">1631 analisi economica</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">1631 analyse économique</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100242">
+    <skos:prefLabel xml:lang="de">5206 Umweltpolitik</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">5206 politique de l'environnement</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">5206 environmental policy</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">5206 politica dell'ambiente</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100238">
+    <skos:prefLabel xml:lang="it">4811 organizzazione dei trasporti</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">4811 organisation of transport</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">4811 Organisation des Verkehrs</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">4811 organisation des transports</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100182">
+    <skos:prefLabel xml:lang="fr">1226 organisation de la justice</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">1226 organisation of the legal system</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">1226 organizzazione della giustizia</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">1226 Gerichtsverfassung</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100167">
+    <skos:prefLabel xml:lang="it">0426 lavori parlamentari</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">0426 travaux parlementaires</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">0426 parliamentary proceedings</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">0426 parlamentarische Arbeit</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100276">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">6846 industrie varie</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">6846 miscellaneous industries</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6846 industries diverses</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">6846 Verschiedene Industriezweige</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100214">
+    <skos:prefLabel xml:lang="it">2836 protezione sociale</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">2836 protection sociale</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2836 social protection</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">2836 Sozialer Schutz</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100260">
+    <skos:prefLabel xml:lang="it">6406 produzione</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6406 production</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">6406 production</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">6406 Produktion</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100189">
+    <skos:prefLabel xml:lang="fr">1626 comptabilité nationale</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">1626 Volkswirtschaftliche Gesamtrechnungen</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">1626 national accounts</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">1626 contabilità nazionale</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100249">
+    <skos:prefLabel xml:lang="it">5626 mezzo di produzione agricola</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">5626 moyen de production agricole</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">5626 means of agricultural production</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">5626 Landwirtschaftliches Betriebsmittel</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100247">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">5616 système d'exploitation agricole</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">5616 Landwirtschaftliches Betriebssystem</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">5616 farming systems</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">5616 orientamento produttivo agricolo</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100197">
+    <skos:prefLabel xml:lang="en">2036 distributive trades</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">2036 Verteilung und Vertrieb</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">2036 distribution commerciale</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">2036 distribuzione commerciale</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100224">
+    <skos:prefLabel xml:lang="en">3606 natural and applied sciences</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">3606 Naturwissenschaften und angewandte Wissenschaften</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">3606 scienze naturali e applicate</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">3606 sciences naturelles et appliquées</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100237">
+    <skos:prefLabel xml:lang="fr">4806 politique des transports</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">4806 transport policy</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">4806 politica dei trasporti</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">4806 Verkehrspolitik</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100252">
+    <skos:prefLabel xml:lang="de">5641 Fischerei</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">5641 fisheries</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">5641 pesca</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">5641 pêche</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100188">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">1621 structure économique</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">1621 economic structure</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">1621 Wirtschaftsstruktur</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">1621 struttura economica</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100271">
+    <skos:prefLabel xml:lang="fr">6821 industrie mécanique</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">6821 mechanical engineering</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">6821 industria meccanica</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">6821 Mechanische Industrie</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100236">
+    <skos:prefLabel xml:lang="en">4426 labour law and labour relations</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">4426 relation et droit du travail</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">4426 rapporti di lavoro e diritto del lavoro</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">4426 Arbeitsrecht und Beziehungen zwischen den Sozialpartnern</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100264">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">6611 industries charbonnière et minière</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">6611 industria carboniera e mineraria</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">6611 coal and mining industries</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">6611 Kohleindustrie und Bergbau</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100209">
+    <skos:prefLabel xml:lang="fr">2811 migration</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">2811 Wanderungsbewegungen</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2811 migration</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">2811 migrazione</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100251">
+    <skos:prefLabel xml:lang="it">5636 foresta</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">5636 forêt</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">5636 Wald</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">5636 forestry</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100208">
+    <skos:prefLabel xml:lang="de">2806 Familie</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">2806 famille</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">2806 famiglia</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2806 family</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100171">
+    <skos:prefLabel xml:lang="it">0811 politica di cooperazione</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">0811 Politik der Zusammenarbeit</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">0811 cooperation policy</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">0811 politique de coopération</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100273">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">6831 edilizia e lavori pubblici</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">6831 Bauindustrie und öffentliches Bauwesen</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">6831 building and public works</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6831 bâtiment et travaux publics</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100265">
+    <skos:prefLabel xml:lang="en">6616 oil industry</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6616 industrie pétrolière</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">6616 Erdölindustrie</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">6616 industria petrolifera</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100185">
+    <skos:prefLabel xml:lang="it">1606 politica economica</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">1606 Wirtschaftspolitik</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">1606 economic policy</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">1606 politique économique</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100239">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">4816 land transport</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">4816 trasporti terrestri</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">4816 transport terrestre</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">4816 Landverkehr</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100201">
+    <skos:prefLabel xml:lang="fr">2421 libre circulation des capitaux</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">2421 Freier Kapitalverkehr</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2421 free movement of capital</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">2421 libera circolazione dei capitali</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100221">
+    <skos:prefLabel xml:lang="de">3226 Kommunikation</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">3226 communications</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">3226 comunicazione</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">3226 communication</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100206">
+    <skos:prefLabel xml:lang="de">2446 Steuerwesen</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">2446 fiscalité</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">2446 fiscalità</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2446 taxation</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100266">
+    <skos:prefLabel xml:lang="fr">6621 industries nucléaire et électrique</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">6621 Elektrizitäts- und Kernkraftindustrie</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">6621 industria nucleare ed elettrica</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">6621 electrical and nuclear industries</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100193">
+    <skos:prefLabel xml:lang="it">2016 commercio</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">2016 Wirtschaftsverkehr</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">2016 échanges économiques</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2016 trade</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100177">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">1021 finances de l'Union européenne</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">1021 Finanzen der Europäischen Union</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">1021 EU finance</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">1021 finanze dell'Unione europea</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100163">
+    <skos:prefLabel xml:lang="it">0406 quadro politico</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">0406 cadre politique</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">0406 Politischer Rahmen</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">0406 political framework</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100230">
+    <skos:prefLabel xml:lang="fr">4026 gestion comptable</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">4026 accounting</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">4026 Betriebliches Rechnungswesen</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">4026 gestione contabile</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100278">
+    <skos:prefLabel xml:lang="fr">7211 régions des États membres de l'Union européenne</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">7211 Regionen der Mitgliedstaaten der Europäischen Union</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">7211 regioni degli Stati membri dell'Unione europea</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">7211 regions of EU Member States</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100263">
+    <skos:prefLabel xml:lang="fr">6606 politique énergétique</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">6606 energy policy</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">6606 politica energetica</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">6606 Energiepolitik</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100205">
+    <skos:prefLabel xml:lang="fr">2441 budget</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">2441 budget</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">2441 bilancio</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">2441 Haushaltsplan</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100192">
+    <skos:prefLabel xml:lang="fr">2011 politique tarifaire</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2011 tariff policy</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">2011 Zolltarifpolitik</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">2011 politica tariffaria</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100222">
+    <skos:prefLabel xml:lang="en">3231 information and information processing</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">3231 information et traitement de l'information</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">3231 informazione ed elaborazione dell'informazione</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">3231 Information und Informationsverarbeitung</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100262">
+    <skos:prefLabel xml:lang="it">6416 ricerca e proprietà intellettuale</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">6416 Forschung und geistiges Eigentum</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">6416 research and intellectual property</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6416 recherche et propriété intellectuelle</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100165">
+    <skos:prefLabel xml:lang="de">0416 Wahlverfahren</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">0416 procedura elettorale e voto</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">0416 procédure électorale et vote</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">0416 electoral procedure and voting</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100202">
+    <skos:prefLabel xml:lang="it">2426 investimenti e finanziamenti</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">2426 Investition und Finanzierung</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">2426 investissement et financement</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2426 financing and investment</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100191">
+    <skos:prefLabel xml:lang="de">2006 Handelspolitik</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">2006 politica commerciale</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">2006 politique commerciale</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2006 trade policy</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100275">
+    <skos:prefLabel xml:lang="en">6841 leather and textile industries</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">6841 industria del cuoio e dei prodotti tessili</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6841 industries du cuir et du textile</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">6841 Textil- und Lederindustrie</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100235">
+    <skos:prefLabel xml:lang="it">4421 amministrazione e remunerazione del personale</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">4421 Verwaltung und Entlohnung des Personals</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">4421 personnel management and staff remuneration</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">4421 administration et rémunération du personnel</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100254">
+    <skos:prefLabel xml:lang="it">6011 prodotto animale</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6011 produit animal</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">6011 animal product</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">6011 Tierisches Erzeugnis</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100227">
+    <skos:prefLabel xml:lang="de">4011 Unternehmensarten</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">4011 business classification</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">4011 tipo d'impresa</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">4011 type d'entreprise</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100272">
+    <skos:prefLabel xml:lang="de">6826 Elektronik und Elektrotechnik</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6826 électronique et électrotechnique</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">6826 elettronica ed elettrotecnica</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">6826 electronics and electrical engineering</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100198">
+    <skos:prefLabel xml:lang="de">2406 Währungsbeziehungen</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2406 monetary relations</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">2406 relations monétaires</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">2406 relazioni monetarie</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100166">
+    <skos:prefLabel xml:lang="en">0421 parliament</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">0421 Parlement</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">0421 Parlament</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">0421 Parlamento</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100194">
+    <skos:prefLabel xml:lang="it">2021 commercio internazionale</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">2021 Internationaler Handel</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">2021 commerce international</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2021 international trade</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100213">
+    <skos:prefLabel xml:lang="de">2831 Kultur und Religion</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">2831 culture et religion</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">2831 cultura e religione</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2831 culture and religion</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100187">
+    <skos:prefLabel xml:lang="en">1616 regions and regional policy</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">1616 Wirtschaftsraum und Regionalpolitik</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">1616 région et politique régionale</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">1616 regione e politica regionale</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100282">
+    <skos:prefLabel xml:lang="en">7231 economic geography</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">7231 geografia economica</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">7231 Wirtschaftsgeografie</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">7231 géographie économique</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100186">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">1611 situation économique</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">1611 Wirtschaftssituation</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">1611 economic conditions</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">1611 situazione economica</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100232">
+    <skos:prefLabel xml:lang="it">4406 occupazione</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">4406 employment</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">4406 Beschäftigung</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">4406 emploi</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100173">
+    <skos:prefLabel xml:lang="en">0821 defence</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">0821 difesa</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">0821 Verteidigung</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">0821 défense</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100289">
+    <skos:prefLabel xml:lang="en">7626 non-governmental organisations</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">7626 organisations non gouvernementales</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">7626 organizzazioni non governative</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">7626 Nichtregierungsorganisation</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100268">
+    <skos:prefLabel xml:lang="de">6806 Industriepolitik und Industriestruktur</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">6806 industrial structures and policy</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6806 politique et structures industrielles</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">6806 politiche e strutture industriali</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100267">
+    <skos:prefLabel xml:lang="en">6626 soft energy</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">6626 Sanfte Energie</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">6626 energia dolce</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6626 énergie douce</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100218">
+    <skos:prefLabel xml:lang="it">3211 insegnamento</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">3211 enseignement</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">3211 teaching</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">3211 Unterrichtswesen</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100234">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">4416 condizioni e organizzazione del lavoro</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">4416 Arbeitsbedingungen und Arbeitsorganisation</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">4416 organisation of work and working conditions</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">4416 conditions et organisation du travail</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100183">
+    <skos:prefLabel xml:lang="de">1231 Internationales Recht</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">1231 diritto internazionale</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">1231 international law</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">1231 droit international</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100283">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">7236 political geography</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">7236 Politische Geografie</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">7236 geografia politica</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">7236 géographie politique</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100233">
+    <skos:prefLabel xml:lang="fr">4411 marché du travail</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">4411 labour market</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">4411 Arbeitsmarkt</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">4411 mercato del lavoro</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100210">
+    <skos:prefLabel xml:lang="fr">2816 démographie et population</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2816 demography and population</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">2816 Demografie und Bevölkerung</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">2816 demografia e popolazione</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100288">
+    <skos:prefLabel xml:lang="it">7621 organizzazioni mondiali</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">7621 world organisations</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">7621 Weltorganisationen</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">7621 organisations mondiales</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100164">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">0411 partito politico</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">0411 political party</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">0411 Politische Partei</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">0411 parti politique</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100255">
+    <skos:prefLabel xml:lang="en">6016 processed agricultural produce</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">6016 produit agricole transformé</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">6016 Landwirtschaftliches Verarbeitungserzeugnis</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">6016 prodotto agricolo trasformato</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100229">
+    <skos:prefLabel xml:lang="fr">4021 gestion administrative</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">4021 management</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">4021 Unternehmensverwaltung</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">4021 gestione amministrativa</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100240">
+    <skos:prefLabel xml:lang="it">4821 trasporti marittimi e fluviali</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">4821 maritime and inland waterway transport</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">4821 See- und Binnenschiffsverkehr</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">4821 transports maritime et fluvial</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100287">
+    <skos:prefLabel xml:lang="it">7616 organizzazioni extraeuropee</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">7616 Außereuropäische Organisation</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">7616 organisations extra-européennes</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">7616 extra-European organisations</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100285">
+    <skos:prefLabel xml:lang="fr">7606 Nations unies</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">7606 United Nations</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">7606 Nazioni Unite</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">7606 Vereinte Nationen</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100281">
+    <skos:prefLabel xml:lang="de">7226 Asien-Ozeanien</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">7226 Asia and Oceania</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">7226 Asie - Océanie</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">7226 Asia-Oceania</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100244">
+    <skos:prefLabel xml:lang="de">5216 Umweltschädigung</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">5216 détérioration de l'environnement</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">5216 deterioration of the environment</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">5216 degrado ambientale</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100274">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">6836 industria del legno</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">6836 wood industry</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6836 industrie du bois</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">6836 Holzindustrie</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100243">
+    <skos:prefLabel xml:lang="fr">5211 milieu naturel</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">5211 ambiente naturale</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">5211 natural environment</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">5211 Natürliche Umgebung</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100168">
+    <skos:prefLabel xml:lang="fr">0431 vie politique et sécurité publique</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">0431 vita politica e sicurezza pubblica</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">0431 Politisches Leben und öffentliche Sicherheit</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">0431 politics and public safety</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100245">
+    <skos:prefLabel xml:lang="de">5606 Agrarpolitik</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">5606 politica agricola</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">5606 politique agricole</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">5606 agricultural policy</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100180">
+    <skos:prefLabel xml:lang="fr">1216 droit pénal</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">1216 Strafrecht</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">1216 criminal law</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">1216 diritto penale</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100258">
+    <skos:prefLabel xml:lang="en">6031 agri-foodstuffs</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">6031 industria agro-alimentare</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6031 agro-alimentaire</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">6031 Landwirtschafts- und Ernährungssektor</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100172">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">0816 internationale Sicherheit</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">0816 sicurezza internazionale</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">0816 sécurité internationale</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">0816 international security</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100246">
+    <skos:prefLabel xml:lang="fr">5611 production et structures agricoles</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">5611 produzione e strutture agricole</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">5611 Agrarproduktion und Agrarstrukturen</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">5611 agricultural structures and production</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100256">
+    <skos:prefLabel xml:lang="de">6021 Getränk und Zucker</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">6021 beverages and sugar</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">6021 bevande e zucchero</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6021 boisson et sucre</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100248">
+    <skos:prefLabel xml:lang="de">5621 Nutzung der landwirtschaftlichen Fläche</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">5621 coltivazione di terreni agricoli</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">5621 exploitation de la terre agricole</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">5621 cultivation of agricultural land</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100181">
+    <skos:prefLabel xml:lang="de">1221 Gerichtswesen</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">1221 justice</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">1221 giustizia</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">1221 justice</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100280">
+    <skos:prefLabel xml:lang="it">7221 Africa</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">7221 Africa</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">7221 Afrika</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">7221 Afrique</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100225">
+    <skos:prefLabel xml:lang="fr">3611 sciences humaines</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">3611 humanities</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">3611 Geisteswissenschaften</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">3611 scienze umane</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100277">
+    <skos:prefLabel xml:lang="en">7206 Europe</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">7206 Europa</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">7206 Europa</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">7206 Europe</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100199">
+    <skos:prefLabel xml:lang="en">2411 monetary economics</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">2411 Geldwirtschaft</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">2411 economia monetaria</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">2411 économie monétaire</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100223">
+    <skos:prefLabel xml:lang="en">3236 information technology and data processing</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">3236 Informatik</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">3236 informatica e trattamento dei dati</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">3236 informatique et traitement des données</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100178">
+    <skos:prefLabel xml:lang="de">1206 Rechtsquellen und Rechtsdisziplinen</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">1206 sources et branches du droit</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">1206 sources and branches of the law</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">1206 fonti e branche del diritto</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100253">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">6006 prodotto vegetale</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">6006 Pflanzliches Erzeugnis</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">6006 plant product</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6006 produit végétal</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100259">
+    <skos:prefLabel xml:lang="en">6036 food technology</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">6036 Lebensmitteltechnologie</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6036 technologie alimentaire</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">6036 tecnologia alimentare</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100226">
+    <skos:prefLabel xml:lang="it">4006 organizzazione aziendale</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">4006 business organisation</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">4006 Unternehmensorganisation</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">4006 organisation de l'entreprise</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100261">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">6411 technology and technical regulations</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">6411 Technologie und technische Regelungen</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">6411 technologie et réglementation technique</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">6411 tecnologia e regolamentazione tecnica</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100211">
+    <skos:prefLabel xml:lang="de">2821 Sozialer Rahmen</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">2821 cadre social</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">2821 quadro sociale</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2821 social framework</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100279">
+    <skos:prefLabel xml:lang="de">7216 Amerika</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">7216 America</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">7216 Amérique</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">7216 America</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100284">
+    <skos:prefLabel xml:lang="fr">7241 pays et territoires d'outre-mer</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">7241 overseas countries and territories</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">7241 paesi e territori d'oltremare</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">7241 Überseeische Länder und Gebiete</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100257">
+    <skos:prefLabel xml:lang="fr">6026 produit alimentaire</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">6026 prodotto alimentare</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">6026 Nahrungsmittel</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">6026 foodstuff</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100195">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="it">2026 consumo</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">2026 consommation</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">2026 Verbrauch</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2026 consumption</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100228">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="de">4016 Rechtsform einer Gesellschaft</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">4016 forma giuridica di società</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">4016 forme juridique de société</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">4016 legal form of organisations</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100220">
+    <skos:prefLabel xml:lang="it">3221 documentazione</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">3221 documentation</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">3221 Dokumentation</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">3221 documentation</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://eurovoc.europa.eu/100212">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="fr">2826 vie sociale</skos:prefLabel>
+    <skos:prefLabel xml:lang="de">2826 Leben in der Gesellschaft</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">2826 social affairs</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">2826 vita sociale</skos:prefLabel>
+  </rdf:Description>
+</rdf:RDF>

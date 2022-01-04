@@ -14,7 +14,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # http://packaging.python.org/en/latest/tutorial.html#version
-    version='1.1.0a',
+    version='2.0.0',
 
     description='''CKAN extension for the Italian Open Data Portals (DCAT_AP-IT).''',
     long_description=long_description,
@@ -23,8 +23,8 @@ setup(
     url='https://github.com/geosolutions/ckanext-dcatapit',
 
     # Author details
-    author='''Tobia Di Pisa''',
-    author_email='''tobia.dipisa@geo-solutions.it''',
+    author='''GeoSolutions''',
+    author_email='''info@geosolutionsgroup.com''',
 
     # Choose your license
     license='AGPL',

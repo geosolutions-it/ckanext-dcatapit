@@ -15,9 +15,12 @@ import ckanext.dcatapit.schema as dcatapit_schema
 import ckanext.dcatapit.validators as validators
 from ckanext.dcatapit.commands import dcatapit as dcatapit_cli
 from ckanext.dcatapit.controllers.harvest import HarvesterController
+from ckanext.dcatapit.dcat.const import THEME_BASE_URI
 from ckanext.dcatapit.helpers import get_org_context
-from ckanext.dcatapit.mapping import populate_theme_groups
+from ckanext.dcatapit.mapping import populate_theme_groups, theme_name_to_uri
+from ckanext.dcatapit.model import ThemeToSubtheme
 from ckanext.dcatapit.model.license import License
+from ckanext.dcatapit.schema import FIELD_THEMES_AGGREGATE
 
 log = logging.getLogger(__file__)
 
@@ -38,33 +41,15 @@ if LOCALIZED_RESOURCES_ENABLED:
 
 class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm, DefaultTranslation):
 
-    # Cli commands
     plugins.implements(plugins.IClick)
-
-    # IDatasetForm
     plugins.implements(plugins.IDatasetForm)
-
-    # IConfigurer
     plugins.implements(plugins.IConfigurer)
-
-    # IValidators
     plugins.implements(plugins.IValidators)
-
-    # ITemplateHelpers
     plugins.implements(plugins.ITemplateHelpers)
-
-    # IRoutes
     plugins.implements(plugins.IRoutes, inherit=True)
-
-    # IPackageController
     plugins.implements(plugins.IPackageController, inherit=True)
-
     plugins.implements(plugins.IFacets, inherit=True)
-
-    # ITranslation
-    if toolkit.check_ckan_version(min_version='2.5.0'):
-        plugins.implements(plugins.ITranslation, inherit=True)
-
+    plugins.implements(plugins.ITranslation, inherit=True)
 
     def get_commands(self):
         return dcatapit_cli.get_commands()
@@ -72,11 +57,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     # ------------- ITranslation -------------4--#
 
     def i18n_domain(self):
-        '''Change the gettext domain handled by this plugin
-        This implementation assumes the gettext domain is
-        ckanext-{extension name}, hence your pot, po and mo files should be
-        named ckanext-{extension name}.mo'''
-        return 'ckanext-{name}'.format(name='dcatapit')
+        return 'ckanext-dcatapit'
 
     # ------------- IRoutes ---------------#
 
@@ -112,12 +93,9 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
     def _modify_package_schema(self, schema):
 
-        ##
-        # Getting custom package schema
-        ##
-
+        # Package schema
         for field in dcatapit_schema.get_custom_package_schema():
-            if 'ignore' in field and field['ignore'] == True:
+            if field.get('ignore'):
                 continue
 
             if 'couples' in field:
@@ -132,12 +110,9 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             ]
         })
 
-        ##
-        # Getting custom resource schema
-        ##
-
+        # Resource schema
         for field in dcatapit_schema.get_custom_resource_schema():
-            if 'ignore' in field and field['ignore'] == True:
+            if field.get('ignore'):
                 continue
 
             validators = []
@@ -276,9 +251,9 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'get_dcatapit_license': helpers.get_dcatapit_license,
             'load_json_or_list': helpers.load_json_or_list,
             'get_geonames_config': helpers.get_geonames_config,
-            'load_dcatapit_subthemes': helpers.load_dcatapit_subthemes,
+            'load_dcatapit_subthemes': helpers.dcatapit_string_to_localized_aggregated_themes,
             'get_dcatapit_subthemes': helpers.get_dcatapit_subthemes,
-            'dump_dcatapit_subthemes': helpers.dump_dcatapit_subthemes,
+            'dump_dcatapit_subthemes': helpers.dcatapit_string_to_aggregated_themes,
             'get_localized_subtheme': helpers.get_localized_subtheme,
             'dcatapit_enable_form_tabs': helpers.get_enable_form_tabs,
             'dcatapit_get_icustomschema_fields': helpers.get_icustomschema_fields,
@@ -331,14 +306,14 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         Insert `dcat_theme` into solr
         '''
 
-        extra_theme = dataset_dict.get('extras_theme', None) or ''
-        themes = helpers.dump_dcatapit_subthemes(extra_theme)
-        search_terms = [t['theme'] for t in themes]
+        extra_theme = dataset_dict.get(f'extras_{FIELD_THEMES_AGGREGATE}', None) or ''
+        aggr_themes = helpers.dcatapit_string_to_aggregated_themes(extra_theme)
+        search_terms = [t['theme'] for t in aggr_themes]
         if search_terms:
             dataset_dict['dcat_theme'] = search_terms
 
         search_subthemes = []
-        for t in themes:
+        for t in aggr_themes:
             search_subthemes.extend(t.get('subthemes') or [])
 
         if search_terms:
@@ -495,7 +470,26 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         # [{"theme": "AGRI", "subthemes": ["http://eurovoc.europa.eu/100253", "http://eurovoc.europa.eu/100258"]},
         # {"theme": "ENVI", "subthemes": []}]
         # We need to fix this.
-        log.warning(f'**** THEME {pkg_dict["theme"] if "theme" in pkg_dict else "None"}')
+
+        if not any(x['key'] == 'theme' for x in pkg_dict.get('extras', [])):
+            # there's no theme, add the list from the aggreagate
+            aggr_raw = pkg_dict.get(FIELD_THEMES_AGGREGATE)
+            if aggr_raw is None:
+                # let's try and find it in extras:
+                aggr_raw = next((x['value'] for x in pkg_dict.get('extras', [])
+                                 if x['key'] == FIELD_THEMES_AGGREGATE), None)
+            if aggr_raw is None:
+                log.error('No Aggregates in dataset!')
+                aggr_raw = json.dumps([{'theme': 'OP_DATPRO', 'subthemes':[]}])
+                pkg_dict[FIELD_THEMES_AGGREGATE] = aggr_raw
+
+            themes = []
+            for aggr in json.loads(aggr_raw):
+                themes.append(theme_name_to_uri(aggr['theme']))
+
+            extras = pkg_dict.get('extras', [])
+            extras.append({'key': 'theme', 'value': json.dumps(themes)})
+            pkg_dict['extras'] = extras
 
         # in some cases (automatic solr indexing after update)
         # pkg_dict may come without validation and thus

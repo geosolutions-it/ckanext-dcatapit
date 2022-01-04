@@ -3,6 +3,7 @@ import pytest
 import unittest
 
 import ckanext.dcatapit.interfaces as interfaces
+from ckanext.dcatapit.tests.utils import get_test_file, SKOS_THEME_FILE
 
 
 class BaseCommandTest(unittest.TestCase):
@@ -19,9 +20,8 @@ class TestDCATAPITCommand(BaseCommandTest):
     @pytest.mark.usefixtures('with_request_context', 'clean_dcatapit_db')
     def test_vocabulary_command(self):
         from ckanext.dcatapit.commands.dcatapit import do_load
-        from ckanext.dcatapit.tests.utils import load_themes
 
-        vocab_file_path = self._get_file_contents('data-theme-skos.rdf')
+        vocab_file_path = get_test_file(SKOS_THEME_FILE)
         do_load('eu_themes', url=None, filename=vocab_file_path, format='xml')
 
         tag_localized = interfaces.get_localized_tag_name('ECON')

@@ -91,7 +91,7 @@ class DCATAPITCommands:
     _locales_ckan_mapping = {
         'it': 'it',
         'de': 'de',
-        'en': 'en_GB',
+        'en': 'en',
         'fr': 'fr',
         'es': 'es'
     }

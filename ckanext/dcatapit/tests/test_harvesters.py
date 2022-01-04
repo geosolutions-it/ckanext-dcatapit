@@ -123,7 +123,7 @@ class HarvestersTestCase(unittest.TestCase):
             else:
                 self.assertEqual(res['license_type'], r[1]['license_type'])
 
-    @pytest.mark.usefixtures(u"clean_db")
+    @pytest.mark.usefixtures('remove_harvest_stuff', 'remove_dataset_groups')
     def test_remote_orgs(self):
         dataset = {'title': 'some title 2',
                    'owner_id': self.org['id'],
@@ -221,6 +221,7 @@ class HarvestersTestCase(unittest.TestCase):
         org = helpers.call_action('organization_show', context={}, id=org_id)
         self.assertEqual(org['identifier'], dataset['holder_identifier'])
 
+    @pytest.mark.usefixtures('remove_harvest_stuff', 'remove_dataset_groups')
     def test_ckan_duplicated_name(self):
         dataset0 = {
             'owner_org': self.org['id'],
@@ -250,8 +251,8 @@ class HarvestersTestCase(unittest.TestCase):
         harvest_obj = HarvestObject.get(harvest_dict['id'])
         harvest_obj.content = data
         h = DCATRDFHarvester()
-        _ = h.import_stage(harvest_obj)
-        self.assertTrue(_, harvest_obj.errors)
+        import_successful = h.import_stage(harvest_obj)
+        self.assertTrue(import_successful, harvest_obj.errors)
         Session.flush()
         dataset1['_id'] = harvest_obj.package_id
 
@@ -267,8 +268,8 @@ class HarvestersTestCase(unittest.TestCase):
         harvest_obj = HarvestObject.get(harvest_dict['id'])
         harvest_obj.content = data
         h = DCATRDFHarvester()
-        _ = h.import_stage(harvest_obj)
-        self.assertTrue(_, harvest_obj.errors)
+        import_successful = h.import_stage(harvest_obj)
+        self.assertTrue(import_successful, harvest_obj.errors)
         Session.flush()
         dataset2['_id'] = harvest_obj.package_id
 

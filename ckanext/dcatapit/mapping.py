@@ -8,22 +8,70 @@ from ckan.model import Session
 from ckan.model.group import Group, Member
 from ckan.plugins import toolkit
 
+from ckanext.dcatapit.dcat.const import THEME_BASE_URI
+from ckanext.dcatapit.schema import FIELD_THEMES_AGGREGATE
+
 log = logging.getLogger(__name__)
 
 DCATAPIT_THEMES_MAP = 'ckanext.dcatapit.nonconformant_themes_mapping.file'
 DCATAPIT_THEMES_MAP_SECTION = 'terms_theme_mapping'
 
 
-def _decode_list(value):
-    return value.strip('{}').split(',')
+def themes_to_aggr_json(themes: list) -> str:
+    aggr = []
+    for name in themes or []:
+        name = name.split('/')[-1]  # if it's a URL, only take the final name
+        aggr.append({'theme': name.upper(), 'subthemes': []})
+    return json.dumps(aggr)
 
 
-def _encode_list(items):
-    if items and len(items) > 1:
-        return '{{{}}}'.format(','.join(items))
-    if isinstance(items, list):
-        return items[0]
-    return items or ''
+def theme_aggr_to_theme_uris(aggregated_themes: list) -> list:
+    return [theme_name_to_uri(agg.get('theme')) for agg in aggregated_themes]
+
+
+def theme_name_to_uri(theme_name: str) -> str:
+    if theme_name.startswith('http'):
+        log.warning(f'Theme name "{theme_name}" is already a URI')
+        return theme_name
+    return THEME_BASE_URI + theme_name.upper()
+
+
+def theme_names_to_uris(names: list) -> list:
+    return [theme_name_to_uri(name) for name in names]
+
+
+def theme_aggrs_unpack(aggrs: list) -> (list, list):
+    themes = []
+    sub = []
+    for aggr in aggrs:
+        themes.append(theme_name_to_uri(aggr['theme']))
+        sub.extend(aggr['subthemes'])
+
+    return themes, sub
+
+
+def themes_parse_to_uris(raw) -> list:
+    if not raw:
+        return []
+
+    log.debug(f'Parsing themes field: {raw}')
+    try:
+        themes = json.loads(raw)
+        themes_list = theme_names_to_uris(themes)
+    except (TypeError, ValueError) as e:
+        log.warning(f'Error parsing themes: {e} -- {raw}')
+        if isinstance(raw, (list, tuple,)):
+            log.debug(f'using themes list: {raw}')
+            themes_list = theme_names_to_uris(raw)
+        elif isinstance(raw, str):
+            log.warning(f'Trying parsing old format: {raw}')
+            themes_list = theme_names_to_uris(
+                [name for name in raw.strip('{}').split(',')])
+        else:
+            log.error('No valid themes found')
+            themes_list = []
+
+    return themes_list
 
 
 def _map_themes_json(fdesc):
@@ -123,31 +171,41 @@ def map_nonconformant_groups(harvest_object):
     if not new_themes:
         return
 
-    # ensure themes are upper-case, otherwise will be discarded
-    # by validators
-    tdata = {'key': 'theme', 'value': _encode_list(new_themes).upper()}
-    existing = False
-    extra = data.get('extras') or []
-    for eitem in extra:
-        if eitem['key'] == 'theme':
-            existing = True
-            eitem['value'] = tdata['value']
-            break
+    # ensure themes are upper-case, otherwise will be discarded by validators
 
-    if not existing:
-        extra.append(tdata)
+
+    extra = data.get('extras') or []
+
+    aggr = themes_to_aggr_json(new_themes)
+    _set_extra(extra, FIELD_THEMES_AGGREGATE, aggr)
+    data[FIELD_THEMES_AGGREGATE] = aggr
+
+    theme_list = json.dumps([theme_name_to_uri(name) for name in new_themes])
+    _set_extra(extra, 'theme', theme_list)
+    data['theme'] = theme_list
+
     data['extras'] = extra
-    data['theme'] = tdata['value']
 
     harvest_object.content = json.dumps(data)
     Session.add(harvest_object)
-    try:
-        rev = Session.revision
-    except AttributeError:
-        rev = None
     Session.flush()
-    Session.revision = rev
 
+
+def _get_extra(extras, key):
+    return next((x for x in extras if x['key'] == key), None)
+
+
+def _get_extra_value(extras, key):
+    return next((x['value'] for x in extras if x['key'] == key), None)
+
+
+def _set_extra(extras, key, value):
+    x = _get_extra(extras, key)
+    if x:
+        x['value'] = value
+    else:
+        extras.append({'key': key, 'value': value})
+    return x is not None
 
 """
 Theme to Group mapping
@@ -277,7 +335,7 @@ def populate_theme_groups(instance, clean_existing=False):
     add_new = toolkit.asbool(config.get(DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS))
     themes = []
     for ex in (instance.get('extras') or []):
-        if ex['key'] == 'theme':
+        if ex['key'] == FIELD_THEMES_AGGREGATE:
             _t = ex['value']
             if isinstance(_t, list):
                 themes.extend(_t)
@@ -285,13 +343,33 @@ def populate_theme_groups(instance, clean_existing=False):
                 try:
                     tval = json.loads(_t)
                 except Exception:
-                    tval = [{'theme': t, 'subthemes': []} for t in _decode_list(_t)]
+                    log.warning(f'Trying old themes format for {_t}')
+                    tval = [{'theme': t, 'subthemes': []} for t in _t.strip('{}').split(',')]
+
                 for tv in tval:
                     themes.append(tv['theme'])
+
+            break  # we don't need any other info - if there are 'themes' is ok to bypass them
+
+        elif ex['key'] == 'theme':
+            _t = ex['value']
+            if isinstance(_t, list):
+                themes.extend(_t)
+            else:
+                try:
+                    tval = json.loads(_t)
+                except Exception:
+                    log.warning(f'Trying old themes format for {_t}')
+                    tval = _t.strip('{}').split(',')
+
+                themes.extend(tval)
+            # dont break the for loop: if aggregates are there, they get precedence
+
     if not themes:
         log.debug('no theme from %s', instance)
         return instance
     theme_map = get_theme_to_groups()
+
     if not theme_map:
         log.warning('Theme to group map is empty')
         return instance
@@ -319,17 +397,11 @@ def populate_theme_groups(instance, clean_existing=False):
 
     if Session.new:
         # flush to db, refresh with ids
-        rev = Session.revision
         Session.flush()
-        Session.revision = rev
         groups = [(Group.get(g.name) if g.id is None else g) for g in groups]
     _add_groups(instance['id'], set(groups))
 
-    # preserve revision, since it's not a commit yet
-    rev = Session.revision
     Session.flush()
-    Session.revision = rev
-
     return instance
 
 

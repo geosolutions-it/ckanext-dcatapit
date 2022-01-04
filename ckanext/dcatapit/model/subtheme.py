@@ -22,7 +22,7 @@ DeclarativeBase = declarative_base(metadata=meta.metadata)
 
 CONFIG_THEME_LANGS = 'ckan.dcatapit.subthemes.langs'
 THEME_LANGS = (config.get(CONFIG_THEME_LANGS) or '').split(' ')
-DEFAULT_LANG = config.get('ckan.locale_default', 'en')
+DEFAULT_LANG = config.get('ckan.locale_default', 'it')
 
 
 class ThemeToSubtheme(DeclarativeBase, DomainObject):
@@ -135,7 +135,7 @@ class Subtheme(DeclarativeBase, DomainObject):
         )
 
     @classmethod
-    def add_for_theme(cls, g, theme_ref, subtheme_ref, parent=None):
+    def add_for_theme(cls, eurovoc, theme_ref, subtheme_ref, parent=None):
         theme = cls.normalize_theme(theme_ref)
         existing = cls.q().filter_by(uri=str(subtheme_ref)).first()
         theme_tag = ThemeToSubtheme.get_tag(theme)
@@ -150,13 +150,13 @@ class Subtheme(DeclarativeBase, DomainObject):
             return existing
 
         labels = {}
-        for l in g.objects(subtheme_ref, SKOS.prefLabel):
+        for l in eurovoc.objects(subtheme_ref, SKOS.prefLabel):
             labels[l.language] = str(l)
         if not labels:
-            log.error(f'NO labels for {subtheme_ref}. Skipping')
+            log.error(f'No labels found in EUROVOC for subtheme {subtheme_ref}. Skipping')
             return
-        version = g.value(subtheme_ref, OWL.versionInfo) or ''
-        identifier = g.value(subtheme_ref, DCT.identifier) or ''
+        version = eurovoc.value(subtheme_ref, OWL.versionInfo) or ''
+        identifier = eurovoc.value(subtheme_ref, DCT.identifier) or ''
         default_label = labels[DEFAULT_LANG]
         inst = cls(version=str(version),
                    identifier=str(identifier),
@@ -182,8 +182,8 @@ class Subtheme(DeclarativeBase, DomainObject):
         cls.Session.flush()
         # handle children
 
-        for child in g.objects(subtheme_ref, SKOS.hasTopConcept):
-            cls.add_for_theme(g, theme_ref, child, inst)
+        for child in eurovoc.objects(subtheme_ref, SKOS.hasTopConcept):
+            cls.add_for_theme(eurovoc, theme_ref, child, inst)
 
         return inst
 
@@ -194,8 +194,7 @@ class Subtheme(DeclarativeBase, DomainObject):
 
     @classmethod
     def map_themes(cls, themes_g, eurovoc_g):
-        concept = SKOS.Concept
-        for theme in themes_g.subjects(RDF.type, concept):
+        for theme in themes_g.subjects(RDF.type, SKOS.Concept):
             sub_themes = themes_g.objects(theme, SKOS.narrowMatch)
             for sub_theme in sub_themes:
                 cls.add_for_theme(eurovoc_g, theme, sub_theme)

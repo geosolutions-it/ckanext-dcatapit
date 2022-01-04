@@ -27,20 +27,23 @@ def main():
 
     ids = get_ids(ids_file)
     doc, nsmap = parse_doc(doc_file)
+    NS_RDF = nsmap['rdf']
+    NS_SKOS = nsmap['skos']
+
     root = doc.getroot()
-    ndoc = etree.Element('{{{}}}RDF'.format(nsmap['rdf']))
+    ndoc = etree.Element(f'{{{NS_RDF}}}RDF')
     for ns, uri in nsmap.items():
         etree.register_namespace(ns, uri)
 
-    for el in doc.findall('{{{}}}Description'.format(nsmap['rdf'])):
-        ref = el.get('{{{}}}about'.format(nsmap['rdf']))
+    for el in doc.findall(f'{{{NS_RDF}}}Description'):
+        ref = el.get(f'{{{NS_RDF}}}about')
         if ref in ids:
             ndoc.append(el)
 
-            for subref in el.findall('{{{}}}hasTopConcept'.format(nsmap['skos'])):
+            for subref in el.findall(f'{{{NS_SKOS}}}hasTopConcept'):
 
-                subref_id = subref.get('{{{}}}resource'.format(nsmap['rdf']))
-                subel = doc.find('Description[@about="{}"]'.format(subref_id))
+                subref_id = subref.get(f'{{{NS_RDF}}}resource')
+                subel = doc.find(f'Description[@about="{subref_id}"]')
                 if subel:
                     ndoc.append(subel)
 

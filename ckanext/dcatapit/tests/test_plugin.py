@@ -1,7 +1,17 @@
+from unittest import TestCase
+from uuid import uuid4
+import json
 
 import nose
+import pytest
+
+import ckan.tests.factories as factories
+from ckan.tests.helpers import call_action
 
 import ckanext.dcatapit.plugin as plugin
+from ckanext.dcatapit.mapping import themes_to_aggr_json, theme_aggr_to_theme_uris, theme_names_to_uris, \
+    theme_name_to_uri
+from ckanext.dcatapit.schema import FIELD_THEMES_AGGREGATE
 
 eq_ = nose.tools.eq_
 ok_ = nose.tools.ok_
@@ -134,3 +144,113 @@ def test_package_after_show():
     out = package_plugin.after_show({}, data)
     eq_(out['issued'], '2000-00-00')
     eq_(out['modified'], '01-02-2013')
+
+
+@pytest.mark.usefixtures("with_request_context")
+class ValidationTests(TestCase):
+
+    DEFAULT_AGGR = 'ENVI'
+    DEFAULT_THEME = 'ECON'
+
+    def _get_dataset(self):
+        org = factories.Organization(identifier=uuid4().hex, is_org=True, name=uuid4().hex)
+
+        return {
+            # 'id': '4b6fe9ca-dc77-4cec-92a4-55c6624a5bd6',
+            'owner_org': org['id'],
+            'name': uuid4().hex,
+            'identifier': str(uuid4()),
+            'title': 'Dataset di test DCAT_AP-IT',
+            'notes': 'dcatapit dataset di test',
+            'issued': '2016-11-29',
+            'modified': '2016-11-29',
+            'frequency': 'UPDATE_CONT',
+            'publisher_name': 'pubbo',
+            'publisher_identifier': '234234234',
+            'creator_name': 'test',
+            'creator_identifier': '412946129',
+            'holder_name': 'holdo',
+            'holder_identifier': '234234234',
+            'geographical_geonames_url': 'http://www.geonames.org/3181913',
+            'language': '{ITA}',
+            FIELD_THEMES_AGGREGATE: themes_to_aggr_json([__class__.DEFAULT_AGGR]),
+            # 'theme': json.dumps(theme_names_to_uris([__class__.DEFAULT_THEME])),
+            'extras': [
+                {
+                    'key': 'theme',
+                    'value': json.dumps(theme_names_to_uris([__class__.DEFAULT_THEME]))
+                },
+            ],
+        }
+
+    context = {'user': 'dummy',
+               'ignore_auth': True,
+               'defer_commit': False}
+
+    def test_package_no_theme_no_aggr(self):
+        src = self._get_dataset()
+        src.pop('extras')
+        src.pop(FIELD_THEMES_AGGREGATE)
+
+        pkg = call_action('package_create', {'defer_commit': False}, **src)
+        self._ensure_aggr(pkg, ['OP_DATPRO'])
+        self._ensure_themes(pkg, ['OP_DATPRO'])
+
+        reloaded = call_action('package_show', context=__class__.context, id=pkg['id'])
+        self._ensure_aggr(reloaded, ['OP_DATPRO'])
+        self._ensure_themes(reloaded, ['OP_DATPRO'])
+
+    def test_package_theme_no_aggr(self):
+        src = self._get_dataset()
+        src.pop(FIELD_THEMES_AGGREGATE)
+
+        pkg = call_action('package_create', {'defer_commit': False}, **src)
+        self._ensure_aggr(pkg, [__class__.DEFAULT_THEME])
+        self._ensure_themes(pkg, [__class__.DEFAULT_THEME])
+
+        reloaded = call_action('package_show', context=__class__.context, id=pkg['id'])
+        self._ensure_aggr(reloaded, [__class__.DEFAULT_THEME])
+        self._ensure_themes(reloaded, [__class__.DEFAULT_THEME])
+
+    def test_package_no_theme_aggr(self):
+        src = self._get_dataset()
+        src.pop('extras')
+
+        pkg = call_action('package_create', {'defer_commit': False}, **src)
+        self._ensure_aggr(pkg, [__class__.DEFAULT_AGGR])
+        self._ensure_themes(pkg, [__class__.DEFAULT_AGGR])
+
+        reloaded = call_action('package_show', context=__class__.context, id=pkg['id'])
+        self._ensure_aggr(reloaded, [__class__.DEFAULT_AGGR])
+        self._ensure_themes(reloaded, [__class__.DEFAULT_AGGR])
+
+    def test_package_theme_aggr(self):
+        src = self._get_dataset()
+
+        pkg = call_action('package_create', {'defer_commit': False}, **src)
+        self._ensure_aggr(pkg, [__class__.DEFAULT_AGGR])
+        self._ensure_themes(pkg, [__class__.DEFAULT_THEME])
+
+        reloaded = call_action('package_show', context=__class__.context, id=pkg['id'])
+        self._ensure_aggr(reloaded, [__class__.DEFAULT_AGGR])
+        self._ensure_themes(reloaded, [__class__.DEFAULT_THEME])
+
+    def _ensure_aggr(self, pkg, expected_themes: list):
+        self.assertIn(FIELD_THEMES_AGGREGATE, pkg.keys(), 'Aggregate not found')
+        aggr = json.loads(pkg[FIELD_THEMES_AGGREGATE])
+        aggr_themes = [a['theme'] for a in aggr]
+        self.assertSetEqual(set(expected_themes), set(aggr_themes))
+
+    def _ensure_themes(self, pkg, expected_themes: list):
+        expected_uris = [theme_name_to_uri(name) for name in expected_themes]
+        print(pkg)
+        extras = pkg.get('extras')
+        self.assertIsNotNone(extras, 'Extras not found')
+        theme = next((x['value'] for x in extras if x['key'] == 'theme'), None)
+        self.assertIsNotNone(theme, 'Theme not found')
+        theme_uri_list = json.loads(theme)
+        self.assertEquals(len(expected_themes), len(theme_uri_list))
+        self.assertSetEqual(set(expected_uris), set(theme_uri_list))
+
+
+

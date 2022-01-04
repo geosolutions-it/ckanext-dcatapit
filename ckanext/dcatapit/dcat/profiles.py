@@ -1,14 +1,13 @@
 import json
 import logging
 
+from rdflib import BNode, Literal, URIRef
+from rdflib.namespace import RDF, SKOS
+
 import ckan.logic as logic
 from ckan.common import config
 from ckan.lib.i18n import get_lang, get_locales
-from rdflib import BNode, Literal, URIRef
-from rdflib.namespace import RDF, SKOS, Namespace
 
-import ckanext.dcatapit.helpers as helpers
-import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcat.profiles import (
     ADMS,
     DCAT,
@@ -22,71 +21,21 @@ from ckanext.dcat.profiles import (
     RDFProfile,
 )
 from ckanext.dcat.utils import catalog_uri, dataset_uri, resource_uri
+
+import ckanext.dcatapit.helpers as helpers
+import ckanext.dcatapit.interfaces as interfaces
 from ckanext.dcatapit import schema, validators
+from ckanext.dcatapit.dcat.const import DCATAPIT, it_namespaces, THEME_BASE_URI, LANG_BASE_URI, FREQ_BASE_URI, \
+    FORMAT_BASE_URI, GEO_BASE_URI, THEME_CONCEPTS, GEO_CONCEPTS, DEFAULT_THEME_KEY, DEFAULT_FORMAT_CODE, \
+    DEFAULT_FREQ_CODE, LOCALISED_DICT_NAME_BASE, LOCALISED_DICT_NAME_RESOURCES, lang_mapping_ckan_to_voc, \
+    lang_mapping_xmllang_to_ckan, lang_mapping_ckan_to_xmllang, format_mapping
 from ckanext.dcatapit.model.subtheme import Subtheme
+from ckanext.dcatapit.mapping import theme_name_to_uri, theme_aggrs_unpack, theme_names_to_uris, themes_parse_to_uris
+from ckanext.dcatapit.schema import FIELD_THEMES_AGGREGATE
 
-DCATAPIT = Namespace('http://dati.gov.it/onto/dcatapit#')
-
-it_namespaces = {
-    'dcatapit': DCATAPIT,
-}
-
-THEME_BASE_URI = 'http://publications.europa.eu/resource/authority/data-theme/'
-LANG_BASE_URI = 'http://publications.europa.eu/resource/authority/language/'
-FREQ_BASE_URI = 'http://publications.europa.eu/resource/authority/frequency/'
-FORMAT_BASE_URI = 'http://publications.europa.eu/resource/authority/file-type/'
-GEO_BASE_URI = 'http://publications.europa.eu/resource/authority/place/'
-
-# vocabulary name, base URI
-THEME_CONCEPTS = ('eu_themes', THEME_BASE_URI)
-LANG_CONCEPTS = ('languages', LANG_BASE_URI)
-GEO_CONCEPTS = ('places', GEO_BASE_URI)
-FREQ_CONCEPTS = ('frequencies', FREQ_BASE_URI)
-FORMAT_CONCEPTS = ('filetype', FORMAT_BASE_URI)
-
-DEFAULT_VOCABULARY_KEY = 'OP_DATPRO'
-DEFAULT_THEME_KEY = DEFAULT_VOCABULARY_KEY
-DEFAULT_FORMAT_CODE = DEFAULT_VOCABULARY_KEY
-DEFAULT_FREQ_CODE = 'UNKNOWN'
-DEFAULT_LANG = config.get('ckan.locale_default', 'en')
-
-LOCALISED_DICT_NAME_BASE = 'DCATAPIT_MULTILANG_BASE'
-LOCALISED_DICT_NAME_RESOURCES = 'DCATAPIT_MULTILANG_RESOURCES'
-OFFERED_LANGS = get_locales()
-
-lang_mapping_ckan_to_voc = {
-    'it': 'ITA',
-    'de': 'DEU',
-    'en': 'ENG',
-    'en_GB': 'ENG',
-    'fr': 'FRA',
-}
-
-lang_mapping_xmllang_to_ckan = {
-    'it': 'it',
-    'de': 'de',
-    # 'en': 'en_GB',
-    'en': 'en',
-    'fr': 'fr',
-}
-
-lang_mapping_ckan_to_xmllang = {
-    'en_GB': 'en',
-    'uk_UA': 'ua',
-    'en_AU': 'en',
-    'es_AR': 'es',
-}
-
-format_mapping = {
-    'WMS': 'MAP_SRVC',
-    'HTML': 'HTML_SIMPL',
-    'CSV': 'CSV',
-    'XLS': 'XLS',
-    'ODS': 'ODS',
-    'ZIP': 'OP_DATPRO',  # requires to be more specific, can't infer
-
-}
-
+DEFAULT_LANG = config.get('ckan.locale_default', 'it')
+HANDLED_LANGS = set(['it', 'fr', 'de', 'en'])
+OFFERED_LANGS = set(get_locales()).intersection(HANDLED_LANGS)
 
 log = logging.getLogger(__name__)
 
@@ -442,9 +391,10 @@ class ItalianDCATAPProfile(RDFProfile):
                 base_dict[key] = value
 
     def _parse_themes(self, dataset, ref):
-        self._remove_from_extra(dataset, 'theme')
+        # self._remove_from_extra(dataset, 'theme')
         themes = list(self.g.objects(ref, DCAT.theme))
-        subthemes = list(self.g.objects(ref, DCATAPIT.subTheme))
+        subthemes04 = list(self.g.objects(ref, DCATAPIT.subTheme)) # dcatapit v0.4 only
+        subthemes10 = list(self.g.objects(ref, DCT.subject))
 
         out = []
         for t in themes:
@@ -456,13 +406,13 @@ class ItalianDCATAPProfile(RDFProfile):
             except ValueError as err:
                 subthemes_for_theme = []
 
-            for subtheme in subthemes:
+            for subtheme in set(subthemes04 + subthemes10):
                 s = str(subtheme)
                 if s in subthemes_for_theme:
                     row['subthemes'].append(s)
             out.append(row)
 
-        dataset['theme'] = json.dumps(out)
+        dataset[FIELD_THEMES_AGGREGATE] = json.dumps(out)
 
     def _remove_from_extra(self, dataset_dict, key):
 
@@ -641,8 +591,9 @@ class ItalianDCATAPProfile(RDFProfile):
         g.add((dataset_ref, RDF.type, DCATAPIT.Dataset))
 
         # replace themes
-        value = self._get_dict_value(dataset_dict, 'theme')
-        self._add_themes(dataset_ref, value)
+        self._add_themes(dataset_ref,
+                         self._get_dict_value(dataset_dict, FIELD_THEMES_AGGREGATE),
+                         self._get_dict_value(dataset_dict, 'theme'))
 
         # replace languages
         value = self._get_dict_value(dataset_dict, 'language')
@@ -688,7 +639,8 @@ class ItalianDCATAPProfile(RDFProfile):
 
         # replace periodicity
         self._remove_node(dataset_dict, dataset_ref, ('frequency', DCT.accrualPeriodicity, None, Literal))
-        self._add_uri_node(dataset_dict, dataset_ref, ('frequency', DCT.accrualPeriodicity, DEFAULT_FREQ_CODE, URIRef), FREQ_BASE_URI)
+        self._add_uri_node(dataset_dict, dataset_ref, ('frequency', DCT.accrualPeriodicity, DEFAULT_FREQ_CODE, URIRef),
+                           FREQ_BASE_URI)
         # self._add_concept(FREQ_CONCEPTS, dataset_dict.get('frequency', DEFAULT_VOCABULARY_KEY))
 
         # replace landing page
@@ -757,7 +709,8 @@ class ItalianDCATAPProfile(RDFProfile):
                 self.g.add((node, DCT.creator, agent))
                 if adata.get('agent_name'):
                     for alang, aname in adata['agent_name'].items():
-                        self.g.add((agent, FOAF.name, Literal(aname, lang=lang_mapping_ckan_to_xmllang.get(alang, alang))))
+                        if alang in OFFERED_LANGS:
+                            self.g.add((agent, FOAF.name, Literal(aname, lang=lang_mapping_ckan_to_xmllang.get(alang, alang))))
 
                 if adata.get('agent_identifier'):
                     self.g.add((agent, DCT.identifier, Literal(adata['agent_identifier'])))
@@ -890,7 +843,8 @@ class ItalianDCATAPProfile(RDFProfile):
 
             # format
             self._remove_node(resource_dict, distribution, ('format', DCT['format'], None, Literal))
-            if not self._add_uri_node(resource_dict, distribution, ('distribution_format', DCT['format'], None, URIRef), FORMAT_BASE_URI):
+            if not self._add_uri_node(resource_dict, distribution, ('distribution_format', DCT['format'], None, URIRef),
+                                      FORMAT_BASE_URI):
                 guessed_format = guess_format(resource_dict)
                 if guessed_format:
                     self.g.add((distribution, DCT['format'], URIRef(FORMAT_BASE_URI + guessed_format)))
@@ -985,35 +939,43 @@ class ItalianDCATAPProfile(RDFProfile):
                                              agent_data=agent_data)
         return holder_ref, use_dataset
 
-    def _add_themes(self, dataset_ref, raw_value):
+    def _add_themes(self, dataset_ref, aggr_raw_value, theme_raw_value):
         """
         Create theme/subtheme
         """
-        try:
-            themes = json.loads(raw_value)
-        except (TypeError, ValueError):
-            if isinstance(raw_value, str):
-                themes = [{'theme': r, 'subthemes': []} for r in raw_value.strip('{}').split(',')]
-            elif isinstance(raw_value, (list, tuple,)):
-                themes = raw_value
-            else:
-                themes = []
+        themes_list = None
+        sub_list = []
+
+        # check if there's the aggregate theme/subthemes;
+        if aggr_raw_value:
+            log.debug(f'Parsing aggr themes: {aggr_raw_value}')
+            try:
+                aggr_themes = json.loads(aggr_raw_value)
+                themes_list, sub_list = theme_aggrs_unpack(aggr_themes)
+            except (TypeError, ValueError) as e:
+                log.warning(f'Error parsing aggr themes: {e} -- {aggr_raw_value}')
+
+        # if no aggregate, take the plain themes
+        if theme_raw_value and themes_list is None:
+            themes_list = themes_parse_to_uris(theme_raw_value)
 
         # ckanext-dcat will leave bad values from serialized themes
         self.g.remove((dataset_ref, DCAT.theme, None))
-        if themes:
-            for theme in themes:
-                theme_name = theme['theme']
-                subthemes = theme.get('subthemes') or []
-                theme_ref = URIRef(theme_name)
 
-                self.g.remove((dataset_ref, DCAT.theme, theme_ref))
+        self._add_subthemes(dataset_ref, sub_list)
 
-                self.g.add((dataset_ref, DCAT.theme, URIRef(THEME_BASE_URI + theme_name)))
-                self._add_concept(THEME_CONCEPTS, theme_name)
-                self._add_subthemes(dataset_ref, subthemes)
+        if themes_list:
+            for theme in themes_list:
+                # theme_name = theme['theme']
+                # subthemes = theme.get('subthemes') or []
+                # theme_ref = URIRef(theme_name)
+                # self.g.remove((dataset_ref, DCAT.theme, theme_ref))
+
+                self.g.add((dataset_ref, DCAT.theme, URIRef(theme)))
+                self._add_concept(THEME_CONCEPTS, uri=theme)
+                # self._add_subthemes(dataset_ref, subthemes)
         else:
-            self.g.add((dataset_ref, DCAT.theme, URIRef(THEME_BASE_URI + DEFAULT_THEME_KEY)))
+            self.g.add((dataset_ref, DCAT.theme, URIRef(theme_name_to_uri(DEFAULT_THEME_KEY))))
             self._add_concept(THEME_CONCEPTS, DEFAULT_THEME_KEY)
 
     def _add_subthemes(self, ref, subthemes):
@@ -1030,6 +992,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
             labels = sthm.get_names_dict()
             self.g.add((sref, RDF.type, SKOS.Concept))
+            self.g.add((sref, RDF.type, DCATAPIT.subTheme))  # only for dcatapit 0.4, not in 1.0
             for lang, label in labels.items():
                 if lang in OFFERED_LANGS:
                     self.g.add((sref, SKOS.prefLabel, Literal(label, lang=lang)))
@@ -1140,7 +1103,7 @@ class ItalianDCATAPProfile(RDFProfile):
         if value:
             self.g.remove((ref, pred, _type(value)))
 
-    def _add_concept(self, concepts, tag):
+    def _add_concept(self, concepts, tag=None, uri=None):
 
         # Localized concepts should be serialized as:
         #
@@ -1154,11 +1117,14 @@ class ItalianDCATAPProfile(RDFProfile):
 
         voc, base_uri = concepts
 
+        if uri:
+            tag = uri.replace('#', '/').split('/')[-1]
+
         loc_dict = interfaces.get_all_localized_tag_labels(tag)
 
         if loc_dict and len(loc_dict) > 0:
 
-            concept = URIRef(base_uri + tag)
+            concept = URIRef(uri if uri else f'{base_uri}{tag}')
             self.g.add((concept, RDF['type'], SKOS.Concept))
 
             for lang, label in loc_dict.items():
