@@ -370,12 +370,33 @@ def dcatapit_temporal_coverage(value, context):
     return json.dumps(new_data)
 
 
+def dcatapit_copy_to_context(key, flattened_data, errors, context):
+    value = flattened_data.get(key)
+    basekey = key[-1]
+    context[f'dcatapit_{basekey}'] = value
+
+
+def dcatapit_remove_theme(key, flattened_data, errors, context):
+    for tkey in flattened_data:
+        if len(tkey) == 3:
+            x, idx, k = tkey
+            if x == 'extras' and k == 'key' and flattened_data[tkey] == 'theme':
+                flattened_data.pop(tkey)
+                flattened_data.pop(('extras', idx, 'value'))
+                return
+
+
 def dcatapit_subthemes(key, flattened_data, errors, context):
     """
-    Expects [{'theme': THEME_CODE,
+    Validate aggregate_theme; expected format is
+    [{'theme': THEME_CODE,
               'subthemes': ['subtheme uri', 'subtheme uri']},
              ..
-             ]
+    ]
+
+    If the aggregate theme does not exist, tryes and parse the extra theme value.
+
+    The extra theme value is anyway popped out from the data.
     """
     def _get_flattened_theme():
         for tkey in flattened_data:
@@ -389,6 +410,7 @@ def dcatapit_subthemes(key, flattened_data, errors, context):
         flattened_data[key] = value
 
     value = flattened_data.get(key)
+
     if not value:
         theme = _get_flattened_theme()
         if theme:
