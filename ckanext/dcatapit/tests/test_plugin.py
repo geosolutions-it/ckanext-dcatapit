@@ -192,48 +192,44 @@ class ValidationTests(TestCase):
         src.pop('extras')
         src.pop(FIELD_THEMES_AGGREGATE)
 
-        pkg = call_action('package_create', {'defer_commit': False}, **src)
-        self._ensure_aggr(pkg, ['OP_DATPRO'])
-        self._ensure_themes(pkg, ['OP_DATPRO'])
+        created = call_action('package_create', {'defer_commit': False}, **src)
+        reloaded = call_action('package_show', context=__class__.context, id=created['id'])
 
-        reloaded = call_action('package_show', context=__class__.context, id=pkg['id'])
-        self._ensure_aggr(reloaded, ['OP_DATPRO'])
-        self._ensure_themes(reloaded, ['OP_DATPRO'])
+        for pkg in (created, reloaded):
+            self._ensure_aggr(pkg, ['OP_DATPRO'])
+            self._ensure_themes(pkg, ['OP_DATPRO'])
 
     def test_package_theme_no_aggr(self):
         src = self._get_dataset()
         src.pop(FIELD_THEMES_AGGREGATE)
 
-        pkg = call_action('package_create', {'defer_commit': False}, **src)
-        self._ensure_aggr(pkg, [__class__.DEFAULT_THEME])
-        self._ensure_themes(pkg, [__class__.DEFAULT_THEME])
+        created = call_action('package_create', {'defer_commit': False}, **src)
+        reloaded = call_action('package_show', context=__class__.context, id=created['id'])
 
-        reloaded = call_action('package_show', context=__class__.context, id=pkg['id'])
-        self._ensure_aggr(reloaded, [__class__.DEFAULT_THEME])
-        self._ensure_themes(reloaded, [__class__.DEFAULT_THEME])
+        for pkg in (created, reloaded):
+            self._ensure_aggr(pkg, [__class__.DEFAULT_THEME])
+            self._ensure_themes(pkg, [__class__.DEFAULT_THEME])
 
     def test_package_no_theme_aggr(self):
         src = self._get_dataset()
         src.pop('extras')
 
-        pkg = call_action('package_create', {'defer_commit': False}, **src)
-        self._ensure_aggr(pkg, [__class__.DEFAULT_AGGR])
-        self._ensure_themes(pkg, [__class__.DEFAULT_AGGR])
+        created = call_action('package_create', {'defer_commit': False}, **src)
+        reloaded = call_action('package_show', context=__class__.context, id=created['id'])
 
-        reloaded = call_action('package_show', context=__class__.context, id=pkg['id'])
-        self._ensure_aggr(reloaded, [__class__.DEFAULT_AGGR])
-        self._ensure_themes(reloaded, [__class__.DEFAULT_AGGR])
+        for pkg in (created, reloaded):
+            self._ensure_aggr(pkg, [__class__.DEFAULT_AGGR])
+            self._ensure_themes(pkg, [__class__.DEFAULT_AGGR])
 
     def test_package_theme_aggr(self):
         src = self._get_dataset()
 
-        pkg = call_action('package_create', {'defer_commit': False}, **src)
-        self._ensure_aggr(pkg, [__class__.DEFAULT_AGGR])
-        self._ensure_themes(pkg, [__class__.DEFAULT_THEME])
+        created = call_action('package_create', {'defer_commit': False}, **src)
+        reloaded = call_action('package_show', context=__class__.context, id=created['id'])
 
-        reloaded = call_action('package_show', context=__class__.context, id=pkg['id'])
-        self._ensure_aggr(reloaded, [__class__.DEFAULT_AGGR])
-        self._ensure_themes(reloaded, [__class__.DEFAULT_THEME])
+        for pkg in (created, reloaded):
+            self._ensure_aggr(pkg, [__class__.DEFAULT_AGGR])
+            self._ensure_themes(pkg, [__class__.DEFAULT_AGGR])
 
     def _ensure_aggr(self, pkg, expected_themes: list):
         self.assertIn(FIELD_THEMES_AGGREGATE, pkg.keys(), 'Aggregate not found')
@@ -251,6 +247,3 @@ class ValidationTests(TestCase):
         theme_uri_list = json.loads(theme)
         self.assertEquals(len(expected_themes), len(theme_uri_list))
         self.assertSetEqual(set(expected_uris), set(theme_uri_list))
-
-
-

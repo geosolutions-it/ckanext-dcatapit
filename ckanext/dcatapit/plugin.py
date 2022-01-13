@@ -80,19 +80,13 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
     # ------------- IDatasetForm ---------------#
 
-    def update_schema_field(self, schema, field):
-        validators = []
-        for validator in field['validator']:
-            validators.append(toolkit.get_validator(validator))
+    def _update_schema_field(self, schema, field):
+        validators = [toolkit.get_validator(v) for v in field['validator']]
+        validators.append(toolkit.get_converter('convert_to_extras'))
 
-        converters = [toolkit.get_converter('convert_to_extras')]
-
-        schema.update({
-            field['name']: validators + converters
-        })
+        schema[field['name']] = validators
 
     def _modify_package_schema(self, schema):
-
         # Package schema
         for field in dcatapit_schema.get_custom_package_schema():
             if field.get('ignore'):
@@ -100,15 +94,16 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
             if 'couples' in field:
                 for couple in field['couples']:
-                    self.update_schema_field(schema, couple)
+                    self._update_schema_field(schema, couple)
             else:
-                self.update_schema_field(schema, field)
+                self._update_schema_field(schema, field)
 
-        schema.update({
-            'notes': [
-                toolkit.get_validator('not_empty')
-            ]
-        })
+        schema['notes'] = [toolkit.get_validator('not_empty')]
+
+        # ignore theme extra fields
+        junk = schema.get('__junk', [])
+        junk.append(toolkit.get_validator('dcatapit_remove_theme'))
+        schema['__junk'] = junk
 
         # Resource schema
         for field in dcatapit_schema.get_custom_resource_schema():
@@ -229,6 +224,8 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             'dcatapit_creator': validators.dcatapit_creator,
             'dcatapit_temporal_coverage': validators.dcatapit_temporal_coverage,
             'dcatapit_subthemes': validators.dcatapit_subthemes,
+            'dcatapit_copy_to_context': validators.dcatapit_copy_to_context,
+            'dcatapit_remove_theme': validators.dcatapit_remove_theme,
         }
 
     # ------------- ITemplateHelpers ---------------#
