@@ -825,9 +825,10 @@ class ItalianDCATAPProfile(RDFProfile):
 
         # rights holder should use special trick to avoid duplicated foaf:name entries
         if holder_use_dataset and holder_ref:
-            self._add_multilang_values(loc_dict, {'holder_name': (holder_ref, FOAF.name)}, exclude_default_lang=dataset_is_local)
+            loc_package_mapping['holder_name'] = (holder_ref, FOAF.name, dataset_is_local)
 
         self._add_multilang_values(loc_dict, loc_package_mapping)
+
         if not holder_use_dataset and holder_ref:
             loc_dict = interfaces.get_for_group_or_organization(org_dict['id'])
             loc_package_mapping = {'name': (holder_ref, FOAF.name)}
@@ -904,14 +905,20 @@ class ItalianDCATAPProfile(RDFProfile):
             default_lang = get_lang() or DEFAULT_LANG
             default_lang = default_lang.split('_')[0]
             for field_name, lang_dict in loc_dict.items():
-                ref, pred = loc_mapping.get(field_name, (None, None))
-                if not pred:
+                try:
+                    ref, pred, exclude = loc_mapping.get(field_name, (None, None, exclude_default_lang))
+                except ValueError:
+                    # prolly the tuple does not include the exclude lang boolean
+                    ref, pred = loc_mapping.get(field_name, (None, None))
+                    exclude = exclude_default_lang
+
+                if pred is None:
                     log.warning('Multilang field not mapped "%s"', field_name)
                     continue
                 for lang, value in lang_dict.items():
                     lang = lang.split('_')[0]  # rdflib is quite picky in lang names
 
-                    if exclude_default_lang and lang == default_lang:
+                    if exclude and lang == default_lang:
                         continue
                     self.g.add((ref, pred, Literal(value, lang=lang)))
         else:
