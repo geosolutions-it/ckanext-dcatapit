@@ -468,25 +468,26 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         # {"theme": "ENVI", "subthemes": []}]
         # We need to fix this.
 
-        if not any(x['key'] == 'theme' for x in pkg_dict.get('extras', [])):
-            # there's no theme, add the list from the aggreagate
-            aggr_raw = pkg_dict.get(FIELD_THEMES_AGGREGATE)
-            if aggr_raw is None:
-                # let's try and find it in extras:
-                aggr_raw = next((x['value'] for x in pkg_dict.get('extras', [])
-                                 if x['key'] == FIELD_THEMES_AGGREGATE), None)
-            if aggr_raw is None:
-                log.error('No Aggregates in dataset!')
-                aggr_raw = json.dumps([{'theme': 'OP_DATPRO', 'subthemes':[]}])
-                pkg_dict[FIELD_THEMES_AGGREGATE] = aggr_raw
+        if not context.get('for_view'):
+            if not any(x['key'] == 'theme' for x in pkg_dict.get('extras', [])):
+                # there's no theme, add the list from the aggreagate
+                aggr_raw = pkg_dict.get(FIELD_THEMES_AGGREGATE)
+                if aggr_raw is None:
+                    # let's try and find it in extras:
+                    aggr_raw = next((x['value'] for x in pkg_dict.get('extras', [])
+                                     if x['key'] == FIELD_THEMES_AGGREGATE), None)
+                if aggr_raw is None:
+                    log.error('No Aggregates in dataset!')
+                    aggr_raw = json.dumps([{'theme': 'OP_DATPRO', 'subthemes':[]}])
+                    pkg_dict[FIELD_THEMES_AGGREGATE] = aggr_raw
 
-            themes = []
-            for aggr in json.loads(aggr_raw):
-                themes.append(theme_name_to_uri(aggr['theme']))
+                themes = []
+                for aggr in json.loads(aggr_raw):
+                    themes.append(theme_name_to_uri(aggr['theme']))
 
-            extras = pkg_dict.get('extras', [])
-            extras.append({'key': 'theme', 'value': json.dumps(themes)})
-            pkg_dict['extras'] = extras
+                extras = pkg_dict.get('extras', [])
+                extras.append({'key': 'theme', 'value': json.dumps(themes)})
+                pkg_dict['extras'] = extras
 
         # in some cases (automatic solr indexing after update)
         # pkg_dict may come without validation and thus
