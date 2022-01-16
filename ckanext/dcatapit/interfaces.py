@@ -30,9 +30,8 @@ def get_language():
     try:
         lang = get_lang()
     except Exception as e:
-        lang = config.get(u'ckan.locale_default', u'en')
-        log.warning(f'Exception while retrieving lang. Using [{lang}]')
-        # log.warning(f'Exception while retrieving lang. Using [{lang}]', exc_info=e, stack_info=True)
+        lang = config.get(u'ckan.locale_default', u'it')
+        log.debug(f'Exception while retrieving lang. Using [{lang}]')
 
     if lang is not None:
         if isinstance(lang, list):
