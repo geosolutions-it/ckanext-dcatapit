@@ -411,9 +411,9 @@ def dcatapit_subthemes(key, flattened_data, errors, context):
 
     value = flattened_data.get(key)
 
-    if not value:
+    if not value or value == '[]':  # a little shortcut here
         theme = _get_flattened_theme()
-        if theme:
+        if theme and theme != '[]':  # other shortcut
             log.warning('Aggregate theme is missing, trying setting values from extra theme key')
             theme_list = themes_parse_to_uris(theme)
             _do_return(themes_to_aggr_json(theme_list))
