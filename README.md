@@ -86,7 +86,7 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
      the DCAT_AP-IT specs.
    * `dcatapit_config`: extends the admin configuration schema allowing to edit and visualize extra fields according to 
      the DCAT_AP-IT specs.
-   * `dcatapit_subcatalog_facets`: adds a facet containing the harvested subcatalogs. It needs the property
+   * `dcatapit_subcatalog_facets`: (deprecated) adds a facet containing the harvested subcatalogs. It needs the property
      `ckanext.dcat.expose_subcatalogs` to be set to `True` (see [*transitive harvesting*](https://github.com/geosolutions-it/ckanext-dcat/blob/d0b4373282cac7dd519c702b15c1aaf1c013e03a/README.md#transitive-harvesting) in ckanext-dcat).
    * `dcatapit_theme_group_mapper`: binds automatically a dataset to groups according to the themes in the dataset. 
      In the configuration file you'll need to specify a file containing the mapping between the themes and the groups:
@@ -157,10 +157,10 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
 
       `sudo service apache2 reload`
      
-14. The EU controlled vocabularies must be populated before start using the dcatapit plugin.  
-    The files in the repository are processed versions of the official files.  
+14. The controlled vocabularies (by EU and AgID) must be populated before start using the dcatapit plugin.    
+    The files in the repository are processed versions of the official files.    
     Please refer to the [`README.files.md`](README.files.md) file for info about how these files 
-    have been recreated and how to regenerate them if needed.  
+    have been processed and how to regenerate them if needed.  
 
     Execute in sequence these commands:
 
@@ -179,16 +179,11 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
          # curl https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/territorial-classifications/regions/regions.rdf > regions.rdf
          # paster --plugin=ckanext-dcatapit vocabulary load --filename regions.rdf --name regions --config=/etc/ckan/default/production.ini
 
-17. DCATAPIT themes and subthemes vocabularies must be popolated:
+         ckan -c /etc/ckan/default/ckan.ini dcatapit load --name subthemes   --filename vocabularies/theme-subtheme-mapping.rdf --eurovoc vocabularies/eurovoc-filtered.rdf
+     
+15. DCATAPIT license tree. Download [license mapping file](https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/licences/licences.rdf). Alternatively you can use ``examples/licenses.rdf``, but mind that it may be outdated. Import `license.rdf` it with command:
 
-         ckan -c /etc/ckan/default/ckan.ini dcatapit load --name subthemes   --filename theme-subtheme-mapping.rdf --eurovoc PATH_TO_EUROVOC
-    
-     Sample `eurovoc.rdf` and `eurovoc_mapping.rdf` can be found in the `examples/eurovoc` directory.
-     You may want to download more recent files.
-    
-18. DCATAPIT license tree. Download [license mapping file](https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/licences/licences.rdf). Alternatively you can use ``examples/licenses.rdf``, but mind that it may be outdated. Import `license.rdf` it with command:
-
-         ckan -c /etc/ckan/default/ckan.ini dcatapit load  --name licenses   --filename path/to/license.rdf
+          ckan -c /etc/ckan/default/ckan.ini dcatapit load  --name licenses   --filename path/to/license.rdf
 
 
 ### Dataset reindexing after Organization change
@@ -386,10 +381,6 @@ Through this an additional schema field named `custom_text` will be added to the
 ## Managing translations
 
 The dcatapit extension implements the ITranslation CKAN's interface so the translations procedure of the GUI elements is automatically covered using the translations files provided in the i18n directory.
-
-    Pay attention that the usage of the ITranslation interface can work only in CKAN 2.5 
-    or later, if you are using a minor version of CKAN the ITranslation's implementation 
-    will be ignored.
 
 ### Creating a new translation
 
