@@ -152,8 +152,9 @@ def migrate_data(offset, limit, skip_orgs=False):
 )
 def load(filename, url, format, name, eurovoc, *args, **kwargs):
     # Checking command given options
-    if not (url or not filename):
-        log.error('ERROR: No URL or FILENAME provided and one is required')
+    if (not filename and not url) or (filename and url):
+        log.error('ERROR: either URL or FILENAME is required')
+        return -1
 
     if name == LICENSES_NAME:
         clear_licenses()
@@ -301,9 +302,12 @@ def do_load(vocab_name, url=None, filename=None, format=None):
         vocab = toolkit.get_action('vocabulary_create')(context, data)
 
         for tag in concepts:
-            log.info("Adding tag {0} to vocabulary '{1}'".format(tag, vocab_name))
-            data = {'name': tag, 'vocabulary_id': vocab['id']}
-            toolkit.get_action('tag_create')(context, data)
+            if len(tag) > 1:
+                log.info(f"Adding tag {tag} to vocabulary '{vocab_name}'")
+                data = {'name': tag, 'vocabulary_id': vocab['id']}
+                toolkit.get_action('tag_create')(context, data)
+            else:
+                log.error(f"Tag too short: skipping tag '{tag}' for vocabulary '{vocab_name}'")
 
     ##
     # Persisting Multilag Tags or updating existing
