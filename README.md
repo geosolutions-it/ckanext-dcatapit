@@ -181,9 +181,7 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
 
          ckan -c /etc/ckan/default/ckan.ini dcatapit load --name subthemes   --filename vocabularies/theme-subtheme-mapping.rdf --eurovoc vocabularies/eurovoc-filtered.rdf
      
-15. DCATAPIT license tree. Download [license mapping file](https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/licences/licences.rdf). Alternatively you can use ``examples/licenses.rdf``, but mind that it may be outdated. Import `license.rdf` it with command:
-
-          ckan -c /etc/ckan/default/ckan.ini dcatapit load  --name licenses   --filename path/to/license.rdf
+         ckan -c /etc/ckan/default/ckan.ini dcatapit load  --name licenses   --filename vocabularies/licences.rdf
 
 
 ### Dataset reindexing after Organization change

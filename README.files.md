@@ -126,6 +126,12 @@ which are only provided in `it` and `en` in the `theme-subtheme-mapping.rdf` fil
     It's a big file, so it will take a bit.
   - Final processed file `eurovoc-skos-filtered.rdf` (about 1% of the original size)
   
+### Licenses
+
+- Download command:
+    ```bash
+    wget https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/licences/licences.rdf
+    ```
 
 ## Examples
 
