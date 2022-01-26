@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:atold="http://publications.europa.eu/resource/authority/" xmlns:at="http://publications.europa.eu/ontology/authority/">
+  <skos:ConceptScheme rdf:about="http://publications.europa.eu/resource/authority/frequency" at:table.id="frequency" at:table.version.number="20190619-0">
+    <owl:versionInfo>20190619-0</owl:versionInfo>
+    <rdfs:label xml:lang="en">Frequency</rdfs:label>
+    <at:prefLabel xml:lang="en">Frequency</at:prefLabel>
+    <skos:prefLabel xml:lang="en">Frequency</skos:prefLabel>
+  </skos:ConceptScheme>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/TRIENNIAL" at:deprecated="false">
+    <dc:identifier>TRIENNIAL</dc:identifier>
+    <skos:prefLabel xml:lang="de">dreijährlich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">triennial</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">triennal</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">triennale</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">trienal</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/triennial"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/BIENNIAL" at:deprecated="false">
+    <dc:identifier>BIENNIAL</dc:identifier>
+    <skos:prefLabel xml:lang="de">zweijährlich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">biennial</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">biennal</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">biennale</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">bienal</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/biennial"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/ANNUAL" at:deprecated="false">
+    <dc:identifier>ANNUAL</dc:identifier>
+    <skos:prefLabel xml:lang="de">jährlich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">annual</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">annuel</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">annuale</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">anual</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/annual"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/ANNUAL_2" at:deprecated="false">
+    <dc:identifier>ANNUAL_2</dc:identifier>
+    <skos:prefLabel xml:lang="de">halbjährlich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">semiannual</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">semestriel</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">semestrale</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">semestral</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/semiannual"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/ANNUAL_3" at:deprecated="false">
+    <dc:identifier>ANNUAL_3</dc:identifier>
+    <skos:prefLabel xml:lang="de">dreimal im Jahr</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">three times a year</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">trois fois par an</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">tre volte all'anno</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">cuatrimestral</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/threeTimesAYear"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/QUARTERLY" at:deprecated="false">
+    <dc:identifier>QUARTERLY</dc:identifier>
+    <skos:prefLabel xml:lang="de">vierteljährlich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">quarterly</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">trimestriel</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">trimestrale</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">trimestral</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/quarterly"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/BIMONTHLY" at:deprecated="false">
+    <dc:identifier>BIMONTHLY</dc:identifier>
+    <skos:prefLabel xml:lang="de">zweimonatlich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">bimonthly</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">bimestriel</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">bimestrale</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">bimestral</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/bimonthly"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/MONTHLY" at:deprecated="false">
+    <dc:identifier>MONTHLY</dc:identifier>
+    <skos:prefLabel xml:lang="de">monatlich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">monthly</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">mensuel</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">mensile</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">mensual</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/monthly"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/MONTHLY_2" at:deprecated="false">
+    <dc:identifier>MONTHLY_2</dc:identifier>
+    <skos:prefLabel xml:lang="de">zweimal im Monat</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">semimonthly</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">bimensuel</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">bimensile</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">bimensual</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/semimonthly"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/BIWEEKLY" at:deprecated="false">
+    <dc:identifier>BIWEEKLY</dc:identifier>
+    <skos:prefLabel xml:lang="de">zweiwöchentlich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">biweekly</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">tous les quinze jours</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">quindicinale</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">quincenal</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/biweekly"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/MONTHLY_3" at:deprecated="false">
+    <dc:identifier>MONTHLY_3</dc:identifier>
+    <skos:prefLabel xml:lang="de">dreimal im Monat</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">three times a month</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">trois fois par mois</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">tre volte al mese</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">tres veces por mes</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/threeTimesAMonth"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/WEEKLY" at:deprecated="false">
+    <dc:identifier>WEEKLY</dc:identifier>
+    <skos:prefLabel xml:lang="de">wöchentlich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">weekly</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">hebdomadaire</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">settimanale</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">semanal</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/weekly"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/WEEKLY_2" at:deprecated="false">
+    <dc:identifier>WEEKLY_2</dc:identifier>
+    <skos:prefLabel xml:lang="de">zweimal in Woche</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">semiweekly</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">bihebdomadaire</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">bisettimanale</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">bisemanal</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/semiweekly"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/WEEKLY_3" at:deprecated="false">
+    <dc:identifier>WEEKLY_3</dc:identifier>
+    <skos:prefLabel xml:lang="de">dreimal in Woche</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">three times a week</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">trois fois par semaine</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">tre volte a settimana</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">tres veces por semana</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/threeTimesAWeek"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/DAILY" at:deprecated="false">
+    <dc:identifier>DAILY</dc:identifier>
+    <skos:prefLabel xml:lang="de">täglich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">daily</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">quotidien</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">quotidiano</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">diario</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/daily"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/UPDATE_CONT" at:deprecated="false">
+    <dc:identifier>UPDATE_CONT</dc:identifier>
+    <skos:prefLabel xml:lang="de">ständige Aktualisierung</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">continuously updated</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">mise à jour continuelle</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">in continuo aggiornamento</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">continuamente actualizado</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/IRREG" at:deprecated="false">
+    <dc:identifier>IRREG</dc:identifier>
+    <skos:prefLabel xml:lang="de">unregelmäßig</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">irregular</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">irrégulier</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">irregolare</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">irregular</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/irregular"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/UNKNOWN" at:deprecated="false">
+    <dc:identifier>UNKNOWN</dc:identifier>
+    <skos:prefLabel xml:lang="de">unbekannt</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">unknown</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">inconnu</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">sconosciuto</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">desconocido</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/OTHER" at:deprecated="false">
+    <dc:identifier>OTHER</dc:identifier>
+    <skos:prefLabel xml:lang="de">anderer</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">other</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">autre</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">altro</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">otro</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/DAILY_2" at:deprecated="false">
+    <dc:identifier>DAILY_2</dc:identifier>
+    <skos:prefLabel xml:lang="de">zweimal täglich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">twice a day</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">deux fois par jour</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">due volte al giorno</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">dos veces al día</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/CONT" at:deprecated="false">
+    <dc:identifier>CONT</dc:identifier>
+    <skos:prefLabel xml:lang="de">kontinuierlich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">continuous</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">continuel</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">continuo</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">continuo</skos:prefLabel>
+    <skos:exactMatch rdf:resource="http://purl.org/cld/freq/continuous"/>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/NEVER" at:deprecated="false">
+    <dc:identifier>NEVER</dc:identifier>
+    <skos:prefLabel xml:lang="de">niemals</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">never</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">jamais</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">mai</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">nunca</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/QUADRENNIAL" at:deprecated="false">
+    <dc:identifier>QUADRENNIAL</dc:identifier>
+    <skos:prefLabel xml:lang="de">vierjährlich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">quadrennial</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">tous les quatre ans</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">ogni quattro anni</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">cada cuatro años</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/QUINQUENNIAL" at:deprecated="false">
+    <dc:identifier>QUINQUENNIAL</dc:identifier>
+    <skos:prefLabel xml:lang="de">fünfjährlich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">quinquennial</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">tous les cinq ans</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">ogni cinque anni</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">cada cinco años</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/HOURLY" at:deprecated="false">
+    <dc:identifier>HOURLY</dc:identifier>
+    <skos:prefLabel xml:lang="de">stündlich</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">hourly</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">toutes les heures</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">ogni ora</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">cada hora</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/DECENNIAL" at:deprecated="false">
+    <dc:identifier>DECENNIAL</dc:identifier>
+    <skos:prefLabel xml:lang="de">alle zehn Jahre</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">decennial</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">tous les dix ans</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">decennale</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">cada diez años</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/BIHOURLY" at:deprecated="false">
+    <dc:identifier>BIHOURLY</dc:identifier>
+    <skos:prefLabel xml:lang="de">alle zwei Stunden</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">bihourly</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">toutes les deux heures</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">ogni due ore</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">cada dos horas</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/TRIHOURLY" at:deprecated="false">
+    <dc:identifier>TRIHOURLY</dc:identifier>
+    <skos:prefLabel xml:lang="de">alle drei Stunden</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">trihourly</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">toutes les trois heures</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">ogni tre ore</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">cada tres horas</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/BIDECENNIAL" at:deprecated="false">
+    <dc:identifier>BIDECENNIAL</dc:identifier>
+    <skos:prefLabel xml:lang="de">alle zwanzig Jahre</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">bidecennial</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">tous les vingt ans</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">bidecennale</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">cada veinte años</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/TRIDECENNIAL" at:deprecated="false">
+    <dc:identifier>TRIDECENNIAL</dc:identifier>
+    <skos:prefLabel xml:lang="de">alle dreißig Jahre</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">tridecennial</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">tous les trente ans</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">tridecennale</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">cada treinta años</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/frequency/OP_DATPRO">
+    <dc:identifier>OP_DATPRO</dc:identifier>
+    <skos:prefLabel xml:lang="de">Vorläufige Daten</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Provisional data</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Datos provisionales</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Données provisoires</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Dati provvisori</skos:prefLabel>
+  </skos:Concept>
+</rdf:RDF>

@@ -1,0 +1,2840 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:atold="http://publications.europa.eu/resource/authority/" xmlns:at="http://publications.europa.eu/ontology/authority/">
+  <skos:ConceptScheme rdf:about="http://publications.europa.eu/resource/authority/place" at:table.id="place" at:table.version.number="20211208-0">
+    <owl:versionInfo>20211208-0</owl:versionInfo>
+    <rdfs:label xml:lang="en">Place</rdfs:label>
+    <at:prefLabel xml:lang="en">Place</at:prefLabel>
+    <skos:prefLabel xml:lang="en">Place</skos:prefLabel>
+  </skos:ConceptScheme>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_AGR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_AGR</at:authority-code>
+    <at:op-code>ITA_AGR</at:op-code>
+    <atold:op-code>ITA_AGR</atold:op-code>
+    <dc:identifier>ITA_AGR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Agrigent</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Agrigento</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Agrigente</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Agrigento</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Agrigento</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>279</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_AOI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_AOI</at:authority-code>
+    <at:op-code>ITA_AOI</at:op-code>
+    <atold:op-code>ITA_AOI</atold:op-code>
+    <dc:identifier>ITA_AOI</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Ancona</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Ancona</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Ancône</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Ancona</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Ancona</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>95</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_AOT" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_AOT</at:authority-code>
+    <at:op-code>ITA_AOT</at:op-code>
+    <atold:op-code>ITA_AOT</atold:op-code>
+    <dc:identifier>ITA_AOT</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Aosta</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Aosta</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Aoste</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Aosta</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Aosta</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>31</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BRI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BRI</at:authority-code>
+    <at:op-code>ITA_BRI</at:op-code>
+    <atold:op-code>ITA_BRI</atold:op-code>
+    <dc:identifier>ITA_BRI</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Bari</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Bari</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Bari</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Bari</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Bari</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>119175</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BEN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BEN</at:authority-code>
+    <at:op-code>ITA_BEN</at:op-code>
+    <atold:op-code>ITA_BEN</atold:op-code>
+    <dc:identifier>ITA_BEN</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Benevent</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Benevento</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Bénévent</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Benevento</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Benevento</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>275</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BGO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BGO</at:authority-code>
+    <at:op-code>ITA_BGO</at:op-code>
+    <atold:op-code>ITA_BGO</atold:op-code>
+    <dc:identifier>ITA_BGO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Bergamo</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Bergamo</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Bergame</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Bergamo</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Bérgamo</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>172</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BLQ" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BLQ</at:authority-code>
+    <at:op-code>ITA_BLQ</at:op-code>
+    <atold:op-code>ITA_BLQ</atold:op-code>
+    <dc:identifier>ITA_BLQ</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Bologna</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Bologna</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Bologne</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Bologna</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Bolonia</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>167</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BZO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BZO</at:authority-code>
+    <at:op-code>ITA_BZO</at:op-code>
+    <atold:op-code>ITA_BZO</atold:op-code>
+    <dc:identifier>ITA_BZO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Bozen</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Bolzano</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Bolzano</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Bolzano</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Bolzano</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>168</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BEK" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BEK</at:authority-code>
+    <at:op-code>ITA_BEK</at:op-code>
+    <atold:op-code>ITA_BEK</atold:op-code>
+    <dc:identifier>ITA_BEK</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Bruneck</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Bruneck</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Bruneck</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Brunico</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Bruneck</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>468251</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CPU" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CPU</at:authority-code>
+    <at:op-code>ITA_CPU</at:op-code>
+    <atold:op-code>ITA_CPU</atold:op-code>
+    <dc:identifier>ITA_CPU</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Capua</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Capua</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Capoue</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Capua</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Capua</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>30</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CRA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CRA</at:authority-code>
+    <at:op-code>ITA_CRA</at:op-code>
+    <atold:op-code>ITA_CRA</atold:op-code>
+    <dc:identifier>ITA_CRA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Carrara</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Carrara</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Carrare</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Carrara</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Carrara</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>190</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CST" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CST</at:authority-code>
+    <at:op-code>ITA_CST</at:op-code>
+    <atold:op-code>ITA_CST</atold:op-code>
+    <dc:identifier>ITA_CST</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Caserta</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Caserta</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Caserte</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Caserta</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Caserta</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>186</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CTA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CTA</at:authority-code>
+    <at:op-code>ITA_CTA</at:op-code>
+    <atold:op-code>ITA_CTA</atold:op-code>
+    <dc:identifier>ITA_CTA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Catania</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Catania</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Catane</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Catania</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Catania</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>153</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_OMO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_OMO</at:authority-code>
+    <at:op-code>ITA_OMO</at:op-code>
+    <atold:op-code>ITA_OMO</atold:op-code>
+    <dc:identifier>ITA_OMO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Como</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Como</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Côme</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Como</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Como</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>3</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CUN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CUN</at:authority-code>
+    <at:op-code>ITA_CUN</at:op-code>
+    <atold:op-code>ITA_CUN</atold:op-code>
+    <dc:identifier>ITA_CUN</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Cuneo</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Cuneo</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Coni</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Cuneo</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Cuneo</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>24</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_FRR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_FRR</at:authority-code>
+    <at:op-code>ITA_FRR</at:op-code>
+    <atold:op-code>ITA_FRR</atold:op-code>
+    <dc:identifier>ITA_FRR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Ferrara</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Ferrara</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Ferrare</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Ferrara</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Ferrara</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>187</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_FLR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_FLR</at:authority-code>
+    <at:op-code>ITA_FLR</at:op-code>
+    <atold:op-code>ITA_FLR</atold:op-code>
+    <dc:identifier>ITA_FLR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Florenz</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Florence</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Florence</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Firenze</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Florencia</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>EP</dc:source>
+        <at:legacy-code>FLO</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>EurLex</dc:source>
+        <at:affected-table>FD_325</at:affected-table>
+        <at:legacy-code>FLORENCE</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>PUB</dc:source>
+        <at:affected-table>PUB_LOC</at:affected-table>
+        <at:legacy-code>{FLOR}</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>161</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_GOA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_GOA</at:authority-code>
+    <at:op-code>ITA_GOA</at:op-code>
+    <atold:op-code>ITA_GOA</atold:op-code>
+    <dc:identifier>ITA_GOA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Genua</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Genoa</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Gênes</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Genova</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Génova</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>84</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_GZA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_GZA</at:authority-code>
+    <at:op-code>ITA_GZA</at:op-code>
+    <atold:op-code>ITA_GZA</atold:op-code>
+    <dc:identifier>ITA_GZA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Görz</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Gorizia</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Gorizia</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Gorizia</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Gorizia</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>144</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ISR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ISR</at:authority-code>
+    <at:op-code>ITA_ISR</at:op-code>
+    <atold:op-code>ITA_ISR</atold:op-code>
+    <dc:identifier>ITA_ISR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Ispra</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Ispra</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Ispra</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Ispra</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Ispra</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>PUB</dc:source>
+        <at:affected-table>PUB_LOC</at:affected-table>
+        <at:legacy-code>{ISPR}</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>707017</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_LVE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_LVE</at:authority-code>
+    <at:op-code>ITA_LVE</at:op-code>
+    <atold:op-code>ITA_LVE</atold:op-code>
+    <dc:identifier>ITA_LVE</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Leifers</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Laives</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Laives</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Laives</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Laives</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>19023</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_LIV" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_LIV</at:authority-code>
+    <at:op-code>ITA_LIV</at:op-code>
+    <atold:op-code>ITA_LIV</atold:op-code>
+    <dc:identifier>ITA_LIV</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Livorno</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Leghorn</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Livourne</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Livorno</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Livorno</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>156</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MAN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MAN</at:authority-code>
+    <at:op-code>ITA_MAN</at:op-code>
+    <atold:op-code>ITA_MAN</atold:op-code>
+    <dc:identifier>ITA_MAN</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Mantua</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Mantova</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Mantoue</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Mantova</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Mantua</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>180</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MEN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MEN</at:authority-code>
+    <at:op-code>ITA_MEN</at:op-code>
+    <atold:op-code>ITA_MEN</atold:op-code>
+    <dc:identifier>ITA_MEN</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Meran</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Merano</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Merano</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Merano</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Merano</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>89</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MSN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MSN</at:authority-code>
+    <at:op-code>ITA_MSN</at:op-code>
+    <atold:op-code>ITA_MSN</atold:op-code>
+    <dc:identifier>ITA_MSN</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Messina</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Messina</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Messine</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Messina</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Mesina</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>176</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MIL" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MIL</at:authority-code>
+    <at:op-code>ITA_MIL</at:op-code>
+    <atold:op-code>ITA_MIL</atold:op-code>
+    <dc:identifier>ITA_MIL</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Mailand</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Milan</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Milan</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Milano</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Milán</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>EP</dc:source>
+        <at:legacy-code>MIL</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>PUB</dc:source>
+        <at:affected-table>PUB_LOC</at:affected-table>
+        <at:legacy-code>{MILA}</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>81</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MOD" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MOD</at:authority-code>
+    <at:op-code>ITA_MOD</at:op-code>
+    <atold:op-code>ITA_MOD</atold:op-code>
+    <dc:identifier>ITA_MOD</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Modena</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Modena</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Modène</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Modena</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Módena</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>85</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MGF" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MGF</at:authority-code>
+    <at:op-code>ITA_MGF</at:op-code>
+    <atold:op-code>ITA_MGF</atold:op-code>
+    <dc:identifier>ITA_MGF</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Welsberg-Taisten</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Monguelfo-Tesido</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Monguelfo-Tesido</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Monguelfo-Tesido</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Monguelfo-Tesido</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>562532</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_NAP" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_NAP</at:authority-code>
+    <at:op-code>ITA_NAP</at:op-code>
+    <atold:op-code>ITA_NAP</atold:op-code>
+    <dc:identifier>ITA_NAP</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Neapel</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Naples</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Naples</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Napoli</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Nápoles</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>82</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_NVR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_NVR</at:authority-code>
+    <at:op-code>ITA_NVR</at:op-code>
+    <atold:op-code>ITA_NVR</atold:op-code>
+    <dc:identifier>ITA_NVR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Novara</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Novara</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Novare</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Novara</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Novara</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>96</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ORA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ORA</at:authority-code>
+    <at:op-code>ITA_ORA</at:op-code>
+    <atold:op-code>ITA_ORA</atold:op-code>
+    <dc:identifier>ITA_ORA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Auer</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Ora</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Ora</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Ora</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Ora</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>721347</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SIT" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SIT</at:authority-code>
+    <at:op-code>ITA_SIT</at:op-code>
+    <atold:op-code>ITA_SIT</atold:op-code>
+    <dc:identifier>ITA_SIT</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Ostia</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Ostia</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Ostie</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Ostia</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Ostia</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>27</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PDA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PDA</at:authority-code>
+    <at:op-code>ITA_PDA</at:op-code>
+    <atold:op-code>ITA_PDA</atold:op-code>
+    <dc:identifier>ITA_PDA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Padua</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Padua</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Padoue</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Padova</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Padua</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>97</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PMO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PMO</at:authority-code>
+    <at:op-code>ITA_PMO</at:op-code>
+    <atold:op-code>ITA_PMO</atold:op-code>
+    <dc:identifier>ITA_PMO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Palermo</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Palermo</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Palerme</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Palermo</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Palermo</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>173</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PMF" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PMF</at:authority-code>
+    <at:op-code>ITA_PMF</at:op-code>
+    <atold:op-code>ITA_PMF</atold:op-code>
+    <dc:identifier>ITA_PMF</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Parma</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Parma</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Parme</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Parma</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Parma</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>PUB</dc:source>
+        <at:affected-table>PUB_LOC</at:affected-table>
+        <at:legacy-code>{PARM}</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>50</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PAV" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PAV</at:authority-code>
+    <at:op-code>ITA_PAV</at:op-code>
+    <atold:op-code>ITA_PAV</atold:op-code>
+    <dc:identifier>ITA_PAV</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Pavia</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Pavia</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Pavie</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Pavia</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Pavía</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>32</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PSR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PSR</at:authority-code>
+    <at:op-code>ITA_PSR</at:op-code>
+    <atold:op-code>ITA_PSR</atold:op-code>
+    <dc:identifier>ITA_PSR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Pescara</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Pescara</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Pescara</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Pescara</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Pescara</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>120301</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PMP" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PMP</at:authority-code>
+    <at:op-code>ITA_PMP</at:op-code>
+    <atold:op-code>ITA_PMP</atold:op-code>
+    <dc:identifier>ITA_PMP</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Pompeji</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Pompeii</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Pompéi</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Pompei</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Pompeya</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>78</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_RGA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_RGA</at:authority-code>
+    <at:op-code>ITA_RGA</at:op-code>
+    <atold:op-code>ITA_RGA</atold:op-code>
+    <dc:identifier>ITA_RGA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Ragusa</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Ragusa</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Raguse</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Ragusa</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Ragusa</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>94</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_RAN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_RAN</at:authority-code>
+    <at:op-code>ITA_RAN</at:op-code>
+    <atold:op-code>ITA_RAN</atold:op-code>
+    <dc:identifier>ITA_RAN</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Ravenna</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Ravenna</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Ravenne</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Ravenna</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Rávena</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>188</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_REG" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_REG</at:authority-code>
+    <at:op-code>ITA_REG</at:op-code>
+    <atold:op-code>ITA_REG</atold:op-code>
+    <dc:identifier>ITA_REG</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Reggio Calabria</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Reggio Calabria</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Reggio de Calabre</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Reggio Calabria</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Regio de Calabria</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>372</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_RNE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_RNE</at:authority-code>
+    <at:op-code>ITA_RNE</at:op-code>
+    <atold:op-code>ITA_RNE</atold:op-code>
+    <dc:identifier>ITA_RNE</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Reggio Emilia</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Reggio Emilia</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Reggio d'Émilie</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Reggio Emilia</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Reggio Emilia</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>361</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_RMI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_RMI</at:authority-code>
+    <at:op-code>ITA_RMI</at:op-code>
+    <atold:op-code>ITA_RMI</atold:op-code>
+    <dc:identifier>ITA_RMI</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Rimini</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Rimini</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Rimini</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Rimini</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Rímini</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>76</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_RVL" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_RVL</at:authority-code>
+    <at:op-code>ITA_RVL</at:op-code>
+    <atold:op-code>ITA_RVL</atold:op-code>
+    <dc:identifier>ITA_RVL</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Rivoli</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Rivoli</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Rivoli</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Rivoli</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Rívoli</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>74</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ROM" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ROM</at:authority-code>
+    <at:op-code>ITA_ROM</at:op-code>
+    <atold:op-code>ITA_ROM</atold:op-code>
+    <dc:identifier>ITA_ROM</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Rom</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Rome</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Rome</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Roma</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Roma</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>EP</dc:source>
+        <at:legacy-code>ROM</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>EurLex</dc:source>
+        <at:affected-table>FD_325</at:affected-table>
+        <at:legacy-code>ROME</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>PUB</dc:source>
+        <at:affected-table>PUB_LOC</at:affected-table>
+        <at:legacy-code>{ROME}</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>PUB</dc:source>
+        <at:affected-table>PUB_LOC</at:affected-table>
+        <at:legacy-code>ROM</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>1</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SAL" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SAL</at:authority-code>
+    <at:op-code>ITA_SAL</at:op-code>
+    <atold:op-code>ITA_SAL</atold:op-code>
+    <dc:identifier>ITA_SAL</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Salerno</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Salerno</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Salerne</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Salerno</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Salerno</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>174</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SRE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SRE</at:authority-code>
+    <at:op-code>ITA_SRE</at:op-code>
+    <atold:op-code>ITA_SRE</atold:op-code>
+    <dc:identifier>ITA_SRE</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">San Remo</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">San Remo</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">San Remo</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Sanremo</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">San Remo</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>175</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SVN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SVN</at:authority-code>
+    <at:op-code>ITA_SVN</at:op-code>
+    <atold:op-code>ITA_SVN</atold:op-code>
+    <dc:identifier>ITA_SVN</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Savona</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Savona</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Savone</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Savona</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Savona</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>98</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SNA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SNA</at:authority-code>
+    <at:op-code>ITA_SNA</at:op-code>
+    <atold:op-code>ITA_SNA</atold:op-code>
+    <dc:identifier>ITA_SNA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Siena</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Sienna</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Sienne</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Siena</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Siena</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>28</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SIR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SIR</at:authority-code>
+    <at:op-code>ITA_SIR</at:op-code>
+    <atold:op-code>ITA_SIR</atold:op-code>
+    <dc:identifier>ITA_SIR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Syrakus</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Syracuse</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Syracuse</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Siracusa</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Siracusa</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>164</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TAR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TAR</at:authority-code>
+    <at:op-code>ITA_TAR</at:op-code>
+    <atold:op-code>ITA_TAR</atold:op-code>
+    <dc:identifier>ITA_TAR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Tarent</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Taranto</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Tarente</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Taranto</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Taranto</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>181</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TIV" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TIV</at:authority-code>
+    <at:op-code>ITA_TIV</at:op-code>
+    <atold:op-code>ITA_TIV</atold:op-code>
+    <dc:identifier>ITA_TIV</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Tivoli</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Tivoli</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Tivoli</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Tivoli</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Tívoli</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>75</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TRT" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TRT</at:authority-code>
+    <at:op-code>ITA_TRT</at:op-code>
+    <atold:op-code>ITA_TRT</atold:op-code>
+    <dc:identifier>ITA_TRT</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Trient</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Trento</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Trente</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Trento</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Trento</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>105</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TRN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TRN</at:authority-code>
+    <at:op-code>ITA_TRN</at:op-code>
+    <atold:op-code>ITA_TRN</atold:op-code>
+    <dc:identifier>ITA_TRN</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Turin</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Turin</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Turin</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Torino</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Turín</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>PUB</dc:source>
+        <at:affected-table>PUB_LOC</at:affected-table>
+        <at:legacy-code>{TORI}</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>73</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TRV" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TRV</at:authority-code>
+    <at:op-code>ITA_TRV</at:op-code>
+    <atold:op-code>ITA_TRV</atold:op-code>
+    <dc:identifier>ITA_TRV</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Treviso</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Treviso</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Trévise</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Treviso</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Treviso</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>159</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TRS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TRS</at:authority-code>
+    <at:op-code>ITA_TRS</at:op-code>
+    <atold:op-code>ITA_TRS</atold:op-code>
+    <dc:identifier>ITA_TRS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Triest</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Trieste</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Trieste</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Trieste</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Trieste</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>162</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VAR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VAR</at:authority-code>
+    <at:op-code>ITA_VAR</at:op-code>
+    <atold:op-code>ITA_VAR</atold:op-code>
+    <dc:identifier>ITA_VAR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Varese</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Varese</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Varèse</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Varese</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Varese</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>92</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VCE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VCE</at:authority-code>
+    <at:op-code>ITA_VCE</at:op-code>
+    <atold:op-code>ITA_VCE</atold:op-code>
+    <dc:identifier>ITA_VCE</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Venedig</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Venice</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Venise</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Venezia</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Venecia</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>151</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VEN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VEN</at:authority-code>
+    <at:op-code>ITA_VEN</at:op-code>
+    <atold:op-code>ITA_VEN</atold:op-code>
+    <dc:identifier>ITA_VEN</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Ventimiglia</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Ventimiglia</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Vintimille</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Ventimiglia</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Ventimiglia</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>344</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VRN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VRN</at:authority-code>
+    <at:op-code>ITA_VRN</at:op-code>
+    <atold:op-code>ITA_VRN</atold:op-code>
+    <dc:identifier>ITA_VRN</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Verona</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Verona</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Vérone</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Verona</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Verona</skos:prefLabel>
+    <at:op-mapped-code>
+      <at:MappedCode>
+        <dc:source>TED</dc:source>
+        <at:legacy-code>86</at:legacy-code>
+      </at:MappedCode>
+    </at:op-mapped-code>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MTR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MTR</at:authority-code>
+    <at:op-code>ITA_MTR</at:op-code>
+    <atold:op-code>ITA_MTR</atold:op-code>
+    <dc:identifier>ITA_MTR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Matera</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Matera</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Matera</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Matera</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Matera</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_OTA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_OTA</at:authority-code>
+    <at:op-code>ITA_OTA</at:op-code>
+    <atold:op-code>ITA_OTA</atold:op-code>
+    <dc:identifier>ITA_OTA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Prato</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Prato</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Prato</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Prato</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Prato</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ACI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ACI</at:authority-code>
+    <at:op-code>ITA_ACI</at:op-code>
+    <atold:op-code>ITA_ACI</atold:op-code>
+    <dc:identifier>ITA_ACI</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Acqui Terme</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_AMT" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_AMT</at:authority-code>
+    <at:op-code>ITA_AMT</at:op-code>
+    <atold:op-code>ITA_AMT</atold:op-code>
+    <dc:identifier>ITA_AMT</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Amantea</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_AZO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_AZO</at:authority-code>
+    <at:op-code>ITA_AZO</at:op-code>
+    <atold:op-code>ITA_AZO</atold:op-code>
+    <dc:identifier>ITA_AZO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Andezeno</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ARN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ARN</at:authority-code>
+    <at:op-code>ITA_ARN</at:op-code>
+    <atold:op-code>ITA_ARN</atold:op-code>
+    <dc:identifier>ITA_ARN</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Arconate</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ACC" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ACC</at:authority-code>
+    <at:op-code>ITA_ACC</at:op-code>
+    <atold:op-code>ITA_ACC</atold:op-code>
+    <dc:identifier>ITA_ACC</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Ariccia</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_AST" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_AST</at:authority-code>
+    <at:op-code>ITA_AST</at:op-code>
+    <atold:op-code>ITA_AST</atold:op-code>
+    <dc:identifier>ITA_AST</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Asti</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_AEA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_AEA</at:authority-code>
+    <at:op-code>ITA_AEA</at:op-code>
+    <atold:op-code>ITA_AEA</atold:op-code>
+    <dc:identifier>ITA_AEA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Aversa</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BLT" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BLT</at:authority-code>
+    <at:op-code>ITA_BLT</at:op-code>
+    <atold:op-code>ITA_BLT</atold:op-code>
+    <dc:identifier>ITA_BLT</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Barletta</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BDG" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BDG</at:authority-code>
+    <at:op-code>ITA_BDG</at:op-code>
+    <atold:op-code>ITA_BDG</atold:op-code>
+    <dc:identifier>ITA_BDG</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Bassano del Grappa</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BLX" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BLX</at:authority-code>
+    <at:op-code>ITA_BLX</at:op-code>
+    <atold:op-code>ITA_BLX</atold:op-code>
+    <dc:identifier>ITA_BLX</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Belluno</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BEG" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BEG</at:authority-code>
+    <at:op-code>ITA_BEG</at:op-code>
+    <atold:op-code>ITA_BEG</atold:op-code>
+    <dc:identifier>ITA_BEG</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Bernareggio</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BIE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BIE</at:authority-code>
+    <at:op-code>ITA_BIE</at:op-code>
+    <atold:op-code>ITA_BIE</atold:op-code>
+    <dc:identifier>ITA_BIE</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Biella</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BT5" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BT5</at:authority-code>
+    <at:op-code>ITA_BT5</at:op-code>
+    <atold:op-code>ITA_BT5</atold:op-code>
+    <dc:identifier>ITA_BT5</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Bitti</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BMA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BMA</at:authority-code>
+    <at:op-code>ITA_BMA</at:op-code>
+    <atold:op-code>ITA_BMA</atold:op-code>
+    <dc:identifier>ITA_BMA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Bovalino Marina</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BRA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BRA</at:authority-code>
+    <at:op-code>ITA_BRA</at:op-code>
+    <atold:op-code>ITA_BRA</atold:op-code>
+    <dc:identifier>ITA_BRA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Bra</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BRC" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BRC</at:authority-code>
+    <at:op-code>ITA_BRC</at:op-code>
+    <atold:op-code>ITA_BRC</atold:op-code>
+    <dc:identifier>ITA_BRC</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Brescia</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BHS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BHS</at:authority-code>
+    <at:op-code>ITA_BHS</at:op-code>
+    <atold:op-code>ITA_BHS</atold:op-code>
+    <dc:identifier>ITA_BHS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Bricherasio</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BDS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BDS</at:authority-code>
+    <at:op-code>ITA_BDS</at:op-code>
+    <atold:op-code>ITA_BDS</atold:op-code>
+    <dc:identifier>ITA_BDS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Brindisi</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BSG" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BSG</at:authority-code>
+    <at:op-code>ITA_BSG</at:op-code>
+    <atold:op-code>ITA_BSG</atold:op-code>
+    <dc:identifier>ITA_BSG</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Brisighella</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BZY" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BZY</at:authority-code>
+    <at:op-code>ITA_BZY</at:op-code>
+    <atold:op-code>ITA_BZY</atold:op-code>
+    <dc:identifier>ITA_BZY</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Bronte</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BBT" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BBT</at:authority-code>
+    <at:op-code>ITA_BBT</at:op-code>
+    <atold:op-code>ITA_BBT</atold:op-code>
+    <dc:identifier>ITA_BBT</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Buonabitacolo</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BSU" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BSU</at:authority-code>
+    <at:op-code>ITA_BSU</at:op-code>
+    <atold:op-code>ITA_BSU</atold:op-code>
+    <dc:identifier>ITA_BSU</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Busalla</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_BUA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_BUA</at:authority-code>
+    <at:op-code>ITA_BUA</at:op-code>
+    <atold:op-code>ITA_BUA</atold:op-code>
+    <dc:identifier>ITA_BUA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Busto Arsizio</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CAG" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CAG</at:authority-code>
+    <at:op-code>ITA_CAG</at:op-code>
+    <atold:op-code>ITA_CAG</atold:op-code>
+    <dc:identifier>ITA_CAG</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Cagliari</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_KMR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_KMR</at:authority-code>
+    <at:op-code>ITA_KMR</at:op-code>
+    <atold:op-code>ITA_KMR</atold:op-code>
+    <dc:identifier>ITA_KMR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Camaiore</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ZGC" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ZGC</at:authority-code>
+    <at:op-code>ITA_ZGC</at:op-code>
+    <atold:op-code>ITA_ZGC</atold:op-code>
+    <dc:identifier>ITA_ZGC</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Cammarata</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CPS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CPS</at:authority-code>
+    <at:op-code>ITA_CPS</at:op-code>
+    <atold:op-code>ITA_CPS</atold:op-code>
+    <dc:identifier>ITA_CPS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Camposampiero</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ZEP" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ZEP</at:authority-code>
+    <at:op-code>ITA_ZEP</at:op-code>
+    <atold:op-code>ITA_ZEP</atold:op-code>
+    <dc:identifier>ITA_ZEP</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Canicattì</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VB2" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VB2</at:authority-code>
+    <at:op-code>ITA_VB2</at:op-code>
+    <atold:op-code>ITA_VB2</atold:op-code>
+    <dc:identifier>ITA_VB2</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Canino</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CMK" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CMK</at:authority-code>
+    <at:op-code>ITA_CMK</at:op-code>
+    <atold:op-code>ITA_CMK</atold:op-code>
+    <dc:identifier>ITA_CMK</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Cappella Maggiore</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CB9" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CB9</at:authority-code>
+    <at:op-code>ITA_CB9</at:op-code>
+    <atold:op-code>ITA_CB9</atold:op-code>
+    <dc:identifier>ITA_CB9</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Carbonia</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_IGO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_IGO</at:authority-code>
+    <at:op-code>ITA_IGO</at:op-code>
+    <atold:op-code>ITA_IGO</atold:op-code>
+    <dc:identifier>ITA_IGO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Cartigliano</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CSS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CSS</at:authority-code>
+    <at:op-code>ITA_CSS</at:op-code>
+    <atold:op-code>ITA_CSS</atold:op-code>
+    <dc:identifier>ITA_CSS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Casale sul Sile</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_AGN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_AGN</at:authority-code>
+    <at:op-code>ITA_AGN</at:op-code>
+    <atold:op-code>ITA_AGN</atold:op-code>
+    <dc:identifier>ITA_AGN</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Cassano Magnago</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CFC" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CFC</at:authority-code>
+    <at:op-code>ITA_CFC</at:op-code>
+    <atold:op-code>ITA_CFC</atold:op-code>
+    <dc:identifier>ITA_CFC</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Castelfranco</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CLE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CLE</at:authority-code>
+    <at:op-code>ITA_CLE</at:op-code>
+    <atold:op-code>ITA_CLE</atold:op-code>
+    <dc:identifier>ITA_CLE</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Castelleone</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CLU" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CLU</at:authority-code>
+    <at:op-code>ITA_CLU</at:op-code>
+    <atold:op-code>ITA_CLU</atold:op-code>
+    <dc:identifier>ITA_CLU</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Castellucchio</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CNQ" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CNQ</at:authority-code>
+    <at:op-code>ITA_CNQ</at:op-code>
+    <atold:op-code>ITA_CNQ</atold:op-code>
+    <dc:identifier>ITA_CNQ</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Castelnovo ne' Monti</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ICV" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ICV</at:authority-code>
+    <at:op-code>ITA_ICV</at:op-code>
+    <atold:op-code>ITA_ICV</atold:op-code>
+    <dc:identifier>ITA_ICV</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Castelverde</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_QCZ" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_QCZ</at:authority-code>
+    <at:op-code>ITA_QCZ</at:op-code>
+    <atold:op-code>ITA_QCZ</atold:op-code>
+    <dc:identifier>ITA_QCZ</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Catanzaro</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CEA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CEA</at:authority-code>
+    <at:op-code>ITA_CEA</at:op-code>
+    <atold:op-code>ITA_CEA</atold:op-code>
+    <dc:identifier>ITA_CEA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Cerignola</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CNT" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CNT</at:authority-code>
+    <at:op-code>ITA_CNT</at:op-code>
+    <atold:op-code>ITA_CNT</atold:op-code>
+    <dc:identifier>ITA_CNT</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Cesenatico</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CHX" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CHX</at:authority-code>
+    <at:op-code>ITA_CHX</at:op-code>
+    <atold:op-code>ITA_CHX</atold:op-code>
+    <dc:identifier>ITA_CHX</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Chiavari</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CDC" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CDC</at:authority-code>
+    <at:op-code>ITA_CDC</at:op-code>
+    <atold:op-code>ITA_CDC</atold:op-code>
+    <dc:identifier>ITA_CDC</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Città di Castello</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_CIT" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_CIT</at:authority-code>
+    <at:op-code>ITA_CIT</at:op-code>
+    <atold:op-code>ITA_CIT</atold:op-code>
+    <dc:identifier>ITA_CIT</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Cittadella</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ZGI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ZGI</at:authority-code>
+    <at:op-code>ITA_ZGI</at:op-code>
+    <atold:op-code>ITA_ZGI</atold:op-code>
+    <dc:identifier>ITA_ZGI</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Codroipo</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_QCO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_QCO</at:authority-code>
+    <at:op-code>ITA_QCO</at:op-code>
+    <atold:op-code>ITA_QCO</atold:op-code>
+    <dc:identifier>ITA_QCO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Corato</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_QCS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_QCS</at:authority-code>
+    <at:op-code>ITA_QCS</at:op-code>
+    <atold:op-code>ITA_QCS</atold:op-code>
+    <dc:identifier>ITA_QCS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Cosenza</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ZGT" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ZGT</at:authority-code>
+    <at:op-code>ITA_ZGT</at:op-code>
+    <atold:op-code>ITA_ZGT</atold:op-code>
+    <dc:identifier>ITA_ZGT</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Costa Volpino</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_DOM" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_DOM</at:authority-code>
+    <at:op-code>ITA_DOM</at:op-code>
+    <atold:op-code>ITA_DOM</atold:op-code>
+    <dc:identifier>ITA_DOM</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Domodossola</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_EBB" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_EBB</at:authority-code>
+    <at:op-code>ITA_EBB</at:op-code>
+    <atold:op-code>ITA_EBB</atold:op-code>
+    <dc:identifier>ITA_EBB</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Eboli</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_EPI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_EPI</at:authority-code>
+    <at:op-code>ITA_EPI</at:op-code>
+    <atold:op-code>ITA_EPI</atold:op-code>
+    <dc:identifier>ITA_EPI</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Empoli</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ENO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ENO</at:authority-code>
+    <at:op-code>ITA_ENO</at:op-code>
+    <atold:op-code>ITA_ENO</atold:op-code>
+    <dc:identifier>ITA_ENO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Enna</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_EST" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_EST</at:authority-code>
+    <at:op-code>ITA_EST</at:op-code>
+    <atold:op-code>ITA_EST</atold:op-code>
+    <dc:identifier>ITA_EST</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Este</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_FAE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_FAE</at:authority-code>
+    <at:op-code>ITA_FAE</at:op-code>
+    <atold:op-code>ITA_FAE</atold:op-code>
+    <dc:identifier>ITA_FAE</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Faenza</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_FAO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_FAO</at:authority-code>
+    <at:op-code>ITA_FAO</at:op-code>
+    <atold:op-code>ITA_FAO</atold:op-code>
+    <dc:identifier>ITA_FAO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Fano</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_FOG" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_FOG</at:authority-code>
+    <at:op-code>ITA_FOG</at:op-code>
+    <atold:op-code>ITA_FOG</atold:op-code>
+    <dc:identifier>ITA_FOG</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Foggia</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_8WV" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_8WV</at:authority-code>
+    <at:op-code>ITA_8WV</at:op-code>
+    <atold:op-code>ITA_8WV</atold:op-code>
+    <dc:identifier>ITA_8WV</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Formicola</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ZCB" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ZCB</at:authority-code>
+    <at:op-code>ITA_ZCB</at:op-code>
+    <atold:op-code>ITA_ZCB</atold:op-code>
+    <dc:identifier>ITA_ZCB</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Francolise</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_FRO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_FRO</at:authority-code>
+    <at:op-code>ITA_FRO</at:op-code>
+    <atold:op-code>ITA_FRO</atold:op-code>
+    <dc:identifier>ITA_FRO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Frosinone</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_GTE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_GTE</at:authority-code>
+    <at:op-code>ITA_GTE</at:op-code>
+    <atold:op-code>ITA_GTE</atold:op-code>
+    <dc:identifier>ITA_GTE</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Gallarate</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_GAL" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_GAL</at:authority-code>
+    <at:op-code>ITA_GAL</at:op-code>
+    <atold:op-code>ITA_GAL</atold:op-code>
+    <dc:identifier>ITA_GAL</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Gallipoli</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_GRB" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_GRB</at:authority-code>
+    <at:op-code>ITA_GRB</at:op-code>
+    <atold:op-code>ITA_GRB</atold:op-code>
+    <dc:identifier>ITA_GRB</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Garbagnate Milanese</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_GEA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_GEA</at:authority-code>
+    <at:op-code>ITA_GEA</at:op-code>
+    <atold:op-code>ITA_GEA</atold:op-code>
+    <dc:identifier>ITA_GEA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Gela</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_GST" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_GST</at:authority-code>
+    <at:op-code>ITA_GST</at:op-code>
+    <atold:op-code>ITA_GST</atold:op-code>
+    <dc:identifier>ITA_GST</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Gessate</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_GIR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_GIR</at:authority-code>
+    <at:op-code>ITA_GIR</at:op-code>
+    <atold:op-code>ITA_GIR</atold:op-code>
+    <dc:identifier>ITA_GIR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Giarre</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_GVP" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_GVP</at:authority-code>
+    <at:op-code>ITA_GVP</at:op-code>
+    <atold:op-code>ITA_GVP</atold:op-code>
+    <dc:identifier>ITA_GVP</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Giffoni Valle Piana</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_GDC" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_GDC</at:authority-code>
+    <at:op-code>ITA_GDC</at:op-code>
+    <atold:op-code>ITA_GDC</atold:op-code>
+    <dc:identifier>ITA_GDC</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Gioia del Colle</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_GIT" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_GIT</at:authority-code>
+    <at:op-code>ITA_GIT</at:op-code>
+    <atold:op-code>ITA_GIT</atold:op-code>
+    <dc:identifier>ITA_GIT</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Gioia Tauro</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_GUS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_GUS</at:authority-code>
+    <at:op-code>ITA_GUS</at:op-code>
+    <atold:op-code>ITA_GUS</atold:op-code>
+    <dc:identifier>ITA_GUS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Guastalla</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_IML" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_IML</at:authority-code>
+    <at:op-code>ITA_IML</at:op-code>
+    <atold:op-code>ITA_IML</atold:op-code>
+    <dc:identifier>ITA_IML</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Imola</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_IMP" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_IMP</at:authority-code>
+    <at:op-code>ITA_IMP</at:op-code>
+    <atold:op-code>ITA_IMP</atold:op-code>
+    <dc:identifier>ITA_IMP</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Imperia</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ISH" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ISH</at:authority-code>
+    <at:op-code>ITA_ISH</at:op-code>
+    <atold:op-code>ITA_ISH</atold:op-code>
+    <dc:identifier>ITA_ISH</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Ischia</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SPE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SPE</at:authority-code>
+    <at:op-code>ITA_SPE</at:op-code>
+    <atold:op-code>ITA_SPE</atold:op-code>
+    <dc:identifier>ITA_SPE</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">La Spezia</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_LMP" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_LMP</at:authority-code>
+    <at:op-code>ITA_LMP</at:op-code>
+    <atold:op-code>ITA_LMP</atold:op-code>
+    <dc:identifier>ITA_LMP</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Lampedusa</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_LAQ" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_LAQ</at:authority-code>
+    <at:op-code>ITA_LAQ</at:op-code>
+    <atold:op-code>ITA_LAQ</atold:op-code>
+    <dc:identifier>ITA_LAQ</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">L'Aquila</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_LTN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_LTN</at:authority-code>
+    <at:op-code>ITA_LTN</at:op-code>
+    <atold:op-code>ITA_LTN</atold:op-code>
+    <dc:identifier>ITA_LTN</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Latina</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_LCC" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_LCC</at:authority-code>
+    <at:op-code>ITA_LCC</at:op-code>
+    <atold:op-code>ITA_LCC</atold:op-code>
+    <dc:identifier>ITA_LCC</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Lecce</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_LCO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_LCO</at:authority-code>
+    <at:op-code>ITA_LCO</at:op-code>
+    <atold:op-code>ITA_LCO</atold:op-code>
+    <dc:identifier>ITA_LCO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Lecco</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_LEI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_LEI</at:authority-code>
+    <at:op-code>ITA_LEI</at:op-code>
+    <atold:op-code>ITA_LEI</atold:op-code>
+    <dc:identifier>ITA_LEI</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Leini</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_LIC" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_LIC</at:authority-code>
+    <at:op-code>ITA_LIC</at:op-code>
+    <atold:op-code>ITA_LIC</atold:op-code>
+    <dc:identifier>ITA_LIC</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Licata</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_RR5" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_RR5</at:authority-code>
+    <at:op-code>ITA_RR5</at:op-code>
+    <atold:op-code>ITA_RR5</atold:op-code>
+    <dc:identifier>ITA_RR5</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Locri</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_LVR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_LVR</at:authority-code>
+    <at:op-code>ITA_LVR</at:op-code>
+    <atold:op-code>ITA_LVR</atold:op-code>
+    <dc:identifier>ITA_LVR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Lovere</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MA2" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MA2</at:authority-code>
+    <at:op-code>ITA_MA2</at:op-code>
+    <atold:op-code>ITA_MA2</atold:op-code>
+    <dc:identifier>ITA_MA2</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Magione</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_LCZ" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_LCZ</at:authority-code>
+    <at:op-code>ITA_LCZ</at:op-code>
+    <atold:op-code>ITA_LCZ</atold:op-code>
+    <dc:identifier>ITA_LCZ</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Maglie</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MAI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MAI</at:authority-code>
+    <at:op-code>ITA_MAI</at:op-code>
+    <atold:op-code>ITA_MAI</atold:op-code>
+    <dc:identifier>ITA_MAI</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Mairano</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MLL" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MLL</at:authority-code>
+    <at:op-code>ITA_MLL</at:op-code>
+    <atold:op-code>ITA_MLL</atold:op-code>
+    <dc:identifier>ITA_MLL</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Mandello del Lario</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MRH" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MRH</at:authority-code>
+    <at:op-code>ITA_MRH</at:op-code>
+    <atold:op-code>ITA_MRH</atold:op-code>
+    <dc:identifier>ITA_MRH</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Marcheno</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MIP" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MIP</at:authority-code>
+    <at:op-code>ITA_MIP</at:op-code>
+    <atold:op-code>ITA_MIP</atold:op-code>
+    <dc:identifier>ITA_MIP</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Mareno di Piave</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MTF" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MTF</at:authority-code>
+    <at:op-code>ITA_MTF</at:op-code>
+    <atold:op-code>ITA_MTF</atold:op-code>
+    <dc:identifier>ITA_MTF</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Martina Franca</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MOG" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MOG</at:authority-code>
+    <at:op-code>ITA_MOG</at:op-code>
+    <atold:op-code>ITA_MOG</atold:op-code>
+    <dc:identifier>ITA_MOG</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Mogliano Veneto</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MG2" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MG2</at:authority-code>
+    <at:op-code>ITA_MG2</at:op-code>
+    <atold:op-code>ITA_MG2</atold:op-code>
+    <dc:identifier>ITA_MG2</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Mogoro</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MOL" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MOL</at:authority-code>
+    <at:op-code>ITA_MOL</at:op-code>
+    <atold:op-code>ITA_MOL</atold:op-code>
+    <dc:identifier>ITA_MOL</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Molfetta</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MVI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MVI</at:authority-code>
+    <at:op-code>ITA_MVI</at:op-code>
+    <atold:op-code>ITA_MVI</atold:op-code>
+    <dc:identifier>ITA_MVI</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Mondovì</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MOA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MOA</at:authority-code>
+    <at:op-code>ITA_MOA</at:op-code>
+    <atold:op-code>ITA_MOA</atold:op-code>
+    <dc:identifier>ITA_MOA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Montebelluna</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_IMM" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_IMM</at:authority-code>
+    <at:op-code>ITA_IMM</at:op-code>
+    <atold:op-code>ITA_IMM</atold:op-code>
+    <dc:identifier>ITA_IMM</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Monteu Roero</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MCH" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MCH</at:authority-code>
+    <at:op-code>ITA_MCH</at:op-code>
+    <atold:op-code>ITA_MCH</atold:op-code>
+    <dc:identifier>ITA_MCH</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Montichiari</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MWQ" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MWQ</at:authority-code>
+    <at:op-code>ITA_MWQ</at:op-code>
+    <atold:op-code>ITA_MWQ</atold:op-code>
+    <dc:identifier>ITA_MWQ</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Montoro Inferiore</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_MZA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_MZA</at:authority-code>
+    <at:op-code>ITA_MZA</at:op-code>
+    <atold:op-code>ITA_MZA</atold:op-code>
+    <dc:identifier>ITA_MZA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Monza</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_NAR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_NAR</at:authority-code>
+    <at:op-code>ITA_NAR</at:op-code>
+    <atold:op-code>ITA_NAR</atold:op-code>
+    <dc:identifier>ITA_NAR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Narni</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_NGR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_NGR</at:authority-code>
+    <at:op-code>ITA_NGR</at:op-code>
+    <atold:op-code>ITA_NGR</atold:op-code>
+    <dc:identifier>ITA_NGR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Negrar</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_NEM" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_NEM</at:authority-code>
+    <at:op-code>ITA_NEM</at:op-code>
+    <atold:op-code>ITA_NEM</atold:op-code>
+    <dc:identifier>ITA_NEM</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Nembro</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_NER" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_NER</at:authority-code>
+    <at:op-code>ITA_NER</at:op-code>
+    <atold:op-code>ITA_NER</atold:op-code>
+    <dc:identifier>ITA_NER</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Nerviano</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_NOA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_NOA</at:authority-code>
+    <at:op-code>ITA_NOA</at:op-code>
+    <atold:op-code>ITA_NOA</atold:op-code>
+    <dc:identifier>ITA_NOA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Noale</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_NOM" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_NOM</at:authority-code>
+    <at:op-code>ITA_NOM</at:op-code>
+    <atold:op-code>ITA_NOM</atold:op-code>
+    <dc:identifier>ITA_NOM</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Nova Milanese</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_NUS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_NUS</at:authority-code>
+    <at:op-code>ITA_NUS</at:op-code>
+    <atold:op-code>ITA_NUS</atold:op-code>
+    <dc:identifier>ITA_NUS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Nusco</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_HOS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_HOS</at:authority-code>
+    <at:op-code>ITA_HOS</at:op-code>
+    <atold:op-code>ITA_HOS</atold:op-code>
+    <dc:identifier>ITA_HOS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Orsogna</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ORV" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ORV</at:authority-code>
+    <at:op-code>ITA_ORV</at:op-code>
+    <atold:op-code>ITA_ORV</atold:op-code>
+    <dc:identifier>ITA_ORV</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Orvieto</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PEC" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PEC</at:authority-code>
+    <at:op-code>ITA_PEC</at:op-code>
+    <atold:op-code>ITA_PEC</atold:op-code>
+    <dc:identifier>ITA_PEC</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Paceco</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PAI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PAI</at:authority-code>
+    <at:op-code>ITA_PAI</at:op-code>
+    <atold:op-code>ITA_PAI</atold:op-code>
+    <dc:identifier>ITA_PAI</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Pagani</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PTR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PTR</at:authority-code>
+    <at:op-code>ITA_PTR</at:op-code>
+    <atold:op-code>ITA_PTR</atold:op-code>
+    <dc:identifier>ITA_PTR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Paternò</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PPY" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PPY</at:authority-code>
+    <at:op-code>ITA_PPY</at:op-code>
+    <atold:op-code>ITA_PPY</atold:op-code>
+    <dc:identifier>ITA_PPY</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Pelago</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PEG" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PEG</at:authority-code>
+    <at:op-code>ITA_PEG</at:op-code>
+    <atold:op-code>ITA_PEG</atold:op-code>
+    <dc:identifier>ITA_PEG</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Perugia</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PES" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PES</at:authority-code>
+    <at:op-code>ITA_PES</at:op-code>
+    <atold:op-code>ITA_PES</atold:op-code>
+    <dc:identifier>ITA_PES</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Pesaro</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PEF" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PEF</at:authority-code>
+    <at:op-code>ITA_PEF</at:op-code>
+    <atold:op-code>ITA_PEF</atold:op-code>
+    <dc:identifier>ITA_PEF</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Piadena</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PIE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PIE</at:authority-code>
+    <at:op-code>ITA_PIE</at:op-code>
+    <atold:op-code>ITA_PIE</atold:op-code>
+    <dc:identifier>ITA_PIE</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Pietrasanta</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PIL" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PIL</at:authority-code>
+    <at:op-code>ITA_PIL</at:op-code>
+    <atold:op-code>ITA_PIL</atold:op-code>
+    <dc:identifier>ITA_PIL</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Pinerolo</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PSA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PSA</at:authority-code>
+    <at:op-code>ITA_PSA</at:op-code>
+    <atold:op-code>ITA_PSA</atold:op-code>
+    <dc:identifier>ITA_PSA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Pisa</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PIS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PIS</at:authority-code>
+    <at:op-code>ITA_PIS</at:op-code>
+    <atold:op-code>ITA_PIS</atold:op-code>
+    <dc:identifier>ITA_PIS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Pistoia</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PIZ" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PIZ</at:authority-code>
+    <at:op-code>ITA_PIZ</at:op-code>
+    <atold:op-code>ITA_PIZ</atold:op-code>
+    <dc:identifier>ITA_PIZ</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Pizzo</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PME" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PME</at:authority-code>
+    <at:op-code>ITA_PME</at:op-code>
+    <atold:op-code>ITA_PME</atold:op-code>
+    <dc:identifier>ITA_PME</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Pogliano Milanese</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_POR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_POR</at:authority-code>
+    <at:op-code>ITA_POR</at:op-code>
+    <atold:op-code>ITA_POR</atold:op-code>
+    <dc:identifier>ITA_POR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Pomigliano d'Arco</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PTB" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PTB</at:authority-code>
+    <at:op-code>ITA_PTB</at:op-code>
+    <atold:op-code>ITA_PTB</atold:op-code>
+    <dc:identifier>ITA_PTB</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Pontebba</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PGR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PGR</at:authority-code>
+    <at:op-code>ITA_PGR</at:op-code>
+    <atold:op-code>ITA_PGR</atold:op-code>
+    <dc:identifier>ITA_PGR</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Portogruaro</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_QPO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_QPO</at:authority-code>
+    <at:op-code>ITA_QPO</at:op-code>
+    <atold:op-code>ITA_QPO</atold:op-code>
+    <dc:identifier>ITA_QPO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Potenza</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_PRP" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_PRP</at:authority-code>
+    <at:op-code>ITA_PRP</at:op-code>
+    <atold:op-code>ITA_PRP</atold:op-code>
+    <dc:identifier>ITA_PRP</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Predappio</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_RCM" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_RCM</at:authority-code>
+    <at:op-code>ITA_RCM</at:op-code>
+    <atold:op-code>ITA_RCM</atold:op-code>
+    <dc:identifier>ITA_RCM</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Racalmuto</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_RGT" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_RGT</at:authority-code>
+    <at:op-code>ITA_RGT</at:op-code>
+    <atold:op-code>ITA_RGT</atold:op-code>
+    <dc:identifier>ITA_RGT</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Regalbuto</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_RHO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_RHO</at:authority-code>
+    <at:op-code>ITA_RHO</at:op-code>
+    <atold:op-code>ITA_RHO</atold:op-code>
+    <dc:identifier>ITA_RHO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Rho</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_RTI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_RTI</at:authority-code>
+    <at:op-code>ITA_RTI</at:op-code>
+    <atold:op-code>ITA_RTI</atold:op-code>
+    <dc:identifier>ITA_RTI</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Rieti</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_IPP" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_IPP</at:authority-code>
+    <at:op-code>ITA_IPP</at:op-code>
+    <atold:op-code>ITA_IPP</atold:op-code>
+    <dc:identifier>ITA_IPP</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Ripi</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_RDG" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_RDG</at:authority-code>
+    <at:op-code>ITA_RDG</at:op-code>
+    <atold:op-code>ITA_RDG</atold:op-code>
+    <dc:identifier>ITA_RDG</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Riva del Garda</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_RQS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_RQS</at:authority-code>
+    <at:op-code>ITA_RQS</at:op-code>
+    <atold:op-code>ITA_RQS</atold:op-code>
+    <dc:identifier>ITA_RQS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Rocca San Casciano</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ROQ" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ROQ</at:authority-code>
+    <at:op-code>ITA_ROQ</at:op-code>
+    <atold:op-code>ITA_ROQ</atold:op-code>
+    <dc:identifier>ITA_ROQ</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Rovato</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SV2" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SV2</at:authority-code>
+    <at:op-code>ITA_SV2</at:op-code>
+    <atold:op-code>ITA_SV2</atold:op-code>
+    <dc:identifier>ITA_SV2</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">San Pietro Vernotico</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SBE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SBE</at:authority-code>
+    <at:op-code>ITA_SBE</at:op-code>
+    <atold:op-code>ITA_SBE</atold:op-code>
+    <dc:identifier>ITA_SBE</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Sala Bolognese</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SLO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SLO</at:authority-code>
+    <at:op-code>ITA_SLO</at:op-code>
+    <atold:op-code>ITA_SLO</atold:op-code>
+    <dc:identifier>ITA_SLO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Salò</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SDB" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SDB</at:authority-code>
+    <at:op-code>ITA_SDB</at:op-code>
+    <atold:op-code>ITA_SDB</atold:op-code>
+    <dc:identifier>ITA_SDB</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">San Benedetto del Tronto</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SDF" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SDF</at:authority-code>
+    <at:op-code>ITA_SDF</at:op-code>
+    <atold:op-code>ITA_SDF</atold:op-code>
+    <dc:identifier>ITA_SDF</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">San Daniele del Friuli</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SLX" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SLX</at:authority-code>
+    <at:op-code>ITA_SLX</at:op-code>
+    <atold:op-code>ITA_SLX</atold:op-code>
+    <dc:identifier>ITA_SLX</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">San Giorgio delle Pertiche</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SMH" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SMH</at:authority-code>
+    <at:op-code>ITA_SMH</at:op-code>
+    <atold:op-code>ITA_SMH</atold:op-code>
+    <dc:identifier>ITA_SMH</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">San Marco dei Cavoti</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_NMO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_NMO</at:authority-code>
+    <at:op-code>ITA_NMO</at:op-code>
+    <atold:op-code>ITA_NMO</atold:op-code>
+    <dc:identifier>ITA_NMO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">San Martino</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_QSS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_QSS</at:authority-code>
+    <at:op-code>ITA_QSS</at:op-code>
+    <atold:op-code>ITA_QSS</atold:op-code>
+    <dc:identifier>ITA_QSS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Sassari</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SUE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SUE</at:authority-code>
+    <at:op-code>ITA_SUE</at:op-code>
+    <atold:op-code>ITA_SUE</atold:op-code>
+    <dc:identifier>ITA_SUE</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Sesto ed Uniti</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SNL" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SNL</at:authority-code>
+    <at:op-code>ITA_SNL</at:op-code>
+    <atold:op-code>ITA_SNL</atold:op-code>
+    <dc:identifier>ITA_SNL</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Sinalunga</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SRU" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SRU</at:authority-code>
+    <at:op-code>ITA_SRU</at:op-code>
+    <atold:op-code>ITA_SRU</atold:op-code>
+    <dc:identifier>ITA_SRU</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Sogliano al Rubicone</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_ARW" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_ARW</at:authority-code>
+    <at:op-code>ITA_ARW</at:op-code>
+    <atold:op-code>ITA_ARW</atold:op-code>
+    <dc:identifier>ITA_ARW</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Solaro</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SVV" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SVV</at:authority-code>
+    <at:op-code>ITA_SVV</at:op-code>
+    <atold:op-code>ITA_SVV</atold:op-code>
+    <dc:identifier>ITA_SVV</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Somma Vesuviana</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SND" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SND</at:authority-code>
+    <at:op-code>ITA_SND</at:op-code>
+    <atold:op-code>ITA_SND</atold:op-code>
+    <dc:identifier>ITA_SND</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Sondrio</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_RIS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_RIS</at:authority-code>
+    <at:op-code>ITA_RIS</at:op-code>
+    <atold:op-code>ITA_RIS</atold:op-code>
+    <dc:identifier>ITA_RIS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Soresina</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_OOX" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_OOX</at:authority-code>
+    <at:op-code>ITA_OOX</at:op-code>
+    <atold:op-code>ITA_OOX</atold:op-code>
+    <dc:identifier>ITA_OOX</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Sorgono</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SBG" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SBG</at:authority-code>
+    <at:op-code>ITA_SBG</at:op-code>
+    <atold:op-code>ITA_SBG</atold:op-code>
+    <dc:identifier>ITA_SBG</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Spilimbergo</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_SLP" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_SLP</at:authority-code>
+    <at:op-code>ITA_SLP</at:op-code>
+    <atold:op-code>ITA_SLP</atold:op-code>
+    <dc:identifier>ITA_SLP</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Sulmona</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TEO" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TEO</at:authority-code>
+    <at:op-code>ITA_TEO</at:op-code>
+    <atold:op-code>ITA_TEO</atold:op-code>
+    <dc:identifier>ITA_TEO</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Teramo</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TMI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TMI</at:authority-code>
+    <at:op-code>ITA_TMI</at:op-code>
+    <atold:op-code>ITA_TMI</atold:op-code>
+    <dc:identifier>ITA_TMI</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Termoli</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TER" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TER</at:authority-code>
+    <at:op-code>ITA_TER</at:op-code>
+    <atold:op-code>ITA_TER</atold:op-code>
+    <dc:identifier>ITA_TER</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Terni</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TVY" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TVY</at:authority-code>
+    <at:op-code>ITA_TVY</at:op-code>
+    <atold:op-code>ITA_TVY</atold:op-code>
+    <dc:identifier>ITA_TVY</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Teverola</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TDI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TDI</at:authority-code>
+    <at:op-code>ITA_TDI</at:op-code>
+    <atold:op-code>ITA_TDI</atold:op-code>
+    <dc:identifier>ITA_TDI</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Todi</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TTB" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TTB</at:authority-code>
+    <at:op-code>ITA_TTB</at:op-code>
+    <atold:op-code>ITA_TTB</atold:op-code>
+    <dc:identifier>ITA_TTB</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Tortoli</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TPS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TPS</at:authority-code>
+    <at:op-code>ITA_TPS</at:op-code>
+    <atold:op-code>ITA_TPS</atold:op-code>
+    <dc:identifier>ITA_TPS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Trapani</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TYT" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TYT</at:authority-code>
+    <at:op-code>ITA_TYT</at:op-code>
+    <atold:op-code>ITA_TYT</atold:op-code>
+    <dc:identifier>ITA_TYT</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Trecastagni</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_TVG" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_TVG</at:authority-code>
+    <at:op-code>ITA_TVG</at:op-code>
+    <atold:op-code>ITA_TVG</atold:op-code>
+    <dc:identifier>ITA_TVG</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Treviglio</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_UDN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_UDN</at:authority-code>
+    <at:op-code>ITA_UDN</at:op-code>
+    <atold:op-code>ITA_UDN</atold:op-code>
+    <dc:identifier>ITA_UDN</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Udine</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_UBT" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_UBT</at:authority-code>
+    <at:op-code>ITA_UBT</at:op-code>
+    <atold:op-code>ITA_UBT</atold:op-code>
+    <dc:identifier>ITA_UBT</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Umbertide</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VS2" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VS2</at:authority-code>
+    <at:op-code>ITA_VS2</at:op-code>
+    <atold:op-code>ITA_VS2</atold:op-code>
+    <dc:identifier>ITA_VS2</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Valdastico</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VNF" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VNF</at:authority-code>
+    <at:op-code>ITA_VNF</at:op-code>
+    <atold:op-code>ITA_VNF</atold:op-code>
+    <dc:identifier>ITA_VNF</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Venafro</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VRE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VRE</at:authority-code>
+    <at:op-code>ITA_VRE</at:op-code>
+    <atold:op-code>ITA_VRE</atold:op-code>
+    <dc:identifier>ITA_VRE</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Venaria Reale</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VIA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VIA</at:authority-code>
+    <at:op-code>ITA_VIA</at:op-code>
+    <atold:op-code>ITA_VIA</atold:op-code>
+    <dc:identifier>ITA_VIA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Viareggio</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VVA" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VVA</at:authority-code>
+    <at:op-code>ITA_VVA</at:op-code>
+    <atold:op-code>ITA_VVA</atold:op-code>
+    <dc:identifier>ITA_VVA</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Vibo Valentia</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VIC" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VIC</at:authority-code>
+    <at:op-code>ITA_VIC</at:op-code>
+    <atold:op-code>ITA_VIC</atold:op-code>
+    <dc:identifier>ITA_VIC</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Vicenza</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VIE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VIE</at:authority-code>
+    <at:op-code>ITA_VIE</at:op-code>
+    <atold:op-code>ITA_VIE</atold:op-code>
+    <dc:identifier>ITA_VIE</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Vieste</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VGV" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VGV</at:authority-code>
+    <at:op-code>ITA_VGV</at:op-code>
+    <atold:op-code>ITA_VGV</atold:op-code>
+    <dc:identifier>ITA_VGV</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Vigevano</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VAM" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VAM</at:authority-code>
+    <at:op-code>ITA_VAM</at:op-code>
+    <atold:op-code>ITA_VAM</atold:op-code>
+    <dc:identifier>ITA_VAM</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Villa d'Almè</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VLS" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VLS</at:authority-code>
+    <at:op-code>ITA_VLS</at:op-code>
+    <atold:op-code>ITA_VLS</atold:op-code>
+    <dc:identifier>ITA_VLS</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Villadossola</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VRV" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VRV</at:authority-code>
+    <at:op-code>ITA_VRV</at:op-code>
+    <atold:op-code>ITA_VRV</atold:op-code>
+    <dc:identifier>ITA_VRV</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Vittorio Veneto</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/place/ITA_VGH" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/place"/>
+    <at:authority-code>ITA_VGH</at:authority-code>
+    <at:op-code>ITA_VGH</at:op-code>
+    <atold:op-code>ITA_VGH</atold:op-code>
+    <dc:identifier>ITA_VGH</dc:identifier>
+    <at:start.use>1951-01-01</at:start.use>
+    <skos:prefLabel xml:lang="en">Voghera</skos:prefLabel>
+  </skos:Concept>
+</rdf:RDF>

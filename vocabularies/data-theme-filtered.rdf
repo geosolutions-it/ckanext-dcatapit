@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:atold="http://publications.europa.eu/resource/authority/" xmlns:at="http://publications.europa.eu/ontology/authority/">
+  <skos:ConceptScheme rdf:about="http://publications.europa.eu/resource/authority/data-theme" at:table.id="data-theme" at:table.version.number="20200923-0">
+    <owl:versionInfo>20200923-0</owl:versionInfo>
+    <rdfs:label xml:lang="en">Data theme</rdfs:label>
+    <at:prefLabel xml:lang="en">Data theme</at:prefLabel>
+    <skos:prefLabel xml:lang="en">Data theme</skos:prefLabel>
+  </skos:ConceptScheme>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/AGRI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+    <at:authority-code>AGRI</at:authority-code>
+    <at:op-code>AGRI</at:op-code>
+    <atold:op-code>AGRI</atold:op-code>
+    <dc:identifier>AGRI</dc:identifier>
+    <at:start.use>2015-10-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Landwirtschaft, Fischerei, Forstwirtschaft und Nahrungsmittel</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Agriculture, fisheries, forestry and food</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Agriculture, pêche, sylviculture et alimentation</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Agricoltura, pesca, silvicoltura e prodotti alimentari</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Agricultura, pesca, silvicultura y alimentación</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/EDUC" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+    <at:authority-code>EDUC</at:authority-code>
+    <at:op-code>EDUC</at:op-code>
+    <atold:op-code>EDUC</atold:op-code>
+    <dc:identifier>EDUC</dc:identifier>
+    <at:start.use>2015-10-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Bildung, Kultur und Sport</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Education, culture and sport</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Éducation, culture et sport</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Istruzione, cultura e sport</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Educación, cultura y deportes</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/ENVI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+    <at:authority-code>ENVI</at:authority-code>
+    <at:op-code>ENVI</at:op-code>
+    <atold:op-code>ENVI</atold:op-code>
+    <dc:identifier>ENVI</dc:identifier>
+    <at:start.use>2015-10-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Umwelt</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Environment</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Environnement</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Ambiente</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Medio ambiente</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/ENER" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+    <at:authority-code>ENER</at:authority-code>
+    <at:op-code>ENER</at:op-code>
+    <atold:op-code>ENER</atold:op-code>
+    <dc:identifier>ENER</dc:identifier>
+    <at:start.use>2015-10-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Energie</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Energy</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Énergie</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Energia</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Energía</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/TRAN" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+    <at:authority-code>TRAN</at:authority-code>
+    <at:op-code>TRAN</at:op-code>
+    <atold:op-code>TRAN</atold:op-code>
+    <dc:identifier>TRAN</dc:identifier>
+    <at:start.use>2015-10-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Verkehr</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Transport</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Transports</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Trasporti</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Transporte</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/TECH" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+    <at:authority-code>TECH</at:authority-code>
+    <at:op-code>TECH</at:op-code>
+    <atold:op-code>TECH</atold:op-code>
+    <dc:identifier>TECH</dc:identifier>
+    <at:start.use>2015-10-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Wissenschaft und Technologie</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Science and technology</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Science et technologie</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Scienza e tecnologia</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Ciencia y tecnología</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/ECON" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+    <at:authority-code>ECON</at:authority-code>
+    <at:op-code>ECON</at:op-code>
+    <atold:op-code>ECON</atold:op-code>
+    <dc:identifier>ECON</dc:identifier>
+    <at:start.use>2015-10-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Wirtschaft und Finanzen</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Economy and finance</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Économie et finances</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Economia e finanze</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Economía y finanzas</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/SOCI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+    <at:authority-code>SOCI</at:authority-code>
+    <at:op-code>SOCI</at:op-code>
+    <atold:op-code>SOCI</atold:op-code>
+    <dc:identifier>SOCI</dc:identifier>
+    <at:start.use>2015-10-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Bevölkerung und Gesellschaft</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Population and society</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Population et société</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Popolazione e società</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Población y sociedad</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/HEAL" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+    <at:authority-code>HEAL</at:authority-code>
+    <at:op-code>HEAL</at:op-code>
+    <atold:op-code>HEAL</atold:op-code>
+    <dc:identifier>HEAL</dc:identifier>
+    <at:start.use>2015-10-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Gesundheit</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Health</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Santé</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Salute</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Salud</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/GOVE" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+    <at:authority-code>GOVE</at:authority-code>
+    <at:op-code>GOVE</at:op-code>
+    <atold:op-code>GOVE</atold:op-code>
+    <dc:identifier>GOVE</dc:identifier>
+    <at:start.use>2015-10-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Regierung und öffentlicher Sektor</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Government and public sector</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Gouvernement et secteur public</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Governo e settore pubblico</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Gobierno y sector público</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/REGI" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+    <at:authority-code>REGI</at:authority-code>
+    <at:op-code>REGI</at:op-code>
+    <atold:op-code>REGI</atold:op-code>
+    <dc:identifier>REGI</dc:identifier>
+    <at:start.use>2015-10-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Regionen und Städte</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Regions and cities</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Régions et villes</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Regioni e città</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Regiones y ciudades</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/JUST" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+    <at:authority-code>JUST</at:authority-code>
+    <at:op-code>JUST</at:op-code>
+    <atold:op-code>JUST</atold:op-code>
+    <dc:identifier>JUST</dc:identifier>
+    <at:start.use>2015-10-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Justiz, Rechtssystem und öffentliche Sicherheit</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Justice, legal system and public safety</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Justice, système juridique et sécurité publique</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Giustizia, sistema giuridico e sicurezza pubblica</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Justicia, sistema judicial y seguridad pública</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/INTR" at:deprecated="false">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+    <at:authority-code>INTR</at:authority-code>
+    <at:op-code>INTR</at:op-code>
+    <atold:op-code>INTR</atold:op-code>
+    <dc:identifier>INTR</dc:identifier>
+    <at:start.use>2015-10-01</at:start.use>
+    <skos:prefLabel xml:lang="de">Internationale Themen</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">International issues</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Questions internationales</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Tematiche internazionali</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Asuntos internacionales</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/data-theme/OP_DATPRO">
+    <skos:inScheme rdf:resource="http://publications.europa.eu/resource/authority/data-theme"/>
+    <at:op-code>OP_DATPRO</at:op-code>
+    <atold:op-code>OP_DATPRO</atold:op-code>
+    <dc:identifier>OP_DATPRO</dc:identifier>
+    <skos:prefLabel xml:lang="de">Vorläufige Daten</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Provisional data</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Datos provisionales</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Données provisoires</skos:prefLabel>
+    <skos:prefLabel xml:lang="it">Dati provvisori</skos:prefLabel>
+  </skos:Concept>
+</rdf:RDF>
