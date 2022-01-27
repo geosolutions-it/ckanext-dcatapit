@@ -15,7 +15,7 @@ dcatapit_vocabulary_table = Table(
     Column('tag_id', types.UnicodeText, ForeignKey('tag.id', ondelete='CASCADE'), nullable=False),
     Column('tag_name', types.UnicodeText, nullable=False, index=True),
     Column('lang', types.UnicodeText, nullable=False, index=True),
-    Column('text', types.UnicodeText, nullable=False, index=True)
+    Column('text', types.UnicodeText, nullable=False, index=False)
 )
 
 
@@ -30,32 +30,27 @@ class DCATAPITTagVocabulary(DomainObject):
     def by_name(self, tag_name, tag_lang, autoflush=True):
         query = meta.Session.query(DCATAPITTagVocabulary)\
             .filter(DCATAPITTagVocabulary.tag_name == tag_name,
-                    DCATAPITTagVocabulary.lang == tag_lang)
-        query = query.autoflush(autoflush)
-        tag = query.first()
-        return tag
+                    DCATAPITTagVocabulary.lang == tag_lang)\
+            .autoflush(autoflush)
+
+        return query.first()
 
     @classmethod
     def all_by_name(self, tag_name, autoflush=True):
         query = meta.Session.query(DCATAPITTagVocabulary)\
-            .filter(DCATAPITTagVocabulary.tag_name == tag_name)
-        query = query.autoflush(autoflush)
-        tags = query.all()
+            .filter(DCATAPITTagVocabulary.tag_name == tag_name)\
+            .autoflush(autoflush)
 
-        ret = {}
-        for record in tags:
-            ret[record.lang] = record.text
-
-        return ret
+        return {record.lang: record.text for record in query.all()}
 
     @classmethod
     def by_tag_id(self, tag_id, tag_lang, autoflush=True):
         query = meta.Session.query(DCATAPITTagVocabulary)\
             .filter(DCATAPITTagVocabulary.tag_id == tag_id,
-                    DCATAPITTagVocabulary.lang == tag_lang)
-        query = query.autoflush(autoflush)
-        tag = query.first()
-        return tag
+                    DCATAPITTagVocabulary.lang == tag_lang)\
+            .autoflush(autoflush)
+
+        return query.first()
 
     @classmethod
     def persist(self, tag, lang):
