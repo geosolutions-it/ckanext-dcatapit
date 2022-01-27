@@ -305,6 +305,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
         extra_theme = dataset_dict.get(f'extras_{FIELD_THEMES_AGGREGATE}', None) or ''
         aggr_themes = helpers.dcatapit_string_to_aggregated_themes(extra_theme)
+
         search_terms = [t['theme'] for t in aggr_themes]
         if search_terms:
             dataset_dict['dcat_theme'] = search_terms
@@ -313,18 +314,16 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         for t in aggr_themes:
             search_subthemes.extend(t.get('subthemes') or [])
 
-        if search_terms:
-            dataset_dict['dcat_theme'] = search_terms
         if search_subthemes:
             dataset_dict['dcat_subtheme'] = search_subthemes
             localized_subthemes = interfaces.get_localized_subthemes(search_subthemes)
             for lang, subthemes in localized_subthemes.items():
                 dataset_dict['dcat_subtheme_{}'.format(lang)] = subthemes
+
         ddict = json.loads(dataset_dict['data_dict'])
         resources = ddict.get('resources') or []
         _licenses = list(set([r.get('license_type') for r in resources if r.get('license_type')]))
 
-        licenses = []
         for l in _licenses:
             lic = License.get(l)
             if lic:
@@ -423,6 +422,15 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                 _dict.pop('holder_identifier', None)
                 _dict.pop('holder_name', None)
             self._update_pkg_rights_holder(_dict)
+
+        lang = interfaces.get_language()
+        facets = search_results['search_facets']
+        if 'dcat_theme' in facets:
+            themes = facets['dcat_theme']
+            for item in themes['items']:
+                name = item['name']
+                label = interfaces.get_localized_tag_name(tag_name=name, lang=lang)
+                item['display_name'] = label
 
         return search_results
 
@@ -556,6 +564,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         facets_dict.pop('license_id', None)
         lang = interfaces.get_language() or validators.DEFAULT_LANG
         facets_dict['resource_license_{}'.format(lang)] = plugins.toolkit._('Resources licenses')
+        facets_dict['dcat_theme'] = plugins.toolkit._('Dataset Themes')
         facets_dict['dcat_subtheme_{}'.format(lang)] = plugins.toolkit._('Subthemes')
         return facets_dict
 
