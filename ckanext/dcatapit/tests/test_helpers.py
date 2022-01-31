@@ -5,6 +5,7 @@ import nose
 import pytest
 
 import ckanext.dcatapit.helpers as helpers
+from ckanext.dcatapit.tests.utils import get_voc_file, SKOS_THEME_FILE, get_test_file, load_graph
 
 eq_ = nose.tools.eq_
 ok_ = nose.tools.ok_
@@ -37,11 +38,10 @@ def test_get_dcatapit_resource_schema():
 @pytest.mark.usefixtures("with_request_context")
 def test_get_vocabulary_items():
     # Load themes voc
-    from ckanext.dcatapit.commands.dcatapit import EUROPEAN_THEME_NAME, do_load
+    from ckanext.dcatapit.commands.vocabulary import EUROPEAN_THEME_NAME, do_load
 
-    path = os.path.join(os.path.dirname(__file__),
-                        '..', '..', '..', 'vocabularies', 'data-theme-skos.rdf')
-    do_load(EUROPEAN_THEME_NAME, filename=path)
+
+    do_load(EUROPEAN_THEME_NAME, load_graph(path=get_test_file(SKOS_THEME_FILE)))
 
     # test it
     vocabularies_items = helpers.get_vocabulary_items(EUROPEAN_THEME_NAME)

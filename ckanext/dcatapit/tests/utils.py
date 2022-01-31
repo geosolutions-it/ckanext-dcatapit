@@ -1,13 +1,13 @@
 
 import os
+from rdflib import Graph
 
 from ckan.model import meta, Tag, Vocabulary
 from ckanext.dcatapit import interfaces
-from ckanext.dcatapit.commands.dcatapit import DCATAPITCommands, do_load
+from ckanext.dcatapit.commands.vocabulary import DCATAPITCommands, do_load, load_subthemes
 from ckanext.dcatapit.model.subtheme import (
     Subtheme,
     clear_subthemes,
-    load_subthemes,
 )
 
 Session = meta.Session
@@ -15,6 +15,7 @@ Session = meta.Session
 SKOS_THEME_FILE = 'data-theme-skos.rdf'
 MAPPING_FILE = 'theme-subtheme-mapping.rdf'
 EUROVOC_FILE = 'eurovoc_filtered.rdf'
+LICENSES_FILE = 'licences.rdf'
 
 
 def _get_base_file(fname, dir_name):
@@ -36,13 +37,9 @@ def get_test_file(fname):
 
 def load_themes():
     filename = get_test_file(SKOS_THEME_FILE)
-    # load_subthemes(filename, 'eu_themes')
-    do_load(
-        vocab_name='eu_themes',
-        url=None,
-        filename=filename,
-        format='xml'
-    )
+    g = load_graph(path=filename)
+    do_load('eu_themes', g)
+
     tag_localized = interfaces.get_localized_tag_name('ECON')
     Session.flush()
     assert tag_localized
@@ -55,3 +52,21 @@ def load_themes():
     clear_subthemes()
     load_subthemes(map_f, voc_f)
     assert Subtheme.q().first()
+
+
+def load_graph(path=None, url=None):
+    if (not path and not url) or (path and url):
+        raise ValueError('You should provide either path or url')
+
+    from ckanext.dcat.profiles import namespaces
+
+    g = Graph()
+    for prefix, namespace in namespaces.items():
+        g.bind(prefix, namespace)
+
+    if url:
+        g.parse(location=url)
+    else:
+        g.parse(source=path)
+
+    return g

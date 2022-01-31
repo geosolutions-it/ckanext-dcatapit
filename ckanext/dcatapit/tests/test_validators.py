@@ -150,7 +150,7 @@ class ValidationTests(TestCase):
             ('{AGRI,INVALID}', False,),
             ('SOME,INVALID,THEME', False,),
             (json.dumps({}), False,),
-            (json.dumps([]), False,),
+            (json.dumps([]), True,),
             (json.dumps([{'theme': 'AGRI'}]), True,),
             (json.dumps([{'theme': 'AGRI'},
                          {'theme': 'AGRI'}]), False,),
