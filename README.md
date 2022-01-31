@@ -116,6 +116,10 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
 
    * `dcatapit_csw_harvester`: enhances the CSW harvester to be able to import some more fields related to DCAT.
 
+   * `dcatapit_vocabulary`: allows to upload vocabularies from the admin pages.    
+     You'll also need to define the property `ckan.dcatapit.eurovoc_location` to point to a local eurovoc file if you 
+     want to load subtheme mappings.  
+
 7. Enable the dcatapit profile adding the following configuration property in the ``production.ini`` file:
 
        ckanext.dcat.rdf.profiles = euro_dcat_ap it_dcat_ap

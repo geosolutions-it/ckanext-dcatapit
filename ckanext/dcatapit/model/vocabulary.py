@@ -69,5 +69,12 @@ class DCATAPITTagVocabulary(DomainObject):
             log.error('Exception occurred while persisting DB objects: %s', err)
             raise
 
+    @classmethod
+    def nin_tags_ids(self, ids, autoflush=True):
+        query = meta.Session.query(DCATAPITTagVocabulary).filter(DCATAPITTagVocabulary.tag_id.notin_(ids))
+        query = query.autoflush(autoflush)
+        tags = query.all()
+        return tags
+
 
 meta.mapper(DCATAPITTagVocabulary, dcatapit_vocabulary_table)

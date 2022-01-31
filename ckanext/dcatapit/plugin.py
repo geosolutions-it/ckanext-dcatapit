@@ -15,10 +15,10 @@ import ckanext.dcatapit.schema as dcatapit_schema
 import ckanext.dcatapit.validators as validators
 from ckanext.dcatapit.commands import dcatapit as dcatapit_cli
 from ckanext.dcatapit.controllers.harvest import HarvesterController
-from ckanext.dcatapit.dcat.const import THEME_BASE_URI
 from ckanext.dcatapit.helpers import get_org_context
 from ckanext.dcatapit.mapping import populate_theme_groups, theme_name_to_uri
-from ckanext.dcatapit.model import ThemeToSubtheme
+from ckanext.dcatapit.mapping import populate_theme_groups
+from ckanext.dcatapit.controllers.thesaurus import ThesaurusController, get_thesaurus_admin_page, update_vocab_admin
 from ckanext.dcatapit.model.license import License
 from ckanext.dcatapit.schema import FIELD_THEMES_AGGREGATE
 
@@ -50,6 +50,10 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IFacets, inherit=True)
     plugins.implements(plugins.ITranslation, inherit=True)
+
+
+
+    # IClick
 
     def get_commands(self):
         return dcatapit_cli.get_commands()

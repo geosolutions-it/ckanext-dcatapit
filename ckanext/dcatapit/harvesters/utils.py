@@ -34,7 +34,7 @@ _mapping_languages_to_mdr_vocabulary = {
 _ckan_locales_mapping = {
     'ita': 'it',
     'ger': 'de',
-    'eng': 'en_GB'
+    'eng': 'en'
 }
 
 

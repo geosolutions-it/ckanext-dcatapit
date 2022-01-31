@@ -891,3 +891,14 @@ msgstr "L'organizzazione proprietaria del dataset, selezionabile nel campo prece
 #~ msgid "Organizations"
 #~ msgstr "Soggetti"
 
+msgid "Thesaurus File Uploader"
+msgstr "Caricamento vocabolari"
+
+msgid "Upload Thesaurus File"
+msgstr "Seleziona un file rdf di vocabolario"
+
+msgid "Vocabulary Type"
+msgstr "Tipo di vocabolario controllato"
+
+msgid "Submit"
+msgstr "Invia"
