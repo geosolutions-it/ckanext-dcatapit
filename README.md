@@ -170,22 +170,22 @@ If you want to manage localized fields, the ckanext-dcatapit extension requires 
 
          export CKAN_CONFIG=/etc/ckan/default/production.ini
 
-         ckan -c /etc/ckan/default/ckan.ini dcatapit load --name=languages   --filename=vocabularies/languages-filtered.rdf
+         ckan -c /etc/ckan/default/ckan.ini dcatapit load --filename=vocabularies/languages-filtered.rdf
 
-         ckan -c /etc/ckan/default/ckan.ini dcatapit load --name=eu_themes   --filename=vocabularies/data-theme-filtered.rdf
+         ckan -c /etc/ckan/default/ckan.ini dcatapit load --filename=vocabularies/data-theme-filtered.rdf
 
-         ckan -c /etc/ckan/default/ckan.ini dcatapit load --name=places      --filename=vocabularies/places-filtered.rdf
+         ckan -c /etc/ckan/default/ckan.ini dcatapit load --filename=vocabularies/places-filtered.rdf
 
-         ckan -c /etc/ckan/default/ckan.ini dcatapit load --name=frequencies --filename=vocabularies/frequencies-filtered.rdf
+         ckan -c /etc/ckan/default/ckan.ini dcatapit load --filename=vocabularies/frequencies-filtered.rdf
 
-         ckan -c /etc/ckan/default/ckan.ini dcatapit load --name=filetype    --filename=vocabularies/filetypes-filtered.rdf
+         ckan -c /etc/ckan/default/ckan.ini dcatapit load --filename=vocabularies/filetypes-filtered.rdf
 
          # curl https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/territorial-classifications/regions/regions.rdf > regions.rdf
          # paster --plugin=ckanext-dcatapit vocabulary load --filename regions.rdf --name regions --config=/etc/ckan/default/production.ini
 
-         ckan -c /etc/ckan/default/ckan.ini dcatapit load --name subthemes   --filename vocabularies/theme-subtheme-mapping.rdf --eurovoc vocabularies/eurovoc-filtered.rdf
+         ckan -c /etc/ckan/default/ckan.ini dcatapit load --filename vocabularies/theme-subtheme-mapping.rdf --eurovoc vocabularies/eurovoc-filtered.rdf
      
-         ckan -c /etc/ckan/default/ckan.ini dcatapit load  --name licenses   --filename vocabularies/licences.rdf
+         ckan -c /etc/ckan/default/ckan.ini dcatapit load --filename vocabularies/licences.rdf
 
 
 ### Dataset reindexing after Organization change

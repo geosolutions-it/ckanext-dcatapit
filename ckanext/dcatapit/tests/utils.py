@@ -4,7 +4,7 @@ from rdflib import Graph
 
 from ckan.model import meta, Tag, Vocabulary
 from ckanext.dcatapit import interfaces
-from ckanext.dcatapit.commands.vocabulary import DCATAPITCommands, do_load, load_subthemes
+from ckanext.dcatapit.commands.vocabulary import do_load, load_subthemes
 from ckanext.dcatapit.model.subtheme import (
     Subtheme,
     clear_subthemes,
@@ -38,7 +38,7 @@ def get_test_file(fname):
 def load_themes():
     filename = get_test_file(SKOS_THEME_FILE)
     g = load_graph(path=filename)
-    do_load('eu_themes', g)
+    do_load(g, 'eu_themes')
 
     tag_localized = interfaces.get_localized_tag_name('ECON')
     Session.flush()

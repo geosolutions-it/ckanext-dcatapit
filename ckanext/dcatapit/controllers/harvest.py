@@ -2,7 +2,7 @@ import logging
 
 import ckan.logic as logic
 import ckan.model as model
-from ckan import common as _
+import ckan.plugins.toolkit as tk
 from ckan import plugins as p
 from ckan.lib.base import abort, c, render
 from flask.views import View
@@ -25,7 +25,7 @@ class HarvesterController(View):
             return render('harvest/sources_list.html')
 
         except p.toolkit.ObjectNotFound:
-            abort(404, _('Harvest source not found'))
+            abort(404, tk._('Harvest source not found'))
         except p.toolkit.NotAuthorized as err:
             abort(401, self.not_auth_message)
         except Exception as err:

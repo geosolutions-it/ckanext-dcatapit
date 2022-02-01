@@ -25,18 +25,6 @@
             <input type="file" name="thesaurus_file" placeholder="Please Add Thesaurus file" class="" />
           </div>
         </div>
-        <div class="control-group control-medium" style="margin-top: 20px" >
-            <label class="control-label" for="vocabulary_type">
-            {{ _('Vocabulary Type') }}
-            </label>
-          <div class="controls">
-             <select name="vocabulary_type" class="form-control">
-                {% for type in vocabularies_allowed %}
-                    <option value="{{ type }}">{{ type }}</option>
-                {% endfor %}
-            </select>
-          </div>
-      </div>
 
       <div class="form-actions" style="margin-top: 10px">
         <button class="btn btn-primary" type="submit" name="submit" >

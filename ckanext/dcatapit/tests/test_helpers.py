@@ -40,8 +40,7 @@ def test_get_vocabulary_items():
     # Load themes voc
     from ckanext.dcatapit.commands.vocabulary import EUROPEAN_THEME_NAME, do_load
 
-
-    do_load(EUROPEAN_THEME_NAME, load_graph(path=get_test_file(SKOS_THEME_FILE)))
+    do_load(load_graph(path=get_test_file(SKOS_THEME_FILE)), EUROPEAN_THEME_NAME)
 
     # test it
     vocabularies_items = helpers.get_vocabulary_items(EUROPEAN_THEME_NAME)

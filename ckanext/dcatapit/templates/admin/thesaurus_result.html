@@ -3,31 +3,21 @@
 
 {% block primary_content_inner %}
   <h1 class="page-heading">
-    {% block page_heading %}{{  _('Thesaurus Result') }}{% endblock %}
+    {% block page_heading %}{{  _('Load vocabulary result') }}{% endblock %}
   </h1>
   {% block form %}
-    <form class="dataset-form add-member-form" method='post' action="{{ h.url_for('dcatapit_core.thesaurus_save') }}" enctype="multipart/form-data">
       <div class="row-fluid">
         <div class="control-group control-medium">
             <label class="control-label" for="vocabulary_type">
-            {{ _('Created') }}
+            {{ _('Detected vocabulary type') }}
             </label>
-            {{ created }}
-        </div>
-        <div class="control-group control-medium">
-            <label class="control-label" for="vocabulary_type">
-            {{ _('Updated') }}
-            </label>
-            {{ updated }}
-        </div>
-        <div class="control-group control-medium">
-            <label class="control-label" for="vocabulary_type">
-            {{ _('Deleted') }}
-            </label>
-            {{ deleted }}
+            {{ voc_name }}
         </div>
 
-    </form>
+        {% for res_type, count in results.items() %}
+           {% snippet "admin/snippets/dcatapit_vocab_result_entry.html", res_type=res_type, text=count, messages=messages %}
+        {% endfor %}
+
   {% endblock %}
 
 {% endblock %}

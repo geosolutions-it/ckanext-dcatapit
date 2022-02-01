@@ -1,5 +1,6 @@
 import json
 import logging
+from enum import Enum
 
 import ckan.lib.search as search
 from ckan.common import config
@@ -8,7 +9,7 @@ from ckan.lib.i18n import get_lang
 from ckan.model import Session
 from ckan.plugins.interfaces import Interface
 from ckanext.dcatapit.model import (
-    DCATAPITTagVocabulary,
+    TagLocalization,
     License,
     Subtheme,
 )
@@ -251,42 +252,42 @@ def _multilang_to_dict(records):
     return fields_dict
 
 
-def persist_tag_multilang(name, lang, localized_text, vocab_name):
-    created = False
-    id = None
-    log.info('DCAT-AP_IT: persisting tag multilang for tag %r ...', name)
+class DBAction(Enum):
+    ERROR = -1
+    NONE = 0
+    CREATED = 1
+    UPDATED = 2
 
-    tag = DCATAPITTagVocabulary.by_name(name, lang)
 
-    if tag:
+def persist_tag_multilang(tag: model.Tag, lang, label, vocab):
+    log.debug('DCAT-AP_IT: persisting tag multilang for tag %r ...', tag.name)
+
+    tag_loc = TagLocalization.by_tag_id(tag.id, lang)
+
+    if tag_loc:
         # Update the existing record
-        if localized_text and localized_text != tag.text:
-            tag.text = localized_text
+        if label:
+            if label != tag_loc.text:
+                try:
+                    tag_loc.text = label
+                    tag_loc.save()
+                    return DBAction.UPDATED, tag_loc.id
+                except Exception as err:
+                    # on rollback, the same closure of state
+                    # as that of commit proceeds.
+                    Session.rollback()
 
-            try:
-                tag.save()
-                id = tag.id
-                log.info('::::::::: OBJECT TAG UPDATED SUCCESSFULLY :::::::::')
-                pass
-            except Exception as err:
-                # on rollback, the same closure of state
-                # as that of commit proceeds.
-                Session.rollback()
-
-                log.error('Exception occurred while persisting DB objects: %s', err)
-                raise
+                    log.error('Exception occurred while persisting DB objects: %s', err)
+                    raise
+            else:
+                return DBAction.NONE, tag_loc.id
+        else:
+            log.warning(f'Skipping empty label V:{vocab.name} T:{tag.name} L:{lang}')
+            return DBAction.ERROR, tag_loc.id
     else:
         # Create a new localized record
-        created = True
-        vocab = model.Vocabulary.get(vocab_name)
-        existing_tag = model.Tag.by_name(name, vocab)
-
-        if existing_tag:
-            id = existing_tag.id
-            DCATAPITTagVocabulary.persist({'id': existing_tag.id, 'name': name, 'text': localized_text}, lang)
-            log.info('::::::::: OBJECT TAG PERSISTED SUCCESSFULLY :::::::::')
-
-    return created, id
+        tag_loc = TagLocalization.persist(tag, label, lang)
+        return DBAction.CREATED, tag_loc.id
 
 
 def get_localized_tag_name(tag_name=None, fallback_lang=None, lang=None):
@@ -294,13 +295,13 @@ def get_localized_tag_name(tag_name=None, fallback_lang=None, lang=None):
         if lang is None:
             lang = get_language()
 
-        localized_tag_name = DCATAPITTagVocabulary.by_name(tag_name, lang)
+        localized_tag_name = TagLocalization.by_name(tag_name, lang)
 
         if localized_tag_name:
             return localized_tag_name.text
         else:
             if fallback_lang:
-                fallback_name = DCATAPITTagVocabulary.by_name(tag_name, fallback_lang)
+                fallback_name = TagLocalization.by_name(tag_name, fallback_lang)
 
                 if fallback_name:
                     fallback_name = fallback_name.text
@@ -314,7 +315,7 @@ def get_localized_tag_name(tag_name=None, fallback_lang=None, lang=None):
 
 
 def get_all_localized_tag_labels(tag_name):
-    return DCATAPITTagVocabulary.all_by_name(tag_name)
+    return TagLocalization.all_by_name(tag_name)
 
 
 def get_resource_licenses_tree(value, lang):

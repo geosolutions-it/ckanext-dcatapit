@@ -895,10 +895,42 @@ msgid "Thesaurus File Uploader"
 msgstr "Caricamento vocabolari"
 
 msgid "Upload Thesaurus File"
-msgstr "Seleziona un file rdf di vocabolario"
-
-msgid "Vocabulary Type"
-msgstr "Tipo di vocabolario controllato"
+msgstr "Seleziona un file RDF di vocabolario"
 
 msgid "Submit"
 msgstr "Invia"
+
+
+msgid "Load vocabulary result"
+msgstr "Risultato del caricamento del vocabolario"
+
+msgid "Detected vocabulary type"
+msgstr "Vocabolario rilevato"
+
+msgid "tag_added"
+msgstr "Tag aggiunti"
+
+msgid "tag_updated"
+msgstr "Tag aggiornati"
+
+msgid "tag_exists"
+msgstr "Tag non modificati"
+
+msgid "tag_deleted"
+msgstr "Tag eliminati"
+
+msgid "tag_skipped"
+msgstr "Tag non processati"
+
+
+msgid "label_added"
+msgstr "Etichette aggiunte"
+
+msgid "label_updated"
+msgstr "Etichette aggiornate"
+
+msgid "label_exists"
+msgstr "Etichette non modificate"
+
+msgid "label_skipped"
+msgstr "Etichette non processate"

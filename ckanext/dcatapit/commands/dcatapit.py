@@ -3,7 +3,7 @@ import click
 import logging
 
 from ckanext.dcatapit.commands.migrate import do_migrate_data
-from ckanext.dcatapit.commands.vocabulary import load as load_voc
+from ckanext.dcatapit.commands.vocabulary import load_from_file as load_voc
 
 log = logging.getLogger(__name__)
 
@@ -69,4 +69,4 @@ def load(filename, url, format, eurovoc, name):
     if name:
         log.warning(f'Option "name" is deprecated and unused.')
 
-    load_voc(filename, url, format, eurovoc)
+    load_voc(filename, url, eurovoc, format=format)

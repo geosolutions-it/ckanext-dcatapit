@@ -7,8 +7,9 @@ from rdflib.term import URIRef
 
 from sqlalchemy.exc import IntegrityError
 
-from ckan.lib.base import config
+from ckan.lib.base import config, model
 from ckan.lib.munge import munge_tag
+from ckan.model import Vocabulary
 from ckan.model.meta import Session
 import ckan.plugins.toolkit as toolkit
 
@@ -16,7 +17,9 @@ from ckanext.dcat.profiles import DCT
 from ckanext.dcat.profiles import namespaces as dcat_namespaces
 
 from ckanext.dcatapit import interfaces
-from ckanext.dcatapit.model import DCATAPITTagVocabulary, License, ThemeToSubtheme, Subtheme, SubthemeLabel
+from ckanext.dcatapit.commands import DataException, ConfigException
+from ckanext.dcatapit.interfaces import DBAction
+from ckanext.dcatapit.model import License, ThemeToSubtheme, Subtheme, SubthemeLabel
 from ckanext.dcatapit.model.license import clear_licenses
 from ckanext.dcatapit.model.subtheme import clear_subthemes
 
@@ -64,131 +67,82 @@ DATE_FORMAT = '%d-%m-%Y'
 
 log = logging.getLogger(__name__)
 
+LANG_MAPPING_SKOS_TO_CKAN = {
+    'it': 'it',
+    'de': 'de',
+    'en': 'en',
+    'fr': 'fr',
+    'es': 'es'
+}
 
-class DCATAPITCommands:
-    places_theme_regex = '^ITA_.+'
+LANGUAGE_IMPORT_FILTER = {
+    'it': 'ITA',
+    'de': 'DEU',
+    'en_GB': 'ENG',
+    'en': 'ENG',
+    'fr': 'FRA',
+    'es': 'SPA'
+}
 
-    _locales_ckan_mapping = {
-        'it': 'it',
-        'de': 'de',
-        'en': 'en',
-        'fr': 'fr',
-        'es': 'es'
-    }
-
-    _ckan_language_theme_mapping = {
-        'it': 'ITA',
-        'de': 'DEU',
-        'en_GB': 'ENG',
-        'en': 'ENG',
-        'fr': 'FRA',
-        'es': 'SPA'
-    }
+PLACES_IMPORT_FILTER = '^ITA_.+'
 
 
-def load(filename=None, url=None, format='xml', eurovoc=None, *args, **kwargs):
-    # Checking command options
-    if (not filename and not url) or (filename and url):
-        log.error('ERROR: either URL or FILENAME is required')
+def load_from_file(filename=None, url=None, eurovoc=None, *args, **kwargs):
+    try:
+        g, name, uri, eurovoc = validate_vocabulary(filename, url, eurovoc)
+    except ValueError as e:
+        log.error(f'Error in handling vocabulary: {e}')
         return -1
 
-    g = _get_graph(path=filename, url=url)
+    results = load(g, name, uri, eurovoc)
 
-    name, uri = detect_rdf_concept_scheme(g)
-    log.info(f'Detected vocabulary {name}')
+    log.info(f'Results: {results}' )
+
+
+def load(g, name, uri, eurovoc):
 
     if name == LICENSES_NAME:
+        ret = {'licenses_deleted': License.count()}
         clear_licenses()
         load_licenses(g)
+        ret['licenses_created'] = License.count()
         Session.commit()
-        return
+        return ret
 
     if name == SUBTHEME_NAME:
+        ret = {'subthemes_deleted': Subtheme.count()}
         clear_subthemes()
-        log.debug(eurovoc)  # path to eurovoc file
-        if eurovoc is None:
-            log.error('ERROR: Missing eurovoc file')
-        else:
-            load_subthemes(filename, eurovoc)
-            Session.commit()
-        return
+        load_subthemes(None, eurovoc, themes_g=g)
+        ret['subthemes_created'] = Subtheme.count()
+        Session.commit()
+        return ret
 
-    created, updated, deleted = do_load(name, g)
-    return created, updated, deleted
+    return do_load(g, name)
 
 
-def do_load_regions(g, vocab_name):
-    concepts = []
-    pref_labels = []
-    for reg in g.subjects(None, URIRef(REGION_TYPE)):
-        names = list(g.objects(reg, URIRef(NAME_TYPE)))
-        identifier = munge_tag(reg.split('/')[-1])
+def do_load(g, vocab_name: str):
+    def _update_label_counter(cnt, action):
+        action_mapping = {
+            DBAction.CREATED: 'label_added',
+            DBAction.UPDATED: 'label_updated',
+            DBAction.NONE: 'label_exists',
+            DBAction.ERROR: 'label_skipped',
+        }
 
-        concepts.append(identifier)
-        for n in names:
-            label = {'name': identifier,
-                     'lang': n.language,
-                     'localized_text': n.value}
-            pref_labels.append(label)
+        try:
+            action_mapped = action_mapping[action]
+            cnt.incr(action_mapped)
+        except KeyError:
+            log.error(f'Unknown action {action}')
 
-    log.info('Loaded %d regions', len(concepts))
-    return pref_labels, concepts
-
-
-def do_load_vocab(g, vocab_name):
-    concepts = []
-    pref_labels = []
-
-    for concept, _pred, _conc in g.triples((None, None, SKOS.Concept)):
-        about = str(concept)
-        identifier = str(g.value(subject=concept, predicate=DC.identifier))
-
-        #
-        # Skipping the ckan locales not mapped in this plugin (subject: language theme)
-        #
-        if vocab_name == 'languages' and identifier not in DCATAPITCommands._ckan_language_theme_mapping.values():
-            continue
-
-        #
-        # Skipping the ckan places not in italy according to the regex (subject: places theme)
-        #
-        if vocab_name == 'places' and not re.match(DCATAPITCommands.places_theme_regex, identifier, flags=0):
-            continue
-
-        concepts.append(identifier)
-
-        langs = set()
-
-        for pref_label in g.objects(concept, SKOS.prefLabel):
-            lang = pref_label.language
-            label = pref_label.value
-
-            langs.add(lang)
-
-            log.debug(f'Concept {about} ({identifier}).  {lang}:{label}')
-            pref_labels.append({
-                'name': identifier,
-                'lang': lang,
-                'localized_text': label
-            })
-        log.info(
-            f'Loaded concept: URI[{about}] ID[{identifier}] languages[{len(langs)}]'
-        )
-    return pref_labels, concepts
-
-
-def do_load(vocab_name, g):
     if vocab_name == LANGUAGE_THEME_NAME:
-        ckan_offered_languages = config.get('ckan.locales_offered', 'it').split(' ')
-        for offered_language in ckan_offered_languages:
-            if offered_language not in DCATAPITCommands._ckan_language_theme_mapping:
+        for offered_language in config.get('ckan.locales_offered', 'it').split(' '):
+            if offered_language not in LANGUAGE_IMPORT_FILTER:
                 log.info(
-                    f"'{offered_language}' CKAN locale is not mapped in this plugin "
+                    f"'{offered_language}' language is fitlered out in this plugin "
                     f"and will be skipped during the import stage (vocabulary '{vocab_name}')")
 
-    ##
     # Loading the RDF vocabulary
-    ##
     log.debug(f'Loading graph for {vocab_name}')
 
     if vocab_name == REGIONS_NAME:
@@ -197,95 +151,128 @@ def do_load(vocab_name, g):
         vocab_load = do_load_vocab
 
     ids = []
-    created_count = 0
-    updated = 0
-    deleted_count = 0
-    pref_labels, concepts = vocab_load(g, vocab_name)
-    ##
-    # Creating the Tag Vocabulary using the given name
-    ##
-    log.info('Creating tag vocabulary %s ...', vocab_name)
+    cnt = Counter()
+
+    concepts = vocab_load(g, vocab_name)
 
     user = toolkit.get_action('get_site_user')({'ignore_auth': True}, {})
     context = {'user': user['name'], 'ignore_auth': True}
 
     log.debug("Using site user '%s'", user['name'])
 
-    try:
-        toolkit.get_action('vocabulary_show')(context, {'id': vocab_name})
+    vocab = Vocabulary.get(vocab_name)
+    if vocab:
+        log.info(f'Vocabulary "{vocab_name}" already exists, skipping...')
+    else:
+        log.info(f'Creating vocabulary "{vocab_name}"')
+        vocab = Vocabulary(vocab_name)
+        vocab.save()
 
-        log.info('Vocabulary %s already exists, skipping...', vocab_name)
-    except toolkit.ObjectNotFound:
-        log.info("Creating vocabulary '%s'", vocab_name)
+    for concept in concepts:
+        tag_name = concept['name']
+        if len(tag_name) < 2:
+            log.error(f"Tag too short: skipping tag '{tag_name}' for vocabulary '{vocab_name}'")
+            cnt.incr('tag_skipped')
+            continue
 
-        vocab = toolkit.get_action('vocabulary_create')(context, {'name': vocab_name})
+        tag = model.Tag.by_name(tag_name, vocab)
+        if tag is None:
+            log.info(f"Adding tag {vocab_name}::{tag_name}")
+            tag = model.Tag(name=tag_name, vocabulary_id=vocab.id)
+            tag.save()
+            cnt.incr('tag_added')
+        else:
+            cnt.incr('tag_exists')
 
-        for tag in concepts:
-            if len(tag) > 1:
-                log.info(f"Adding tag {tag} to vocabulary '{vocab_name}'")
-                data = {'name': tag, 'vocabulary_id': vocab['id']}
-                toolkit.get_action('tag_create')(context, data)
-            else:
-                log.error(f"Tag too short: skipping tag '{tag}' for vocabulary '{vocab_name}'")
+        log.debug(f'Creating multilang labels for tag {vocab_name}:{tag_name}')
 
-    ##
-    # Persisting Multilag Tags or updating existing
-    ##
-    log.info('Creating the corresponding multilang tags for vocab: {0} ...'.format(vocab_name))
-
-    for pref_label in pref_labels:
-        if pref_label['lang'] in DCATAPITCommands._locales_ckan_mapping:
-            tag_name = pref_label['name']
-            tag_lang = DCATAPITCommands._locales_ckan_mapping[pref_label['lang']]
-            tag_localized_name = pref_label['localized_text']
+        for pref_label in concept['labels']:
+            if pref_label['lang'] not in LANG_MAPPING_SKOS_TO_CKAN:
+                cnt.incr('label_skipped')
+                continue
+            tag_lang = LANG_MAPPING_SKOS_TO_CKAN[pref_label['lang']]
+            tag_text = pref_label['text']
 
             try:
-                log.info('Storing tag: name[%s] lang[%s] label[%s]', tag_name,
-                         tag_lang, tag_localized_name)
+                log.debug('Storing tag: name[%s] lang[%s] label[%s]', tag_name, tag_lang, tag_text)
             except UnicodeEncodeError:
                 log.error(f'Storing tag: name[{tag_name}] lang[{tag_lang}]')
 
-            created, id = interfaces.persist_tag_multilang(tag_name, tag_lang, tag_localized_name, vocab_name)
-            if created:
-                created_count += 1
-            else:
-                updated += 1
-            ids.append(id)
+            action, tl_id = interfaces.persist_tag_multilang(tag, tag_lang, tag_text, vocab)
 
-            tags = DCATAPITTagVocabulary.nin_tags_ids(ids)
-            deleted_count = len(tags)
-            for tag in tags:
-                tag.delete()
+            _update_label_counter(cnt, action)
+
+        ids.append(tag.id)
+
+    # delete from DB old tags not found in input graph
+    tag_not_in_voc = model.Session.query(model.Tag)\
+        .filter(model.Tag.id.notin_(ids))\
+        .filter(model.Tag.vocabulary_id==vocab.id)\
+        .all()
+    for tag_to_delete in tag_not_in_voc:
+        pkg_cnt = len(tag_to_delete.packages)
+        if pkg_cnt == 0:
+            tag_to_delete.delete()
+            Session.commit()
+            log.info(f"Deleting tag {tag_to_delete} from vocabulary '{vocab_name}'")
+            cnt.incr('tag_deleted')
+        else:
+            log.info(f"Cannot delete tag {tag_to_delete} from vocabulary '{vocab_name}' used in {pkg_cnt} packages")
+            cnt.incr('tag_notdeletable')
+
     log.info(f'Vocabulary successfully loaded ({vocab_name})')
 
-    return created_count, updated, deleted_count
+    return cnt.get()
 
 
-def _get_graph(path=None, url=None):
-    if (not path and not url) or (path and url):
-        raise ValueError('You should provide either path or url')
-    g = Graph()
-    for prefix, namespace in namespaces.items():
-        g.bind(prefix, namespace)
+def do_load_regions(g, vocab_name):
+    concepts = []
 
-    if url:
-        g.parse(location=url)
-    else:
-        g.parse(source=path)
+    for reg in g.subjects(None, URIRef(REGION_TYPE)):
+        names = list(g.objects(reg, URIRef(NAME_TYPE)))
+        identifier = munge_tag(reg.split('/')[-1])
 
-    return g
+        labels = [{'lang': n.language, 'text': n.value} for n in names]
+
+        concepts.append({
+            'name': identifier,
+            'labels': labels
+        })
+
+    log.info(f'Loaded {len(concepts)} regions')
+    return concepts
 
 
-def detect_rdf_concept_scheme(g: Graph) -> (str, str):
-    try:
-        cs = next(g.subjects(RDF.type, SKOS.ConceptScheme))
-    except StopIteration:
-        raise ValueError("No ConceptScheme found")
+def do_load_vocab(g, vocab_name):
+    '''
+    :param g: The vocabulary Graph
+    :param vocab_name: The Vocabulary name
+    :return: a list [ {'name': TAG_NAME, 'labels': [{'lang': LANG, 'text': LABEL}, ...]}]
+    '''
 
-    try:
-        return next(iter([(k, VOC_URI[k]) for k in VOC_URI if VOC_URI[k] == str(cs)]))
-    except StopIteration:
-        raise ValueError(f"ConceptScheme not handled {str(cs)}")
+    concepts = []
+
+    for concept, _pred, _conc in g.triples((None, None, SKOS.Concept)):
+        identifier = str(g.value(subject=concept, predicate=DC.identifier))
+
+        # Filtering the ckan locales not mapped in this plugin (subject: language theme)
+        if vocab_name == LANGUAGE_THEME_NAME and identifier not in LANGUAGE_IMPORT_FILTER.values():
+            continue
+
+        # Filtering the ckan places not in italy according to the regex (subject: places theme)
+        if vocab_name == LOCATIONS_THEME_NAME and not re.match(PLACES_IMPORT_FILTER, identifier, flags=0):
+            continue
+
+        labels = [{'lang':pl.language, 'text': pl.value} for pl in g.objects(concept, SKOS.prefLabel) if pl.language]
+
+        concepts.append({
+            'name': identifier,
+            'labels': labels
+        })
+
+        log.debug(f'Loaded concept: URI[{str(concept)}] ID[{identifier}] languages[{len(labels)}]')
+
+    return concepts
 
 
 def load_licenses(g: Graph):
@@ -326,13 +313,15 @@ def load_licenses(g: Graph):
             License.get(license).set_parent(parent)
 
 
-def load_subthemes(themes, eurovoc):
-    themes_g = Graph()
+def load_subthemes(t2sub_mapping, eurovoc, themes_g=None):
+    if themes_g is None:
+        themes_g = Graph()
+        themes_g.parse(t2sub_mapping)
+
     eurovoc_g = Graph()
+    eurovoc_g.parse(eurovoc)
 
     ThemeToSubtheme.vocab_id = None  # reset vocabulary attached to mapping
-    themes_g.parse(themes)
-    eurovoc_g.parse(eurovoc)
 
     for theme in themes_g.subjects(RDF.type, SKOS.Concept):
         sub_themes = themes_g.objects(theme, SKOS.narrowMatch)
@@ -343,7 +332,7 @@ def load_subthemes(themes, eurovoc):
 def add_subtheme(eurovoc, theme_ref, subtheme_ref, parent=None):
 
     def info(theme, inst):
-        return f"T:{theme} id:{inst.id:4} dpth:{inst.depth} par:{inst.parent_id} P:{inst.path}"
+        return f"T:{theme} id:{inst.id:4} dpth:{inst.depth} par:{inst.parent_id or '':5} P:{inst.path}"
 
     theme = Subtheme.normalize_theme(theme_ref)
     existing = Subtheme.q().filter_by(uri=str(subtheme_ref)).first()
@@ -403,3 +392,75 @@ def add_subtheme(eurovoc, theme_ref, subtheme_ref, parent=None):
             log.error(f'Not adding subtheme parent "{child}" for "{theme_ref}" and sub "{subtheme_ref}"')
 
     return inst
+
+
+def validate_vocabulary(filename=None, url=None, eurovoc=None):
+    # Checking command options
+    if (not filename and not url) or (filename and url):
+        raise DataException('Either URL or FILENAME is required')
+
+    try:
+        g = _get_graph(path=filename, url=url)
+    except Exception as e:
+        raise DataException(f'Could not parse vocabulary file: {e}')
+
+    name, uri = _detect_rdf_concept_scheme(g)
+    log.info(f'Detected vocabulary "{name}"')
+
+    if name == SUBTHEME_NAME:
+        if not eurovoc:
+            eurovoc_config_item = 'ckan.dcatapit.eurovoc_location'
+            eurovoc_source_path = config.get(eurovoc_config_item)
+            if not eurovoc_source_path:
+                raise ConfigException(f'EUROVOC file not configured at {eurovoc_config_item}.')
+            else:
+                log.info(f'Using configured EUROVOC file at "{eurovoc_source_path}"')
+                eurovoc = eurovoc_source_path
+        else:
+            log.info(f'Using provided EUROVOC file at "{eurovoc}"')
+
+    return g, name, uri, eurovoc
+
+
+def _get_graph(path=None, url=None):
+    if (not path and not url) or (path and url):
+        raise ValueError('You should provide either path or url')
+    g = Graph()
+    for prefix, namespace in namespaces.items():
+        g.bind(prefix, namespace)
+
+    if url:
+        g.parse(location=url)
+    else:
+        g.parse(source=path)
+
+    return g
+
+
+def _detect_rdf_concept_scheme(g: Graph) -> (str, str):
+    try:
+        cs = next(g.subjects(RDF.type, SKOS.ConceptScheme))
+    except StopIteration:
+        raise DataException("No ConceptScheme found")
+
+    for k in VOC_URI:
+        uriref = URIRef(VOC_URI[k])
+        try:
+            found = next(g.triples((uriref, RDF.type, SKOS.ConceptScheme)))
+        except StopIteration:
+            continue
+        if found:
+            return k, VOC_URI[k]
+
+    raise DataException(f"ConceptScheme not handled {str(cs)}")
+
+
+class Counter:
+    def __init__(self):
+        self.d = {}
+
+    def incr(self, name):
+        self.d[name] = self.d.get(name, 0) + 1
+
+    def get(self):
+        return self.d
