@@ -4,7 +4,7 @@ import re
 
 from ckan.model import Session, Tag
 
-from ckanext.dcatapit.model import DCATAPITTagVocabulary
+from ckanext.dcatapit.model import TagLocalization
 from ckanext.dcatapit.model.license import License
 
 log = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ _mapping_languages_to_mdr_vocabulary = {
 _ckan_locales_mapping = {
     'ita': 'it',
     'ger': 'de',
-    'eng': 'en_GB'
+    'eng': 'en'
 }
 
 
@@ -71,8 +71,8 @@ def get_controlled_vocabulary_values(vocabulary_id, thesaurus_id, keywords):
         for key in keywords:
             if thesaurus_id and (thesaurus_id in key['thesaurus-identifier'] or thesaurus_id in key['thesaurus-title']):
                 for k in key['keyword']:
-                    query = Session.query(DCATAPITTagVocabulary) \
-                        .filter(DCATAPITTagVocabulary.text == k, DCATAPITTagVocabulary.tag_name.in_(tag_names_list))
+                    query = Session.query(TagLocalization) \
+                        .filter(TagLocalization.text == k, TagLocalization.tag_name.in_(tag_names_list))
                     query = query.autoflush(True)
                     theme = query.first()
 

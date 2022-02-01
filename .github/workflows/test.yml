@@ -1,5 +1,5 @@
 name: Tests
-on: [push, pull_request]
+on: [ push, pull_request ]
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -21,7 +21,7 @@ jobs:
     needs: lint
     strategy:
       matrix:
-        ckan-version: [2.9]
+        ckan-version: [ 2.9 ]
       fail-fast: false
 
     name: CKAN ${{ matrix.ckan-version }}
@@ -31,6 +31,8 @@ jobs:
     services:
       solr:
         image: ckan/ckan-solr-dev:${{ matrix.ckan-version }}
+        volumes:
+          - SOLR_SCHEMA_FILE:../solr/schema.xml
       postgres:
         # image: ckan/ckan-postgres-dev:${{ matrix.ckan-version }}
         image: postgis/postgis:10-3.1
@@ -40,7 +42,7 @@ jobs:
           POSTGRES_DB: postgres
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       redis:
-          image: redis:3
+        image: redis:3
     env:
       CKAN_SQLALCHEMY_URL: postgresql://ckan_default:pass@postgres/ckan_test
       CKAN_DATASTORE_WRITE_URL: postgresql://datastore_write:pass@postgres/datastore_test
@@ -50,111 +52,111 @@ jobs:
       PGPASSWORD: postgres
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Create Database
-      run: |
-        psql --host=postgres --username=postgres --command="CREATE USER ckan_default WITH PASSWORD 'pass' NOSUPERUSER NOCREATEDB NOCREATEROLE;"
-        createdb --encoding=utf-8 --host=postgres --username=postgres --owner=ckan_default ckan_test
-        psql --host=postgres --username=postgres --command="CREATE USER datastore_write WITH PASSWORD 'pass' NOSUPERUSER NOCREATEDB NOCREATEROLE;"
-        psql --host=postgres --username=postgres --command="CREATE USER datastore_read WITH PASSWORD 'pass' NOSUPERUSER NOCREATEDB NOCREATEROLE;"
-        createdb --encoding=utf-8 --host=postgres --username=postgres --owner=datastore_write datastore_test
-    - name: Setup postgis
-      run: |
-        psql --host=postgres --username=postgres -d ckan_test --command="ALTER ROLE ckan_default WITH superuser;"
-        psql --host=postgres --username=postgres -d ckan_test --command="CREATE EXTENSION postgis;"
-    - name: Install dependency (common)
-      run: |
-        apk add --no-cache \
-          geos \
-          geos-dev \
-          proj-util \
-          proj-dev \
-          libxml2 \
-          libxslt \
-          gcc \
-          swig \
-          libxml2-dev \
-          libxslt-dev
-    - name: Install dependency (python3)
-      if: ${{ matrix.ckan-version == '2.9' }}
-      run: |
-        apk add --no-cache \
-          python3-dev
-        pip install -U pip
-        pip install -r dev-requirements.txt
+      - uses: actions/checkout@v2
+      - name: Create Database
+        run: |
+          psql --host=postgres --username=postgres --command="CREATE USER ckan_default WITH PASSWORD 'pass' NOSUPERUSER NOCREATEDB NOCREATEROLE;"
+          createdb --encoding=utf-8 --host=postgres --username=postgres --owner=ckan_default ckan_test
+          psql --host=postgres --username=postgres --command="CREATE USER datastore_write WITH PASSWORD 'pass' NOSUPERUSER NOCREATEDB NOCREATEROLE;"
+          psql --host=postgres --username=postgres --command="CREATE USER datastore_read WITH PASSWORD 'pass' NOSUPERUSER NOCREATEDB NOCREATEROLE;"
+          createdb --encoding=utf-8 --host=postgres --username=postgres --owner=datastore_write datastore_test
+      - name: Setup postgis
+        run: |
+          psql --host=postgres --username=postgres -d ckan_test --command="ALTER ROLE ckan_default WITH superuser;"
+          psql --host=postgres --username=postgres -d ckan_test --command="CREATE EXTENSION postgis;"
+      - name: Install dependency (common)
+        run: |
+          apk add --no-cache \
+            geos \
+            geos-dev \
+            proj-util \
+            proj-dev \
+            libxml2 \
+            libxslt \
+            gcc \
+            swig \
+            libxml2-dev \
+            libxslt-dev
+      - name: Install dependency (python3)
+        if: ${{ matrix.ckan-version == '2.9' }}
+        run: |
+          apk add --no-cache \
+            python3-dev
+          pip install -U pip
+          pip install -r dev-requirements.txt
 
-    - name: Install dependency - ckanext-harvest and its requirements...
-      run: |
-        git clone --branch master https://github.com/ckan/ckanext-harvest
-        cd ckanext-harvest
-        python3 setup.py develop
-        pip install -r pip-requirements.txt
-        # paster harvester initdb -c ../ckan/test-core.ini
-
-
-    - name: Install dependency - ckanext-dcat and its requirements...
-      run: |
-        git clone --branch master https://github.com/ckan/ckanext-dcat
-        cd ckanext-dcat
-        python3 setup.py develop
-        pip install -r requirements.txt
-
-    - name: Install dependency - ckanext-spatial and its requirements...
-      run: |
-        git clone --branch master https://github.com/ckan/ckanext-spatial
-        cd ckanext-spatial
-        python3 setup.py develop
-
-        # #TODO: Make compatable pyproj with py3 vesions
-        # sed -i '/pyproj==2.6.1/cpyproj' requirements.txt
-
-        pip install -r pip-requirements.txt
-        # paster spatial initdb -c ../ckan/test-core.ini
+      - name: Install dependency - ckanext-harvest and its requirements...
+        run: |
+          git clone --branch master https://github.com/ckan/ckanext-harvest
+          cd ckanext-harvest
+          python3 setup.py develop
+          pip install -r pip-requirements.txt
+          # paster harvester initdb -c ../ckan/test-core.ini
 
 
-    - name: Install dependency - ckanext-multilang and its requirements...
-      run: |
-        git clone --branch master https://github.com/geosolutions-it/ckanext-multilang
-        cd ckanext-multilang
-        python3 setup.py develop
-        # paster multilangdb initdb -c ../ckan/test-core.ini
-        # ckan -c test.ini multilang initdb
+      - name: Install dependency - ckanext-dcat and its requirements...
+        run: |
+          git clone --branch master https://github.com/ckan/ckanext-dcat
+          cd ckanext-dcat
+          python3 setup.py develop
+          pip install -r requirements.txt
+
+      - name: Install dependency - ckanext-spatial and its requirements...
+        run: |
+          git clone --branch master https://github.com/ckan/ckanext-spatial
+          cd ckanext-spatial
+          python3 setup.py develop
+
+          # #TODO: Make compatable pyproj with py3 vesions
+          # sed -i '/pyproj==2.6.1/cpyproj' requirements.txt
+
+          pip install -r pip-requirements.txt
+          # paster spatial initdb -c ../ckan/test-core.ini
 
 
-    - name: Install dependency - ckanext-dcatapit and its requirements...
-      run: |
-        python3 setup.py develop
-        pip install -r dev-requirements.txt
-        # paster vocabulary initdb -c ckan/test-core.ini
+      - name: Install dependency - ckanext-multilang and its requirements...
+        run: |
+          git clone --branch master https://github.com/geosolutions-it/ckanext-multilang
+          cd ckanext-multilang
+          python3 setup.py develop
+          # paster multilangdb initdb -c ../ckan/test-core.ini
+          # ckan -c test.ini multilang initdb
 
 
-    - name: Install ckanext-dcatapit
-      run: |
-        pip install -e .
-        # Replace default path to CKAN core config file with the one on the container
-        sed -i -e 's/use = config:.*/use = config:\/srv\/app\/src\/ckan\/test-core.ini/' test.ini
+      - name: Install dependency - ckanext-dcatapit and its requirements...
+        run: |
+          python3 setup.py develop
+          pip install -r dev-requirements.txt
+          # paster vocabulary initdb -c ckan/test-core.ini
 
-    - name: Setup extensions
-      run: |
-        crudini --set --verbose --list --list-sep=\  test.ini app:main ckan.plugins multilang_resources ckan_harvester multilang multilang_harvester dcat harvest spatial_metadata spatial_query spatial_harvest_metadata_api dcat_rdf_harvester dcatapit_pkg dcatapit_org dcatapit_config dcatapit_harvester dcatapit_csw_harvester dcatapit_theme_group_mapper dcatapit_ckan_harvester
-        crudini --set --verbose test.ini app:main ckanext.dcat.expose_subcatalogs False
-        crudini --set --verbose test.ini app:main ckanext.dcatapit.localized_resources True
-        crudini --set --verbose --list --list-sep=\  test.ini app:main ckanext.dcat.rdf.profiles euro_dcat_ap it_dcat_ap
 
-        ckan -c test.ini db init
-        ckan -c test.ini harvester initdb
-        ckan -c test.ini spatial initdb
-        # ckan -c test.ini dcat generate_static
-        ckan -c test.ini multilang initdb
+      - name: Install ckanext-dcatapit
+        run: |
+          pip install -e .
+          # Replace default path to CKAN core config file with the one on the container
+          sed -i -e 's/use = config:.*/use = config:\/srv\/app\/src\/ckan\/test-core.ini/' test.ini
 
-    - name: Setup extensions (dcatapit)
-      run: |
-        ckan -c test.ini dcatapit initdb
+      - name: Setup extensions
+        run: |
+          crudini --set --verbose --list --list-sep=\  test.ini app:main ckan.plugins multilang_resources ckan_harvester multilang multilang_harvester dcat harvest spatial_metadata spatial_query spatial_harvest_metadata_api dcat_rdf_harvester dcatapit_pkg dcatapit_org dcatapit_config dcatapit_harvester dcatapit_csw_harvester dcatapit_theme_group_mapper dcatapit_ckan_harvester
+          crudini --set --verbose test.ini app:main ckanext.dcat.expose_subcatalogs False
+          crudini --set --verbose test.ini app:main ckanext.dcatapit.localized_resources True
+          crudini --set --verbose --list --list-sep=\  test.ini app:main ckanext.dcat.rdf.profiles euro_dcat_ap it_dcat_ap
 
-    - name: Run tests
-      run: pytest --ckan-ini=test.ini --cov=ckanext.dcatapit --cov-report=xml --cov-append --disable-warnings ckanext/dcatapit/tests
+          ckan -c test.ini db init
+          ckan -c test.ini harvester initdb
+          ckan -c test.ini spatial initdb
+          # ckan -c test.ini dcat generate_static
+          ckan -c test.ini multilang initdb
 
-    - name: Upload coverage report to codecov
-      uses: codecov/codecov-action@v1
-      with:
-        file: ./coverage.xml
+      - name: Setup extensions (dcatapit)
+        run: |
+          ckan -c test.ini dcatapit initdb
+
+      - name: Run tests
+        run: pytest --ckan-ini=test.ini --cov=ckanext.dcatapit --cov-report=xml --cov-append --disable-warnings ckanext/dcatapit/tests
+
+      - name: Upload coverage report to codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.xml

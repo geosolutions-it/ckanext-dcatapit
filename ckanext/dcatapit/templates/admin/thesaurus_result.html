@@ -1,0 +1,31 @@
+{% extends "admin/base.html" %}
+
+
+{% block primary_content_inner %}
+  <h1 class="page-heading">
+    {% block page_heading %}{{  _('Load vocabulary result') }}{% endblock %}
+  </h1>
+  {% block form %}
+      <div class="row-fluid">
+        <div class="control-group control-medium">
+            <label class="control-label" for="vocabulary_type">
+            {{ _('Detected vocabulary type') }}
+            </label>
+            {{ voc_name }}
+        </div>
+
+        {% for res_type, count in results.items() %}
+           {% snippet "admin/snippets/dcatapit_vocab_result_entry.html", res_type=res_type, text=count, messages=messages %}
+        {% endfor %}
+
+  {% endblock %}
+
+{% endblock %}
+
+
+
+
+
+
+
+

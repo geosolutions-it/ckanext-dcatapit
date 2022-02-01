@@ -6,6 +6,11 @@ import pytest
 from ckan import model
 from ckan.lib.munge import munge_name
 from ckan.model import User, Group, Session
+from ckanext.dcatapit.tests.utils import (
+    LICENSES_FILE,
+    load_graph,
+    get_voc_file,
+)
 
 try:
     from ckan.tests import helpers
@@ -16,8 +21,8 @@ from ckanext.dcat.harvesters.rdf import DCATRDFHarvester
 from ckanext.dcatapit.harvesters.ckanharvester import CKANMappingHarvester
 from ckanext.dcatapit.model.license import (
     License,
-    load_from_graph,
 )
+from ckanext.dcatapit.commands.vocabulary import load_licenses as load_licenses
 from ckanext.harvest.model import HarvestObject
 from ckan.tests.helpers import call_action
 
@@ -27,11 +32,8 @@ from ckan.tests.helpers import call_action
 class HarvestersTestCase(unittest.TestCase):
 
     def setUp(self):
-        def get_path(fname):
-            return os.path.join(os.path.dirname(__file__),
-                                '..', '..', '..', 'examples', fname)
-        licenses = get_path('licenses.rdf')
-        load_from_graph(path=licenses)
+        licenses = get_voc_file(LICENSES_FILE)
+        load_licenses(load_graph(licenses))
         Session.flush()
 
         user = User.get('dummy')

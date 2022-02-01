@@ -1,10 +1,7 @@
 import logging
 import re
 
-from ckan.common import _
 from ckan.model import meta, DomainObject
-from rdflib import Graph
-from rdflib.namespace import SKOS, Namespace
 from sqlalchemy import Column, ForeignKey, orm, types
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -174,24 +171,10 @@ class License(DeclarativeBase, DomainObject):
         return q.first()
 
     @classmethod
-    def clear(cls):
+    def delete_all(cls):
         cls.Session.query(LocalizedLicenseName).delete()
         cls.Session.query(cls).delete()
         cls.Session.flush()
-
-    @classmethod
-    def for_license_uri(cls, uri, lang):
-        inst = cls.get(uri)
-        return inst.get_name(lang)
-
-    @classmethod
-    def for_dataset_license(cls, ds_license):
-        license = cls.get(ds_license.url)
-
-        tokens = cls.get_tokenized()
-        if license:
-            return license
-        return cls.get(cls.DEFAULT_LICENSE)
 
     @classmethod
     def get_as_tokens(cls):
@@ -323,87 +306,6 @@ class LocalizedLicenseName(DeclarativeBase, DomainObject):
     @classmethod
     def q(cls):
         return cls.Session.query(cls)
-
-
-ADMS = Namespace('http://www.w3.org/ns/adms#')
-CLVAPIT = Namespace('https://w3id.org/italia/onto/CLV/')
-DCATAPIT = Namespace('http://dati.gov.it/onto/dcatapit#')
-DCT = Namespace('http://purl.org/dc/terms/')
-FOAF = Namespace('http://xmlns.com/foaf/0.1/')
-OWL = Namespace('http://www.w3.org/2002/07/owl#')
-RDF = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
-RDFS = Namespace('http://www.w3.org/2000/01/rdf-schema#')
-SKOS = Namespace('http://www.w3.org/2004/02/skos/core#')
-XKOS = Namespace('http://rdf-vocabulary.ddialliance.org/xkos#')
-
-namespaces = {
-    'adms': ADMS,
-    'clvapit': CLVAPIT,
-    'dcatapit': DCATAPIT,
-    'dct': DCT,
-    'foaf': FOAF,
-    'owl': OWL,
-    'rdf': RDF,
-    'rdfs': RDFS,
-    'skos': SKOS,
-    'xkos': XKOS,
-}
-
-
-def _get_graph(path=None, url=None):
-    if (not path and not url) or (path and url):
-        raise ValueError(_('You should provide either path or url'))
-    g = Graph()
-    for prefix, namespace in namespaces.items():
-        g.bind(prefix, namespace)
-
-    if url:
-        g.parse(location=url)
-    else:
-        g.parse(source=path)
-
-    return g
-
-
-def load_from_graph(path=None, url=None):
-    """
-    Loads license tree into db from provided path or url
-
-    """
-    g = _get_graph(path=path, url=url)
-    License.clear()
-
-    for license in g.subjects(None, SKOS.Concept):
-        rank_order = g.value(license, CLVAPIT.hasRankOrder)
-        version = g.value(license, OWL.versionInfo)
-        doc_uri = g.value(license, DCATAPIT.referenceDoc)
-
-        # exactMatch exists only in 2nd level
-        license_type = g.value(license, SKOS.exactMatch)
-        if not license_type:
-            # 3rd level, need to go up
-            parent = g.value(license, SKOS.broader)
-            license_type = g.value(parent, SKOS.exactMatch)
-
-        _labels = g.objects(license, SKOS.prefLabel)
-        labels = dict([(l.language, l) for l in _labels])
-        license_path = str(license).split('/')[-1].split('_')[0]
-        log.debug('Adding license [%r] [%s]', license, labels.get('it', None))
-        l = License.from_data(license_type or '',
-                              str(version) if version else None,
-                              uri=str(license),
-                              path=license_path,
-                              document_uri=str(doc_uri) if doc_uri else None,
-                              rank_order=int(str(rank_order)),
-                              names=labels,
-                              parent=None)  # parent will be set later
-
-    for license in g.subjects(None, SKOS.Concept):
-        parent = None
-        parents = list(g.objects(license, SKOS.broader))
-        if parents:
-            parent = parents[0]
-            License.get(license).set_parent(parent)
 
 
 def clear_licenses():

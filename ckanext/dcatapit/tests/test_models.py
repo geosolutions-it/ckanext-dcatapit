@@ -4,7 +4,14 @@ import unittest
 from ckan.model.meta import Session
 from rdflib import RDF, Graph
 
-from ckanext.dcatapit.tests.utils import get_example_file, MAPPING_FILE, get_test_file, EUROVOC_FILE, get_voc_file
+from ckanext.dcatapit.tests.utils import (
+    EUROVOC_FILE,
+    MAPPING_FILE,
+    get_example_file,
+    get_test_file,
+    get_voc_file,
+    load_graph, LICENSES_FILE,
+)
 
 try:
     from ckan.tests import helpers
@@ -12,16 +19,13 @@ except ImportError:
     from ckan.new_tests import helpers
 
 from ckanext.dcatapit.model.license import (
-    SKOS,
     License,
     LocalizedLicenseName,
-    _get_graph,
-    load_from_graph,
 )
+from ckanext.dcatapit.commands.vocabulary import SKOS, load_licenses as load_license, load_subthemes
 from ckanext.dcatapit.model.subtheme import (
     Subtheme,
     clear_subthemes,
-    load_subthemes,
 )
 
 
@@ -29,12 +33,12 @@ class LicenseTestCase(unittest.TestCase):
 
     def setUp(self):
 
-        self.licenses = get_example_file('licenses.rdf')
-        self.g = _get_graph(path=self.licenses)
+        self.licenses = get_voc_file(LICENSES_FILE)
+        self.g = load_graph(path=self.licenses)
 
     def test_licenses(self):
 
-        load_from_graph(path=self.licenses)
+        load_license(self.g)
         Session.flush()
 
         all_licenses = License.q()
@@ -52,7 +56,7 @@ class LicenseTestCase(unittest.TestCase):
 
     def test_tokenizer(self):
 
-        load_from_graph(path=self.licenses)
+        load_license(self.g)
         Session.flush()
         tokens = License.get_as_tokens()
         self.assertTrue(len(tokens.keys()) > 0)

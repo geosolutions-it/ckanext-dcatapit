@@ -1,0 +1,58 @@
+{% extends "admin/base.html" %}
+
+{% import 'macros/form.html' as form %}
+
+{% set user = c.user_dict %}
+{% set ckan_29_or_higher = h.ckan_version().split('.')[1] | int >= 9 %}
+{% set showcase_admin_remove_route = 'showcase_blueprint.admin_remove' if ckan_29_or_higher else 'showcase_admin_remove' %}
+
+
+{% block primary_content_inner %}
+  <h1 class="page-heading">
+    {% block page_heading %}{{  _('Thesaurus File') }}{% endblock %}
+  </h1>
+  {% block form %}
+    <form class="dataset-form add-member-form"
+          method='post'
+          action="{{ h.url_for('dcatapit_core.thesaurus_save') }}"
+          enctype="multipart/form-data">
+      <div class="row-fluid">
+        <div class="control-group control-medium">
+          <label class="control-label" for="username">
+            {{ _('Upload Thesaurus File') }}
+          </label>
+          <div class="controls">
+            <input type="file" name="thesaurus_file" placeholder="Please Add Thesaurus file" class="" />
+          </div>
+        </div>
+
+      <div class="form-actions" style="margin-top: 10px">
+        <button class="btn btn-primary" type="submit" name="submit" >
+          {{ _('Submit') }}
+        </button>
+      </div>
+    </form>
+  {% endblock %}
+
+{% endblock %}
+
+{% block secondary_content %}
+  <div class="module module-narrow module-shallow">
+    <h2 class="module-heading">
+      <i class="fa fa-info-circle"></i>
+      {{ _('Thesaurus File') }}
+    </h2>
+    <div class="module-content">
+      {% trans %}
+        <p>Used to add, update, delete vocabulary datasets, of choosen type.</p>
+      {% endtrans %}
+    </div>
+  </div>
+{% endblock %}
+
+
+
+
+
+
+

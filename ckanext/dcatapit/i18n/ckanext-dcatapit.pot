@@ -813,3 +813,51 @@ msgstr ""
 msgid "eg. 1024"
 msgstr ""
 
+msgid "Thesaurus File Uploader"
+msgstr ""
+
+msgid "Upload Thesaurus File"
+msgstr ""
+
+msgid "Vocabulary Type"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+
+msgid "Load vocabulary result"
+msgstr ""
+
+msgid "Detected vocabulary type"
+msgstr ""
+
+
+msgid "tag_added"
+msgstr ""
+
+msgid "tag_updated"
+msgstr ""
+
+msgid "tag_exists"
+msgstr ""
+
+msgid "tag_deleted"
+msgstr ""
+
+msgid "tag_skipped"
+msgstr ""
+
+
+
+msgid "label_added"
+msgstr ""
+
+msgid "label_updated"
+msgstr ""
+
+msgid "label_exists"
+msgstr ""
+
+msgid "label_skipped"
+msgstr ""

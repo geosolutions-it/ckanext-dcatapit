@@ -5,8 +5,7 @@ import logging
 
 from ckan.lib.base import config
 from ckan.model import Tag, Vocabulary, meta, DomainObject
-from rdflib import Graph
-from rdflib.namespace import OWL, RDF, SKOS
+
 from sqlalchemy import Column, ForeignKey, Index, and_, or_, orm, types
 from sqlalchemy.exc import SQLAlchemyError as SAError, IntegrityError
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
@@ -16,7 +15,7 @@ from ckanext.dcat.profiles import DCT
 log = logging.getLogger(__name__)
 
 __all__ = ['Subtheme', 'SubthemeLabel',
-           'load_subthemes', 'clear_subthemes']
+           'clear_subthemes']
 
 DeclarativeBase = declarative_base(metadata=meta.metadata)
 
@@ -134,82 +133,9 @@ class Subtheme(DeclarativeBase, DomainObject):
             self.uri, self.default_label, ','.join([t.name for t in self.themes])
         )
 
-    @classmethod
-    def add_for_theme(cls, eurovoc, theme_ref, subtheme_ref, parent=None):
-
-        def info(theme, inst):
-            return f"T:{theme} id:{inst.id:4} dpth:{inst.depth} par:{inst.parent_id} P:{inst.path}"
-
-        theme = cls.normalize_theme(theme_ref)
-        existing = cls.q().filter_by(uri=str(subtheme_ref)).first()
-        theme_tag = ThemeToSubtheme.get_tag(theme)
-
-        # several themes may refer to this subtheme, so we'll just return
-        # exising instance
-        if existing:
-            if not theme_tag in existing.themes:
-                existing.themes.append(theme_tag)
-            cls.Session.flush()
-            log.error(f'Subtheme {subtheme_ref} already exists - {info(theme, existing)}. Skipping')
-            return existing
-
-        labels = {}
-        for pref_label in eurovoc.objects(subtheme_ref, SKOS.prefLabel):
-            labels[pref_label.language] = str(pref_label)
-        if not labels:
-            log.error(f'No labels found in EUROVOC for subtheme {subtheme_ref}. Skipping')
-            return
-        version = eurovoc.value(subtheme_ref, OWL.versionInfo) or ''
-        identifier = eurovoc.value(subtheme_ref, DCT.identifier) or ''
-        default_label = labels[DEFAULT_LANG]
-        inst = cls(version=str(version),
-                   identifier=str(identifier),
-                   uri=str(subtheme_ref),
-                   default_label=default_label,
-                   parent_id=parent.id if parent else None,
-                   depth=parent.depth + 1 if parent else 0)
-        inst.update_path()
-
-        inst.add()
-        cls.Session.flush()
-
-        log.info(f"Added sub {info(theme, inst)}")
-
-        if parent is None:
-            inst.parent_id = inst.id
-
-        theme_m = ThemeToSubtheme(tag_id=theme_tag.id, subtheme_id=inst.id)
-        theme_m.add()
-
-        for lang, label in labels.items():
-            l = SubthemeLabel(subtheme_id=inst.id,
-                              lang=lang,
-                              label=label)
-            l.add()
-        cls.Session.flush()
-        # handle children
-
-        # make sure that we have all the intermediate items from the subtheme upto the main theme
-        for child in eurovoc.objects(subtheme_ref, SKOS.hasTopConcept):
-            try:
-                cls.add_for_theme(eurovoc, theme_ref, child, inst)
-            except IntegrityError as e:
-                # same parent may have already been added
-                log.error(f'Not adding subtheme parent "{child}" for "{theme_ref}" and sub "{subtheme_ref}"')
-
-        return inst
-
     @staticmethod
     def normalize_theme(theme_uri):
-        s = str(theme_uri)
-        return s.split('/')[-1]
-
-    @classmethod
-    def map_themes(cls, themes_g, eurovoc_g):
-        for theme in themes_g.subjects(RDF.type, SKOS.Concept):
-            sub_themes = themes_g.objects(theme, SKOS.narrowMatch)
-            for sub_theme in sub_themes:
-                cls.add_for_theme(eurovoc_g, theme, sub_theme)
+        return str(theme_uri).split('/')[-1]
 
     @classmethod
     def for_theme(cls, theme, lang=None):
@@ -276,13 +202,3 @@ def clear_subthemes():
     SubthemeLabel.q().delete()
     ThemeToSubtheme.q().delete()
     Subtheme.q().delete()
-
-
-def load_subthemes(themes, eurovoc):
-    themes_g = Graph()
-    eurovoc_g = Graph()
-
-    ThemeToSubtheme.vocab_id = None  # reset vocabulary attached to mapping
-    themes_g.parse(themes)
-    eurovoc_g.parse(eurovoc)
-    Subtheme.map_themes(themes_g, eurovoc_g)

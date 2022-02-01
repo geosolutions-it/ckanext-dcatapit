@@ -33,7 +33,13 @@ from ckanext.dcat.profiles import DCT, FOAF
 
 from ckanext.dcatapit import validators
 from ckanext.dcatapit.schema import FIELD_THEMES_AGGREGATE
-from ckanext.dcatapit.tests.utils import load_themes, get_example_file
+from ckanext.dcatapit.tests.utils import (
+    LICENSES_FILE,
+    get_example_file,
+    get_voc_file,
+    load_graph,
+    load_themes,
+)
 from ckanext.dcatapit.harvesters.ckanharvester import CKANMappingHarvester
 from ckanext.dcatapit.mapping import (
     DCATAPIT_THEME_TO_MAPPING_ADD_NEW_GROUPS,
@@ -41,7 +47,8 @@ from ckanext.dcatapit.mapping import (
     DCATAPIT_THEMES_MAP,
     theme_aggr_to_theme_uris, _get_extra, theme_name_to_uri, theme_names_to_uris, _get_extra_value
 )
-from ckanext.dcatapit.model.license import License, _get_graph, load_from_graph
+from ckanext.dcatapit.model.license import License
+from ckanext.dcatapit.commands.vocabulary import load_licenses as load_licenses
 
 Session = meta.Session
 
@@ -177,10 +184,9 @@ class TestDCATAPITProfileParsing(BaseParseTest):
 
         harvester = CKANMappingHarvester()
 
-        licenses = get_example_file('licenses.rdf')
-        self.g = _get_graph(path=licenses)
-
-        load_from_graph(path=licenses)
+        licenses_file = get_voc_file(LICENSES_FILE)
+        self.g = load_graph(path=licenses_file)
+        load_licenses(self.g)
         Session.flush()
 
         # clean, no mapping
@@ -404,7 +410,8 @@ class TestDCATAPITProfileParsing(BaseParseTest):
         meta.Session.rollback()
 
     def test_license(self):
-        load_from_graph(path=get_example_file('licenses.rdf'))
+        g = load_graph(path=get_voc_file(LICENSES_FILE))
+        load_licenses(g)
         Session.flush()
 
         dataset = {'title': 'some title',
