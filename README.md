@@ -421,15 +421,37 @@ In order to update the existing translations proceed as follow:
        python setup.py compile_catalog --locale YOUR_LANGUAGE
 
 
-## Updating an old installation
+## Updating an existing installation
+
+### Migration from 1.1.0 to 2.0.0
+
+1. Dump of ckan and datastore databases (this is a safety measure)
+
+2. Run the migration script:
+
+       ckan -c CONFIG_FILE dcatapit migrate-200
+ 
+4. Reindex the datasets 
+
+#### Migration details
+
+The `theme` extra field is now required by the `ckanext-dcat` extension, and it's required to be a valid URI.
+
+The `ckanext-dcatapit` extension used the `theme` field as a dict for holding information about multiple themes and
+subthemes, and this content would conflict with the dcat one.
+
+The migration will move the content from the `theme` extra field to the `themes_aggregate` field,
+while the logic will provide on-the-fly valid content for the `theme` field so that `ckanext-dcat` will not complain.
+
+### Migration from 1.0.0 to 1.1.0
 
 In order to update an old installation (from 1.0.0 to 1.1.0 version):
 
 1. Dump of ckan and datastore databases (this is a safety measure):
 
-		su postgres
-		pg_dump -U postgres -i ckan > ckan.dump
-		pg_dump -U postgres -i datastore > datastore.dump
+        su postgres
+        pg_dump -U postgres -i ckan > ckan.dump
+        pg_dump -U postgres -i datastore > datastore.dump
 
 2. Update extension code:
 
@@ -437,36 +459,36 @@ In order to update an old installation (from 1.0.0 to 1.1.0 version):
 
 3. Update the Solr schema as reported in the installation steps and then restart Solr. In particular ensure that following fields are present in schema.xml:
 
-		<field name="dcat_theme" type="string" indexed="true" stored="false" multiValued="true"/>
-		<field name="dcat_subtheme" type="string" indexed="true" stored="false" multiValued="true"/>
-		<dynamicField name="dcat_subtheme_*" type="string" indexed="true" stored="false" multiValued="true"/>
-		<dynamicField name="organization_region_*" type="string" indexed="true" stored="false" multiValued="true"/>
-		<dynamicField name="resource_license_*" type="string" indexed="true" stored="false" multiValued="true"/>
-		<field name="resource_license" type="string" indexed="true" stored="false" multiValued="true"/>
+        <field name="dcat_theme" type="string" indexed="true" stored="false" multiValued="true"/>
+        <field name="dcat_subtheme" type="string" indexed="true" stored="false" multiValued="true"/>
+        <dynamicField name="dcat_subtheme_*" type="string" indexed="true" stored="false" multiValued="true"/>
+        <dynamicField name="organization_region_*" type="string" indexed="true" stored="false" multiValued="true"/>
+        <dynamicField name="resource_license_*" type="string" indexed="true" stored="false" multiValued="true"/>
+        <field name="resource_license" type="string" indexed="true" stored="false" multiValued="true"/>
 
 4. Ensure that all the configuration properties required by the new version have been properly provided in .ini file (see [Installation](#installation) paragraph)
 
 5. Activate the virtual environment:
 
-		. /usr/lib/ckan/default/bin/activate
+        . /usr/lib/ckan/default/bin/activate
 6. Run model update
 
         paster --plugin=ckanext-dcatapit vocabulary initdb --config=/etc/ckan/default/production.ini
 
 7. Run vocabulary load commands (regions, licenses and sub-themes):
 
-		wget "https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/territorial-classifications/regions/regions.rdf" -O "/tmp/regions.rdf"
+        wget "https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/territorial-classifications/regions/regions.rdf" -O "/tmp/regions.rdf"
 	
-		paster --plugin=ckanext-dcatapit vocabulary load --filename "/tmp/regions.rdf" --name regions --config "/etc/ckan/default/production.ini"
+        paster --plugin=ckanext-dcatapit vocabulary load --filename "/tmp/regions.rdf" --name regions --config "/etc/ckan/default/production.ini"
 
-		wget "https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/licences/licences.rdf" -O "/tmp/licenses.rdf"
+        wget "https://raw.githubusercontent.com/italia/daf-ontologie-vocabolari-controllati/master/VocabolariControllati/licences/licences.rdf" -O "/tmp/licenses.rdf"
 	
-		paster --plugin=ckanext-dcatapit vocabulary load --filename "/tmp/licenses.rdf" --name licenses --config "/etc/ckan/default/production.ini"
-		paster --plugin=ckanext-dcatapit vocabulary load --filename "ckanext-dcatapit/examples/eurovoc_mapping.rdf" --name subthemes --config "/etc/ckan/default/production.ini" "ckanext-dcatapit/examples/eurovoc.rdf"
+        paster --plugin=ckanext-dcatapit vocabulary load --filename "/tmp/licenses.rdf" --name licenses --config "/etc/ckan/default/production.ini"
+        paster --plugin=ckanext-dcatapit vocabulary load --filename "ckanext-dcatapit/examples/eurovoc_mapping.rdf" --name subthemes --config "/etc/ckan/default/production.ini" "ckanext-dcatapit/examples/eurovoc.rdf"
 
 8. Run data migration command:
 
-        paster --plugin=ckanext-dcatapit vocabulary migrate_data --config=/etc/ckan/default/production.ini > migration.log
+        ckan -c CONFIG_FILE dcatapit migrate-110
 
 You can review migration results by viewing `migration.log` file. It will contain list of messages generated during migration. 
 There are additional command switches that can be used to optimize processing:

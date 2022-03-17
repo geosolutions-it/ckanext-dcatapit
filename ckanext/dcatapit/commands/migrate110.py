@@ -10,6 +10,7 @@ from ckan.lib.base import config
 from ckan.lib.navl.dictization_functions import Invalid
 from ckan.logic import ValidationError
 from ckan.logic.validators import tag_name_validator
+from ckan.model.meta import Session
 from ckan.model import (
     Group,
     GroupExtra,
@@ -17,10 +18,10 @@ from ckan.model import (
     PackageExtra,
     repo,
 )
-from ckan.model.meta import Session
 
 from ckanext.multilang.model import PackageMultilang as ML_PM
 
+from ckanext.dcatapit.schema import FIELD_THEMES_AGGREGATE
 from ckanext.dcatapit import validators
 import ckanext.dcatapit.interfaces as interfaces
 
@@ -33,7 +34,10 @@ DATE_FORMAT = '%d-%m-%Y'
 log = logging.getLogger(__name__)
 
 
-def do_migrate_data(limit=None, offset=None, skip_orgs=False):
+def do_migrate_data(limit=None, offset=None, skip_orgs=False, pkg_uuid: list = None):
+    # Data migrations from 1.0.0 to 1.1.0
+    # ref: https://github.com/geosolutions-it/ckanext-dcatapit/issues/188
+
     from ckanext.dcatapit.plugin import DCATAPITPackagePlugin
 
     user = toolkit.get_action('get_site_user')({'ignore_auth': True}, {})
@@ -77,7 +81,7 @@ def do_migrate_data(limit=None, offset=None, skip_orgs=False):
     else:
         log.info(u'Skipping organizations processing')
     pcontext = context.copy()
-    pkg_list = get_package_list()
+    pkg_list = get_package_list(pkg_uuid)
     pcount = pkg_list.count()
     log.info(f'processing {pcount} packages')
     errored = []
@@ -153,12 +157,18 @@ def do_migrate_data(limit=None, offset=None, skip_orgs=False):
                 log.error(
                     f' {ptitile} at position {position}: {err.__class__}{err_summary}'
                 )
+    return pidx_count
 
 
-def get_package_list():
-    return Session.query(Package.name).filter(Package.state == 'active',
-                                              Package.type == 'dataset') \
-        .order_by(Package.title)
+def get_package_list(pkg_uuid=None):
+    query = Session.query(Package.name)\
+                .filter(Package.state.in_(['active', 'draft']),
+                        Package.type == 'dataset')
+
+    if pkg_uuid:
+        query = query.filter(Package.id.in_(pkg_uuid))
+
+    return query.order_by(Package.title)
 
 
 def get_organization_list():
@@ -222,6 +232,8 @@ def update_conforms_to(pdata):
 
 
 def update_creator(pdata):
+    # move "creator_name" and "creator_identifier" into a json struct in field "creator"
+    # old format foresaw a single creator, new struct allows N creators
     if pdata.get('creator'):
         return
     cname = pdata.pop('creator_name', None)
@@ -250,6 +262,9 @@ DEFAULT_THEME = json.dumps([{'theme': 'OP_DATPRO', 'subthemes': []}])
 
 
 def update_theme(pdata):
+    if FIELD_THEMES_AGGREGATE in pdata:
+        return
+
     theme = pdata.pop('theme', None)
     if not theme:
         to_delete = []

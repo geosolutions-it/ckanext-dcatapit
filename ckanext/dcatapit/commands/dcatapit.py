@@ -2,7 +2,8 @@
 import click
 import logging
 
-from ckanext.dcatapit.commands.migrate import do_migrate_data
+import ckanext.dcatapit.commands.migrate110 as migrate110
+import ckanext.dcatapit.commands.migrate200 as migrate200
 from ckanext.dcatapit.commands.vocabulary import load_from_file as load_voc
 
 log = logging.getLogger(__name__)
@@ -28,18 +29,25 @@ def initdb():
         click.secho('DCATAPIT DB tables not created', fg=u"yellow")
 
 
-@dcatapit.command()
+@dcatapit.command(help='Migrate from 1.0.0 version to 1.1.0 (many elements 0..1 now are 0..N)')
 @click.option('-o', '--offset', default=None, type=int,
               help='Start from dataset at offset during data migration')
 @click.option('-l', '--limit', default=None, type=int,
               help='Limit number of processed datasets during data migration')
 @click.option('-s', '--skip-orgs', is_flag=True,
               help='Skip organizations in data migration')
-def migrate_data(offset, limit, skip_orgs=False):
-    do_migrate_data(limit=limit, offset=offset, skip_orgs=skip_orgs)
+def migrate_110(offset, limit, skip_orgs=False):
+    migrate110.do_migrate_data(limit=limit, offset=offset, skip_orgs=skip_orgs)
 
 
-@dcatapit.command()
+@dcatapit.command(help='Migrate to 2.0.0 (themes are encoded in a different named field)')
+@click.option('-f', '--fix-old', is_flag=True, default=False,
+              help='Try and fix datasets in older 1.0.0 format')
+def migrate_200(fix_old):
+    migrate200.migrate(fix_old)
+
+
+@dcatapit.command(help='Load an RDF vocabulary into the DB')
 @click.option('-f', "--filename", required=False, help='Path to a file', type=str)
 @click.option('--url', required=False, help='URL to a resource')
 @click.option('--format', default='xml', help='Use specific graph format (xml, turtle..), default: xml')
