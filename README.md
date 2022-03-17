@@ -429,7 +429,11 @@ In order to update the existing translations proceed as follow:
 
 2. Run the migration script:
 
-       ckan -c CONFIG_FILE dcatapit migrate-200
+       ckan -c $CONFIG_FILE dcatapit migrate-200
+
+3. Update the DB:
+
+       ckan -c $CONFIG_FILE db upgrade -p dcatapit_pkg
  
 4. Reindex the datasets 
 
@@ -442,6 +446,8 @@ subthemes, and this content would conflict with the dcat one.
 
 The migration will move the content from the `theme` extra field to the `themes_aggregate` field,
 while the logic will provide on-the-fly valid content for the `theme` field so that `ckanext-dcat` will not complain.
+
+The `db upgrade` will remove some harmful constraints in the vocabulary model.
 
 ### Migration from 1.0.0 to 1.1.0
 
