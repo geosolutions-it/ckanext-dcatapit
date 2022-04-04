@@ -43,7 +43,7 @@ def migrate(fix_old=False):
     log.info(f'Obsolete theme found: {cnt_obsolete_found}')
     if fix_old:
         log.info(f'Obsolete theme migrated: {cnt_obsolete_migrated}')
-    else:
+    elif cnt_obsolete_found:
         log.info(f'*** You may want to use the --fix-old argument to fix the pre-1.1.0 datasets')
 
 def migrate_themes():
@@ -67,15 +67,16 @@ def check_obsolete_themes(fix_old):
             .filter(PackageExtra.value.notlike('%"subthemes"%'))
 
     cnt_bad = bad_extra_themes.count()
+    migrated = 0
+
     if cnt_bad:
         log.error(f'There are {cnt_bad} themes in the 1.0.0 plain format. Please review your DB.')
 
-    migrated = 0
-    if fix_old:
-        import ckanext.dcatapit.commands.migrate110 as migrate110
+        if fix_old:
+            import ckanext.dcatapit.commands.migrate110 as migrate110
 
-        uuid = [pe.package_id for pe in bad_extra_themes]
-        log.debug(f'bad packages id {uuid}')
-        migrated = migrate110.do_migrate_data(skip_orgs=True, pkg_uuid=uuid)
+            uuid = [pe.package_id for pe in bad_extra_themes]
+            log.debug(f'bad packages id {uuid}')
+            migrated = migrate110.do_migrate_data(skip_orgs=True, pkg_uuid=uuid)
 
     return cnt_bad, migrated
