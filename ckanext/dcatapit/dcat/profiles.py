@@ -798,7 +798,7 @@ class ItalianDCATAPProfile(RDFProfile):
         if 'telephone' in org_dict.keys():
             g.add((poc, VCARD.hasTelephone, Literal(org_dict.get('telephone'))))
         if 'site' in org_dict.keys():
-            g.add((poc, VCARD.hasURL, Literal(org_dict.get('site'))))
+            g.add((poc, VCARD.hasURL, URIRef(org_dict.get('site'))))
 
         # Rights holder : Agent,
         # holder_ref keeps graph reference to holder subject
