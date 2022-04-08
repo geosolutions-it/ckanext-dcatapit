@@ -2,7 +2,7 @@
 {% set pkg_fields = h.get_dcatapit_package_schema() %}
 {% set icustom_fields = [] %}
 {% for custom_field in h.dcatapit_get_icustomschema_fields() %}
-    {% if {'name': custom_field['name']} not in icustom_fields %}
+    {% if {'name': custom_field['name']} not in icustom_fields and not custom_field['in_tab']%}
         {% set tmp=icustom_fields.append({'name': custom_field['name']}) %}
     {% endif %}
 {% endfor %}
@@ -10,7 +10,9 @@
 {% block package_basic_fields_custom %}
     {{ super() }}
 
-    <div id="dcatapit-edit-form-settings" class="hidden">{{ h.json_dump({'tabs': [
+    {% block dcatapit_package_basic_fields_custom %}
+    {% block dcatapit_package_basic_fields_custom_settings %}
+    <div id="dcatapit-edit-form-settings" class="hidden" ext="dcatapit">{{ h.json_dump({'tabs': [
     {'id': 'information',
     'name': _('Information'),
     'fields': [{'name': 'title'},
@@ -46,7 +48,7 @@
      'fields': [
                 {'name': 'issued', 'class': 'form-control', 'style': 'width:50%'},
                 {'name': 'modified', 'class': 'form-control', 'style': 'width:50%'},
-                {'name': 'frequency'},
+                {'name': 'frequency', 'class': 'form-control', 'style': 'width:50%'},
                 {'name': 'released'},
                 {'name': 'temporal_coverage', 'parent': '.temporal-coverage-wrap'},
                ]},
@@ -64,8 +66,8 @@
     {'id': 'related',
      'name': _('Related Datasets'),
      'fields': [
-                {'name': 'is_version_of', 'class': 'form-control', 'style': 'width:50%'},
-                {'name': 'url', 'class': 'form-control', 'style':'width:50%'}
+                {'name': 'is_version_of', 'class': 'form-control',},
+                {'name': 'url', 'class': 'form-control'}
               ]},
     {'id': 'extra',
      'name': _('Additional Info'),
@@ -76,13 +78,18 @@
                 {'name': 'maintainer_email'},] + icustom_fields,
      'use_extra': true},
     ]}) }}
+    {% endblock %}
     </div>
     {% asset 'ckanext-dcatapit/dcatapit_style' %}
     {% asset 'ckanext-dcatapit/dcatapit_script' %}
 	{% snippet 'snippets/dcatapit_form_fields.html', data=data, errors=errors, schema_fields=pkg_fields %}
     {% if h.dcatapit_enable_form_tabs() %}
-    <div class="dcatapit-form" data-module="dcatapit-edit-form" data-module-settings-container="#dcatapit-edit-form-settings" data-module-form-container="#dataset-edit">
+    <div class="dcatapit-form"
+         data-module="dcatapit-edit-form"
+         data-module-settings-container="#dcatapit-edit-form-settings"
+         data-module-form-container="#dataset-edit">
     </div>
     {% endif %}
+    {% endblock %}
 {% endblock %}
 

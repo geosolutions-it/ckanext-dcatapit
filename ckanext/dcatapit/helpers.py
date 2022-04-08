@@ -363,6 +363,17 @@ def get_icustomschema_fields():
     return out
 
 
+def get_icustomschema_org_fields():
+    out = []
+    for plugin in PluginImplementations(interfaces.ICustomSchema):
+        extra_schema = plugin.get_custom_org_schema()
+
+        for extra in extra_schema:
+            extra['external'] = True
+        out.extend(extra_schema)
+    return out
+
+
 def dataset_is_local(pkg_id):
     q = Session.query(HarvestObject).filter(HarvestObject.package_id == pkg_id).exists()
     is_remote = Session.query(q).scalar()

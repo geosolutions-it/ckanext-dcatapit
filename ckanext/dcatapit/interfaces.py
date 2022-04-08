@@ -18,13 +18,42 @@ log = logging.getLogger(__name__)
 
 
 class ICustomSchema(Interface):
-    '''
-    Allows extensions to provide their own schema fields.
-    '''
+    """
+    Allows extensions to extend DCATAPIT schema
+    """
 
     def get_custom_schema(self):
-        '''gets the array containing the custom schema fields'''
+        """
+        Provide the custom fields
+        :return: an array of dict representing the new fields, in the same way the fields are defined in schema.py.
+                 You may want to specify {'in_tab': True} if the field is handled in an overriding package_basic_field
+        """
         return []
+
+    def get_schema_updates(self):
+        """
+        Provide info to modify default DCATAPIT fields
+        :return: a dict {field_schema_name: {map of attribs to be changed}} of the fields to be updates
+        """
+        return {}
+
+
+class ICustomOrganizationSchema(Interface):
+    """
+    Allows extensions to extend DCATAPIT schema for Organizations
+    """
+
+    def get_custom_org_schema(self):
+        """
+        Provide the custom fields for Orgs
+        """
+        return []
+
+    def get_org_schema_updates(self):
+        """
+        Provide info to modify default DCATAPIT fields for Orgs
+        """
+        return {}
 
 
 def get_language():

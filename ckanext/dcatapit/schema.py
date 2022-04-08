@@ -1,9 +1,12 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
+import logging
 from ckan.common import _
+from ckan.plugins import PluginImplementations
+
+from ckanext.dcatapit.interfaces import ICustomSchema
 
 FIELD_THEMES_AGGREGATE = 'themes_aggregate'
+
+log = logging.getLogger(__name__)
 
 def get_custom_config_schema(show=True):
     if show:
@@ -58,7 +61,7 @@ def get_custom_config_schema(show=True):
 
 
 def get_custom_organization_schema():
-    return [
+    org_schema = [
         {
             'name': 'email',
             'validator': ['ignore_missing'],
@@ -110,6 +113,10 @@ def get_custom_organization_schema():
             'placeholder': _('organization IPA/IVA code')
         }
     ]
+
+    from ckanext.dcatapit.helpers import get_icustomschema_org_fields
+    org_schema.extend(get_icustomschema_org_fields())
+    return org_schema
 
 
 def get_custom_package_schema():
@@ -347,9 +354,21 @@ def get_custom_package_schema():
         }
     ]
 
+    _update_schema_fields(package_schema)
+
     from ckanext.dcatapit.helpers import get_icustomschema_fields
     package_schema.extend(get_icustomschema_fields())
     return package_schema
+
+
+def _update_schema_fields(package_schema: dict):
+    for plugin in PluginImplementations(ICustomSchema):
+        schema_updates = plugin.get_schema_updates()
+        for field in package_schema:
+            if field['name'] in schema_updates:
+                log.debug(f'Plugin {plugin} updating schema field "{field["name"]}"')
+                field.update(schema_updates[field['name']])
+                field['tainted'] = True
 
 
 def get_custom_resource_schema():
