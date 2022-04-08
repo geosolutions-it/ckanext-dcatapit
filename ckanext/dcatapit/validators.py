@@ -285,6 +285,7 @@ def dcatapit_creator(value, context):
 DATE_FORMATS = ['%Y-%m-%d',
                 '%d-%m-%Y',
                 '%Y%m%d',
+                '%y-%m-%d',
                 '%Y-%m-%dT%H:%M:%S',
                 '%Y-%m-%dT%H:%M:%S %z',
                 '%Y-%m-%dT%H:%M:%S %Z',

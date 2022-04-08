@@ -4,8 +4,13 @@
     {%- set extra_html = caller() if caller -%}
 
     {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %}
-        <input id="{{ id or name }}" type="{{ type }}" name="{{ name }}" value="{{ value | empty_and_escape }}"
-               placeholder="{{ placeholder }}" {{ attributes(attrs) }} />
+        <input id="{{ id or name }}"
+               type="{{ type }}"
+               name="{{ name }}"
+               value="{{ value | empty_and_escape }}"
+               class="form-control"
+               placeholder="{{ placeholder }}"
+               {{ attributes(attrs) }} />
         {{ help_block(help) }}
 
     {% endcall %}
@@ -80,7 +85,9 @@ Old implementation of the couple element (one element with comma separated value
 {% endmacro %}
 
 
-{% macro couple(name, labels=(), names=(), id="", label="", values=(), placeholders=(), error="", types="", classes=[], attrs={}, is_required=false, key_values=(), help='', read_only=False, modify_fields=False) %}
+{% macro couple(name, labels=(), names=(), id="", label="",
+                values=(), placeholders=(), error="", types="", classes=[], attrs={},
+                is_required=false, key_values=(), help='', read_only=False, modify_fields=False) %}
     {%- set classes = (classes|list) -%}
     {%- set label_id = (id) ~ "-key" -%}
     {%- set extra_html = caller() if caller -%}
