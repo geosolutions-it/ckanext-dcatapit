@@ -363,12 +363,13 @@ def get_custom_package_schema():
 
 def _update_schema_fields(package_schema: dict):
     for plugin in PluginImplementations(ICustomSchema):
-        schema_updates = plugin.get_schema_updates()
-        for field in package_schema:
-            if field['name'] in schema_updates:
-                log.debug(f'Plugin {plugin} updating schema field "{field["name"]}"')
-                field.update(schema_updates[field['name']])
-                field['tainted'] = True
+        if hasattr(plugin, 'get_schema_updates'):
+            schema_updates = plugin.get_schema_updates()
+            for field in package_schema:
+                if field['name'] in schema_updates:
+                    log.debug(f'Plugin {plugin} updating schema field "{field["name"]}"')
+                    field.update(schema_updates[field['name']])
+                    field['tainted'] = True
 
 
 def get_custom_resource_schema():
