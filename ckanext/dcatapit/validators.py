@@ -405,6 +405,12 @@ def dcatapit_subthemes(key, flattened_data, errors, context):
                 x, idx, k = tkey
                 if x == 'extras' and k == 'key' and flattened_data[tkey] == 'theme':
                     return flattened_data[('extras', idx, 'value')]
+
+        # Not found in expected fields, Look into the discarded fields
+        __extras = flattened_data.get(('__extras',), None)
+        if __extras and 'theme' in __extras:
+            return __extras['theme']
+
         return None
 
     def _do_return(value):
