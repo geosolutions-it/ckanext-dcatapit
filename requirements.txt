@@ -6,3 +6,6 @@ markupsafe==1.1.1
 rdflib==4.2.1
 
 # geomet==0.3.0
+
+# this is a requirement by ckanext-harvest that is rolled back by ckanext-dcat, so let's fix it
+ckantoolkit>=0.0.7
