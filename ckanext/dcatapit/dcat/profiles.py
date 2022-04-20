@@ -764,6 +764,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
         if euro_poc:
             g.remove((dataset_ref, DCAT.contactPoint, euro_poc))
+            remove_unused_object(g, euro_poc, "contactPoint")
 
         org_id = dataset_dict.get('owner_org')
 
