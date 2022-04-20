@@ -726,9 +726,11 @@ class ItalianDCATAPProfile(RDFProfile):
         #   </foaf:Organization>
         # </dct:publisher>
 
+        # remove the publisher created by the dcat plugin, bc we are going to encode it in a different way
         for s, p, o in g.triples((dataset_ref, DCT.publisher, None)):
-            # log.info("Removing publisher %r", o)
+            log.debug("Removing publisher %r", o)
             g.remove((s, p, o))
+            remove_unused_object(g, o, "publisher")  # if the publisher node is not used elsewhere, remove it
 
         publisher_ref = self._add_agent(dataset_dict, dataset_ref, 'publisher', DCT.publisher, use_default_lang=True)
 
@@ -1221,6 +1223,15 @@ def organization_uri(orga_dict):
     uri = '{0}/organization/{1}'.format(catalog_uri().rstrip('/'), orga_dict.get('id', None))
 
     return uri
+
+
+def remove_unused_object(g, o, oname='object'):
+    usage_s, usage_p = next(g.subject_predicates(o), (None, None))
+    if not usage_s:
+        log.debug(f'Removing unused {oname} {o}')
+        for ps, pp, po in g.triples((o, None, None)):
+            log.debug(f' - Removing {oname} detail {pp}::{po}')
+            g.remove((ps, pp, po))
 
 
 def guess_format(resource_dict):
