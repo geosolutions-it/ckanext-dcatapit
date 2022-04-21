@@ -1,4 +1,4 @@
-[![Build status](https://github.com/geosolutions-it/ckanext-dcatapit/actions/workflows/test.yml/badge.svg)](https://github.com/geosolutions-it/ckanext-dcatapit/actions/workflows/test.yml)
+<!-- [![Build status](https://github.com/geosolutions-it/ckanext-dcatapit/actions/workflows/test.yml/badge.svg)](https://github.com/geosolutions-it/ckanext-dcatapit/actions/workflows/test.yml) -->
 [![Code Coverage](https://codecov.io/github/geosolutions-it/ckanext-dcatapit/coverage.svg?branch=master)](https://codecov.io/github/geosolutions-it/ckanext-dcatapit?branch=master)
 
 # ckanext-dcatapit
