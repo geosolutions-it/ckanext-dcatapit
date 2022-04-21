@@ -574,17 +574,17 @@ ckan.module('geonames', function($){
  });
 
 
-ckan.module('dcatapit-help', function($){
-    var help = {
-        initialize: function(){
-            $.proxyAll(this, /_on/);
-            $(this.el.find('i')).tooltip();
-        }
-    }
+// ckan.module('dcatapit-help', function($){
+//     var help = {
+//         initialize: function(){
+//             $.proxyAll(this, /_on/);
+//             $(this.el.find('i')).tooltip();
+//         }
+//     }
 
-    return $.extend({}, help);
+//     return $.extend({}, help);
 
- });
+//  });
 
 
 ckan.module('dcatapit-theme', function($){
