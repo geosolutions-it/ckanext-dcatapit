@@ -169,14 +169,14 @@
                                      help=field.help,
                                      classes=[]) }}
             {% elif field.element == 'licenses_tree' %}
-                {% set attrs = {'class': 'form-control', 'style': 'width:50%'} %}
+                {% set attrs = {'class': 'form-control', 'style': 'width:100%'} %}
                 {% set licenses = h.get_resource_licenses_tree(data[field.name], lang=h.lang()) %}
 
                     {{ dform.select(field.name,
                                    label=field.label,
                                    id='field-' + field.name,
                                    options=licenses,
-                                   selected=data[field.name],
+                                   selected=data[field.name] or "https://w3id.org/italia/controlled-vocabulary/licences/A21_CCBY40",
                                    error=errors[field.name],
                                    help=field.help,
                                    attrs=attrs) }}
