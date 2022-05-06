@@ -112,11 +112,6 @@ def test_org_db_to_form_schema():
     ok_(schema)
 
 
-def test_org_default_show_group_schema():
-    schema = organization_plugin.default_show_group_schema()
-    ok_(schema)
-
-
 # ####################################
 # DCATAPITPackagePlugin test methods #
 # ####################################

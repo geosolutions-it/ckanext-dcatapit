@@ -22,7 +22,7 @@ from ckanext.dcatapit.controllers.thesaurus import ThesaurusController, get_thes
 from ckanext.dcatapit.model.license import License
 from ckanext.dcatapit.schema import FIELD_THEMES_AGGREGATE
 
-log = logging.getLogger(__file__)
+log = logging.getLogger(__name__)
 
 try:
     from ckan.lib.plugins import DefaultTranslation
@@ -126,7 +126,6 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         if MLR:
             schema = MLR.update_schema(schema)
 
-        log.debug('Schema updated for DCAT_AP-TI:  %r', schema)
         return schema
 
     def create_package_schema(self):
@@ -192,7 +191,6 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         # conditionally include schema fields from MultilangResourcesPlugin
         if MLR:
             schema = MLR.update_schema(schema)
-        log.debug('Schema updated for DCAT_AP-TI:  %r', schema)
 
         return schema
 
@@ -489,7 +487,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                     aggr_raw = next((x['value'] for x in pkg_dict.get('extras', [])
                                      if x['key'] == FIELD_THEMES_AGGREGATE), None)
                 if aggr_raw is None:
-                    log.error('No Aggregates in dataset!')
+                    log.error(f'No Aggregates in dataset {pkg_dict.get("id", "_")}')
                     aggr_raw = json.dumps([{'theme': 'OP_DATPRO', 'subthemes':[]}])
                     pkg_dict[FIELD_THEMES_AGGREGATE] = aggr_raw
 
@@ -573,7 +571,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         return facets_dict
 
 
-class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupForm):
+class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultOrganizationForm):
 
     # IConfigurer
     plugins.implements(plugins.IConfigurer)
@@ -599,41 +597,6 @@ class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupFo
         }
 
     # ------------- IGroupForm ---------------#
-
-    def group_controller(self):
-        return 'organization'
-
-    def group_form(self):
-        return 'organization/new_organization_form.html'
-
-    def setup_template_variables(self, context, data_dict):
-        pass
-
-    def new_template(self):
-        return 'organization/new.html'
-
-    def about_template(self):
-        return 'organization/about.html'
-
-    def index_template(self):
-        return 'organization/index.html'
-
-    def admins_template(self):
-        return 'organization/admins.html'
-
-    def bulk_process_template(self):
-        return 'organization/bulk_process.html'
-
-    def read_template(self):
-        return 'organization/read.html'
-
-    # don't override history_template - use group template for history
-
-    def edit_template(self):
-        return 'organization/edit.html'
-
-    def activity_template(self):
-        return 'organization/activity_stream.html'
 
     def is_fallback(self):
         # Return True to register this plugin as the default handler for
@@ -666,67 +629,38 @@ class DCATAPITOrganizationPlugin(plugins.SingletonPlugin, toolkit.DefaultGroupFo
             return self.form_to_db_schema()
 
     def form_to_db_schema_api_create(self):
-        schema = super(DCATAPITOrganizationPlugin, self).form_to_db_schema_api_create()
+        schema = logic.schema.default_group_schema()
         schema = self._modify_group_schema(schema)
         return schema
 
     def form_to_db_schema_api_update(self):
-        schema = super(DCATAPITOrganizationPlugin, self).form_to_db_schema_api_update()
+        schema = logic.schema.default_update_group_schema()
         schema = self._modify_group_schema(schema)
         return schema
 
     def form_to_db_schema(self):
-        schema = super(DCATAPITOrganizationPlugin, self).form_to_db_schema()
+        schema = logic.schema.group_form_schema()
         schema = self._modify_group_schema(schema)
         return schema
 
     def _modify_group_schema(self, schema):
+        TO_EXTRAS = toolkit.get_converter('convert_to_extras')
+
         for field in dcatapit_schema.get_custom_organization_schema():
-
-            validators = []
-            for validator in field['validator']:
-                validators.append(toolkit.get_validator(validator))
-
-            schema.update({
-                field['name']: validators + [
-                    toolkit.get_converter('convert_to_extras')
-                ]
-            })
+            schema[field['name']] = [toolkit.get_validator(v) for v in field['validator']] + [ TO_EXTRAS ]
 
         return schema
 
     def db_to_form_schema(self):
         '''This is an interface to manipulate data from the database
         into a format suitable for the form (optional)'''
-        schema = self.default_show_group_schema()
+        schema = logic.schema.default_show_group_schema()
+        schema['extras'] = logic.schema.default_extras_schema()
+
+        FROM_EXTRAS = toolkit.get_converter('convert_from_extras')
 
         for field in dcatapit_schema.get_custom_organization_schema():
-
-            validators = []
-            for validator in field['validator']:
-                validators.append(toolkit.get_validator(validator))
-
-            schema.update({
-                field['name']: [
-                    toolkit.get_converter('convert_from_extras')
-                ] + validators
-            })
-
-        return schema
-
-    def default_show_group_schema(self):
-        schema = logic.schema.default_group_schema()
-
-        # make default show schema behave like when run with no validation
-        schema['num_followers'] = []
-        schema['created'] = []
-        schema['display_name'] = []
-        #schema['extras'] = {'__extras': [ckan.lib.navl.validators.keep_extras]}
-        schema['package_count'] = []
-        schema['packages'] = {'__extras': [lib.navl.validators.keep_extras]}
-        schema['revision_id'] = []
-        schema['state'] = []
-        schema['users'] = {'__extras': [lib.navl.validators.keep_extras]}
+            schema[field['name']] = [ FROM_EXTRAS ] + [toolkit.get_validator(v) for v in field['validator']]
 
         return schema
 
