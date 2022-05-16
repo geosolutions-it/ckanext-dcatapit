@@ -61,7 +61,7 @@ def get_language():
         lang = get_lang()
     except Exception as e:
         lang = config.get(u'ckan.locale_default', u'it')
-        log.debug(f'Exception while retrieving lang. Using [{lang}]')
+        # log.debug(f'Exception while retrieving lang. Using [{lang}]', stack_info=True)
 
     if lang is not None:
         if isinstance(lang, list):
@@ -341,6 +341,14 @@ def get_localized_tag_name(tag_name=None, fallback_lang=None, lang=None):
                 return tag_name
     else:
         return None
+
+
+def get_localized_tag_by_id(tag_id, lang=None):
+    if lang is None:
+        lang = get_language()
+
+    localized_tag_name = TagLocalization.by_tag_id(tag_id, lang)
+    return localized_tag_name.text if localized_tag_name else None
 
 
 def get_all_localized_tag_labels(tag_name):

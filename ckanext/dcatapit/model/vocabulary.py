@@ -29,7 +29,7 @@ class TagLocalization(DomainObject):
     @classmethod
     def by_name(cls, tag_name, tag_lang, autoflush=True):
         # !!! TODO: deprecate this method: name is not unique, since different vocs may have the same names
-        log.warning('Deprecated TagLocalization.by_name call')
+        log.warning(f'Deprecated TagLocalization.by_name call for "{tag_name}"')
         query = meta.Session.query(TagLocalization)\
             .filter(TagLocalization.tag_name == tag_name,
                     TagLocalization.lang == tag_lang)\

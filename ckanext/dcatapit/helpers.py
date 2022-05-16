@@ -59,21 +59,24 @@ def get_dcatapit_resource_schema():
     return dcatapit_schema.get_custom_resource_schema()
 
 
-def get_vocabulary_items(vocabulary_name, keys=None):
+def get_vocabulary_items(vocabulary_name, keys=None, lang=None):
     try:
         tag_list = toolkit.get_action('tag_list')
-        items = tag_list(data_dict={'vocabulary_id': vocabulary_name})
+        items = tag_list(data_dict={'vocabulary_id': vocabulary_name, 'all_fields': True})
 
+        # log.warning(f'ITEMS {items}')
         tag_list = []
-        for item in items:
+        for full_item in items:
+            tag_id = full_item['id']
+            tag_name = full_item['name']
             if keys:
                 for key in keys:
-                    if key == item:
-                        localized_tag_name = interfaces.get_localized_tag_name(item)
+                    if key == tag_name:
+                        localized_tag_name = interfaces.get_localized_tag_name(tag_name, lang)
                         tag_list.append(localized_tag_name)
             else:
-                localized_tag_name = interfaces.get_localized_tag_name(item)
-                tag_list.append({'text': localized_tag_name, 'value': item})
+                localized_tag_name = interfaces.get_localized_tag_by_id(tag_id, lang)
+                tag_list.append({'text': localized_tag_name, 'value': tag_name})
 
         return tag_list
     except toolkit.ObjectNotFound:
