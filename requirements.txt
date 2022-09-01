@@ -1,6 +1,6 @@
 #xml_python==0.4.3
 #M2Crypto==0.37.1
-pyjwt==1.7.1
+pyjwt==2.4.0
 cryptography==3.4.7
 markupsafe==1.1.1
 # rdflib==4.2.1
