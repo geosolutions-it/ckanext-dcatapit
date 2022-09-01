@@ -3,7 +3,7 @@
 pyjwt==1.7.1
 cryptography==3.4.7
 markupsafe==1.1.1
-rdflib==4.2.1
+# rdflib==4.2.1
 
 # geomet==0.3.0
 
