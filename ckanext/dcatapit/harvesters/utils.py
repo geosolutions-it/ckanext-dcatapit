@@ -43,15 +43,14 @@ def get_responsible_party(citedResponsiblePartys, agent_config):
         role = agent_config.get('role', None)
         if not role:
             log.warning('Warning: Agent role missing in harvest configuration ...')
+            continue
 
         if party['role'] == role:
-            publisher_name = party['organisation-name']
-            agent_code, agent_name = get_agent(publisher_name, agent_config)
+            remote_name = party['organisation-name']
+            parsed_code, parsed_name = get_agent(remote_name, agent_config)
 
-            name = agent_name or publisher_name
-
-            if publisher_name:
-                code = agent_code or agent_config.get('code', None)
+            name = parsed_name or remote_name
+            code = parsed_code or agent_config.get('code', None)
 
             return [name, code]
     return [None, None]

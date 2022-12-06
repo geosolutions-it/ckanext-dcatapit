@@ -61,7 +61,7 @@ ISOKeyword.elements.append(
 
 class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
-    _dcatapit_config = {
+    DEFAULT_CONFIG = {
         'dataset_themes': [{'theme': 'OP_DATPRO', 'subthemes': []}],
         'dataset_places': None,
         'dataset_languages': 'ITA',
@@ -128,9 +128,7 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
 
         self._ckan_locales_mapping = self.source_config.get('ckan_locales_mapping') or utils._ckan_locales_mapping
 
-        default_values = self.source_config.get('default_values') or {}
-
-        dcatapit_config = self.source_config.get('dcatapit_config', self._dcatapit_config)
+        dcatapit_config = self.source_config.get('dcatapit_config', self.DEFAULT_CONFIG)
 
         # if dcatapit_config and not all(name in dcatapit_config for name in self._dcatapit_config):
         #    dcatapit_config = self._dcatapit_config
@@ -140,9 +138,12 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         # elif not dcatapit_config:
         #    dcatapit_config = self._dcatapit_config
 
-        controlled_vocabularies = dcatapit_config.get('controlled_vocabularies',
-                                                      self._dcatapit_config.get('controlled_vocabularies'))
-        agents = dcatapit_config.get('agents', self._dcatapit_config.get('agents'))
+        controlled_vocabularies = dcatapit_config.get(
+            'controlled_vocabularies',
+            self.DEFAULT_CONFIG.get('controlled_vocabularies'))
+        agents = dcatapit_config.get(
+            'agents',
+            self.DEFAULT_CONFIG.get('agents'))
 
         # ------------------------------#
         #    MANDATORY FOR DCAT-AP_IT   #
@@ -152,51 +153,54 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         identifier = iso_values['guid']
         package_dict['extras'].append({'key': 'identifier', 'value': identifier})
 
-        default_agent_code = identifier.split(':')[0] if ':' in identifier else None
+        default_ipa = identifier.split(':')[0] if ':' in identifier else None
 
         #  -- theme -- #
         dataset_themes = []
         if iso_values['keywords']:
-            default_vocab_id = self._dcatapit_config.get('controlled_vocabularies').get('dcatapit_skos_theme_id')
-            dataset_themes = utils.get_controlled_vocabulary_values('eu_themes',
-                                                                    controlled_vocabularies.get('dcatapit_skos_theme_id', default_vocab_id), iso_values['keywords'])
+            default_vocab_id = self.DEFAULT_CONFIG.get('controlled_vocabularies').get('dcatapit_skos_theme_id')
+            dataset_themes = utils.get_controlled_vocabulary_values(
+                'eu_themes',
+                controlled_vocabularies.get('dcatapit_skos_theme_id', default_vocab_id), iso_values['keywords'])
 
         if dataset_themes:
             dataset_themes = list(set(dataset_themes))
             dataset_themes = [{'theme': str(l), 'subthemes': []} for l in dataset_themes]
 
         else:
-            dataset_themes = default_values.get('dataset_theme')
+            dataset_themes = dcatapit_config.get('dataset_themes')
 
         if isinstance(dataset_themes, str):
             dataset_themes = [{'theme': dt} for dt in dataset_themes.strip('{}').split(',')]
 
-        log.info('Medatata harvested dataset themes: %r', dataset_themes)
+        log.info('Metadata harvested dataset themes: %r', dataset_themes)
         package_dict['extras'].append({'key': FIELD_THEMES_AGGREGATE, 'value': json.dumps(dataset_themes)})
 
         #  -- publisher -- #
-        citedResponsiblePartys = iso_values['cited-responsible-party']
-        agent_name, agent_code = utils.get_responsible_party(citedResponsiblePartys, agents.get('publisher',
-                                                                                                self._dcatapit_config.get('agents').get('publisher')))
+        agent_name, agent_code = utils.get_responsible_party(
+            iso_values['cited-responsible-party'],
+            agents.get('publisher',
+                       self.DEFAULT_CONFIG.get('agents').get('publisher')))
         package_dict['extras'].append({'key': 'publisher_name', 'value': agent_name})
-        package_dict['extras'].append({'key': 'publisher_identifier', 'value': agent_code or default_agent_code})
+        package_dict['extras'].append({'key': 'publisher_identifier', 'value': agent_code or default_ipa})
 
         #  -- modified -- #
         revision_date = iso_values['date-updated'] or iso_values['date-released']
         package_dict['extras'].append({'key': 'modified', 'value': revision_date})
 
         #  -- frequency -- #
-        updateFrequency = iso_values['frequency-of-update']
-        package_dict['extras'].append({'key': 'frequency', 'value':
-                                       mapping_frequencies_to_mdr_vocabulary.get(updateFrequency,
-                                                                                 dcatapit_config.get('frequency', self._dcatapit_config.get('frequency')))})
+        package_dict['extras'].append({
+            'key': 'frequency',
+            'value': mapping_frequencies_to_mdr_vocabulary.get(
+                iso_values['frequency-of-update'],
+                dcatapit_config.get('frequency', self.DEFAULT_CONFIG.get('frequency')))})
 
         #  -- rights_holder -- #
-        citedResponsiblePartys = iso_values['cited-responsible-party']
-        agent_name, agent_code = utils.get_responsible_party(citedResponsiblePartys,
-                                                             agents.get('owner', self._dcatapit_config.get('agents').get('owner')))
+        agent_name, agent_code = utils.get_responsible_party(
+            iso_values['cited-responsible-party'],
+            agents.get('owner', self.DEFAULT_CONFIG.get('agents').get('owner')))
         package_dict['extras'].append({'key': 'holder_name', 'value': agent_name})
-        package_dict['extras'].append({'key': 'holder_identifier', 'value': agent_code or default_agent_code})
+        package_dict['extras'].append({'key': 'holder_identifier', 'value': agent_code or default_ipa})
 
         # -----------------------------------------------#
         #    OTHER FIELDS NOT MANDATORY FOR DCAT_AP-IT   #
@@ -211,19 +215,21 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         #  -- geographical_name  -- #
         dataset_places = []
         if iso_values['keywords']:
-            default_vocab_id = self._dcatapit_config.get('controlled_vocabularies').get('dcatapit_skos_theme_id')
-            dataset_places = utils.get_controlled_vocabulary_values('places',
-                                                                    controlled_vocabularies.get('dcatapit_skos_places_id', default_vocab_id), iso_values['keywords'])
+            default_vocab_id = self.DEFAULT_CONFIG.get('controlled_vocabularies').get('dcatapit_skos_theme_id')
+            dataset_places = utils.get_controlled_vocabulary_values(
+                'places',
+                controlled_vocabularies.get('dcatapit_skos_places_id', default_vocab_id), iso_values['keywords'])
 
         if dataset_places and len(dataset_places) > 1:
             dataset_places = list(set(dataset_places))
             dataset_places = '{' + ','.join(str(l) for l in dataset_places) + '}'
         else:
-            dataset_places = dataset_places[0] if dataset_places and len(dataset_places) > 0 else dcatapit_config.get('dataset_places',
-                                                                                                                      self._dcatapit_config.get('dataset_places'))
+            dataset_places = dataset_places[0] if dataset_places and len(dataset_places) > 0 else \
+                dcatapit_config.get('dataset_places',
+                                    self.DEFAULT_CONFIG.get('dataset_places'))
 
         if dataset_places:
-            log.info('Medatata harvested dataset places: %r', dataset_places)
+            log.info('Metadata harvested dataset places: %r', dataset_places)
             package_dict['extras'].append({'key': 'geographical_name', 'value': dataset_places})
 
         #  -- geographical_geonames_url nothing to do  -- #
@@ -242,9 +248,9 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
                 language = '{' + ','.join(str(l) for l in languages) + '}'
             else:
                 language = languages[0] if len(languages) > 0 else dcatapit_config.get('dataset_languages',
-                                                                                       self._dcatapit_config.get('dataset_languages'))
+                                                                                       self.DEFAULT_CONFIG.get('dataset_languages'))
 
-            log.info('Medatata harvested dataset languages: %r', language)
+            log.info('Metadata harvested dataset languages: %r', language)
         else:
             language = dcatapit_config.get('dataset_language')
 
@@ -261,7 +267,7 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
                 temporal_extent_value = iso_values[key][0]
                 if key == 'temporal-extent-begin':
                     temporal_start = temporal_extent_value
-                if key == 'temporal-extent-end':
+                elif key == 'temporal-extent-end':
                     temporal_end = temporal_extent_value
         if temporal_start:
             temporal_coverage.append({'temporal_start': temporal_start,
@@ -283,13 +289,12 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
         # creator
         # ###############
         #  -- creator -- #
-        citedResponsiblePartys = iso_values['cited-responsible-party']
-        agent_name, agent_code = utils.get_responsible_party(citedResponsiblePartys,
-                                                             agents.get('author', self._dcatapit_config.get('agents').get('author')))
+        agent_name, agent_code = utils.get_responsible_party(
+            iso_values['cited-responsible-party'],
+            agents.get('author', self.DEFAULT_CONFIG.get('agents').get('author')))
 
-        agent_code = agent_code or default_agent_code
-        if (agent_name and agent_code):
-
+        agent_code = agent_code or default_ipa
+        if agent_name and agent_code:
             creator = {}
             creator_lang = self._ckan_locales_mapping.get(iso_values['metadata-language'], 'it').lower()
             creator['creator_name'] = {creator_lang: agent_name}
@@ -305,7 +310,9 @@ class DCATAPITCSWHarvester(CSWHarvester, SingletonPlugin):
             import ckan.logic.action.get as _license
             license_list = _license.license_list({'model': model, 'session': Session, 'user': 'harvest'}, {})
             for license in license_list:
-                if use_constraints == str(license.get('id')) or use_constraints == str(license.get('url')) or (str(license.get('id')) in use_constraints.lower()):
+                if use_constraints == str(license.get('id')) or \
+                        use_constraints == str(license.get('url')) or \
+                        (str(license.get('id')) in use_constraints.lower()):
                     ckan_license = license
                     break
 

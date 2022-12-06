@@ -439,7 +439,9 @@ class ItalianDCATAPProfile(RDFProfile):
 
         # clean from dcat's data, to avoid duplicates
         for obj in g.objects(dataset_ref, DCT.temporal):
+            self.log_remove('temporal', DCT.temporal)
             g.remove((dataset_ref, DCT.temporal, obj,))
+            remove_unused_object(g, obj, "temporal")
 
         temp_cov = dataset_dict.get('temporal_coverage')
 
@@ -527,8 +529,8 @@ class ItalianDCATAPProfile(RDFProfile):
 
         out['identifier'] = str(identifier)
 
-        predicate, basekey = DCT.creator, 'creator'
-        agent_dict, agent_loc_dict = self._parse_agent(alt_id, predicate, basekey)
+        basekey = 'creator'
+        agent_dict, agent_loc_dict = self._parse_agent(alt_id, DCT.creator, basekey)
         agent = {}
         for k, v in agent_dict.items():
             new_k = 'agent_{}'.format(k[len(basekey) + 1:])
@@ -728,7 +730,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
         # remove the publisher created by the dcat plugin, bc we are going to encode it in a different way
         for s, p, o in g.triples((dataset_ref, DCT.publisher, None)):
-            log.debug("Removing publisher %r", o)
+            self.log_remove('publisher', DCT.publisher)
             g.remove((s, p, o))
             remove_unused_object(g, o, "publisher")  # if the publisher node is not used elsewhere, remove it
 
@@ -764,6 +766,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
         if euro_poc:
             g.remove((dataset_ref, DCAT.contactPoint, euro_poc))
+            self.log_remove('contactPoint', DCAT.contactPoint)
             remove_unused_object(g, euro_poc, "contactPoint")
 
         org_id = dataset_dict.get('owner_org')
@@ -801,7 +804,7 @@ class ItalianDCATAPProfile(RDFProfile):
         if 'telephone' in org_dict.keys():
             g.add((poc, VCARD.hasTelephone, Literal(org_dict.get('telephone'))))
         if 'site' in org_dict.keys():
-            g.add((poc, VCARD.hasURL, Literal(org_dict.get('site'))))
+            g.add((poc, VCARD.hasURL, URIRef(org_dict.get('site'))))
 
         # Rights holder : Agent,
         # holder_ref keeps graph reference to holder subject
@@ -1116,6 +1119,7 @@ class ItalianDCATAPProfile(RDFProfile):
 
         value = self._get_dict_value(_dict, key)
         if value:
+            self.log_remove(key, pred)
             self.g.remove((ref, pred, _type(value)))
 
     def _add_concept(self, concepts, tag=None, uri=None):
@@ -1204,6 +1208,9 @@ class ItalianDCATAPProfile(RDFProfile):
 
         self.g.remove((catalog_ref, DCT.language, Literal(config.get(DEFAULT_LANG))))
 
+    def log_remove(self, key, pred):
+        log.debug(f'Removing "{key}" type "{self.g.qname(pred)}"')
+
 
 def organization_uri(orga_dict):
     '''
@@ -1231,7 +1238,8 @@ def remove_unused_object(g, o, oname='object'):
     if not usage_s:
         log.debug(f'Removing unused {oname} {o}')
         for ps, pp, po in g.triples((o, None, None)):
-            log.debug(f' - Removing {oname} detail {pp}::{po}')
+            po_print = g.qname(po) if pp == RDF.type else po
+            log.debug(f' - Removing {oname} detail: {g.qname(pp)}::{po_print}')
             g.remove((ps, pp, po))
 
 

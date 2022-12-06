@@ -297,7 +297,8 @@ def dcatapit_string_to_aggregated_themes(value):
         # no subthemes provided in the old format
         if isinstance(value, str):
             data = [{'theme': s, 'subthemes': []} for s in value.strip('{}').split(',')]
-    out.extend(data)
+    if data:
+        out.extend(data)
     return out
 
 

@@ -95,11 +95,14 @@
                         <tr>
                             <th scope="row" class="dataset-label">{{ _(field.label) }}</th>
                             <td class="dataset-details">
-                                {% if creator.creator_name[lang] %}
-                                <span class="bold">{{_('Name')}}: </span><span>{{ creator.creator_name[lang] }}</span>
+                                {% set crname = creator.creator_name[lang] or creator.creator_name%}
+                                {% if crname %}
+                                <span class="bold">{{_('Name')}}: </span>
+                                <span>{{ crname }}</span>
                                 <br/>
                                 {% endif %}
-                                <span class="bold">IPA/IVA: </span><span>{{ creator.creator_identifier }}</span>
+                                <span class="bold">{{_('IPA/IVA')}}: </span>
+                                <span>{{ creator.creator_identifier }}</span>
                             </td>
                         </tr>
                     {% endfor %}

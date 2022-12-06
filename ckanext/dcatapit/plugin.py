@@ -486,7 +486,8 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                     # let's try and find it in extras:
                     aggr_raw = next((x['value'] for x in pkg_dict.get('extras', [])
                                      if x['key'] == FIELD_THEMES_AGGREGATE), None)
-                if aggr_raw is None:
+
+                if aggr_raw is None or json.loads(aggr_raw) is None:
                     log.error(f'No Aggregates in dataset {pkg_dict.get("id", "_")}')
                     aggr_raw = json.dumps([{'theme': 'OP_DATPRO', 'subthemes':[]}])
                     pkg_dict[FIELD_THEMES_AGGREGATE] = aggr_raw

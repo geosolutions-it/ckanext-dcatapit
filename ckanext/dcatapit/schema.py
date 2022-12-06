@@ -327,8 +327,8 @@ def get_custom_package_schema():
         },
         {
             'name': 'creator',
-                    'element': 'creator',
-                    'label': _('Creator'),
+            'element': 'creator',
+            'label': _('Creator'),
             'type': 'creator',
             'placeholder': '-',
             'validator': ['ignore_missing', 'dcatapit_creator'],
@@ -367,7 +367,7 @@ def _update_schema_fields(package_schema: dict):
             schema_updates = plugin.get_schema_updates()
             for field in package_schema:
                 if field['name'] in schema_updates:
-                    log.debug(f'Plugin {plugin} updating schema field "{field["name"]}"')
+                    log.debug(f'Plugin "{plugin.name}" updating schema field "{field["name"]}"')
                     field.update(schema_updates[field['name']])
                     field['tainted'] = True
 
