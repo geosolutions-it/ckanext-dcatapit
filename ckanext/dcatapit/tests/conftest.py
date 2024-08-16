@@ -6,8 +6,9 @@ from ckan.model import Package, Group, PackageExtra, meta, GroupExtra, Member, P
 from ckanext.harvest.model import HarvestObject, HarvestSource, HarvestJob, HarvestObjectError
 
 from ckan.tests.pytest_ckan.fixtures import clean_db
-from ckanext.harvest.tests.fixtures import harvest_setup
-from ckanext.spatial.tests.conftest import clean_postgis, spatial_setup
+# from ckanext.harvest.tests.fixtures import harvest_setup
+# from ckanext.spatial.tests.conftest import clean_postgis, spatial_setup
+from ckanext.spatial.tests.conftest import harvest_setup
 from ckanext.multilang.tests.conftest import multilang_setup
 
 from ckanext.dcatapit.model import setup_db as dcatapit_setup_db
@@ -17,7 +18,19 @@ from ckanext.dcatapit.model import setup_db as dcatapit_setup_db
 def dcatapit_setup():
     dcatapit_setup_db()
 
+@pytest.fixture
+def clean_dcatapit_db(clean_db, harvest_setup, multilang_setup, dcatapit_setup):
+    return [
+        # clean_postgis,
+        clean_db,
+        # clean_index()
+        harvest_setup,
+        # spatial_setup,
+        multilang_setup,
+        dcatapit_setup,
+        ]
 
+'''
 @pytest.fixture
 def clean_dcatapit_db(clean_postgis, clean_db, harvest_setup, spatial_setup, multilang_setup, dcatapit_setup):
     return [
@@ -29,7 +42,7 @@ def clean_dcatapit_db(clean_postgis, clean_db, harvest_setup, spatial_setup, mul
         multilang_setup,
         dcatapit_setup,
         ]
-
+'''
 
 @pytest.fixture
 def remove_dataset_groups():
@@ -58,3 +71,4 @@ def remove_harvest_stuff():
         meta.Session.query(cls).delete()
 
     meta.Session.commit()
+    

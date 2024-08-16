@@ -19,7 +19,7 @@ from ckan.model import (
     repo,
 )
 
-from ckanext.multilang.model import PackageMultilang as ML_PM
+# from ckanext.multilang.model import PackageMultilang as ML_PM
 
 from ckanext.dcatapit.schema import FIELD_THEMES_AGGREGATE
 from ckanext.dcatapit import validators

@@ -7,7 +7,11 @@ from rdflib.term import URIRef
 
 from sqlalchemy.exc import IntegrityError
 
-from ckan.lib.base import config, model
+# from ckan.lib.base import config, model
+import ckan.model as model
+# from ckantoolkit import config
+from ckan.common import config
+
 from ckan.lib.munge import munge_tag
 from ckan.model import Vocabulary
 from ckan.model.meta import Session
@@ -116,7 +120,6 @@ def load(g, name, uri, eurovoc):
         ret['subthemes_created'] = Subtheme.count()
         Session.commit()
         return ret
-
     return do_load(g, name)
 
 
@@ -136,7 +139,8 @@ def do_load(g, vocab_name: str):
             log.error(f'Unknown action {action}')
 
     if vocab_name == LANGUAGE_THEME_NAME:
-        for offered_language in config.get('ckan.locales_offered', 'it').split(' '):
+        # for offered_language in config.get('ckan.locales_offered', 'it').split(' '):
+          for offered_language in config.get('ckan.locales_offered', 'it'):
             if offered_language not in LANGUAGE_IMPORT_FILTER:
                 log.info(
                     f"'{offered_language}' language is fitlered out in this plugin "

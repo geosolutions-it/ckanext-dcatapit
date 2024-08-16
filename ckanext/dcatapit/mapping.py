@@ -28,17 +28,14 @@ def themes_to_aggr_json(themes: list) -> str:
 def theme_aggr_to_theme_uris(aggregated_themes: list) -> list:
     return [theme_name_to_uri(agg.get('theme')) for agg in aggregated_themes]
 
-
 def theme_name_to_uri(theme_name: str) -> str:
-    if theme_name.startswith('http'):
-        log.warning(f'Theme name "{theme_name}" is already a URI')
-        return theme_name
-    return THEME_BASE_URI + theme_name.upper()
-
+     if theme_name.startswith('http'):
+         log.warning(f'Theme name "{theme_name}" is already a URI')
+         return theme_name
+     return THEME_BASE_URI + theme_name.upper()
 
 def theme_names_to_uris(names: list) -> list:
     return [theme_name_to_uri(name) for name in names]
-
 
 def theme_aggrs_unpack(aggrs: list) -> (list, list):
     themes = []
@@ -48,7 +45,6 @@ def theme_aggrs_unpack(aggrs: list) -> (list, list):
         sub.extend(aggr['subthemes'])
 
     return themes, sub
-
 
 def themes_parse_to_uris(raw) -> list:
     if not raw:

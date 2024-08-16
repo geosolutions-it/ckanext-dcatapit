@@ -8,7 +8,7 @@ from ckan.plugins.core import SingletonPlugin
 from ckanext.dcatapit import interfaces
 from ckanext.dcatapit.model import License
 from ckanext.spatial.harvesters.csw import CSWHarvester
-from ckanext.spatial.model import (
+from ckanext.spatial.harvested_metadata import (
     ISODocument,
     ISOElement,
     ISOKeyword,

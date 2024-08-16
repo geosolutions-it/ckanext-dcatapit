@@ -6,6 +6,7 @@ from rdflib.namespace import RDF, SKOS
 
 import ckan.logic as logic
 from ckan.common import config
+# from ckantoolkit import config
 from ckan.lib.i18n import get_lang, get_locales
 
 from ckanext.dcat.profiles import (

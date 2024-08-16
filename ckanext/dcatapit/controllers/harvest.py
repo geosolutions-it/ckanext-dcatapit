@@ -4,7 +4,9 @@ import ckan.logic as logic
 import ckan.model as model
 import ckan.plugins.toolkit as tk
 from ckan import plugins as p
-from ckan.lib.base import abort, c, render
+from ckan.lib.base import abort, render
+# For CKAN 2.10
+from ckan.common import c
 from flask.views import View
 
 log = logging.getLogger(__file__)
