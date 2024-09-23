@@ -6,7 +6,8 @@ from datetime import datetime
 from sqlalchemy import and_
 
 import ckan.plugins.toolkit as toolkit
-from ckan.lib.base import config
+# from ckan.lib.base import config
+from ckan.common import config
 from ckan.lib.navl.dictization_functions import Invalid
 from ckan.logic import ValidationError
 from ckan.logic.validators import tag_name_validator

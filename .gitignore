@@ -93,3 +93,6 @@ ENV/
 
 # IDE
 .idea
+
+# configuration files
+ckanext/dcatapit/config_files

@@ -7,7 +7,9 @@ import ckan.plugins.toolkit as toolkit
 from ckan import lib, logic
 from ckan.common import config
 from flask import Blueprint
-from routes.mapper import SubMapper
+
+# from routes.mapper import SubMapper
+from ckanext.dcatapit.controllers.api import get_blueprints
 
 import ckanext.dcatapit.helpers as helpers
 import ckanext.dcatapit.interfaces as interfaces
@@ -46,7 +48,9 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IValidators)
     plugins.implements(plugins.ITemplateHelpers)
-    plugins.implements(plugins.IRoutes, inherit=True)
+    # IRoutes is deprecated for CKAN 2.10
+    # plugins.implements(plugins.IRoutes, inherit=True)
+    plugins.implements(plugins.IBlueprint, inherit=True)
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IFacets, inherit=True)
     plugins.implements(plugins.ITranslation, inherit=True)
@@ -63,6 +67,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     def i18n_domain(self):
         return 'ckanext-dcatapit'
 
+    '''
     # ------------- IRoutes ---------------#
 
     def before_map(self, map):
@@ -74,6 +79,19 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             m.connect('/util/vocabulary/autocomplete', action='vocabulary_autocomplete',
                       conditions=GET)
         return map
+    '''
+
+    #--------------IBlueprint -----------------#
+    # from ckanext.dcatapit.controllers.api import dcatapit_blp
+    # from flask_smorest import Api
+
+    # ckan.config["api"] = "/util/vocabulary/autocomplete" 
+    # api = Api(ckan)
+    #api.register_blueprint(dcatapit_blp)
+
+
+    def get_blueprint(self):
+        return get_blueprints()
 
     # ------------- IConfigurer ---------------#
 

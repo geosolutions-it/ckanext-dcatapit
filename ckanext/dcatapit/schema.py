@@ -265,7 +265,6 @@ def get_custom_package_schema():
 
             'help': _('package_temporal_coverage_help')
         },
-
         {
             'name': 'rights_holder',
             'element': 'rights_holder',
