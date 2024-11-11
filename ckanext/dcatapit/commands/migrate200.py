@@ -36,7 +36,9 @@ log = logging.getLogger(__name__)
 def migrate(fix_old=False):
     # Data migrations from 1.1.0 to 2.0.0
 
+    log.info(f'Migrating themes...')
     cnt_migrated = migrate_themes()
+    log.info(f'Check obsolete themes...')
     cnt_obsolete_found, cnt_obsolete_migrated = check_obsolete_themes(fix_old)
 
     log.info(f'========== Migration summary ==========')
@@ -71,13 +73,14 @@ def check_obsolete_themes(fix_old):
     migrated = 0
 
     if cnt_bad:
-        log.error(f'There are {cnt_bad} themes in the 1.0.0 plain format. Please review your DB.')
-
         if fix_old:
+            log.error(f'There are {cnt_bad} themes in the 1.0.0 plain format, applying 1.1.0 migrations.')
             import ckanext.dcatapit.commands.migrate110 as migrate110
 
             uuid = [pe.package_id for pe in bad_extra_themes]
             log.debug(f'bad packages id {uuid}')
             migrated = migrate110.do_migrate_data(skip_orgs=True, pkg_uuid=uuid)
+        else:
+            log.error(f'There are {cnt_bad} themes in the 1.0.0 plain format. Please review your DB.')
 
     return cnt_bad, migrated
