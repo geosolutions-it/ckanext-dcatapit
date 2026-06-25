@@ -7,7 +7,9 @@ import ckan.plugins.toolkit as toolkit
 from ckan import lib, logic
 from ckan.common import config
 from flask import Blueprint
-from routes.mapper import SubMapper
+
+# from routes.mapper import SubMapper
+from ckanext.dcatapit.controllers.api import get_blueprints
 
 import ckanext.dcatapit.helpers as helpers
 import ckanext.dcatapit.interfaces as interfaces
@@ -18,7 +20,6 @@ from ckanext.dcatapit.controllers.harvest import HarvesterController
 from ckanext.dcatapit.helpers import get_org_context
 from ckanext.dcatapit.mapping import populate_theme_groups, theme_name_to_uri
 from ckanext.dcatapit.mapping import populate_theme_groups
-from ckanext.dcatapit.controllers.thesaurus import ThesaurusController, get_thesaurus_admin_page, update_vocab_admin
 from ckanext.dcatapit.model.license import License
 from ckanext.dcatapit.schema import FIELD_THEMES_AGGREGATE
 
@@ -46,12 +47,10 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IValidators)
     plugins.implements(plugins.ITemplateHelpers)
-    plugins.implements(plugins.IRoutes, inherit=True)
+    plugins.implements(plugins.IBlueprint, inherit=True)
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IFacets, inherit=True)
     plugins.implements(plugins.ITranslation, inherit=True)
-
-
 
     # IClick
 
@@ -63,6 +62,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     def i18n_domain(self):
         return 'ckanext-dcatapit'
 
+    '''
     # ------------- IRoutes ---------------#
 
     def before_map(self, map):
@@ -74,6 +74,19 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
             m.connect('/util/vocabulary/autocomplete', action='vocabulary_autocomplete',
                       conditions=GET)
         return map
+    '''
+
+    #--------------IBlueprint -----------------#
+    # from ckanext.dcatapit.controllers.api import dcatapit_blp
+    # from flask_smorest import Api
+
+    # ckan.config["api"] = "/util/vocabulary/autocomplete" 
+    # api = Api(ckan)
+    #api.register_blueprint(dcatapit_blp)
+
+
+    def get_blueprint(self):
+        return get_blueprints()
 
     # ------------- IConfigurer ---------------#
 
@@ -264,11 +277,9 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
     # ------------- IPackageController ---------------#
 
-    def after_create(self, context, pkg_dict):
+    def after_dataset_create(self, context, pkg_dict):
         # During the harvest the get_lang() is not defined
-        lang = interfaces.get_language()
-        otype = pkg_dict.get('type')
-        if lang and otype == 'dataset':
+        if lang := interfaces.get_language():
             for extra in pkg_dict.get('extras') or []:
                 for field in dcatapit_schema.get_custom_package_schema():
 
@@ -285,12 +296,9 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                             # Create the localized field record
                             self.create_loc_field(extra, lang, pkg_dict.get('id'))
 
-    def after_update(self, context, pkg_dict):
+    def after_dataset_update(self, context, pkg_dict):
         # During the harvest the get_lang() is not defined
-        lang = interfaces.get_language()
-        otype = pkg_dict.get('type')
-
-        if lang and otype == 'dataset':
+        if lang := interfaces.get_language():
             for extra in pkg_dict.get('extras') or []:
                 for field in dcatapit_schema.get_custom_package_schema():
                     couples = field.get('couples', [])
@@ -300,7 +308,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
                     else:
                         self.update_loc_field(extra, pkg_dict.get('id'), field, lang)
 
-    def before_index(self, dataset_dict):
+    def before_dataset_index(self, dataset_dict):
         '''
         Insert `dcat_theme` into solr
         '''
@@ -374,7 +382,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
         self._update_pkg_rights_holder(dataset_dict, org=org)
         return dataset_dict
 
-    def before_search(self, search_params):
+    def before_dataset_search(self, search_params):
         '''
         # this code may be needed with different versions of solr
 
@@ -391,7 +399,7 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
 
         return search_params
 
-    def after_search(self, search_results, search_params):
+    def after_dataset_search(self, search_results, search_params):
         ## #####################################################################
         # This method moves the dcatapit fields into the extras array (needed for
         # the CKAN harvester).
@@ -450,10 +458,10 @@ class DCATAPITPackagePlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm,
     def create_loc_field(self, extra, lang, pkg_id):
         interfaces.save_extra_package_multilang({'id': pkg_id, 'text': extra.get('value'), 'field': extra.get('key')}, lang, 'extra')
 
-    def before_view(self, pkg_dict):
+    def before_dataset_view(self, pkg_dict):
         return self._update_pkg_rights_holder(pkg_dict)
 
-    def after_show(self, context, pkg_dict):
+    def after_dataset_show(self, context, pkg_dict):
         schema = dcatapit_schema.get_custom_package_schema()
         # quick hack on date fields that are in wrong format
         for fdef in schema:

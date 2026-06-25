@@ -1,8 +1,8 @@
 {% ckan_extends %}
-    {% block footer_links %}
+    {#% block footer_links %}
      {{ super() }}
       <li><a href="{{ h.url_for('harvest.search') }}">{{ _('Harvest list') }}</a></li>
-    {% endblock %}
+    {% endblock %#}
 
     {% block footer_attribution %}
      <p>{% trans %}<strong>Powered by</strong> <a class="hide-text ckan-footer-logo" href="http://ckan.org">CKAN</a>{% endtrans %}

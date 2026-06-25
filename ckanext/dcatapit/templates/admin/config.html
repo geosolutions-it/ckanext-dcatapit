@@ -7,13 +7,22 @@
 {% block admin_form %}
   {{ super() }}
 
-  {% snippet 'snippets/dcatapit_form_fields.html', data=data, errors=errors, schema_fields=config_fields %}
+  {% for field in config_fields %}
+      {{ form.input(
+        field['name'],
+        id='field-' + field['name'],
+        label=field['label'],
+        value=data[field['name']],
+        error=errors[field['name']],
+        is_required=field.is_required
+      ) }}
+  {% endfor %}
 {% endblock %}
 
 
 {% block admin_form_help %}
-
   {{ super() }}
+
   {% for field in config_fields %}
   	<p><strong>{{ field['label'] }}:</strong> {{ field['description'] }}</p>
   {% endfor %}

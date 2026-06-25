@@ -15,7 +15,6 @@ DEFAULT_LANG = config.get('ckan.locale_default', 'en')
 log = logging.getLogger(__file__)
 available_locales = get_locales()
 
-
 def is_blank(string):
     return not (string and string.strip())
 

@@ -286,7 +286,7 @@ def update_theme(pdata):
     except Invalid as err:
         log.error(
             f"dataset {pdata['name']}: cannot use theme {theme}:",
-            exec_info=True
+            exc_info=True
         )
         theme = DEFAULT_THEME
     pdata['theme'] = theme
@@ -300,6 +300,7 @@ def update_temporal_coverage(pdata):
     tstart = pdata.pop('temporal_start', None)
     tend = pdata.pop('temporal_end', None)
 
+    # if at least one of them is missing, let's search into the extras field
     if not (tstart and tend):
         to_delete = []
         for idx, ex in enumerate(pdata.get('extras') or []):
@@ -313,48 +314,56 @@ def update_temporal_coverage(pdata):
             for idx in reversed(to_delete):
                 pdata['extras'].pop(idx)
 
-    try:
-        tstart = validators.parse_date(tstart).strftime(DATE_FORMAT)
-    except (Invalid, ValueError, TypeError) as err:
-        if tstart is not None:
-            log.error(
-                f"dataset {pdata['name']}: can't use {tstart} as temporal coverage start:",
-                exc_info=True
-            )
-        tstart = None
-    try:
-        tend = validators.parse_date(tend).strftime(DATE_FORMAT)
-    except (Invalid, ValueError, TypeError) as err:
-        if tend is not None:
-            log.error(
-                f"dataset {pdata['name']}: can't use {tend} as temporal coverage end:",
-                exc_info=True
-            )
+    if tstart:
+        try:
+            tstart = validators.parse_date(tstart).strftime(DATE_FORMAT)
+        except (Invalid, ValueError, TypeError) as err:
+            if tstart is not None and tstart != '':
+                log.error(
+                    f"Dataset {pdata['name']}: can't use '{tstart}' as temporal coverage start:",
+                    exc_info=True
+                )
+            tstart = None
+    else:
+        tstart = None # put to none even if it's an empty string
+
+    if tend:
+        try:
+            tend = validators.parse_date(tend).strftime(DATE_FORMAT)
+        except (Invalid, ValueError, TypeError) as err:
+            if tend is not None and tend != '':
+                log.error(
+                    f"Dataset {pdata['name']}: can't use '{tend}' as temporal coverage end:",
+                    exc_info=True
+                )
+            tend = None
+        # handle 2010-01-01 to 2010-01-01 case, use whole year
+        # if tstart == tend and tstart.day == 1 and tstart.month == 1:
+        #     tend = tend.replace(day=31, month=12)
+    else:
         tend = None
-    # handle 2010-01-01 to 2010-01-01 case, use whole year
-    # if tstart == tend and tstart.day == 1 and tstart.month == 1:
-    #     tend = tend.replace(day=31, month=12)
 
-    if (tstart):
-
-        validator = toolkit.get_validator('dcatapit_temporal_coverage')
-        if (tstart == tend):
+    if tstart:
+        if tstart == tend:
             log.info(
-                f"dataset {pdata['name']}: "
-                f'the same temporal coverage start/end: {tstart}/{tend}, '
-                f'using start only',
+                f"Dataset {pdata['name']}: same temporal coverage limits: {tstart}/{tend}, using start only"
             )
             tend = None
+
         temp_cov = json.dumps([{'temporal_start': tstart,
                                 'temporal_end': tend}])
-        try:
-            temp_cov = validator(temp_cov, {})
-            pdata['temporal_coverage'] = temp_cov
-        except Invalid as err:
-            log.error(
-                f"dataset {pdata['name']}: cannot use temporal coverage {(tstart, tend)}:",
-                exec_info=True
-            )
+    else:
+        temp_cov = json.dumps([])
+
+    try:
+        validator = toolkit.get_validator('dcatapit_temporal_coverage')
+        temp_cov = validator(temp_cov, {})
+        pdata['temporal_coverage'] = temp_cov
+    except Invalid as err:
+        log.error(
+            f"dataset {pdata['name']}: cannot use temporal coverage {(tstart, tend)}:",
+            exc_info=True
+        )
 
 
 def update_frequency(pdata):

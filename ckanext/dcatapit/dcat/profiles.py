@@ -6,6 +6,7 @@ from rdflib.namespace import RDF, SKOS
 
 import ckan.logic as logic
 from ckan.common import config
+# from ckantoolkit import config
 from ckan.lib.i18n import get_lang, get_locales
 
 from ckanext.dcat.profiles import (
@@ -1199,9 +1200,9 @@ class ItalianDCATAPProfile(RDFProfile):
         self.g.add((taxonomy, DCT.title, Literal('Il Vocabolario Data Theme', lang='it')))
 
         # language
-        langs = config.get('ckan.locales_offered', 'it')
+        langs = config.get('ckan.locales_offered', ['it'])
 
-        for lang_offered in langs.split():
+        for lang_offered in langs:
             lang_code = lang_mapping_ckan_to_voc.get(lang_offered)
             if lang_code:
                 self.g.add((catalog_ref, DCT.language, URIRef(LANG_BASE_URI + lang_code)))
