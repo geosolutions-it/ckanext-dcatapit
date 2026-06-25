@@ -20,7 +20,6 @@ from ckanext.dcatapit.controllers.harvest import HarvesterController
 from ckanext.dcatapit.helpers import get_org_context
 from ckanext.dcatapit.mapping import populate_theme_groups, theme_name_to_uri
 from ckanext.dcatapit.mapping import populate_theme_groups
-from ckanext.dcatapit.controllers.thesaurus import ThesaurusController, get_thesaurus_admin_page, update_vocab_admin
 from ckanext.dcatapit.model.license import License
 from ckanext.dcatapit.schema import FIELD_THEMES_AGGREGATE
 

@@ -9,11 +9,10 @@ FIELD_THEMES_AGGREGATE = 'themes_aggregate'
 log = logging.getLogger(__name__)
 
 def get_custom_config_schema(show=True):
-    if show:
-        return [
+    full_schema= [
             {
                 'name': 'ckanext.dcatapit_configpublisher_name',
-                'validator': ['not_empty'],
+                'validator': ['ignore_missing', 'not_empty'],
                 'element': 'input',
                 'type': 'text',
                 'label': _('Dataset Editor'),
@@ -23,7 +22,7 @@ def get_custom_config_schema(show=True):
             },
             {
                 'name': 'ckanext.dcatapit_configpublisher_code_identifier',
-                'validator': ['not_empty'],
+                'validator': ['ignore_missing', 'not_empty'],
                 'element': 'input',
                 'type': 'text',
                 'label': _('Catalog Organization Code'),
@@ -43,21 +42,11 @@ def get_custom_config_schema(show=True):
                 'is_required': False
             }
         ]
+
+    if show:
+        return full_schema
     else:
-        return [
-            {
-                'name': 'ckanext.dcatapit_configpublisher_name',
-                'validator': ['not_empty']
-            },
-            {
-                'name': 'ckanext.dcatapit_configpublisher_code_identifier',
-                'validator': ['not_empty']
-            },
-            {
-                'name': 'ckanext.dcatapit_config.catalog_issued',
-                'validator': ['ignore_missing']
-            }
-        ]
+        return [{'name': el['name'], 'validator':el['validator']} for el in full_schema]
 
 
 def get_custom_organization_schema():
