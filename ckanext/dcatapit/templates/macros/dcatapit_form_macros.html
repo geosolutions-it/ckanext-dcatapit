@@ -480,7 +480,7 @@ Old implementation of the couple element (one element with comma separated value
 {% macro help_block(content) %}
     {% if content %}
         <span class="inline-block" data-module="dcatapit-help">
-      <i class="icon-info-sign size-12" title="{{ content }}"></i>
+      <i class="icon-info-sign size-12" data-title="{{ content }}" title="{{ content }}"></i>
     </span>
     {% endif %}
 {% endmacro %}
