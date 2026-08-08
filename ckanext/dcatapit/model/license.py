@@ -55,7 +55,7 @@ class License(DeclarativeBase, DomainObject):
                                                   remote_side=[id]),
                               lazy=True)
 
-    DEFAULT_LICENSE = 'https://w3id.org/italia/controlled-vocabulary/licences/C1_Unknown'
+    DEFAULT_LICENSE = 'https://w3id.org/italia/controlled-vocabulary/licences/A21_CCBY40'
 
     @classmethod
     def q(cls):
